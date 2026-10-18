@@ -4,7 +4,7 @@ Acuan: materi Technical Meeting yang diberikan pengguna, halaman 15-17 dan 22-27
 
 ## First Draft - 1 November 2026
 
-- [ ] Repository GitHub/GitLab publik, dapat dibuka tanpa login.
+- [x] Repository GitHub publik: [mrizalbasri/Equora](https://github.com/mrizalbasri/Equora), visibilitas PUBLIC diverifikasi 18 Oktober 2026.
 - [ ] README: judul dan deskripsi 1-2 kalimat, stack aktual, clone/install/run yang teruji, progress nyata.
 - [ ] PDF bernama `WIA_FSDMIA2026_NamaTim.pdf`; ganti NamaTim dengan identitas tim terdaftar.
 - [ ] PDF maksimal 10 halaman dan maksimal 10 MB.

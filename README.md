@@ -30,7 +30,8 @@ python scripts/check_docs.py
 - [ ] Audit file dataset dan lisensi.
 - [ ] Landing page dan explorer berjalan.
 - [ ] Simulasi, perbandingan skenario, dan pengujian.
-- [ ] Repository publik, deployment, screenshot, PDF dan video submission.
+- [x] Repository publik [mrizalbasri/Equora](https://github.com/mrizalbasri/Equora).
+- [ ] Deployment, screenshot, PDF dan video submission.
 
 ## Batasan
 

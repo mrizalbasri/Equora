@@ -55,7 +55,7 @@ Gerbang data: cakupan dan lisensi diketahui. Gerbang desain: spesifikasi ditinja
 | Irisan data tidak cukup | Belum diukur | Tinggi | Audit sebelum engine; kurangi indikator secara eksplisit |
 | Scope melebihi kapasitas tim | Belum diukur | Tinggi | Satu alur utuh; tinjau usulan penyederhanaan |
 | Harga intervensi tidak valid | Belum diukur | Tinggi | Label asumsi demo dan tampilkan sumber |
-| Akses GitHub CLI invalid | Teramati | Menghambat publikasi | Login ulang atau gunakan sesi browser yang sah |
+| Akses GitHub CLI invalid | Terselesaikan 18 Okt | Sebelumnya menghambat publikasi | Pengguna login ulang; repository publik berhasil dibuat dan diunggah |
 
 ## 8. Komunikasi & Pelaporan
 

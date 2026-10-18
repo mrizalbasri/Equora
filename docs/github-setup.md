@@ -1,6 +1,6 @@
 # Setup GitHub
 
-Pengguna memilih repository publik `mrizalbasri/Equora`. Git lokal menggunakan branch `main`. Publikasi remote harus dibuktikan dengan URL yang berhasil diakses; konfigurasi lokal saja bukan bukti upload.
+Repository publik [mrizalbasri/Equora](https://github.com/mrizalbasri/Equora) dibuat pada 18 Oktober 2026. Branch `main` melacak `origin/main`; commit awal dokumentasi `4432cd0` telah diunggah. Autentikasi CLI yang sebelumnya terhambat telah berhasil diperbaiki pengguna.
 
 ## Isi setup
 

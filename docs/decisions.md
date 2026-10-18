@@ -11,7 +11,7 @@ Tanggal: 18 Oktober 2026. Status keputusan mengikuti bukti di repo, bukan asumsi
 | D-05 | Granularitas, jenjang, tahun | Ditentukan setelah audit file sumber |
 | D-06 | Biaya intervensi | Cari referensi resmi atau gunakan asumsi demo berlabel |
 | D-07 | Nama tim, anggota dan PIC | Menunggu informasi pengguna; tidak diisi dengan nama rekaan |
-| D-08 | GitHub | Pengguna memilih publik mrizalbasri/Equora; publikasi menunggu autentikasi GitHub yang valid |
+| D-08 | GitHub | Pengguna memilih publik mrizalbasri/Equora; repository dibuat dan commit awal diunggah pada 18 Oktober 2026 |
 | D-09 | Lisensi kode | Pemilik memilih sebelum memberi izin penggunaan ulang |
 | D-10 | Scope first draft | Penyederhanaan di evaluasi kompetisi adalah usulan, belum perubahan PRD |
 | D-11 | Rubrik final | Konfirmasi selisih total bobot slide 27 ke panitia |
