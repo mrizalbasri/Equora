@@ -2,7 +2,7 @@
 
 Platform web untuk membandingkan akses fasilitas pendidikan dari data publik dan menguji simulasi prioritas alokasi sumber daya yang dapat dijelaskan. Disiapkan untuk Web In Action (WIA), MIA 2026.
 
-**Status 19 Oktober 2026: fondasi backend/frontend disiapkan; fitur produk dan dataset belum diimplementasikan.**
+**Status 19 Oktober 2026: fondasi backend/frontend dan landing/about tersedia; explorer, engine simulasi, serta release dataset belum diimplementasikan.**
 
 ## Dokumentasi
 
@@ -10,7 +10,7 @@ Mulai dari [indeks docs](docs/README.md) dan [evaluasi kesesuaian lomba](docs/co
 
 Dokumen utama hanya disimpan di `docs/`: [BRD](docs/BRD_Equora.md), [PRD](docs/PRD_Equora.md), dan [desain](docs/DESIGN_Equora.md).
 
-Untuk kontributor yang mulai coding, ikuti [panduan mengambil fondasi](docs/pembagian-kerja/MULAI-NGODING.md). Pekerjaan frontend dapat dimulai tanpa database; halaman produk dan kontrak katalog belum tersedia.
+Untuk kontributor yang mulai coding, ikuti [panduan mengambil fondasi](docs/pembagian-kerja/MULAI-NGODING.md). Pekerjaan frontend dapat dimulai tanpa database; fondasi UI publik tersedia dalam [panduan UI](docs/ui-foundation.md), sedangkan kontrak katalog belum tersedia.
 
 ## Stack
 
@@ -38,7 +38,7 @@ Copy-Item .env.example .env
 pnpm dev
 ```
 
-Pasang uv bila belum tersedia dengan `python -m pip install uv`. Jangan menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend saat ini berupa JSON status fondasi, belum halaman produk. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
+Pasang uv bila belum tersedia dengan `python -m pip install uv`. Jangan menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend menampilkan landing page; `/about` menjelaskan tujuan dan batas penggunaan. Status server web tetap tersedia di `/health`. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
 
 Frontend dijalankan langsung melalui `pnpm dev`. Untuk menjalankan API dalam container, jalankan `docker compose up --build -d` dari `backend/`; file Compose hanya tersedia di backend. API memakai network PostgreSQL yang sudah ada. Database/schema Equora belum dibuat; isi koneksi setelah target disiapkan, lalu jalankan migrasi secara manual sesuai panduan backend.
 
@@ -68,7 +68,8 @@ python scripts/check_docs.py
 - [x] Struktur docs, template issue/PR, dan workflow pemeriksaan docs.
 - [x] Fondasi backend/frontend, Compose backend, migrasi awal, kontrak OpenAPI dan CI stack.
 - [ ] Audit file dataset dan lisensi.
-- [ ] Landing page dan explorer berjalan.
+- [x] Landing page dan About responsif dengan penjelasan sumber/metode serta status fitur yang belum tersedia.
+- [ ] Explorer berjalan dengan release data terverifikasi.
 - [ ] Simulasi, perbandingan skenario, dan pengujian.
 - [x] Repository publik [mrizalbasri/Equora](https://github.com/mrizalbasri/Equora).
 - [ ] Deployment, screenshot, PDF dan video submission.

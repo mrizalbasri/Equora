@@ -1,11 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-test('built frontend serves its foundation and health routes', async ({ request }) => {
+test('built frontend serves landing HTML and a separate health route', async ({ request }) => {
   const root = await request.get('/');
   expect(root.ok()).toBeTruthy();
-  expect(await root.json()).toEqual({
-    service: 'Equora frontend', status: 'ok', stage: 'foundation'
-  });
+  expect(root.headers()['content-type']).toContain('text/html');
+  expect(await root.text()).toContain('Akses pendidikan berbeda.');
   const health = await request.get('/health');
   expect(health.ok()).toBeTruthy();
   expect(await health.json()).toEqual({ status: 'ok' });
