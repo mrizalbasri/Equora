@@ -1,6 +1,6 @@
 # Equora — Product Requirements Document (PRD)
 
-**Versi:** 1.0 | **Status:** Engineering-ready draft, data schema provisional | **18 Oktober 2026**
+**Versi:** 1.1 | **Status:** Draft implementasi, schema data provisional; baseline stack disetujui, solver final menunggu validasi | **19 Oktober 2026**
 **Referensi:** [BRD_Equora.md](./BRD_Equora.md)
 
 ## 1. Product statement
@@ -52,6 +52,9 @@ Equora membantu publik dan analis memahami kondisi akses fasilitas pendidikan da
 - AC-10: setiap nilai dapat membuka URL sumber dan informasi definisi/refresh.
 - AC-11: peta ditampilkan hanya jika file boundary legal dan join region valid; selain itu gunakan sortable bar chart.
 - AC-12: ekspor hasil filter dalam CSV lengkap metadata.
+- AC-29: peta memakai MapLibre GL JS dan basemap Protomaps/PMTiles berbasis OSM; boundary serta indikator memiliki provenance terpisah. Join geografis dan lisensi lulus [gerbang peta](map-plan.md) sebelum layer analisis ditampilkan.
+- AC-30: legenda membedakan missing dan nol; perbandingan indikator setara memakai batas kelas yang sama. Filter/release serta pemilihan wilayah sinkron dengan tabel dan detail sumber.
+- AC-31: kegagalan tile/WebGL menyediakan status dan retry tanpa menutup tabel, filter, detail dan ekspor data. Pemilihan wilayah tersedia via keyboard di tabel/pencarian; atribusi dapat diakses pada mobile dan disertakan pada ekspor yang memuat peta.
 
 ### EP-04 Priority engine — P0
 **Method v1:** weighted multicriteria decision analysis (MCDA); score dihitung dari indikator kebutuhan yang sudah distandardisasi dan dirancang agar *nilai lebih tinggi = kebutuhan lebih tinggi*. Bobot nonnegative dan total 1.0.
@@ -66,6 +69,9 @@ Equora membantu publik dan analis memahami kondisi akses fasilitas pendidikan da
 - AC-18: output tidak melampaui anggaran; constraint wajib terpenuhi; jika infeasible tampil alasan, bukan fake recommendation.
 - AC-19: outcome adalah `packages_allocated`, `budget_used`, `priority_coverage_proxy`—**bukan** sekolah pasti tertolong/angka dampak nyata bila data tidak mendukung.
 - AC-20: semua biaya dan kapasitas berlabel `official_reference` atau `demo_assumption`.
+- AC-26: status membedakan optimal, feasible belum terbukti optimal, infeasible terbukti, berhenti tanpa solusi, model invalid, dan kegagalan eksekusi; timeout tanpa solusi tidak disebut infeasible. Bound/gap ditampilkan jika tersedia, beserta toleransi solver.
+- AC-27: hasil divalidasi ulang terhadap anggaran, kapasitas, integrality, dan fairness constraints sebelum ditampilkan; kasus kecil diverifikasi dengan enumerasi.
+- AC-28: hasil dibandingkan dengan baseline merata dan greedy yang memakai constraint setara, serta diuji sensitivitas bobot/biaya mengikuti [protokol validasi](technical-stack.md).
 
 ### EP-06 Comparison & explanation — P0
 - AC-21: simpan 2 scenario snapshot dengan dataset version, weights, costs, constraints, model version.
@@ -131,25 +137,32 @@ audit_events(id, actor_id, action, entity_type, entity_id, detail_json, timestam
 **Response** includes `coverage`, `ranking[]`, `contributions[]`, `warnings[]`, `method_version`, `provenance[]`. Input indicator availability must be validated.
 
 ## 8. Suggested stack and repository
-- Frontend: **SvelteKit, TypeScript, Tailwind**, TanStack Query, ECharts; MapLibre optional based on geodata.
+- Baseline disetujui pada 19 Oktober 2026; fondasi dan dependensi tersedia sesuai [setup stack](setup-stack.md). Alasan, alternatif dan protokol pembuktian ada di [stack teknis](technical-stack.md); belum ada klaim performa.
+- Frontend: **SvelteKit, TypeScript, Tailwind, ECharts**; TanStack Query sesuai kebutuhan cache/refetch. Peta: **MapLibre GL JS + Protomaps/PMTiles + basemap OSM**; layer analisis mengikuti kesiapan boundary/data dan [rencana peta](map-plan.md).
 - Backend: **FastAPI, Pydantic v2, SQLAlchemy 2, Alembic**.
 - DB: **PostgreSQL**; PostGIS optional for map geometry.
-- Data ETL: **Polars/Pandas, openpyxl, Pandera**, manual source adapters first; Prefect only when recurring ingestion proves necessary.
-- Optimization: **OR-Tools**; deterministic MCDA in Python module.
+- Data ETL: **Polars, openpyxl, validasi schema (mis. Pandera)**; Pandas bila kompatibilitas library memerlukan; manual source adapters first; Prefect only when recurring ingestion proves necessary.
+- Optimization: **OR-Tools**, CP-SAT kandidat awal untuk paket integer/boolean; evaluasi solver MIP seperti SCIP/HiGHS jika model memerlukan variabel kontinu atau benchmark membenarkannya. Solver final belum dipilih.
+- Engine: modul Python MCDA/optimasi terpisah dari endpoint HTTP; pisahkan pembentukan model, eksekusi solver, dan validasi hasil.
+- Contracts: tipe TypeScript dihasilkan dari OpenAPI FastAPI; CI memeriksa sinkronisasi kontrak.
+- Snapshot komputasi mencatat versi data/model/solver, parameter, batas waktu, toleransi, thread/worker dan seed bila tersedia. Optimum ganda tidak otomatis menghasilkan alokasi identik; simpan hasil dan uji tie-breaking bila diperlukan.
 - Storage: local dev volume, S3-compatible object store for production raw files.
-- Testing: pytest, httpx, Vitest, Playwright; CI GitHub Actions; Docker Compose for local development.
+- Testing: pytest, httpx, Vitest, Playwright; CI GitHub Actions. Docker Compose untuk backend; frontend lokal memakai pnpm.
 ```text
 equora/
-├── apps/web/             # SvelteKit
-├── services/api/         # FastAPI routes, services, models
-├── packages/contracts/   # OpenAPI-generated TS contracts
+├── frontend/             # SvelteKit, pnpm; berjalan lokal
+│   ├── src/lib/api/      # tipe TypeScript hasil OpenAPI dan client API
+│   └── scripts/          # alat khusus frontend
+├── backend/              # FastAPI, Alembic, uv, modul ETL/MCDA/optimasi
+│   ├── app/
+│   ├── tests/
+│   └── compose.yaml      # API; memakai PostgreSQL Docker yang sudah ada
 ├── data/raw/             # gitignored licensed/large official source files
-├── data/metadata/        # source manifest & dictionaries (versioned)
+├── data/fixtures/        # fixture sintetis untuk pengujian
 ├── data/processed/       # local derived data, gitignored
-├── scripts/              # ingestion and validation
+├── scripts/              # perintah PowerShell root, ekspor kontrak dan validasi docs
 ├── docs/                 # BRD, PRD, architecture, methodology
-├── tests/                # fixtures and golden calculation examples
-└── docker-compose.yml
+└── .github/workflows/    # pemeriksaan docs dan stack
 ```
 
 ## 9. Implementation order (milestones)
@@ -160,6 +173,8 @@ equora/
 **M2 Data pipeline:** import -> validation -> staging -> publish -> explorer; quality reports and provenance.
 
 **M3 Decision engine:** standardized indicator transforms, MCDA and explanations, golden tests.
+
+**Gerbang validasi engine:** enumerasi kasus kecil, validasi independen constraint, perbandingan baseline, status solver, sensitivitas dan reproduksibilitas lulus. Benchmark kasus representatif/stress mengikuti protokol stack; target kapasitas ditetapkan setelah audit data/hosting, sebelum pengukuran.
 
 **M4 Scenario studio:** budget/cost assumptions, optimizer, constraint validations, compare and export.
 
@@ -173,6 +188,7 @@ equora/
 - Integration: XLSX -> normalized observations -> explorer -> scenario -> compare.
 - E2E: guest explore; analyst create two scenarios; admin upload/reject/publish dataset; mobile keyboard navigation.
 - Adversarial: malformed spreadsheets, spreadsheet formula injection on CSV export, large payloads, mismatched region codes, missing metadata.
+- Validasi engine dan benchmark: ikuti V-01 sampai V-07 serta protokol dalam [stack teknis](technical-stack.md); catat hasil nyata, hardware, konfigurasi dan hash input. Optimal menurut model bukan bukti dampak pendidikan nyata.
 
 ## 11. Source data acquisition — downloadable source pages
 **Start here; click 'Unduh Dataset' on each official portal page. Tautan diwarisi dari dokumen awal; halaman dan binary XLSX belum diverifikasi ulang dalam sesi setup ini.**

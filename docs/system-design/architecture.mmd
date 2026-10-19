@@ -1,0 +1,21 @@
+%% Equora MVP — status 19 Oktober 2026.
+%% Frontend lokal dengan pnpm; Compose hanya untuk backend.
+%% PostgreSQL bersama sudah tersedia, target database/schema Equora belum dibuat.
+%% Garis putus-putus: alur yang direncanakan atau data yang belum diisi.
+flowchart LR
+    WEB["Frontend<br/>SvelteKit · pnpm<br/>Fondasi tersedia"]
+    API["API FastAPI<br/>/api/v1<br/>Health tersedia; API bisnis direncanakan"]
+    MCDA["MCDA<br/>Bobot dan missing policy<br/>Usulan"]
+    SOLVER["Optimasi<br/>OR-Tools dan validasi independen<br/>Usulan"]
+    RAW["Berkas sumber<br/>data/raw/<br/>Belum diaudit"]
+    ETL["ETL<br/>Polars dan openpyxl<br/>Usulan"]
+    PG[("PostgreSQL bersama<br/>postgres-local<br/>Target Equora belum dibuat")]
+
+    WEB -->|HTTP| API
+    API -.->|CALL| MCDA
+    MCDA -.->|SKOR| SOLVER
+    API -.->|SQL| PG
+    RAW -.->|READ| ETL
+    ETL -.->|RELEASE| PG
+
+    linkStyle 0 stroke:#2E668C,stroke-width:2px;

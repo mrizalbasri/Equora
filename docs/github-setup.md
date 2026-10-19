@@ -34,6 +34,8 @@ git push -u origin main
 
 ## Pengaturan setelah publikasi
 
+Alur kerja tim: setiap pekerjaan baru dimulai di branch `<type>/<deskripsi-kebab-case>` sebelum coding; pesan commit dan judul PR mengikuti [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/). Berlaku untuk pemilik dan kontributor. Rincian tersedia di [CONTRIBUTING](../CONTRIBUTING.md) dan [aturan kontributor](pembagian-kerja/ATURAN-KONTRIBUTOR.md). Validasi otomatis format tersebut belum dipasang.
+
 Verifikasi workflow `Documentation checks` berjalan. Rekomendasi: pull request untuk perubahan, pemeriksaan CI wajib, larangan force-push pada main. Proteksi branch, anggota, label, GitHub Project dan deployment belum dikonfigurasi otomatis. Pilih lisensi bersama pemilik dan periksa izin dataset sebelum redistribusi.
 
 Repository publik wajib untuk First Draft. Tambahkan URL deployment dan instruksi install/run sebenarnya setelah kode tersedia.

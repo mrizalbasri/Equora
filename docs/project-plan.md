@@ -21,12 +21,13 @@ In-scope mengikuti BRD/PRD: audit sumber, explorer, MCDA, simulasi anggaran, per
 |---|---|---|
 | Audit data dan metode | Metadata, kamus data, laporan quality | Join dan definisi tervalidasi |
 | Spesifikasi teknis | SRS/SDD dan desain database | Ditinjau setelah kontrak data diketahui |
+| Validasi stack dan engine | Laporan pengujian/benchmark yang dapat dijalankan ulang | Enumerasi, constraint, baseline, sensitivitas, status dan reproduksibilitas mengikuti [protokol stack](technical-stack.md) |
 | Demo First Draft | Aplikasi, repo publik, PDF | Landing + satu halaman nyata dan run instructions |
 | Final penyisihan | Website, proposal, surat, video | Seluruh checklist final terpenuhi |
 
 ## 4. Work Breakdown Structure & Jadwal
 
-PIC setiap task belum ditetapkan; tanggal di bawah adalah target internal yang disarankan.
+Pembagian PIC per paket mengikuti [panduan dua orang](pembagian-kerja/README.md); nama anggota dan kapasitas jam belum dicatat. Tanggal di bawah adalah target internal yang disarankan.
 
 | WBS | Task | Fase | Durasi | Target selesai |
 |---|---|---|---|---|
@@ -42,11 +43,15 @@ PIC setiap task belum ditetapkan; tanggal di bawah adalah target internal yang d
 
 ## 5. Tim & Peran
 
-Nama tim, anggota, ketua/PIC dan kapasitas kerja harian belum diberikan. Peran yang harus dialokasikan: koordinasi/submission, analisis data, frontend, backend/engine, QA, serta presentasi. Satu orang boleh menangani beberapa peran; jangan menganggap tersedia beberapa developer.
+Pengguna mengonfirmasi bekerja berdua dengan teman yang memiliki kemampuan full-stack. Pada 19 Oktober 2026, pembagian disepakati: pemilik memegang perkiraan 75-80% beban, teman 20-25%; ini perkiraan kompleksitas/scope, bukan jam yang sudah diukur. Nama tim/anggota dan kapasitas kerja harian belum diberikan.
+
+Pemilik mengerjakan fondasi, data/API/DB, explorer/peta, MCDA, simulasi, comparison, integrasi dan deployment. Teman mengerjakan landing/about, katalog dataset read-only, halaman metodologi dari naskah pemilik, serta QA/bukti demo. Folder per fitur, input yang diperlukan dan checklist selesai tersedia pada [pembagian kerja](pembagian-kerja/README.md). Pengujian perhitungan dan tanggung jawab kebenaran model tetap di pemilik.
 
 ## 6. Milestone
 
 Gerbang data: cakupan dan lisensi diketahui. Gerbang desain: spesifikasi ditinjau pemilik. Gerbang First Draft: demo dan PDF memenuhi checklist. Gerbang final: fitur teruji dan dokumen/video lengkap. Jangan menandai milestone lulus tanpa bukti.
+
+Gerbang engine sebelum klaim hasil simulasi: V-01 sampai V-07 pada [stack teknis](technical-stack.md) lulus. Setelah audit data/hosting, tetapkan target kapasitas sebelum benchmark. Pengukuran dan evaluasi solver masuk task 4.2-4.3; durasi jadwal tetap usulan dan perlu ditinjau berdasarkan hasil audit. Persetujuan baseline stack pada 19 Oktober tidak berarti seluruh SDD atau jadwal disetujui.
 
 ## 7. Risiko
 
