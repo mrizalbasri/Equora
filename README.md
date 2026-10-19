@@ -85,6 +85,14 @@ Untuk memeriksa tautan dokumentasi dengan Python 3:
 python scripts/check_docs.py
 ```
 
+Untuk menjalankan tes E2E frontend secara lokal, unduh Chromium Playwright
+sekali dari folder `frontend/`:
+
+```sh
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
 ## Progress
 
 - [x] BRD, PRD dan baseline desain.
