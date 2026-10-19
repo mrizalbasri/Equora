@@ -38,10 +38,13 @@ pnpm check
 pnpm test
 pnpm check:api
 pnpm build
+pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-Playwright saat ini memeriksa endpoint HTTP dari hasil build dan tidak memerlukan browser binary. Tes browser untuk alur produk ditambahkan bersama halaman produknya.
+Tes E2E menggunakan Playwright pada hasil build. Jalankan `pnpm exec
+playwright install chromium` sekali sebelum tes lokal; workflow GitHub Actions
+mengunduh Chromium secara otomatis dengan dependensi sistemnya.
 
 `src/lib/api/schema.d.ts` dihasilkan dari `backend/openapi.json`. Setelah backend mengekspor schema baru:
 
