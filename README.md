@@ -2,19 +2,58 @@
 
 Platform web untuk membandingkan akses fasilitas pendidikan dari data publik dan menguji simulasi prioritas alokasi sumber daya yang dapat dijelaskan. Disiapkan untuk Web In Action (WIA), MIA 2026.
 
-**Status 18 Oktober 2026: dokumentasi dan persiapan repository. Aplikasi belum diimplementasikan.**
+**Status 19 Oktober 2026: fondasi backend/frontend disiapkan; fitur produk dan dataset belum diimplementasikan.**
 
 ## Dokumentasi
 
 Mulai dari [indeks docs](docs/README.md) dan [evaluasi kesesuaian lomba](docs/competition-alignment.md).
 
-## Stack yang direncanakan
+Dokumen utama hanya disimpan di `docs/`: [BRD](docs/BRD_Equora.md), [PRD](docs/PRD_Equora.md), dan [desain](docs/DESIGN_Equora.md).
 
-SvelteKit, TypeScript, Tailwind CSS, ECharts; FastAPI, PostgreSQL; Polars/Pandas dan OR-Tools. Ini rencana teknis dalam PRD, belum menjadi dependensi terpasang.
+Untuk kontributor yang mulai coding, ikuti [panduan mengambil fondasi](docs/pembagian-kerja/MULAI-NGODING.md). Pekerjaan frontend dapat dimulai tanpa database; halaman produk dan kontrak katalog belum tersedia.
+
+## Stack
+
+SvelteKit, TypeScript, Tailwind CSS, ECharts, MapLibre/PMTiles; FastAPI, PostgreSQL, SQLAlchemy/Alembic; Polars, openpyxl dan OR-Tools. Manifest dan lockfile tersedia di masing-masing aplikasi. Pemilihan solver final menunggu audit model/data dan benchmark. Lihat [alasan, alternatif dan protokol pembuktian](docs/technical-stack.md).
 
 ## Menjalankan project
 
-Saat ini tidak ada aplikasi atau perintah install/run. Buka repository lokal dan baca [PRD](docs/PRD_Equora.md). Setelah frontend/backend dibuat, bagian ini wajib dilengkapi URL clone sebenarnya, versi runtime, konfigurasi environment, instalasi dependensi, migrasi/seed, serta perintah menjalankan aplikasi sebelum First Draft.
+Clone [repository Equora](https://github.com/mrizalbasri/Equora), lalu siapkan Node.js 24, pnpm 11.18.0, Python 3.14, uv dan Docker Desktop yang berjalan. PostgreSQL memakai instance Docker yang sudah ada, bukan server baru dari Compose Equora. Petunjuk lengkap: [backend](backend/README.md), [frontend](frontend/README.md), dan [data](data/README.md).
+
+Development dengan PowerShell, mulai dari root repository:
+
+```powershell
+cd backend
+uv sync --locked --extra dev
+Copy-Item .env.example .env
+uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Di terminal kedua, mulai dari root repository:
+
+```powershell
+cd frontend
+pnpm install --frozen-lockfile
+Copy-Item .env.example .env
+pnpm dev
+```
+
+Pasang uv bila belum tersedia dengan `python -m pip install uv`. Jangan menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend saat ini berupa JSON status fondasi, belum halaman produk. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
+
+Frontend dijalankan langsung melalui `pnpm dev`. Untuk menjalankan API dalam container, jalankan `docker compose up --build -d` dari `backend/`; file Compose hanya tersedia di backend. API memakai network PostgreSQL yang sudah ada. Database/schema Equora belum dibuat; isi koneksi setelah target disiapkan, lalu jalankan migrasi secara manual sesuai panduan backend.
+
+Belum ada seed statistik atau tabel domain sebelum audit dataset. Migrasi awal hanya membentuk riwayat Alembic. Test memakai data sintetis sementara.
+
+Setelah dependensi terpasang dan `.env` disiapkan, perintah berikut dapat dijalankan dari root menggunakan PowerShell:
+
+```powershell
+.\scripts\equora.ps1 dev
+.\scripts\equora.ps1 check
+.\scripts\equora.ps1 test
+.\scripts\equora.ps1 openapi
+```
+
+`dev` menjalankan API Docker di background dan frontend lokal pada terminal yang sama. Ctrl+C menghentikan frontend; API tetap berjalan. Tidak ada database atau migrasi yang dibuat otomatis. Detail semua perintah dan pembagian alat tersedia di [panduan scripts](scripts/README.md).
 
 Untuk memeriksa tautan dokumentasi dengan Python 3:
 
@@ -27,6 +66,7 @@ python scripts/check_docs.py
 - [x] BRD, PRD dan baseline desain.
 - [x] Evaluasi materi Technical Meeting dan checklist submission.
 - [x] Struktur docs, template issue/PR, dan workflow pemeriksaan docs.
+- [x] Fondasi backend/frontend, Compose backend, migrasi awal, kontrak OpenAPI dan CI stack.
 - [ ] Audit file dataset dan lisensi.
 - [ ] Landing page dan explorer berjalan.
 - [ ] Simulasi, perbandingan skenario, dan pengujian.

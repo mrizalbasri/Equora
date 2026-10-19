@@ -13,6 +13,8 @@ Status: belum ada dataset mentah di repo. URL calon sumber pada BRD/PRD diwarisi
 
 ## Kriteria lulus
 
+Untuk layer peta, jalankan juga [gerbang data geografis](map-plan.md): metadata/lisensi boundary, kesesuaian periode/kode, validitas geometri, pemeriksaan simplifikasi dan laporan join dua arah. Basemap OSM tidak menggantikan sumber indikator pendidikan; polygon tanpa observasi harus tampil sebagai missing.
+
 - Seluruh indikator demo memiliki provenance, unit, tahun dan jenjang.
 - Tidak ada natural key duplikat; persen berada di 0-100 dan count tidak negatif.
 - Join yang gagal dilaporkan; data kosong tidak dianggap nol.

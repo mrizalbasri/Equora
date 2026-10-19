@@ -1,14 +1,19 @@
 # Dokumentasi Equora
 
-Status: baseline kerja, 18 Oktober 2026. Dokumentasi menjelaskan rencana; tidak membuktikan implementasi sudah tersedia.
+Status: baseline kerja, diperbarui 19 Oktober 2026. Dokumentasi menjelaskan rencana; tidak membuktikan implementasi sudah tersedia.
 
 | Dokumen | Kegunaan |
 |---|---|
 | [Kesesuaian kompetisi](competition-alignment.md) | Penilaian konsep terhadap PPT dan gap submission |
 | [BRD](BRD_Equora.md) | Masalah, tujuan, stakeholder dan scope bisnis |
 | [PRD](PRD_Equora.md) | Fitur, acceptance criteria, stack dan model domain usulan |
+| [Stack teknis](technical-stack.md) | Alasan pemilihan, alternatif solver, validasi hasil dan protokol benchmark |
+| [Setup stack](setup-stack.md) | Fondasi implementasi, struktur folder, runtime dan petunjuk menjalankan aplikasi |
+| [System Design](system-design/README.md) | Dokumen Word dari template, diagram arsitektur, kontrak dan kesiapan operasi |
+| [Rencana peta](map-plan.md) | MapLibre/Protomaps, sumber layer, gerbang geografis, atribusi dan fallback |
 | [Desain UI](DESIGN_Equora.md) | Baseline Soft Gray Enterprise / Coral |
 | [Project plan](project-plan.md) | Prioritas, jadwal kerja usulan dan risiko |
+| [Pembagian kerja dua orang](pembagian-kerja/README.md) | Porsi pemilik/teman, folder tugas per fitur, dependensi dan checklist serah terima |
 | [Data readiness](data-readiness.md) | Gerbang validasi sebelum analisis |
 | [Submission checklist](submission-checklist.md) | Bukti yang perlu disiapkan per tahap |
 | [Keputusan dan pertanyaan](decisions.md) | Keputusan yang masih perlu dikonfirmasi |

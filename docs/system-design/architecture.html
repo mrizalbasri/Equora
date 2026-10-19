@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arsitektur MVP Equora</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&amp;family=Inter:wght@400;600;700&amp;display=swap">
+  <style>
+    :root { color-scheme:light; --page:#E7E8EA; --paper:#F9F9FA; --ink:#24262B; --muted:#555C65; --accent:#C94025; --tint:#F7E4DF; --rule:#CFD2D6; --link:#2E668C; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--page); color:var(--ink); font-family:Inter,Arial,sans-serif; }
+    main { max-width:1080px; min-width:0; margin:48px auto; padding:0 24px; }
+    h1 { margin:0 0 12px; font-size:32px; line-height:1.2; font-weight:600; }
+    p { max-width:850px; margin:12px 0 24px; font-size:16px; line-height:1.6; color:var(--muted); }
+    .diagram-container { width:100%; overflow-x:auto; border:1px solid var(--rule); border-radius:6px; background:var(--paper); }
+    svg { width:100%; min-width:960px; display:block; }
+    svg text { font-family:Inter,Arial,sans-serif; fill:var(--ink); }
+    .technical,.tag,.edge-label { font-family:'Geist Mono',Consolas,monospace; }
+    .technical { font-size:14px; fill:var(--muted); }
+    .tag { font-size:14px; font-weight:500; fill:var(--muted); }
+    .node-name { font-size:20px; font-weight:600; }
+    .edge-label { font-size:14px; fill:var(--muted); text-anchor:middle; }
+    .route { fill:none; stroke:var(--muted); stroke-width:2; marker-end:url(#eq-arrow); }
+    .planned-route { stroke-dasharray:5 4; }
+    .mask { fill:var(--paper); }
+    .node { fill:#FFFFFF; stroke:var(--muted); stroke-width:1.5; }
+    .future { stroke-dasharray:5 4; }
+    .focus { fill:var(--tint); stroke:var(--accent); stroke-width:2; }
+    .legend { font-size:14px; fill:var(--muted); }
+    @media(max-width:600px) { main { margin:24px auto; padding:0 16px; } h1 { font-size:26px; } }
+    @media print { body { background:white; } main { max-width:none; margin:0; padding:0; } .diagram-container { overflow-x:visible; } svg { min-width:0; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Arsitektur MVP Equora</h1>
+  <p>Fondasi aplikasi sudah tersedia. ETL, penilaian kebutuhan, optimasi dan tabel domain masih direncanakan. PostgreSQL memakai instance bersama yang sudah ada; target database atau schema Equora belum dibuat.</p>
+  <div class="diagram-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 492" role="img" aria-labelledby="architecture-title architecture-desc">
+      <title id="architecture-title">Arsitektur MVP Equora</title>
+      <desc id="architecture-desc">Frontend lokal memanggil API FastAPI yang dirancang mengoordinasikan MCDA dan optimasi, sedangkan ETL akan mengubah berkas sumber menjadi release pada target PostgreSQL Equora yang belum dibuat.</desc>
+      <defs>
+        <marker id="eq-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#555C65"/></marker>
+      </defs>
+      <rect width="960" height="492" fill="#F9F9FA"/>
+      <text x="32" y="44" font-size="24" font-weight="600">Web, API dan engine keputusan</text>
+      <text x="32" y="72" class="technical">ARSITEKTUR TARGET · STATUS 19 OKTOBER 2026</text>
+
+      <path d="M208 152 H272" class="route" style="stroke:#2E668C"/>
+      <path d="M448 152 H512" class="route planned-route"/>
+      <path d="M688 152 H752" class="route planned-route"/>
+      <path d="M360 200 V228 Q360 236 368 236 H592 Q600 236 600 244 V280" class="route planned-route"/>
+      <path d="M272 328 H208" class="route planned-route"/>
+      <path d="M120 376 V412 Q120 420 128 420 H592 Q600 420 600 412 V376" class="route planned-route"/>
+
+      <rect x="216" y="120" width="48" height="22" class="mask"/><text x="240" y="137" class="edge-label">HTTP</text>
+      <rect x="456" y="120" width="48" height="22" class="mask"/><text x="480" y="137" class="edge-label">CALL</text>
+      <rect x="696" y="120" width="48" height="22" class="mask"/><text x="720" y="137" class="edge-label">SKOR</text>
+      <rect x="456" y="204" width="48" height="24" class="mask"/><text x="480" y="223" class="edge-label">SQL</text>
+      <rect x="216" y="296" width="48" height="22" class="mask"/><text x="240" y="313" class="edge-label">READ</text>
+      <rect x="312" y="388" width="96" height="24" class="mask"/><text x="360" y="407" class="edge-label">RELEASE</text>
+
+      <g data-node-id="web">
+        <rect x="32" y="104" width="176" height="96" rx="6" class="node"/>
+        <text x="48" y="124" class="tag">FONDASI ADA</text>
+        <text x="48" y="152" class="node-name">Frontend</text>
+        <text x="48" y="176" class="technical">SvelteKit · pnpm</text>
+      </g>
+      <g data-node-id="api">
+        <rect x="272" y="104" width="176" height="96" rx="6" class="node focus"/>
+        <text x="288" y="124" class="tag">HEALTH TERSEDIA</text>
+        <text x="288" y="152" class="node-name">API</text>
+        <text x="288" y="176" class="technical">FastAPI · /api/v1</text>
+      </g>
+      <g data-node-id="mcda">
+        <rect x="512" y="104" width="176" height="96" rx="6" class="node future"/>
+        <text x="528" y="124" class="tag">USULAN</text>
+        <text x="528" y="152" class="node-name">MCDA</text>
+        <text x="528" y="176" class="technical">Bobot + missing</text>
+      </g>
+      <g data-node-id="solver">
+        <rect x="752" y="104" width="176" height="96" rx="6" class="node focus future"/>
+        <text x="768" y="124" class="tag">USULAN</text>
+        <text x="768" y="152" class="node-name">Optimasi</text>
+        <text x="768" y="176" class="technical">OR-Tools + cek</text>
+      </g>
+      <g data-node-id="etl">
+        <rect x="32" y="280" width="176" height="96" rx="6" class="node future"/>
+        <text x="48" y="300" class="tag">USULAN</text>
+        <text x="48" y="328" class="node-name">ETL</text>
+        <text x="48" y="352" class="technical">Polars/openpyxl</text>
+      </g>
+      <g data-node-id="files">
+        <rect x="272" y="280" width="176" height="96" rx="6" class="node future"/>
+        <text x="288" y="300" class="tag">BELUM DIAUDIT</text>
+        <text x="288" y="328" class="node-name">Berkas sumber</text>
+        <text x="288" y="352" class="technical">data/raw/</text>
+      </g>
+      <g data-node-id="database">
+        <rect x="512" y="280" width="176" height="96" rx="6" class="node"/>
+        <text x="528" y="300" class="tag">INSTANCE ADA</text>
+        <text x="528" y="324" class="node-name">PostgreSQL</text>
+        <text x="528" y="344" class="technical">postgres-local</text>
+        <text x="528" y="364" class="technical">Target belum ada</text>
+      </g>
+
+      <text x="752" y="308" font-size="14" font-weight="600">Keputusan lingkungan</text>
+      <text x="752" y="336" class="technical">Frontend lokal</text>
+      <text x="752" y="360" class="technical">Compose hanya API</text>
+      <text x="752" y="384" class="technical">Migrasi manual</text>
+      <line x1="32" y1="452" x2="928" y2="452" stroke="#CFD2D6"/>
+      <line x1="32" y1="476" x2="64" y2="476" stroke="#555C65" stroke-width="2"/>
+      <text x="76" y="481" class="legend">Tersedia</text>
+      <line x1="236" y1="476" x2="268" y2="476" stroke="#555C65" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="280" y="481" class="legend">Direncanakan atau belum diisi</text>
+      <text x="752" y="481" class="legend">7 komponen · 6 alur</text>
+    </svg>
+  </div>
+  <p>HTTP web–API dan health endpoint sudah tersedia. Garis SQL masih rencana koneksi target Equora; uji koneksi server bersama tidak berarti schema bisnis telah dibuat. Hasil solver harus melewati validasi independen sebelum disimpan sebagai hasil sukses.</p>
+</main>
+</body>
+</html>
