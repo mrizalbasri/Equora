@@ -2,7 +2,7 @@
 
 Platform web untuk membandingkan akses fasilitas pendidikan dari data publik dan menguji simulasi prioritas alokasi sumber daya yang dapat dijelaskan. Disiapkan untuk Web In Action (WIA), MIA 2026.
 
-**Status 19 Oktober 2026: fondasi backend/frontend disiapkan; fitur produk dan dataset belum diimplementasikan.**
+**Status 20 Oktober 2026: `main` berisi fondasi backend/frontend; fitur produk dan dataset belum terintegrasi ke `main`.**
 
 ## Dokumentasi
 
@@ -20,16 +20,40 @@ SvelteKit, TypeScript, Tailwind CSS, ECharts, MapLibre/PMTiles; FastAPI, Postgre
 
 Clone [repository Equora](https://github.com/mrizalbasri/Equora), lalu siapkan Node.js 24, pnpm 11.18.0, Python 3.14, uv dan Docker Desktop yang berjalan. PostgreSQL memakai instance Docker yang sudah ada, bukan server baru dari Compose Equora. Petunjuk lengkap: [backend](backend/README.md), [frontend](frontend/README.md), dan [data](data/README.md).
 
-Development dengan PowerShell, mulai dari root repository:
+### macOS/Linux
+
+Jalankan dari root repository. Terminal pertama menjalankan API:
+
+```sh
+cd backend
+python3 -m pip install --user uv  # hanya jika uv belum tersedia
+uv sync --locked --extra dev
+cp -n .env.example .env
+uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Terminal kedua menjalankan frontend:
+
+```sh
+cd frontend
+pnpm install --frozen-lockfile
+cp -n .env.example .env
+pnpm dev
+```
+
+`cp -n` tidak menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend saat ini berupa JSON status fondasi, belum halaman produk. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
+
+### Windows PowerShell
 
 ```powershell
 cd backend
+python -m pip install uv
 uv sync --locked --extra dev
 Copy-Item .env.example .env
 uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Di terminal kedua, mulai dari root repository:
+Di terminal kedua:
 
 ```powershell
 cd frontend
@@ -38,7 +62,7 @@ Copy-Item .env.example .env
 pnpm dev
 ```
 
-Pasang uv bila belum tersedia dengan `python -m pip install uv`. Jangan menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend saat ini berupa JSON status fondasi, belum halaman produk. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
+Jangan menimpa `.env` yang sudah disesuaikan. Jika pnpm belum tersedia, aktifkan pnpm 11.18.0 melalui Corepack seperti dijelaskan di [panduan frontend](frontend/README.md).
 
 Frontend dijalankan langsung melalui `pnpm dev`. Untuk menjalankan API dalam container, jalankan `docker compose up --build -d` dari `backend/`; file Compose hanya tersedia di backend. API memakai network PostgreSQL yang sudah ada. Database/schema Equora belum dibuat; isi koneksi setelah target disiapkan, lalu jalankan migrasi secara manual sesuai panduan backend.
 
@@ -61,12 +85,21 @@ Untuk memeriksa tautan dokumentasi dengan Python 3:
 python scripts/check_docs.py
 ```
 
+Untuk menjalankan tes E2E frontend secara lokal, unduh Chromium Playwright
+sekali dari folder `frontend/`:
+
+```sh
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
 ## Progress
 
 - [x] BRD, PRD dan baseline desain.
 - [x] Evaluasi materi Technical Meeting dan checklist submission.
 - [x] Struktur docs, template issue/PR, dan workflow pemeriksaan docs.
 - [x] Fondasi backend/frontend, Compose backend, migrasi awal, kontrak OpenAPI dan CI stack.
+- [x] Panduan clone, setup dan menjalankan fondasi pada macOS/Linux serta Windows.
 - [ ] Audit file dataset dan lisensi.
 - [ ] Landing page dan explorer berjalan.
 - [ ] Simulasi, perbandingan skenario, dan pengujian.
