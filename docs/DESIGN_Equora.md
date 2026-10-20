@@ -157,11 +157,14 @@ Navigation item terdiri dari ikon, label, active background putih/hampir putih d
 **Tujuan:** dalam 10 detik menjelaskan *data → prioritas → skenario* dan mengarahkan pengunjung ke pengalaman nyata.
 
 ```text
-[logo]       Jelajahi Data   Studio Skenario   Metodologi    [Mulai eksplorasi]
+[logo]       Alur analisis   Sumber data   Metode & batasan   Tentang Equora
 
-[Eyebrow: Transparansi data dan keputusan]
-[Pahlawan: Dari data publik menuju keputusan yang lebih terukur.]
-[Deskripsi 2 baris, caveat simulator] [Jelajahi data] [Bangun skenario]
+[Eyebrow: Data publik untuk pendidikan]
+[Hero: Beda wilayah, beda kebutuhan.]
+[Deskripsi: air minum, fasilitas digital dan konteks kebutuhan wilayah]
+[Lihat alur perbandingan] [Pahami cara simulasi]
+[Status pengembangan + caveat simulator]
+[Ilustrasi lingkungan sekolah yang dominan; caption air minum / sanitasi / akses digital]
 
 [Product preview: contoh explorer, grafik, scenario output yang bisa diklik]
 [3 langkah: Telusuri data > Susun prioritas > Bandingkan skenario]
@@ -172,6 +175,8 @@ Navigation item terdiri dari ikon, label, active background putih/hampir putih d
 ```
 
 **Interactions:** CTA navigate; product preview no fake live metrics; no misleading logos/testimonials. Hero motion optional and respects `prefers-reduced-motion`.
+
+**Hero publik saat ini:** komposisi teks dan ilustrasi terbuka, bukan kartu status berisi daftar metadata. Headline dua baris menonjolkan kebutuhan antardaerah, dengan ilustrasi kampus/sekolah SVG di sebelahnya. Buku, air dan perangkat digital hanya memberi konteks fasilitas, bukan bukti data sekolah nyata. Metadata dan rincian alur tetap di section berikutnya. Pada mobile ilustrasi ditumpuk setelah teks/tindakan, tanpa label kecil tertanam di SVG. CTA menuju anchor penjelasan yang tersedia sampai explorer/studio siap; jangan membuat link aktif ke route yang belum ada.
 
 ### 6.2 `/explore` — Regional Equity Explorer (P0)
 Header: title, source snapshot/year, selected education level. Toolbar: pilih indikator, wilayah, tahun, jenjang, urutkan. Body desktop: peta *jika coverage geometri valid* or ranked bar chart, companion metrics cards, detail table. On mobile: chart then searchable table; no sideways forced scrolling. Click a region => details. Every indicator has `Lihat sumber`, unit, year, and warnings.

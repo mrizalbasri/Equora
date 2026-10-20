@@ -31,26 +31,19 @@
 ]}>
   <section class="eq-container hero" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <p class="eq-kicker">Transparansi data dan keputusan</p>
-      <h1 id="hero-title">Akses pendidikan berbeda.<br /><span>Prioritas perlu dasar.</span></h1>
-      <p class="intro">Bandingkan akses fasilitas pendidikan antardaerah. Pahami kebutuhan, lalu uji pilihan alokasi sumber daya dengan asumsi yang terbuka.</p>
+      <p class="eq-kicker">Data publik untuk pendidikan</p>
+      <h1 id="hero-title">Beda wilayah,<br /><span>beda kebutuhan.</span></h1>
+      <p class="intro">Dari air minum hingga akses digital, setiap wilayah punya konteksnya. Kenali kesenjangan fasilitas pendidikan dan pahami dasar pilihan alokasinya.</p>
       <div class="actions">
         <a class="eq-button eq-button-primary" href="#pratinjau">Lihat alur perbandingan</a>
         <a class="eq-button" href="#metode">Pahami cara simulasi</a>
       </div>
-      <p class="hero-note">Intelligence for Equitable Decisions.</p>
+      <p class="hero-note"><span class="development-label">Dalam pengembangan</span><br />Simulasi, bukan keputusan anggaran resmi.</p>
     </div>
-    <aside class="analysis-note" aria-labelledby="analysis-title">
-      <div class="note-header"><span>Ruang analisis Equora</span><span class="status">Dalam pengembangan</span></div>
+    <figure class="education-visual">
       <div class="education-scene"><EducationScene /></div>
-      <h2 id="analysis-title">Dari akses,<br />ke pilihan alokasi.</h2>
-      <dl>
-        <div><dt>Data publik</dt><dd>Fasilitas pendidikan</dd></div>
-        <div><dt>Prioritas</dt><dd>Indikator & bobot terbuka</dd></div>
-        <div><dt>Skenario</dt><dd>Anggaran & kendala</dd></div>
-      </dl>
-      <p>Hasil adalah simulasi, bukan keputusan anggaran resmi.</p>
-    </aside>
+      <figcaption><p>Memahami akses, sebelum menentukan prioritas.</p><div class="facility-topics"><span>Air minum</span><span>Sanitasi</span><span>Akses digital</span></div></figcaption>
+    </figure>
   </section>
 
   <section id="pratinjau" class="eq-container preview" aria-labelledby="preview-title">
@@ -133,22 +126,22 @@
 </PublicShell>
 
 <style>
-  .hero { display: grid; grid-template-columns: 1.35fr 1fr; align-items: center; gap: 64px; padding-block: 48px 80px; }
-  .hero-copy > .eq-kicker { margin-bottom: 24px; }
+  .hero { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: 32px; padding-block: 56px 72px; }
+  .hero-copy > .eq-kicker { margin-bottom: 24px; color: var(--eq-primary-hover); }
+  h1 { font-size: clamp(2.6rem, 5vw, 4.5rem); line-height: 1.06; letter-spacing: -0.055em; }
   h1 span { color: var(--eq-primary-hover); }
-  .intro { max-width: 580px; margin-top: 24px; color: var(--eq-text-secondary); font-size: 18px; }
+  .intro { max-width: 500px; margin-top: 24px; color: var(--eq-text-secondary); font-size: 18px; line-height: 1.7; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-  .hero-note { margin-top: 24px; font-size: 13px; color: var(--eq-text-secondary); }
-  .analysis-note { border: 1px solid var(--eq-border); border-radius: var(--eq-radius-lg); padding: 24px; background: var(--eq-surface); }
-  .education-scene { margin-top: 20px; }
-  .note-header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--eq-text-secondary); }
-  .status { font-weight: 600; }
-  .analysis-note h2 { margin-block: 24px; font-size: clamp(1.8rem, 2.8vw, 2.4rem); }
+  .hero-note { margin-top: 24px; font-size: 13px; line-height: 1.8; color: var(--eq-text-secondary); }
+  .development-label { font-weight: 600; }
+  .education-visual { min-width: 0; margin: 0; }
+  .education-scene { width: 100%; }
+  figcaption { margin: 0 24px; padding-top: 16px; border-top: 1px solid var(--eq-border); }
+  figcaption > p { font-size: 14px; font-weight: 600; color: var(--eq-text); }
+  .facility-topics { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 8px; font-size: 13px; color: var(--eq-text-secondary); }
   dl { margin: 0; }
-  .analysis-note dl div { display: flex; justify-content: space-between; gap: 16px; padding-block: 14px; border-top: 1px solid var(--eq-border); font-size: 14px; }
   dt { font-weight: 600; }
   dd { margin: 0; color: var(--eq-text-secondary); }
-  .analysis-note > p { margin-top: 24px; font-size: 13px; color: var(--eq-text-secondary); }
   .preview { border: 1px solid var(--eq-border); border-radius: var(--eq-radius-lg); background: var(--eq-surface-elevated); }
   .preview-header { padding: 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
   .preview-header h2 { margin-top: 8px; font-size: clamp(1.5rem, 2.5vw, 2rem); }
@@ -200,8 +193,7 @@
   .method-details :global(aside) { margin-top: 24px; }
   @media (max-width: 1023px) {
     .hero { gap: 32px; padding-block: 40px 64px; }
-    .analysis-note { padding: 24px; }
-    .analysis-note dl div { flex-direction: column; gap: 4px; }
+    .hero .intro { font-size: 16px; }
     .sources-layout, .method { gap: 40px; }
     .preview-body { grid-template-columns: 1fr 1.4fr; }
     .facility-row { grid-template-columns: 1fr; gap: 8px; }
@@ -210,8 +202,8 @@
   @media (max-width: 767px) {
     .hero { grid-template-columns: 1fr; gap: 32px; padding-top: 24px; }
     h1 { max-width: 620px; }
-    .analysis-note h2 { margin-block: 24px; }
-    .analysis-note dl div { flex-direction: row; }
+    .education-visual { width: min(100%, 520px); justify-self: center; }
+    figcaption { margin-inline: 16px; }
     .preview-header { align-items: flex-start; flex-direction: column; gap: 12px; padding: 24px; }
     .preview-caption { text-align: left; }
     .preview-caption br { display: none; }
@@ -230,7 +222,6 @@
   }
   @media (max-width: 479px) {
     .actions { flex-direction: column; align-items: stretch; }
-    .analysis-note dl div { flex-direction: column; }
     .view-switch { flex-direction: column; align-items: stretch; }
     .facility-row { grid-template-columns: 1fr; gap: 8px; }
     .source-row { align-items: flex-start; flex-direction: column; gap: 8px; }

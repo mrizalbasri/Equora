@@ -4,7 +4,7 @@ test('built frontend serves landing HTML and a separate health route', async ({ 
   const root = await request.get('/');
   expect(root.ok()).toBeTruthy();
   expect(root.headers()['content-type']).toContain('text/html');
-  expect(await root.text()).toContain('Akses pendidikan berbeda.');
+  expect(await root.text()).toContain('Beda wilayah,');
   const health = await request.get('/health');
   expect(health.ok()).toBeTruthy();
   expect(await health.json()).toEqual({ status: 'ok' });

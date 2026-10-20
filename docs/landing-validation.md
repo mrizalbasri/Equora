@@ -8,6 +8,10 @@ Pembaruan: 20 Oktober 2026. Baseline: [DESIGN v1.2 Clean Education Blue](DESIGN_
 
 Tema memakai panel putih, canvas sangat muda, biru utama, serta satu bingkai workspace dengan bayangan tipis di desktop dan layout penuh di mobile. Ilustrasi sekolah SVG lokal memperjelas konteks pendidikan; bukan sekolah nyata atau data indikator. Warna ilustrasi mengikuti token UI. Tidak ada maskot atau aset finansial/avatar dari referensi.
 
+Penyempurnaan hero pada `feat/landing-hero`: headline **Beda wilayah, beda kebutuhan.**, komposisi teks/ilustrasi sekolah yang terbuka, detail buku/air/perangkat, serta caption fasilitas HTML. Kartu status/daftar metadata di sisi kanan dihapus. Status pengembangan dan batas simulasi tetap terlihat di dekat CTA. Palet v1.2 dan perilaku interaksi tetap sama.
+
+Hero terbaru telah diperiksa melalui build/type-check, 2 unit tests dan 6 Playwright tests yang lulus pada lima viewport. Detail tampilan tersedia di [hero desktop](evidence/landing/hero-desktop.png) dan [hero mobile](evidence/landing/hero-mobile.png); keduanya ditinjau secara visual. Gate Hard/Purpose/Liveliness/Craftsmanship tetap PASS: tidak ada metrik rekaan, caption tetap HTML terbaca, dan ilustrasi noninteraktif tidak menyamarkan tombol.
+
 CTA menuju anchor penjelasan yang tersedia. Tombol perbandingan/simulasi mengganti penjelasan, bukan menjalankan solver. Explorer/studio, release data, dan metode final ditandai belum tersedia. Tidak ada angka indikator, hasil optimasi, peta, testimoni atau dampak rekaan. Empat URL sumber mengacu pada calon sumber di BRD; halaman penerbit berhasil dibuka saat verifikasi, tetapi audit file/lisensi terpisah.
 
 ## Pemeriksaan aktual

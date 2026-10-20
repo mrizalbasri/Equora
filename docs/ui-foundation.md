@@ -13,6 +13,8 @@ ENERGY 2 / RHYTHM 2 / MOTION 1. Identitas Clean Education Blue: canvas abu-abu s
 - `AvailabilityNotice.svelte`: judul dan snippet isi untuk status ketersediaan. Tidak memakai live region untuk informasi statis.
 - `EducationScene.svelte`: ilustrasi sekolah lokal dengan nama aksesibel. Warna memakai token UI; tidak memuat angka, aset eksternal, atau hasil analisis.
 
+Hero memakai headline dua baris dan ilustrasi lingkungan sekolah yang terbuka, menggantikan kartu metadata di sisi kanan. Buku/air/perangkat memperjelas konteks fasilitas; caption HTML tetap terbaca pada mobile dan status pengembangan berada di dekat CTA. Alur dan metadata rinci tetap berada di bawah hero agar pengantar lebih mudah dipahami.
+
 Shell dipasang oleh halaman publik yang membutuhkannya. Endpoint `/health` dan `/api/health` tetap terpisah dari UI. Tidak ada sidebar dashboard atau navigasi admin sebelum route serta kontrol aksesnya tersedia.
 
 ## Pemisahan pekerjaan
