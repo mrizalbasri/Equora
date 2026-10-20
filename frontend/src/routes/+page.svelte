@@ -35,12 +35,6 @@
     <section class="eq-container hero" aria-labelledby="hero-title">
       <!-- Centered Header Copy -->
       <div class="hero-header">
-        <div class="hero-badge">
-          <span class="badge-dot" aria-hidden="true"></span>
-          <span class="badge-text">Data publik untuk pendidikan</span>
-          <span class="badge-sep" aria-hidden="true">·</span>
-          <span class="badge-tag">Dalam pengembangan</span>
-        </div>
         <h1 id="hero-title">Beda wilayah,<br /><span>beda kebutuhan.</span></h1>
         <p class="intro">Dari air minum hingga akses digital, setiap wilayah punya konteksnya. Kenali kesenjangan fasilitas pendidikan dan pahami dasar pilihan alokasinya.</p>
         <div class="actions">
@@ -409,32 +403,6 @@
     align-items: center;
     max-width: 820px;
     margin-inline: auto;
-  }
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    background: var(--eq-surface);
-    border: 1px solid var(--eq-border);
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 550;
-    color: var(--eq-text-secondary);
-    box-shadow: 0 2px 8px rgb(18 100 216 / 4%);
-    margin-bottom: 24px;
-  }
-  .badge-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--eq-primary);
-    box-shadow: 0 0 0 3px var(--eq-primary-tint);
-    animation: pulseDot 2s infinite ease-in-out;
-  }
-  .badge-tag {
-    color: var(--eq-primary-hover);
-    font-weight: 600;
   }
   h1 {
     font-size: clamp(2.6rem, 5.5vw, 4.6rem);
@@ -861,10 +829,6 @@
     from { width: 0; }
     to { width: var(--target-width); }
   }
-  @keyframes pulseDot {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.7; }
-  }
 
   /* Section Pratinjau */
   .preview { border: 1px solid var(--eq-border); border-radius: var(--eq-radius-lg); background: var(--eq-surface-elevated); }
@@ -992,10 +956,10 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-badge, h1, .intro, .actions, .hero-note, .hero-showcase, .progress-bar {
+    .progress-bar {
       animation: none !important;
     }
-    .badge-left, .badge-right, .badge-dot {
+    .badge-left, .badge-right {
       animation: none !important;
     }
   }
