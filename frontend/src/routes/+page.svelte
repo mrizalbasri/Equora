@@ -856,7 +856,7 @@
   .allocation-explainer dt { font-size: 14px; margin-bottom: 6px; }
   .allocation-explainer dd { font-size: 14px; }
   .allocation-explainer a { display: inline-flex; align-items: center; min-height: 44px; margin-top: 16px; font-size: 14px; }
-  
+
   /* Section Workflow */
   .workflow { padding-block: 96px; }
   .section-heading > p:last-child { margin-top: 20px; max-width: 370px; color: var(--eq-text-secondary); }
@@ -866,7 +866,7 @@
   li:hover { transform: translateY(-3px); background: var(--eq-surface-subtle); box-shadow: 0 8px 24px rgb(18 100 216 / 4%); }
   li h3 { margin-block: 20px 12px; }
   li p { color: var(--eq-text-secondary); font-size: 14px; }
-  
+
   /* Section Sources */
   .sources-section { padding-block: 64px; background: var(--eq-surface-subtle); border-block: 1px solid var(--eq-border); }
   .sources-layout { display: grid; grid-template-columns: 1fr 1.35fr; gap: 80px; }
@@ -880,7 +880,7 @@
   .source-link-label { flex-shrink: 0; text-decoration: underline; text-underline-offset: 4px; }
   .source-row:hover h3 { text-decoration: underline; text-underline-offset: 4px; }
   .source-footnote { margin-top: 24px; }
-  
+
   /* Section Method */
   .method { display: grid; grid-template-columns: 1fr 1.35fr; gap: 80px; padding-block: 96px; }
   .method-details details { border-top: 1px solid var(--eq-border); }
