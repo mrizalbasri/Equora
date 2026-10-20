@@ -4,6 +4,12 @@
   import EducationScene from '#lib/components/EducationScene.svelte';
 
   let view = $state<'access' | 'allocation'>('access');
+  let facility = $state<'water' | 'sanitation' | 'digital'>('water');
+  const heroFacilities = [
+    { id: 'water', label: 'Air minum', description: 'Air minum layak adalah bagian dari lingkungan belajar yang sehat.' },
+    { id: 'sanitation', label: 'Sanitasi', description: 'Sanitasi dasar mendukung kenyamanan dan kebersihan di sekolah.' },
+    { id: 'digital', label: 'Akses digital', description: 'Internet dan komputer membuka akses pada sumber belajar digital.' }
+  ] as const;
   const facilities = [
     { name: 'Sanitasi dasar', measure: 'Persentase sekolah dengan akses', note: 'Bandingkan pada tahun dan jenjang yang sama.' },
     { name: 'Air minum layak', measure: 'Persentase sekolah dengan akses', note: 'Periksa definisi akses dan cakupan wilayah.' },
@@ -29,22 +35,33 @@
   { label: 'Metode & batasan', href: '#metode' },
   { label: 'Tentang Equora', href: '/about' }
 ]}>
+  <div class="hero-backdrop">
   <section class="eq-container hero" aria-labelledby="hero-title">
     <div class="hero-copy">
       <p class="eq-kicker">Data publik untuk pendidikan</p>
       <h1 id="hero-title">Beda wilayah,<br /><span>beda kebutuhan.</span></h1>
       <p class="intro">Dari air minum hingga akses digital, setiap wilayah punya konteksnya. Kenali kesenjangan fasilitas pendidikan dan pahami dasar pilihan alokasinya.</p>
       <div class="actions">
-        <a class="eq-button eq-button-primary" href="#pratinjau">Lihat alur perbandingan</a>
+        <a class="eq-button eq-button-primary hero-primary" href="#pratinjau">Lihat alur perbandingan <span aria-hidden="true">↗</span></a>
         <a class="eq-button" href="#metode">Pahami cara simulasi</a>
       </div>
       <p class="hero-note"><span class="development-label">Dalam pengembangan</span><br />Simulasi, bukan keputusan anggaran resmi.</p>
     </div>
     <figure class="education-visual">
-      <div class="education-scene"><EducationScene /></div>
-      <figcaption><p>Memahami akses, sebelum menentukan prioritas.</p><div class="facility-topics"><span>Air minum</span><span>Sanitasi</span><span>Akses digital</span></div></figcaption>
+      <div class="education-scene"><EducationScene selected={facility} /></div>
+      <figcaption>
+        <p class="scene-label">Kenali fasilitas sekolah</p>
+        <div class="facility-topics" role="group" aria-label="Sorot fasilitas pada ilustrasi">
+          {#each heroFacilities as item}
+            <button aria-pressed={facility === item.id} aria-controls="facility-description" onclick={() => facility = item.id}>{item.label}</button>
+          {/each}
+        </div>
+        <p id="facility-description" class="facility-description" aria-live="polite">{heroFacilities.find((item) => item.id === facility)?.description}</p>
+        <p class="illustration-note">Ilustrasi pengenalan · bukan data sekolah</p>
+      </figcaption>
     </figure>
   </section>
+  </div>
 
   <section id="pratinjau" class="eq-container preview" aria-labelledby="preview-title">
     <div class="preview-header">
@@ -126,19 +143,30 @@
 </PublicShell>
 
 <style>
+  .hero-backdrop { position: relative; isolation: isolate; background: linear-gradient(110deg, var(--eq-surface) 30%, var(--eq-primary-tint) 100%); margin-bottom: 40px; }
+  .hero-backdrop::before { content: ''; position: absolute; inset: 0; z-index: -1; border-bottom: 1px solid var(--eq-border); border-radius: 0 0 80px 0; pointer-events: none; }
   .hero { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: 32px; padding-block: 56px 72px; }
   .hero-copy > .eq-kicker { margin-bottom: 24px; color: var(--eq-primary-hover); }
   h1 { font-size: clamp(2.6rem, 5vw, 4.5rem); line-height: 1.06; letter-spacing: -0.055em; }
   h1 span { color: var(--eq-primary-hover); }
   .intro { max-width: 500px; margin-top: 24px; color: var(--eq-text-secondary); font-size: 18px; line-height: 1.7; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero-primary { box-shadow: 0 4px 0 var(--eq-primary-hover); gap: 16px; transition: transform 160ms ease, box-shadow 160ms ease; }
+  .hero-primary span { font-size: 20px; }
+  .hero-primary:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--eq-primary-hover); }
   .hero-note { margin-top: 24px; font-size: 13px; line-height: 1.8; color: var(--eq-text-secondary); }
   .development-label { font-weight: 600; }
   .education-visual { min-width: 0; margin: 0; }
   .education-scene { width: 100%; }
-  figcaption { margin: 0 24px; padding-top: 16px; border-top: 1px solid var(--eq-border); }
+  figcaption { margin: 0 24px; padding-top: 16px; border-top: 1px solid var(--eq-control-border); }
   figcaption > p { font-size: 14px; font-weight: 600; color: var(--eq-text); }
-  .facility-topics { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 8px; font-size: 13px; color: var(--eq-text-secondary); }
+  .facility-topics { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .facility-topics button { min-height: 44px; padding: 8px 14px; border: 1px solid var(--eq-control-border); border-radius: var(--eq-radius-sm); background: var(--eq-surface); color: var(--eq-text-secondary); font-size: 13px; font-weight: 600; }
+  .facility-topics button[aria-pressed='true'] { background: var(--eq-primary); color: white; border-color: var(--eq-primary); }
+  .facility-topics button:hover { border-color: var(--eq-primary); }
+  figcaption .facility-description { min-height: 48px; margin-top: 12px; color: var(--eq-text-secondary); font-size: 14px; font-weight: 400; }
+  figcaption .illustration-note { margin-top: 8px; font-size: 12px; color: var(--eq-text-muted); font-weight: 400; }
+  @media (prefers-reduced-motion: reduce) { .hero-primary:active { transform: none; } }
   dl { margin: 0; }
   dt { font-weight: 600; }
   dd { margin: 0; color: var(--eq-text-secondary); }
@@ -200,6 +228,7 @@
     ol { gap: 24px; }
   }
   @media (max-width: 767px) {
+    .hero-backdrop { background: linear-gradient(180deg, var(--eq-surface) 35%, var(--eq-primary-tint) 100%); margin-bottom: 32px; }
     .hero { grid-template-columns: 1fr; gap: 32px; padding-top: 24px; }
     h1 { max-width: 620px; }
     .education-visual { width: min(100%, 520px); justify-self: center; }

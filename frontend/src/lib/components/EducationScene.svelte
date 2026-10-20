@@ -1,4 +1,8 @@
-<svg viewBox="0 0 600 430" role="img" aria-label="Ilustrasi lingkungan sekolah dengan fasilitas air dan akses digital, bukan data sekolah nyata">
+<script lang="ts">
+  let { selected = 'water' }: { selected?: 'water' | 'sanitation' | 'digital' } = $props();
+</script>
+
+<svg viewBox="0 0 600 430" role="img" aria-label="Ilustrasi lingkungan sekolah dengan fasilitas air, sanitasi, dan akses digital, bukan data sekolah nyata">
   <defs>
     <pattern id="eq-school-windows" width="30" height="38" patternUnits="userSpaceOnUse">
       <rect x="6" y="8" width="17" height="22" rx="2" class="window" />
@@ -32,14 +36,24 @@
   <path d="M64 264C48 247 63 228 69 222C66 198 100 194 108 218C130 231 117 263 103 268Z" class="leaves" />
   <path d="M511 256C495 239 510 220 516 214C513 190 547 186 555 210C577 223 564 255 550 260Z" class="leaves" />
   <g transform="translate(49 108) rotate(-7 38 38)">
+    <g class="facility-icon" class:selected={selected === 'water'}>
     <rect width="76" height="76" rx="20" class="resource-card" />
     <path d="M38 17C31 28 23 36 23 44A15 15 0 0 0 53 44C53 36 45 28 38 17Z" class="drop" />
     <path d="M31 44Q31 51 38 52" class="drop-detail" />
+    </g>
   </g>
   <g transform="translate(439 59) rotate(8 43 37)">
+    <g class="facility-icon" class:selected={selected === 'digital'}>
     <rect width="88" height="74" rx="20" class="resource-card" />
     <path d="M23 40V24H65V50H23V40M16 57H72M38 50V57M51 50V57" class="computer" />
     <path d="M36 34Q44 27 52 34M41 39Q44 36 47 39" class="signal" />
+    </g>
+  </g>
+  <g transform="translate(450 306) rotate(5 38 38)">
+    <g class="facility-icon" class:selected={selected === 'sanitation'}>
+      <rect width="76" height="76" rx="20" class="resource-card" />
+      <path d="M18 37H58L53 49H23ZM38 49V59M28 59H48M35 37V23H46V28M31 23H40" class="computer" />
+    </g>
   </g>
   <path d="M146 347Q169 331 192 344L192 381Q169 367 146 380Z" class="open-book-left" />
   <path d="M192 344Q216 331 240 347V380Q216 367 192 381Z" class="open-book-right" />
@@ -60,6 +74,10 @@
   .window-line, .door-line, .drop-detail { fill: none; stroke: var(--eq-surface); stroke-width: 1.5; stroke-linecap: round; }
   .tree { fill: none; stroke: var(--eq-chart-blue); stroke-width: 3; stroke-linecap: round; }
   .resource-card { fill: var(--eq-surface); stroke: var(--eq-border); stroke-width: 1.5; }
+  .facility-icon { transform-box: fill-box; transform-origin: center; transition: transform 220ms ease, filter 220ms ease; }
+  .selected { transform: translateY(-8px); filter: drop-shadow(0 8px 6px rgb(14 79 175 / 14%)); }
+  .selected .resource-card { stroke: var(--eq-primary); stroke-width: 2.5; }
+  @media (prefers-reduced-motion: reduce) { .facility-icon { transition: none; } .selected { transform: none; } }
   .computer, .signal, .book, .book-lines { fill: none; stroke: var(--eq-primary-hover); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .open-book-left, .open-book-right { stroke: var(--eq-chart-blue); stroke-width: 1.5; stroke-linejoin: round; }
 </style>

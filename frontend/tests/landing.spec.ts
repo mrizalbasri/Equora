@@ -12,6 +12,21 @@ for (const width of [360, 390, 768, 1024, 1440]) {
     await expect(page.getByText('Explorer belum tersedia.')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
+    const facilities = page.getByRole('group', { name: 'Sorot fasilitas pada ilustrasi' });
+    await facilities.getByRole('button', { name: 'Sanitasi', exact: true }).click();
+    await expect(page.locator('#facility-description')).toContainText('Sanitasi dasar');
+    await facilities.getByRole('button', { name: 'Akses digital', exact: true }).focus();
+    await page.keyboard.press('Enter');
+    await expect(facilities.getByRole('button', { name: 'Akses digital', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('#facility-description')).toContainText('Internet dan komputer');
+    await expect(page.locator('.education-scene .selected')).toHaveCount(1);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect(page.locator('.education-scene .selected')).toHaveCSS('transform', 'none');
+    await facilities.getByRole('button', { name: 'Air minum', exact: true }).click();
+    await expect(page.locator('#facility-description')).toContainText('Air minum layak');
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/');
+
     await page.keyboard.press('Tab');
     await expect(page.getByRole('link', { name: 'Lewati ke konten utama' })).toBeFocused();
     await page.keyboard.press('Enter');

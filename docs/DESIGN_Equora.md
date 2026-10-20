@@ -176,6 +176,8 @@ Navigation item terdiri dari ikon, label, active background putih/hampir putih d
 
 **Interactions:** CTA navigate; product preview no fake live metrics; no misleading logos/testimonials. Hero motion optional and respects `prefers-reduced-motion`.
 
+**Latar dan respons hero:** gradien putih menuju tint biru dibatasi pada pengantar untuk memisahkan area baca dari lingkungan ilustrasi. Tidak ada glow, grid atau glass. Pilihan fasilitas Air minum, Sanitasi dan Akses digital menyorot ikon terkait dan mengganti penjelasan HTML; ini pengenalan fasilitas, bukan dataset interaktif. Tombol memakai `aria-pressed`, dapat dioperasikan dengan keyboard, dan deskripsi diumumkan melalui live region. Transisi sorotan 220ms dan respons tekan CTA hanya dipicu tindakan pengguna, tanpa animasi berulang. Reduced motion mempertahankan outline seleksi tanpa perpindahan ikon/tombol.
+
 **Hero publik saat ini:** komposisi teks dan ilustrasi terbuka, bukan kartu status berisi daftar metadata. Headline dua baris menonjolkan kebutuhan antardaerah, dengan ilustrasi kampus/sekolah SVG di sebelahnya. Buku, air dan perangkat digital hanya memberi konteks fasilitas, bukan bukti data sekolah nyata. Metadata dan rincian alur tetap di section berikutnya. Pada mobile ilustrasi ditumpuk setelah teks/tindakan, tanpa label kecil tertanam di SVG. CTA menuju anchor penjelasan yang tersedia sampai explorer/studio siap; jangan membuat link aktif ke route yang belum ada.
 
 ### 6.2 `/explore` — Regional Equity Explorer (P0)

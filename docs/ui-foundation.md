@@ -15,6 +15,8 @@ ENERGY 2 / RHYTHM 2 / MOTION 1. Identitas Clean Education Blue: canvas abu-abu s
 
 Hero memakai headline dua baris dan ilustrasi lingkungan sekolah yang terbuka, menggantikan kartu metadata di sisi kanan. Buku/air/perangkat memperjelas konteks fasilitas; caption HTML tetap terbaca pada mobile dan status pengembangan berada di dekat CTA. Alur dan metadata rinci tetap berada di bawah hero agar pengantar lebih mudah dipahami.
 
+Penyempurnaan `feat/hero-atmosphere` memberi latar putih menuju tint biru hanya pada hero: area baca tetap terang, sisi ilustrasi menjadi lingkungan sekolah yang lebih terasa. Ini pemisah hierarki, tanpa glow, glass atau pola grid. Pilihan Air minum/Sanitasi/Akses digital adalah tombol nyata dengan `aria-pressed`, caption live dan sorotan ikon terkait; tidak mengubah data atau menjalankan analisis. Ikon terpilih terangkat 8px selama transisi 220ms, tanpa loop. Reduced motion meniadakan perpindahan, menyisakan outline seleksi. CTA utama memiliki tepi bawah biru gelap untuk respons tekan, tanpa menggeser layout. ENERGY 2 / RHYTHM 2 / MOTION 1 tetap berlaku.
+
 Shell dipasang oleh halaman publik yang membutuhkannya. Endpoint `/health` dan `/api/health` tetap terpisah dari UI. Tidak ada sidebar dashboard atau navigasi admin sebelum route serta kontrol aksesnya tersedia.
 
 ## Pemisahan pekerjaan
