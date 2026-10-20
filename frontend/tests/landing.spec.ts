@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-for (const width of [360, 768, 1440]) {
+for (const width of [360, 390, 768, 1024, 1440]) {
   test(`public pages and interactions at ${width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: 900 });
     const errors: string[] = [];

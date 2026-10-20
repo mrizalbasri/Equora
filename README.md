@@ -10,6 +10,8 @@ Mulai dari [indeks docs](docs/README.md) dan [evaluasi kesesuaian lomba](docs/co
 
 Dokumen utama hanya disimpan di `docs/`: [BRD](docs/BRD_Equora.md), [PRD](docs/PRD_Equora.md), dan [desain](docs/DESIGN_Equora.md).
 
+Tema visual terbaru: **Clean Education Blue (DESIGN v1.2)**, disetujui 20 Oktober 2026. Landing/About memakai panel putih, latar abu-abu sangat muda dan biru utama; diagram serta dokumen System Design mengikuti palet yang sama.
+
 Untuk kontributor yang mulai coding, ikuti [panduan mengambil fondasi](docs/pembagian-kerja/MULAI-NGODING.md). Pekerjaan frontend dapat dimulai tanpa database; fondasi UI publik tersedia dalam [panduan UI](docs/ui-foundation.md), sedangkan kontrak katalog belum tersedia.
 
 ## Stack

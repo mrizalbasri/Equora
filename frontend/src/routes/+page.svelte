@@ -1,6 +1,7 @@
 <script lang="ts">
   import PublicShell from '#lib/components/PublicShell.svelte';
   import AvailabilityNotice from '#lib/components/AvailabilityNotice.svelte';
+  import EducationScene from '#lib/components/EducationScene.svelte';
 
   let view = $state<'access' | 'allocation'>('access');
   const facilities = [
@@ -41,6 +42,7 @@
     </div>
     <aside class="analysis-note" aria-labelledby="analysis-title">
       <div class="note-header"><span>Ruang analisis Equora</span><span class="status">Dalam pengembangan</span></div>
+      <div class="education-scene"><EducationScene /></div>
       <h2 id="analysis-title">Dari akses,<br />ke pilihan alokasi.</h2>
       <dl>
         <div><dt>Data publik</dt><dd>Fasilitas pendidikan</dd></div>
@@ -131,16 +133,17 @@
 </PublicShell>
 
 <style>
-  .hero { display: grid; grid-template-columns: 1.45fr 1fr; align-items: center; gap: 64px; padding-block: 64px 80px; }
+  .hero { display: grid; grid-template-columns: 1.35fr 1fr; align-items: center; gap: 64px; padding-block: 48px 80px; }
   .hero-copy > .eq-kicker { margin-bottom: 24px; }
-  h1 span { color: var(--eq-text-secondary); }
+  h1 span { color: var(--eq-primary-hover); }
   .intro { max-width: 580px; margin-top: 24px; color: var(--eq-text-secondary); font-size: 18px; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
   .hero-note { margin-top: 24px; font-size: 13px; color: var(--eq-text-secondary); }
-  .analysis-note { border: 1px solid var(--eq-border); border-radius: var(--eq-radius-lg); padding: 28px; background: var(--eq-surface); }
+  .analysis-note { border: 1px solid var(--eq-border); border-radius: var(--eq-radius-lg); padding: 24px; background: var(--eq-surface); }
+  .education-scene { margin-top: 20px; }
   .note-header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--eq-text-secondary); }
   .status { font-weight: 600; }
-  .analysis-note h2 { margin-block: 40px 32px; font-size: clamp(2rem, 3.5vw, 3rem); }
+  .analysis-note h2 { margin-block: 24px; font-size: clamp(1.8rem, 2.8vw, 2.4rem); }
   dl { margin: 0; }
   .analysis-note dl div { display: flex; justify-content: space-between; gap: 16px; padding-block: 14px; border-top: 1px solid var(--eq-border); font-size: 14px; }
   dt { font-weight: 600; }
@@ -156,7 +159,7 @@
   .view-switch button[aria-pressed='true'] { background: var(--eq-primary-tint); color: var(--eq-primary-hover); border-color: var(--eq-primary-tint); }
   .view-switch button:active { border-color: var(--eq-primary); }
   .preview-body { display: grid; grid-template-columns: 0.85fr 1.7fr; min-height: 382px; }
-  .preview-context { padding: 32px; background: var(--eq-surface); border-radius: 0 0 0 var(--eq-radius-lg); border-right: 1px solid var(--eq-border); }
+  .preview-context { padding: 32px; background: var(--eq-surface-subtle); border-radius: 0 0 0 var(--eq-radius-lg); border-right: 1px solid var(--eq-border); }
   .step-label { display: block; font-size: 13px; font-weight: 600; color: var(--eq-text-secondary); }
   .preview-context h3 { margin-block: 20px 16px; font-size: 26px; }
   .preview-context p { font-size: 14px; color: var(--eq-text-secondary); }
@@ -178,7 +181,7 @@
   li { padding-top: 20px; border-top: 1px solid var(--eq-border); }
   li h3 { margin-block: 24px 12px; }
   li p { color: var(--eq-text-secondary); font-size: 14px; }
-  .sources-section { padding-block: 64px; background: var(--eq-surface); border-block: 1px solid var(--eq-border); }
+  .sources-section { padding-block: 64px; background: var(--eq-surface-subtle); border-block: 1px solid var(--eq-border); }
   .sources-layout { display: grid; grid-template-columns: 1fr 1.35fr; gap: 80px; }
   .source-intro h2 { margin-block: 16px 24px; }
   .source-intro > p:not(.eq-kicker) { color: var(--eq-text-secondary); margin-bottom: 32px; }
