@@ -8,7 +8,7 @@
   <meta name="description" content="Tujuan, status pengembangan, dan batas penggunaan Equora, platform perbandingan akses fasilitas pendidikan dan simulasi alokasi sumber daya." />
 </svelte:head>
 
-<PublicShell links={[{ label: 'Beranda', href: '/' }, { label: 'Sumber data', href: '/#sumber' }, { label: 'Metode & batasan', href: '/#metode' }]}>
+<PublicShell links={[{ label: 'Alur analisis', href: '/#alur' }, { label: 'Sumber data', href: '/#sumber' }, { label: 'Metode & batasan', href: '/#metode' }, { label: 'Tentang Equora', href: '/about' }]}>
   <article class="eq-container about">
     <p class="eq-kicker">Tentang Equora</p>
     <h1>Keputusan lebih terukur dimulai dari data yang bisa diperiksa.</h1>

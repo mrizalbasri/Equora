@@ -4,7 +4,7 @@ Mengikuti baseline yang disetujui pada `DESIGN_Equora.md` v1.2, bagian 3–6, di
 
 ## Arah dan keputusan visual
 
-ENERGY 2 / RHYTHM 2 / MOTION 1. Identitas Clean Education Blue: canvas abu-abu sangat muda, panel putih, teks biru gelap/netral dan biru medium untuk tindakan utama. Tipografi Inter dengan fallback sistem mengikuti baseline, tanpa unduhan font. Ruang kosong memisahkan penjelasan dari bukti; border memisahkan metadata. Satu bingkai putih bersudut 28px dan bayangan tipis menandai workspace pada desktop; mobile menjadi bidang penuh tanpa bingkai. Wordmark teks sementara `equora.` mengikuti dokumen desain. Ilustrasi sekolah SVG lokal memperjelas konteks pendidikan tanpa mewakili sekolah nyata atau data.
+ENERGY 2 / RHYTHM 2 / MOTION 1. Identitas Clean Education Blue: canvas abu-abu sangat muda, panel putih, teks biru gelap/netral dan biru medium untuk tindakan utama. Tipografi Inter dengan fallback sistem mengikuti baseline, tanpa unduhan font. Ruang kosong memisahkan penjelasan dari bukti; border memisahkan metadata. Satu bingkai putih bersudut 28px dan bayangan tipis menandai workspace pada desktop; mobile/tablet di bawah 1024px menjadi bidang penuh tanpa bingkai. Wordmark teks sementara `equora.` mengikuti dokumen desain. Ilustrasi sekolah SVG lokal memperjelas konteks pendidikan tanpa mewakili sekolah nyata atau data.
 
 ## Kontrak bersama
 
@@ -13,9 +13,11 @@ ENERGY 2 / RHYTHM 2 / MOTION 1. Identitas Clean Education Blue: canvas abu-abu s
 - `AvailabilityNotice.svelte`: judul dan snippet isi untuk status ketersediaan. Tidak memakai live region untuk informasi statis.
 - `EducationScene.svelte`: ilustrasi sekolah lokal dengan nama aksesibel. Warna memakai token UI; tidak memuat angka, aset eksternal, atau hasil analisis.
 
-Hero memakai headline dua baris dan ilustrasi lingkungan sekolah yang terbuka, menggantikan kartu metadata di sisi kanan. Buku/air/perangkat memperjelas konteks fasilitas; caption HTML tetap terbaca pada mobile dan status pengembangan berada di dekat CTA. Alur dan metadata rinci tetap berada di bawah hero agar pengantar lebih mudah dipahami.
+Hero memakai headline dua baris dan ilustrasi sekolah statis. Panel Kenali fasilitas sekolah, pilihan fasilitas, caption dan state seleksinya dihapus pada `feat/public-navbar-refinement`, sesuai tinjauan pengguna. Penjelasan indikator tetap tersedia pada pratinjau. Nama aksesibel ilustrasi menjelaskan bahwa ini bukan data sekolah nyata. Status pengembangan tetap di dekat CTA.
 
-Penyempurnaan `feat/hero-atmosphere` memberi latar putih menuju tint biru hanya pada hero: area baca tetap terang, sisi ilustrasi menjadi lingkungan sekolah yang lebih terasa. Ini pemisah hierarki, tanpa glow, glass atau pola grid. Pilihan Air minum/Sanitasi/Akses digital adalah tombol nyata dengan `aria-pressed`, caption live dan sorotan ikon terkait; tidak mengubah data atau menjalankan analisis. Ikon terpilih terangkat 8px selama transisi 220ms, tanpa loop. Reduced motion meniadakan perpindahan, menyisakan outline seleksi. CTA utama memiliki tepi bawah biru gelap untuk respons tekan, tanpa menggeser layout. ENERGY 2 / RHYTHM 2 / MOTION 1 tetap berlaku.
+Latar putih menuju tint biru hanya pada hero memisahkan area baca dari ilustrasi, tanpa glow, glass atau grid. CTA utama memiliki tepi bawah biru gelap untuk respons tekan, tanpa menggeser layout. ENERGY 2 / RHYTHM 2 / MOTION 1 tetap berlaku.
+
+Navbar publik memakai header sticky putih solid, penanda aktif dengan `aria-current` dan outline pada Tentang Equora. Landing dan About memakai daftar menu yang sama. Breakpoint menu 1024px mencegah menu berdesakan di tablet; bingkai luar juga menjadi penuh di bawah breakpoint ini. Menu buka/tutup mendukung Escape, penutupan setelah navigasi, dan batas tinggi viewport dengan scroll. Offset anchor 112px menghindari judul tertutup header. Transisi ikon menu mengikuti reduced motion global.
 
 Shell dipasang oleh halaman publik yang membutuhkannya. Endpoint `/health` dan `/api/health` tetap terpisah dari UI. Tidak ada sidebar dashboard atau navigasi admin sebelum route serta kontrol aksesnya tersedia.
 

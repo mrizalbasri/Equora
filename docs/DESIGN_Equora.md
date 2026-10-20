@@ -164,7 +164,7 @@ Navigation item terdiri dari ikon, label, active background putih/hampir putih d
 [Deskripsi: air minum, fasilitas digital dan konteks kebutuhan wilayah]
 [Lihat alur perbandingan] [Pahami cara simulasi]
 [Status pengembangan + caveat simulator]
-[Ilustrasi lingkungan sekolah yang dominan; caption air minum / sanitasi / akses digital]
+[Ilustrasi lingkungan sekolah yang dominan, tanpa panel pilihan fasilitas]
 
 [Product preview: contoh explorer, grafik, scenario output yang bisa diklik]
 [3 langkah: Telusuri data > Susun prioritas > Bandingkan skenario]
@@ -176,7 +176,9 @@ Navigation item terdiri dari ikon, label, active background putih/hampir putih d
 
 **Interactions:** CTA navigate; product preview no fake live metrics; no misleading logos/testimonials. Hero motion optional and respects `prefers-reduced-motion`.
 
-**Latar dan respons hero:** gradien putih menuju tint biru dibatasi pada pengantar untuk memisahkan area baca dari lingkungan ilustrasi. Tidak ada glow, grid atau glass. Pilihan fasilitas Air minum, Sanitasi dan Akses digital menyorot ikon terkait dan mengganti penjelasan HTML; ini pengenalan fasilitas, bukan dataset interaktif. Tombol memakai `aria-pressed`, dapat dioperasikan dengan keyboard, dan deskripsi diumumkan melalui live region. Transisi sorotan 220ms dan respons tekan CTA hanya dipicu tindakan pengguna, tanpa animasi berulang. Reduced motion mempertahankan outline seleksi tanpa perpindahan ikon/tombol.
+**Latar dan respons hero:** gradien putih menuju tint biru dibatasi pada pengantar untuk memisahkan area baca dari lingkungan ilustrasi. Tidak ada glow, grid atau glass. Ilustrasi statis memiliki nama aksesibel yang menyatakan bahwa ini bukan data sekolah nyata. Panel pilihan fasilitas dan keterangannya dihapus agar hero ringkas; penjelasan indikator berada di pratinjau berikutnya. Respons tekan CTA tetap mengikuti reduced motion.
+
+**Navbar publik:** header sticky putih solid, logo di kiri dan menu di kanan. Tentang Equora dibedakan dengan outline; bagian aktif memakai tint biru, garis bawah dan `aria-current`. Landing dan About memakai menu yang sama. Di bawah 1024px menu buka/tutup memiliki target minimum 44px, Escape mengembalikan fokus, dan pilihan tautan menutup menu. Tinggi menu dibatasi viewport dan dapat digulir. Offset anchor 112px menjaga judul bagian tetap terbaca di bawah header.
 
 **Hero publik saat ini:** komposisi teks dan ilustrasi terbuka, bukan kartu status berisi daftar metadata. Headline dua baris menonjolkan kebutuhan antardaerah, dengan ilustrasi kampus/sekolah SVG di sebelahnya. Buku, air dan perangkat digital hanya memberi konteks fasilitas, bukan bukti data sekolah nyata. Metadata dan rincian alur tetap di section berikutnya. Pada mobile ilustrasi ditumpuk setelah teks/tindakan, tanpa label kecil tertanam di SVG. CTA menuju anchor penjelasan yang tersedia sampai explorer/studio siap; jangan membuat link aktif ke route yang belum ada.
 

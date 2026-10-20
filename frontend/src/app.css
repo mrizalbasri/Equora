@@ -46,7 +46,7 @@ button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
 :focus-visible { outline: 3px solid var(--eq-focus); outline-offset: 4px; }
 ::selection { background: var(--eq-primary-tint); color: var(--eq-text); }
-section[id], main[id] { scroll-margin-top: 24px; }
+section[id], main[id] { scroll-margin-top: 112px; }
 .eq-container { width: min(1200px, calc(100% - 64px)); margin-inline: auto; }
 .eq-button {
   display: inline-flex; justify-content: center; align-items: center;

@@ -4,12 +4,6 @@
   import EducationScene from '#lib/components/EducationScene.svelte';
 
   let view = $state<'access' | 'allocation'>('access');
-  let facility = $state<'water' | 'sanitation' | 'digital'>('water');
-  const heroFacilities = [
-    { id: 'water', label: 'Air minum', description: 'Air minum layak adalah bagian dari lingkungan belajar yang sehat.' },
-    { id: 'sanitation', label: 'Sanitasi', description: 'Sanitasi dasar mendukung kenyamanan dan kebersihan di sekolah.' },
-    { id: 'digital', label: 'Akses digital', description: 'Internet dan komputer membuka akses pada sumber belajar digital.' }
-  ] as const;
   const facilities = [
     { name: 'Sanitasi dasar', measure: 'Persentase sekolah dengan akses', note: 'Bandingkan pada tahun dan jenjang yang sama.' },
     { name: 'Air minum layak', measure: 'Persentase sekolah dengan akses', note: 'Periksa definisi akses dan cakupan wilayah.' },
@@ -48,17 +42,7 @@
       <p class="hero-note"><span class="development-label">Dalam pengembangan</span><br />Simulasi, bukan keputusan anggaran resmi.</p>
     </div>
     <figure class="education-visual">
-      <div class="education-scene"><EducationScene selected={facility} /></div>
-      <figcaption>
-        <p class="scene-label">Kenali fasilitas sekolah</p>
-        <div class="facility-topics" role="group" aria-label="Sorot fasilitas pada ilustrasi">
-          {#each heroFacilities as item}
-            <button aria-pressed={facility === item.id} aria-controls="facility-description" onclick={() => facility = item.id}>{item.label}</button>
-          {/each}
-        </div>
-        <p id="facility-description" class="facility-description" aria-live="polite">{heroFacilities.find((item) => item.id === facility)?.description}</p>
-        <p class="illustration-note">Ilustrasi pengenalan · bukan data sekolah</p>
-      </figcaption>
+      <div class="education-scene"><EducationScene /></div>
     </figure>
   </section>
   </div>
@@ -158,14 +142,6 @@
   .development-label { font-weight: 600; }
   .education-visual { min-width: 0; margin: 0; }
   .education-scene { width: 100%; }
-  figcaption { margin: 0 24px; padding-top: 16px; border-top: 1px solid var(--eq-control-border); }
-  figcaption > p { font-size: 14px; font-weight: 600; color: var(--eq-text); }
-  .facility-topics { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  .facility-topics button { min-height: 44px; padding: 8px 14px; border: 1px solid var(--eq-control-border); border-radius: var(--eq-radius-sm); background: var(--eq-surface); color: var(--eq-text-secondary); font-size: 13px; font-weight: 600; }
-  .facility-topics button[aria-pressed='true'] { background: var(--eq-primary); color: white; border-color: var(--eq-primary); }
-  .facility-topics button:hover { border-color: var(--eq-primary); }
-  figcaption .facility-description { min-height: 48px; margin-top: 12px; color: var(--eq-text-secondary); font-size: 14px; font-weight: 400; }
-  figcaption .illustration-note { margin-top: 8px; font-size: 12px; color: var(--eq-text-muted); font-weight: 400; }
   @media (prefers-reduced-motion: reduce) { .hero-primary:active { transform: none; } }
   dl { margin: 0; }
   dt { font-weight: 600; }
@@ -232,7 +208,6 @@
     .hero { grid-template-columns: 1fr; gap: 32px; padding-top: 24px; }
     h1 { max-width: 620px; }
     .education-visual { width: min(100%, 520px); justify-self: center; }
-    figcaption { margin-inline: 16px; }
     .preview-header { align-items: flex-start; flex-direction: column; gap: 12px; padding: 24px; }
     .preview-caption { text-align: left; }
     .preview-caption br { display: none; }

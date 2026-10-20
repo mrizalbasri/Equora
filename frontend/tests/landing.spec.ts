@@ -12,21 +12,6 @@ for (const width of [360, 390, 768, 1024, 1440]) {
     await expect(page.getByText('Explorer belum tersedia.')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
-    const facilities = page.getByRole('group', { name: 'Sorot fasilitas pada ilustrasi' });
-    await facilities.getByRole('button', { name: 'Sanitasi', exact: true }).click();
-    await expect(page.locator('#facility-description')).toContainText('Sanitasi dasar');
-    await facilities.getByRole('button', { name: 'Akses digital', exact: true }).focus();
-    await page.keyboard.press('Enter');
-    await expect(facilities.getByRole('button', { name: 'Akses digital', exact: true })).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('#facility-description')).toContainText('Internet dan komputer');
-    await expect(page.locator('.education-scene .selected')).toHaveCount(1);
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await expect(page.locator('.education-scene .selected')).toHaveCSS('transform', 'none');
-    await facilities.getByRole('button', { name: 'Air minum', exact: true }).click();
-    await expect(page.locator('#facility-description')).toContainText('Air minum layak');
-    await page.emulateMedia({ reducedMotion: 'no-preference' });
-    await page.goto('/');
-
     await page.keyboard.press('Tab');
     await expect(page.getByRole('link', { name: 'Lewati ke konten utama' })).toBeFocused();
     await page.keyboard.press('Enter');
@@ -56,7 +41,7 @@ for (const width of [360, 390, 768, 1024, 1440]) {
     for (const label of ['Lihat alur perbandingan', 'Pahami cara simulasi']) {
       await page.getByRole('link', { name: label, exact: true }).click();
     }
-    if (width < 768) {
+    if (width < 1024) {
       const menu = page.locator('button[aria-controls="public-navigation"]');
       await menu.click();
       await expect(menu).toHaveAttribute('aria-expanded', 'true');
@@ -65,18 +50,32 @@ for (const width of [360, 390, 768, 1024, 1440]) {
       await expect(menu).toHaveAttribute('aria-expanded', 'false');
     }
     for (const label of ['Alur analisis', 'Sumber data', 'Metode & batasan']) {
-      if (width < 768) await page.getByRole('button', { name: 'Menu', exact: true }).click();
+      if (width < 1024) await page.getByRole('button', { name: 'Menu', exact: true }).click();
       await page.getByRole('navigation').getByRole('link', { name: label, exact: true }).click();
       const fragment = new URL(page.url()).hash;
       await expect(page.locator(fragment)).toBeVisible();
+      await expect(page.locator('#public-navigation').getByRole('link', { name: label, exact: true, includeHidden: true })).toHaveAttribute('aria-current', 'location');
+      const header = await page.locator('header').boundingBox();
+      const section = await page.locator(fragment).boundingBox();
+      expect(section!.y).toBeGreaterThanOrEqual(header!.y + header!.height);
+      if (width < 1024) await expect(page.getByRole('button', { name: 'Menu', exact: true })).toHaveAttribute('aria-expanded', 'false');
     }
     await expect(page.locator('a[href^="https://data.kemendikdasmen.go.id/"]')).toHaveCount(4);
     await expect(page.locator('a[href="/explore"], a[href="/studio"], a[href="/datasets"], a[href="/methodology"]')).toHaveCount(0);
+    await page.goto('/');
     await page.screenshot({ path: testInfo.outputPath(`landing-${width}.png`), fullPage: true });
+    if (width < 1024) {
+      await page.getByRole('button', { name: 'Menu', exact: true }).click();
+      await page.screenshot({ path: testInfo.outputPath(`navigation-${width}.png`) });
+      await page.keyboard.press('Escape');
+    }
 
-    if (width < 768) await page.getByRole('button', { name: 'Menu', exact: true }).click();
+    if (width < 1024) await page.getByRole('button', { name: 'Menu', exact: true }).click();
     await page.getByRole('link', { name: 'Tentang Equora', exact: true }).click();
     await expect(page).toHaveURL(/\/about$/);
+    if (width < 1024) await page.getByRole('button', { name: 'Menu', exact: true }).click();
+    await expect(page.getByRole('navigation').getByRole('link', { name: 'Tentang Equora', exact: true })).toHaveAttribute('aria-current', 'page');
+    if (width < 1024) await page.keyboard.press('Escape');
     await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: testInfo.outputPath(`about-${width}.png`), fullPage: true });
