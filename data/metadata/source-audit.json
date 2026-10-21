@@ -1,0 +1,194 @@
+{
+  "release_status": "not_approved",
+  "sources": [
+    {
+      "id": "sanitation",
+      "filename": "sanitation.xlsx",
+      "sha256": "2bae4aa1fa8b6386cde29340dfc230889b06d7253d1c4fdba55d0227d9edc8e6",
+      "bytes": 26641,
+      "retrieved_at": "2026-10-19T14:22:19.101052+00:00",
+      "title": "Persentase Sekolah dengan Akses terhadap Fasilitas Sanitasi Dasar, Tahun Ajaran 2025/2026",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "header_rows": [
+        3,
+        4,
+        5
+      ],
+      "first_data_row": 6,
+      "province_rows": 38,
+      "unique_province_codes": 38,
+      "duplicate_province_codes": [],
+      "excluded_aggregate_rows": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "province_observation_quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 12,
+        "missing": 0,
+        "invalid_type": 0,
+        "invalid_range": 0
+      },
+      "missing_tokens": {},
+      "nonmissing_total_by_education_level": {
+        "TK": 38,
+        "SD": 38,
+        "SMP": 38,
+        "SMA": 38,
+        "SMK": 38,
+        "SLB": 38
+      },
+      "license_field_present": false
+    },
+    {
+      "id": "water",
+      "filename": "water.xlsx",
+      "sha256": "4b70b15de08d4f3b446a23c714ee938403ff7fcf63c271a5dd4f4ccad2411bf1",
+      "bytes": 26385,
+      "retrieved_at": "2026-10-19T14:22:19.256679+00:00",
+      "title": "Persentase Sekolah dengan Akses terhadap Air Minum Layak, Tahun Ajaran 2025/2026",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "header_rows": [
+        3,
+        4
+      ],
+      "first_data_row": 5,
+      "province_rows": 38,
+      "unique_province_codes": 38,
+      "duplicate_province_codes": [],
+      "excluded_aggregate_rows": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "province_observation_quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 7,
+        "missing": 0,
+        "invalid_type": 0,
+        "invalid_range": 0
+      },
+      "missing_tokens": {},
+      "nonmissing_total_by_education_level": {
+        "TK": 38,
+        "SD": 38,
+        "SMP": 38,
+        "SMA": 38,
+        "SMK": 38,
+        "SLB": 38
+      },
+      "license_field_present": false
+    },
+    {
+      "id": "internet",
+      "filename": "internet.xlsx",
+      "sha256": "995798cd19ccac05add5b16a04309284a23d2398bad6f035a21ace8430115086",
+      "bytes": 22258,
+      "retrieved_at": "2026-10-19T14:22:19.395956+00:00",
+      "title": "Jumlah Sekolah dengan Akses Internet untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "header_rows": [
+        3,
+        4
+      ],
+      "first_data_row": 5,
+      "province_rows": 38,
+      "unique_province_codes": 38,
+      "duplicate_province_codes": [],
+      "excluded_aggregate_rows": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "province_observation_quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 7,
+        "missing": 0,
+        "invalid_type": 0,
+        "invalid_range": 0
+      },
+      "missing_tokens": {},
+      "nonmissing_total_by_education_level": {
+        "TK": 38,
+        "SD": 38,
+        "SMP": 38,
+        "SMA": 38,
+        "SMK": 38,
+        "SLB": 38
+      },
+      "license_field_present": false
+    },
+    {
+      "id": "computers",
+      "filename": "computers.xlsx",
+      "sha256": "fb37ee39657fc76ebfb68d732e79782ba3b288c30cdd8dd91d25c691311607bd",
+      "bytes": 22027,
+      "retrieved_at": "2026-10-19T14:22:19.516584+00:00",
+      "title": "Jumlah Sekolah dengan Akses Komputer untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "header_rows": [
+        3,
+        4,
+        5
+      ],
+      "first_data_row": 6,
+      "province_rows": 38,
+      "unique_province_codes": 38,
+      "duplicate_province_codes": [],
+      "excluded_aggregate_rows": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "province_observation_quality": {
+        "observations": 684,
+        "numeric": 683,
+        "zeros": 35,
+        "missing": 1,
+        "invalid_type": 0,
+        "invalid_range": 0
+      },
+      "missing_tokens": {
+        "None": 1
+      },
+      "nonmissing_total_by_education_level": {
+        "TK": 38,
+        "SD": 38,
+        "SMP": 38,
+        "SMA": 38,
+        "SMK": 38,
+        "SLB": 38
+      },
+      "license_field_present": false
+    }
+  ],
+  "province_join": {
+    "union": 38,
+    "intersection": 38,
+    "matched_fraction": 1.0,
+    "unmatched_by_source": {
+      "sanitation": [],
+      "water": [],
+      "internet": [],
+      "computers": []
+    },
+    "sd_total_nonmissing_intersection": 38
+  },
+  "limitations": [
+    "Source province codes have not been mapped to a reviewed boundary or regional registry.",
+    "No denominator is provided for internet/computer counts.",
+    "No license/terms approval, cost assumptions, or release approval is implied."
+  ]
+}

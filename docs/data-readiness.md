@@ -1,6 +1,6 @@
 # Data readiness
 
-Status: belum ada dataset mentah di repo. URL calon sumber pada BRD/PRD diwarisi dari dokumen awal; belum diverifikasi ulang pada sesi ini. Jangan menyebutnya dataset siap pakai.
+Status 19 Oktober 2026: empat file sumber telah diunduh secara lokal dan diperiksa dalam [audit awal](source-audit-2026-10-19.md). Metadata/hash serta quality report tersedia di `data/metadata/`; file mentah dan preview tetap diabaikan Git. Lisensi, persetujuan release, scope final serta mapping boundary belum diselesaikan. Jangan menyebutnya dataset siap pakai.
 
 ## Gerbang sebelum engine
 
@@ -21,4 +21,4 @@ Untuk layer peta, jalankan juga [gerbang data geografis](map-plan.md): metadata/
 - Lisensi/ketentuan redistribusi ditinjau sebelum file dimasukkan ke repo publik.
 - Bila irisan data tidak memadai, kurangi indikator atau turunkan scope analisis secara eksplisit.
 
-Raw data disimpan lokal di `data/raw/` (diabaikan Git). Metadata yang telah diperiksa dapat ditempatkan di `data/metadata/`. Kedua folder belum berisi data. Jangan membuat angka statistik atau hasil optimasi seolah berasal dari data resmi.
+Raw data disimpan lokal di `data/raw/` (diabaikan Git). Metadata empat calon sumber dan hasil audit awal tersedia di `data/metadata/`. Belum ada release data resmi Equora. Jangan membuat angka statistik atau hasil optimasi seolah berasal dari data resmi.

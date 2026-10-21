@@ -27,8 +27,8 @@ Equora membantu publik dan analis memahami kondisi akses fasilitas pendidikan da
 ```
 
 ## 4. UX / identitas sementara
-- Arah visual: **Soft Gray Enterprise / Coral**, mengikuti [DESIGN versi 1.1](./DESIGN_Equora.md), menggantikan Editorial Cobalt.
-- Tokens baseline: `bg: #E7E8EA`, `surface: #F9F9FA`, `text: #24262B`, `primary: #C94025`. Dokumen DESIGN menjadi acuan lengkap.
+- Arah visual: **Clean Education Blue**, mengikuti [DESIGN versi 1.2](./DESIGN_Equora.md), disetujui 20 Oktober 2026 dan menggantikan palet coral sebelumnya. Panel putih, latar abu-abu sangat muda, sudut lembut, biru untuk tindakan, teks yang tetap kontras.
+- Tokens baseline: `bg: #F3F5F8`, `surface: #FFFFFF`, `text: #1F2D3D`, `primary: #1264D8`. Dokumen DESIGN menjadi acuan lengkap. Ilustrasi sekolah sederhana dapat mendukung landing; workspace analitis tetap mengutamakan data dan sumber.
 - Landing page: hero satu kalimat manfaat, animasi ringan simulasi *before/after*, CTA `Explore public data` dan `Build a scenario`; 3-step workflow, methodology proof, featured dataset sources, disclaimer.
 - Dashboard: sidebar ringkas, breadcrumbs, year/region selector, comparison mode, provenance per chart, small-screen table fallback.
 - A11y: contrast >= WCAG AA untuk body, focus visible, semantic labels, mobile 360px+, color tidak jadi satu-satunya kode status.

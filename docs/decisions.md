@@ -1,12 +1,12 @@
 # Keputusan dan pertanyaan terbuka
 
-Terakhir diperbarui: 19 Oktober 2026. Status keputusan mengikuti bukti di repo dan persetujuan eksplisit pengguna dalam sesi pembaruan stack.
+Terakhir diperbarui: 20 Oktober 2026. Status keputusan mengikuti bukti di repo dan persetujuan eksplisit pengguna.
 
 | ID | Topik | Status / langkah berikut |
 |---|---|---|
 | D-01 | Cabang WIA | Dasar review karena BRD/PRD menargetkan WIA; konfirmasi pendaftaran aktual |
 | D-02 | Subtema | Rekomendasi utama Data-Driven Decision Support; lebih dari satu diperbolehkan pada slide 21 |
-| D-03 | Arah UI | DESIGN v1.1 menjadi baseline dokumen terbaru; PRD diselaraskan |
+| D-03 | Arah UI | DESIGN v1.2 Clean Education Blue disetujui 20 Oktober 2026 berdasarkan referensi dashboard pengguna: panel putih, biru utama, canvas abu-abu sangat muda, sudut/bayangan lembut dan teks kontras. Menggantikan palet coral; PRD, web dan system design diselaraskan. Ilustrasi sekolah sederhana, tanpa maskot wajib |
 | D-04 | Stack | Baseline SvelteKit/FastAPI/PostgreSQL, Polars, OR-Tools disetujui pengguna pada 19 Okt; fondasi dan dependensi disiapkan sesuai [setup stack](setup-stack.md), alasan dan alternatif di [stack teknis](technical-stack.md). Fitur domain belum diimplementasikan |
 | D-05 | Granularitas, jenjang, tahun | Ditentukan setelah audit file sumber |
 | D-06 | Biaya intervensi | Cari referensi resmi atau gunakan asumsi demo berlabel |

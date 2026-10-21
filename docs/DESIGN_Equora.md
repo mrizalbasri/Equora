@@ -1,6 +1,6 @@
 # Equora — UI/UX Design System & Interface Specification
 
-**Versi:** 1.1 — Soft Gray Enterprise UI · **Tanggal:** 18 Oktober 2026
+**Versi:** 1.2 — Clean Education Blue · **Tanggal:** 20 Oktober 2026
 **Status:** Arah desain disetujui sebagai baseline; warna tetap berupa tokens yang dapat diubah
 **Dokumen terkait:** [BRD](./BRD_Equora.md) · [PRD](./PRD_Equora.md)
 
@@ -9,7 +9,7 @@ Equora adalah platform eksplorasi open data pendidikan, pemeringkatan prioritas 
 
 Prinsip: (1) **Clarity over decoration** — angka beserta satuan, cakupan, tahun; (2) **Evidence first** — tampilkan sumber dan versi data pada visualisasi; (3) **Explain, don't mystify** — bobot, asumsi, trade-off dan batasan selalu dapat ditemukan; (4) **Honest states** — simulasi tidak disebut hasil resmi atau prediksi dampak; (5) **Responsive and accessible**.
 
-**Referensi terbaru dari pengguna:** tiga screenshot dashboard Retainr-like (knowledge management, activity overview, review konflik). Gunakan prinsip *soft gray workspace*, kartu putih, sidebar navigasi berkelompok, panel review, tombol coral, status yang jelas, dan tipografi hierarkis. Referensi SaaS terdahulu (Framer / Adopt / Brainfish / Genie) tetap berlaku khusus landing. **Jangan menyalin logo, layout pixel-perfect, konten, atau aset milik produk lain**.
+**Referensi terbaru dari pengguna:** screenshot dashboard berpanel putih dengan aksen biru yang disetujui pada 20 Oktober 2026. Ambil prinsip ruang kerja ringan, bidang putih, latar abu-abu sangat muda, sudut membulat, bayangan tipis, dan hierarki teks yang jelas. Pertahankan navigasi berkelompok dan review berbasis bukti dari rancangan sebelumnya. Landing lebih terbuka dan bercerita tentang pendidikan; explorer/studio memakai struktur workspace saat tersedia. **Jangan menyalin logo, layout pixel-perfect, konten finansial, angka, avatar atau aset referensi**. Teks dibuat lebih gelap daripada referensi untuk keterbacaan.
 
 ## 2. Identitas & tone
 - Nama tampil: **equora.** (wordmark sementara; perlu pemeriksaan merek).
@@ -18,73 +18,81 @@ Prinsip: (1) **Clarity over decoration** — angka beserta satuan, cakupan, tahu
 - Voice: jelas, tenang, analitis, tidak hiperbolis, tidak menyebut output simulasi sebagai rekomendasi resmi pemerintah.
 - Bahasa: UI utama Bahasa Indonesia. Istilah teknis dapat diberi tooltip dan terjemahan; siapkan string localization agar English mudah ditambahkan.
 
-## 3. Visual direction final sementara — Soft Gray Enterprise
+## 3. Visual direction — Clean Education Blue
 
-**Pilihan baseline: Soft Gray Enterprise / Coral** (menggantikan default Editorial Cobalt). Fokus warna abu-abu lembut, panel hampir putih, teks graphite, coral sebagai aksen tindakan. Palet tidak dibuat menyerupai identitas produk referensi secara persis.
+**Baseline disetujui: Clean Education Blue**, menggantikan palet coral versi 1.1. Fokus pada putih dan abu-abu sangat muda, teks biru gelap/netral, serta biru medium untuk tindakan dan pilihan aktif. Kesan yang dituju adalah platform data pendidikan yang bersih, ringan dan mudah didekati. Coral tidak lagi menjadi warna tindakan utama; warna warning/danger tetap semantik, bukan dekorasi.
 
 ### 3.1 Color tokens
 
 | Semantic token | HEX | Pemakaian |
 |---|---|---|
-| `bg` | `#E7E8EA` | Canvas dashboard |
-| `sidebar` | `#E3E4E6` | Sidebar dan area navigasi |
-| `surface` | `#F9F9FA` | Kartu, panel, drawer |
+| `bg` | `#F3F5F8` | Canvas luar ruang kerja |
+| `sidebar` | `#F5F8FC` | Sidebar dan area navigasi |
+| `surface` | `#FFFFFF` | Kartu, panel, drawer |
 | `surface-elevated` | `#FFFFFF` | Modal, dropdown, popover |
-| `surface-subtle` | `#F0F1F2` | Subpanel, tabel alternate, input |
-| `text` | `#24262B` | Headings, data penting |
-| `text-secondary` | `#555C65` | Body sekunder |
-| `text-muted` | `#686E76` | Metadata; hindari terlalu pucat |
-| `primary` | `#C94025` | Tombol utama dan tindakan penting; lebih gelap untuk kontras teks putih |
-| `primary-hover` | `#B33720` | Hover |
-| `primary-tint` | `#F7E4DF` | Selection, tags coral lembut |
-| `border` | `#CFD2D6` | Divider, input border |
+| `surface-subtle` | `#F5F8FC` | Subpanel, tabel alternate, input |
+| `text` | `#1F2D3D` | Headings, data penting |
+| `text-secondary` | `#536276` | Body sekunder |
+| `text-muted` | `#5F6D7D` | Metadata; tetap terbaca pada latar terang |
+| `primary` | `#1264D8` | Tombol utama dan tindakan penting; kontras teks putih |
+| `primary-hover` | `#0E4FAF` | Hover dan teks pilihan aktif pada tint |
+| `primary-tint` | `#EAF3FF` | Latar pilihan dan ilustrasi pendidikan |
+| `border` | `#DCE4EE` | Divider dan batas panel dekoratif |
+| `control-border` | `#7E8DA1` | Batas kontrol saat diperlukan kontras nonteks 3:1 |
 | `chart-blue` | `#3979AB` | Seri data non-semantik |
 | `chart-blue-light` | `#83A9C7` | Seri sekunder |
 | `success` | `#246F56` | Lolos validasi |
 | `warning` | `#8D5D13` | Butuh pemeriksaan |
 | `danger` | `#B83A28` | Error / data gagal |
-| `info` | `#2E668C` | Informasi |
-| `focus` | `#236AAB` | Focus ring aksesibel |
+| `info` | `#205F9A` | Informasi |
+| `focus` | `#0E4FAF` | Focus ring aksesibel |
 
-**Aturan:** Coral bukan kode warna untuk risiko, kemiskinan, atau kebutuhan tinggi. Status laporan data memakai label teks + ikon + warna. Jangan gunakan tint pucat sebagai warna teks pada putih. Validasi WCAG dengan pengujian browser nyata sebelum final.
+**Aturan:** Biru merek menunjukkan tindakan/selection, bukan tingkat kebutuhan atau kualitas pendidikan. Warna grafik tetap mengikuti legend, unit dan seri yang dijelaskan. Status laporan data memakai label teks, bukan warna saja. Tint dipakai sebagai latar, bukan teks pada putih. Border panel yang halus tidak dipakai sebagai satu-satunya batas kontrol penting. Validasi WCAG dengan pengujian browser nyata sebelum final.
 
 ### 3.2 CSS variables — siap implementasi
 
 ```css
 :root {
   color-scheme: light;
-  --eq-bg: #E7E8EA;
-  --eq-sidebar: #E3E4E6;
-  --eq-surface: #F9F9FA;
+  --eq-bg: #F3F5F8;
+  --eq-sidebar: #F5F8FC;
+  --eq-surface: #FFFFFF;
   --eq-surface-elevated: #FFFFFF;
-  --eq-surface-subtle: #F0F1F2;
-  --eq-text: #24262B;
-  --eq-text-secondary: #555C65;
-  --eq-text-muted: #686E76;
-  --eq-primary: #C94025;
-  --eq-primary-hover: #B33720;
-  --eq-primary-tint: #F7E4DF;
-  --eq-border: #CFD2D6;
+  --eq-surface-subtle: #F5F8FC;
+  --eq-text: #1F2D3D;
+  --eq-text-secondary: #536276;
+  --eq-text-muted: #5F6D7D;
+  --eq-primary: #1264D8;
+  --eq-primary-hover: #0E4FAF;
+  --eq-primary-tint: #EAF3FF;
+  --eq-border: #DCE4EE;
+  --eq-control-border: #7E8DA1;
   --eq-chart-blue: #3979AB;
   --eq-chart-blue-light: #83A9C7;
   --eq-success: #246F56;
   --eq-warning: #8D5D13;
   --eq-danger: #B83A28;
-  --eq-info: #2E668C;
-  --eq-focus: #236AAB;
-  --eq-radius-sm: 10px;
-  --eq-radius-md: 14px;
-  --eq-radius-lg: 22px;
+  --eq-info: #205F9A;
+  --eq-focus: #0E4FAF;
+  --eq-radius-sm: 12px;
+  --eq-radius-md: 18px;
+  --eq-radius-lg: 24px;
   --eq-shadow-card: 0 2px 10px rgba(30, 36, 43, 0.035);
 }
 ```
 
 ### 3.3 Style rules
-- Gray outer canvas, near-white primary panels, no gradient-heavy canvas and no glassmorphism.
+- Very light gray outer canvas and white primary panels; no gradient-heavy canvas or glassmorphism.
 - Borders `1px` subtle; shadows only for dropdown, floating action, modal and occasional active card.
-- Coral accent concentrated on primary CTA, selected workflow step and actionable review callout; never across entire analytics chart.
+- Blue accent concentrated on primary CTA, selected workflow step and actionable review callout; never substitute brand color for chart semantics.
 - Typography carries hierarchy; use restrained icons, spacious padding and concise labels.
 - Public landing page can be more expressive; app workspace should prioritize scanability and dense information.
+
+### 3.4 Ilustrasi pendidikan dan batas referensi
+- Landing dapat memakai ilustrasi sekolah sederhana berwarna biru untuk menjelaskan konteks pendidikan. Ilustrasi bukan sekolah nyata atau hasil data dan tidak menggantikan visualisasi analitis.
+- Gunakan SVG lokal yang ringan untuk bentuk sederhana; beri nama aksesibel jika informatif. Tidak perlu maskot khusus, karakter mengambang, avatar rekaan atau ikon finansial dari referensi.
+- Ilustrasi kecil dapat membantu empty state dengan langkah berikutnya yang jelas; explorer/studio tetap memprioritaskan data dan sumber.
+- Bayangan tipis boleh membedakan satu bingkai workspace dari canvas luar. Hindari bayangan pada setiap baris/kartu; radius dibedakan menurut peran kontrol/panel.
 
 ## 4. Typography, spacing & grid
 - Fonts (web-safe fallback): `Inter, system-ui, sans-serif` for UI; optional `Manrope` for headings, with proper font licenses and font-display swap. Avoid downloading or embedding proprietary reference-site fonts.
@@ -92,7 +100,7 @@ Prinsip: (1) **Clarity over decoration** — angka beserta satuan, cakupan, tahu
 - Section heading: 32–40px desktop, 26–30px mobile; page title: 28–34px; body: 16px / 1.55; small: 13–14px (never critical text below 13px).
 - Spacing scale: `4, 8, 12, 16, 24, 32, 48, 64, 96`px. Main content max-width `1200–1280px`.
 - Dashboard desktop: left rail 256px (min 232 / max 280), content flexible, 24px gutters; tablet collapsed rail; mobile single column.
-- Cards use 1px subtle border, soft radius 14–22px; avoid heavy shadows and excessive glassmorphism.
+- Cards use 1px subtle border, soft radius 18–24px; public workspace frame may use 28px. Controls use 12px. Avoid heavy shadows and excessive glassmorphism.
 - Buttons 40–44px minimum control height; interactive targets >= 44x44 when feasible.
 
 ## 5. Navigation & application shell
@@ -149,11 +157,14 @@ Navigation item terdiri dari ikon, label, active background putih/hampir putih d
 **Tujuan:** dalam 10 detik menjelaskan *data → prioritas → skenario* dan mengarahkan pengunjung ke pengalaman nyata.
 
 ```text
-[logo]       Jelajahi Data   Studio Skenario   Metodologi    [Mulai eksplorasi]
+[logo]       Alur analisis   Sumber data   Metode & batasan   Tentang Equora
 
-[Eyebrow: Transparansi data dan keputusan]
-[Pahlawan: Dari data publik menuju keputusan yang lebih terukur.]
-[Deskripsi 2 baris, caveat simulator] [Jelajahi data] [Bangun skenario]
+[Eyebrow: Data publik untuk pendidikan]
+[Hero: Beda wilayah, beda kebutuhan.]
+[Deskripsi: air minum, fasilitas digital dan konteks kebutuhan wilayah]
+[Lihat alur perbandingan] [Pahami cara simulasi]
+[Status pengembangan + caveat simulator]
+[Ilustrasi lingkungan sekolah yang dominan, tanpa panel pilihan fasilitas]
 
 [Product preview: contoh explorer, grafik, scenario output yang bisa diklik]
 [3 langkah: Telusuri data > Susun prioritas > Bandingkan skenario]
@@ -165,6 +176,12 @@ Navigation item terdiri dari ikon, label, active background putih/hampir putih d
 
 **Interactions:** CTA navigate; product preview no fake live metrics; no misleading logos/testimonials. Hero motion optional and respects `prefers-reduced-motion`.
 
+**Latar dan respons hero:** gradien putih menuju tint biru dibatasi pada pengantar untuk memisahkan area baca dari lingkungan ilustrasi. Tidak ada glow, grid atau glass. Ilustrasi statis memiliki nama aksesibel yang menyatakan bahwa ini bukan data sekolah nyata. Panel pilihan fasilitas dan keterangannya dihapus agar hero ringkas; penjelasan indikator berada di pratinjau berikutnya. Respons tekan CTA tetap mengikuti reduced motion.
+
+**Navbar publik:** header sticky putih solid, logo di kiri dan menu di kanan. Tentang Equora dibedakan dengan outline; bagian aktif memakai tint biru, garis bawah dan `aria-current`. Landing dan About memakai menu yang sama. Di bawah 1024px menu buka/tutup memiliki target minimum 44px, Escape mengembalikan fokus, dan pilihan tautan menutup menu. Tinggi menu dibatasi viewport dan dapat digulir. Offset anchor 112px menjaga judul bagian tetap terbaca di bawah header.
+
+**Hero publik saat ini:** komposisi teks dan ilustrasi terbuka, bukan kartu status berisi daftar metadata. Headline dua baris menonjolkan kebutuhan antardaerah, dengan ilustrasi kampus/sekolah SVG di sebelahnya. Buku, air dan perangkat digital hanya memberi konteks fasilitas, bukan bukti data sekolah nyata. Metadata dan rincian alur tetap di section berikutnya. Pada mobile ilustrasi ditumpuk setelah teks/tindakan, tanpa label kecil tertanam di SVG. CTA menuju anchor penjelasan yang tersedia sampai explorer/studio siap; jangan membuat link aktif ke route yang belum ada.
+
 ### 6.2 `/explore` — Regional Equity Explorer (P0)
 Header: title, source snapshot/year, selected education level. Toolbar: pilih indikator, wilayah, tahun, jenjang, urutkan. Body desktop: peta *jika coverage geometri valid* or ranked bar chart, companion metrics cards, detail table. On mobile: chart then searchable table; no sideways forced scrolling. Click a region => details. Every indicator has `Lihat sumber`, unit, year, and warnings.
 
@@ -175,7 +192,7 @@ Regional header + badges for data coverage; compare against peer group; indicato
 Catalog table with search/filters: title, publisher, year, unit, coverage, last imported date, quality status. **Desain ala knowledge management:** tab `Semua sumber`, `Perlu ditinjau`, `Disetujui`, `Duplikat` (hanya tampil bila status ada); row source icon, title, file type, coverage, role/source label dan menu aksi. Detail: overview, source URL, license/usage terms, last download timestamp, checksum, preview 20 rows, quality flags, lineage. Expandable review card memperlihatkan dua nilai yang bertentangan, rujukan sumber, dan opsi `Tandai untuk ditinjau`, `Pilih versi` (admin, tercatat di audit log). **Sistem tidak memutuskan fakta benar hanya berdasarkan versi terbaru.** Missing and withheld values are **not zero**.
 
 ### 6.5 `/studio` — Scenario builder (P0, core demo)
-Desktop workflow-style workspace dengan stepper horizontal (langkah aktif coral, completed graphite); mobile stepper vertikal/compact:
+Desktop workflow-style workspace dengan stepper horizontal (langkah aktif biru, completed graphite); mobile stepper vertikal/compact:
 1. **Pilih wilayah & indikator**: dataset version and coverage; missing-data handling explicitly selected.
 2. **Atur prioritas**: indicator weight sliders totaling 100%; normalization method and explainable per-region contribution.
 3. **Anggaran & kendala**: budget (IDR), intervention type, cost per package with `official_reference` / `demo_assumption`, capacities and fairness constraints; calculate.
@@ -246,21 +263,21 @@ Authenticated dataset import flow: upload area dashed border (`CSV/XLSX` jika me
 
 ### 8.2 Decision workspace
 
-Main area: light canvas + large white result surface; side summary panel contains `Anggaran terpakai`, `Cakupan analisis`, `Jumlah wilayah yang layak`, and methodology. Use a single coral button for `Jalankan optimasi`; secondary actions outlined. Prioritization result card can expand to show indicator contribution and assumptions, similar to an evidence review panel.
+Main area: light canvas + large white result surface; side summary panel contains `Anggaran terpakai`, `Cakupan analisis`, `Jumlah wilayah yang layak`, and methodology. Use a single blue button for `Jalankan optimasi`; secondary actions outlined. Prioritization result card can expand to show indicator contribution and assumptions, similar to an evidence review panel.
 
 ### 8.3 Analytics widgets
 
-KPI row in a full-width white panel with subtle vertical separators; contextual color dots with accessible text; charts inside white canvas with restrained blue bars and coral solely for interaction/selection where semantically correct. Avoid imitating the reference's agent metrics and fake activity examples. Use educational dataset values exclusively once validated.
+KPI row in a full-width white panel with subtle vertical separators; contextual color dots with accessible text; charts inside white canvas with restrained analytical blue series. Active selections use a clear outline or text label so brand blue is not confused with the scale of need. Avoid imitating the reference's finance metrics and fake activity examples. Use educational dataset values exclusively once validated.
 
 ### 8.4 Button, tag, form, table and overlay specs
 
 | Element | Visual | Interaction |
 |---|---|---|
-| Primary button | solid dark coral, white text, 12px radius, 44px min height | hover darken; disable while pending |
+| Primary button | solid blue, white text, 12px radius, 44px min height | hover darken; disable while pending |
 | Secondary button | white with gray 1px border | focus ring visible; no misleading primary hierarchy |
 | Danger action | text + warning icon; red only for destructive action | confirmation dialog + recovery details |
 | Status tag | gentle tint background, readable dark foreground | always include status text |
-| Input | white/subtle gray, border `#CFD2D6`, 12px radius | visible label, helper/error below |
+| Input | white/subtle gray, control border `#7E8DA1`, 12px radius | visible label, helper/error below |
 | Data table | white rows, separator lines, sticky header on desktop | keyboard sortable, mobile card fallback |
 | Review expand panel | white nested panel, lightweight border, slight shadow | content not hidden solely by hover |
 | Modal | white floating surface with backdrop; max width 560px | trap focus, esc dismiss except critical flows |
@@ -315,7 +332,7 @@ apps/web/src/
 ```
 
 ## 13. Design delivery order
-1. Soft Gray tokens, typography, grouped sidebar, top bar, foundational components.
+1. Clean Education Blue tokens, typography, grouped sidebar, top bar, foundational components.
 2. Landing + Explorer + source provenance card (first draft screenshots); avoid stale theme examples.
 3. Dataset catalog + details and responsive data visualizations.
 4. Scenario Studio + explainability results + comparison.
@@ -335,10 +352,10 @@ apps/web/src/
 - [ ] Sidebar groups and active/nested navigation match the approved reference *principles*, not a copied design.
 - [ ] Import UI advertises only formats actually supported by backend.
 - [ ] Source conflict review has evidence, manual approval, reason and audit trace.
-- [ ] Primary CTA uses coral; charts preserve analytical semantics rather than brand-only colors.
+- [ ] Primary CTA uses blue; charts preserve analytical semantics rather than brand-only colors.
 
 ## 15. Decisions to confirm later
-- Soft Gray Enterprise is baseline; review actual **landing + dataset review + scenario studio** screenshots before finalizing coral hue.
+- Clean Education Blue v1.2 is the approved baseline; apply it to actual **landing + dataset review + scenario studio** as each route becomes available. Do not add placeholder routes just to demonstrate the theme.
 - Decide whether `Manrope` headings improve visual identity; otherwise use Inter throughout.
 - Verify accessible contrast of any final palette.
 - Confirm downloaded dataset fields, region granularity and official licensing before final chart design.

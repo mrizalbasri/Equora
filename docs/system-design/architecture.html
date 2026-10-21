@@ -6,7 +6,7 @@
   <title>Arsitektur MVP Equora</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&amp;family=Inter:wght@400;600;700&amp;display=swap">
   <style>
-    :root { color-scheme:light; --page:#E7E8EA; --paper:#F9F9FA; --ink:#24262B; --muted:#555C65; --accent:#C94025; --tint:#F7E4DF; --rule:#CFD2D6; --link:#2E668C; }
+    :root { color-scheme:light; --page:#F3F5F8; --paper:#FFFFFF; --ink:#1F2D3D; --muted:#536276; --accent:#1264D8; --tint:#EAF3FF; --rule:#DCE4EE; --link:#205F9A; }
     * { box-sizing:border-box; }
     body { margin:0; background:var(--page); color:var(--ink); font-family:Inter,Arial,sans-serif; }
     main { max-width:1080px; min-width:0; margin:48px auto; padding:0 24px; }
@@ -40,13 +40,13 @@
       <title id="architecture-title">Arsitektur MVP Equora</title>
       <desc id="architecture-desc">Frontend lokal memanggil API FastAPI yang dirancang mengoordinasikan MCDA dan optimasi, sedangkan ETL akan mengubah berkas sumber menjadi release pada target PostgreSQL Equora yang belum dibuat.</desc>
       <defs>
-        <marker id="eq-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#555C65"/></marker>
+        <marker id="eq-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#536276"/></marker>
       </defs>
-      <rect width="960" height="492" fill="#F9F9FA"/>
+      <rect width="960" height="492" fill="#FFFFFF"/>
       <text x="32" y="44" font-size="24" font-weight="600">Web, API dan engine keputusan</text>
       <text x="32" y="72" class="technical">ARSITEKTUR TARGET · STATUS 19 OKTOBER 2026</text>
 
-      <path d="M208 152 H272" class="route" style="stroke:#2E668C"/>
+      <path d="M208 152 H272" class="route" style="stroke:#205F9A"/>
       <path d="M448 152 H512" class="route planned-route"/>
       <path d="M688 152 H752" class="route planned-route"/>
       <path d="M360 200 V228 Q360 236 368 236 H592 Q600 236 600 244 V280" class="route planned-route"/>
@@ -108,10 +108,10 @@
       <text x="752" y="336" class="technical">Frontend lokal</text>
       <text x="752" y="360" class="technical">Compose hanya API</text>
       <text x="752" y="384" class="technical">Migrasi manual</text>
-      <line x1="32" y1="452" x2="928" y2="452" stroke="#CFD2D6"/>
-      <line x1="32" y1="476" x2="64" y2="476" stroke="#555C65" stroke-width="2"/>
+      <line x1="32" y1="452" x2="928" y2="452" stroke="#DCE4EE"/>
+      <line x1="32" y1="476" x2="64" y2="476" stroke="#536276" stroke-width="2"/>
       <text x="76" y="481" class="legend">Tersedia</text>
-      <line x1="236" y1="476" x2="268" y2="476" stroke="#555C65" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="236" y1="476" x2="268" y2="476" stroke="#536276" stroke-width="2" stroke-dasharray="5 4"/>
       <text x="280" y="481" class="legend">Direncanakan atau belum diisi</text>
       <text x="752" y="481" class="legend">7 komponen · 6 alur</text>
     </svg>
