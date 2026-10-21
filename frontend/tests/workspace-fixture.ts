@@ -60,6 +60,29 @@ export const snapshot = {
   data_status: 'local_review',
   created_at: '2026-10-21T00:00:00Z',
   region_names: { '11': rows[0].name },
+  input_rows: rows.map((row) => ({
+    code: row.code,
+    name: row.name,
+    values: {
+      ...Object.fromEntries(core.map((key) => [key, row.source_value])),
+      institutions_count: row.denominator,
+    },
+    cells: Object.fromEntries(core.map((key) => [key, row.source_cell])),
+  })),
+  case: {
+    budget_idr: 30,
+    priority_scale: 10000,
+    cost_source_type: 'demo_assumption',
+    regions: [
+      {
+        region_code: '11',
+        cost_idr: 10,
+        capacity: 2,
+        minimum_packages: 0,
+        priority_units: 8000,
+      },
+    ],
+  },
   parameters: {
     name: 'Synthetic saved scenario',
     education_level: 'SD',
@@ -141,11 +164,36 @@ export async function mockWorkspace(page: Page) {
           release_id: snapshot.release_id,
         },
       ];
-    else if (path === 'scenarios/compare') json = {
-      objective_comparable: false, warnings: ['Bobot berbeda; objective tidak setara.'],
-      budget_delta_idr: 10, coverage: {left:{eligible_regions:1,receiving_regions:1,total_packages:2,excluded_regions:1}, right:{eligible_regions:1,receiving_regions:1,total_packages:2,excluded_regions:1}},
-      rows: [{region_code:'11',left_packages:1,right_packages:2,delta:1,left_rank:1,right_rank:1}]
-    };
+    else if (path === 'scenarios/compare')
+      json = {
+        objective_comparable: false,
+        warnings: ['Bobot berbeda; objective tidak setara.'],
+        budget_delta_idr: 10,
+        coverage: {
+          left: {
+            eligible_regions: 1,
+            receiving_regions: 1,
+            total_packages: 2,
+            excluded_regions: 1,
+          },
+          right: {
+            eligible_regions: 1,
+            receiving_regions: 1,
+            total_packages: 2,
+            excluded_regions: 1,
+          },
+        },
+        rows: [
+          {
+            region_code: '11',
+            left_packages: 1,
+            right_packages: 2,
+            delta: 1,
+            left_rank: 1,
+            right_rank: 1,
+          },
+        ],
+      };
     else if (path.startsWith('scenarios/')) json = snapshot;
     else if (path === 'admin/import')
       return route.fulfill({

@@ -51,7 +51,7 @@ def priority(payload, level, weights, region_codes=None):
     return rank_needs(needs, weights)
 
 
-def calculate_scenario(payload, parameters):
+def calculate_scenario(payload, parameters, *, max_time_seconds=5):
     ranking = priority(
         payload, parameters.education_level, parameters.weights, parameters.region_codes
     )
@@ -73,7 +73,7 @@ def calculate_scenario(payload, parameters):
             )
         )
     case = AllocationCase(parameters.budget_idr, 10000, tuple(options))
-    result = solve_allocation(case, max_time_seconds=5)
+    result = solve_allocation(case, max_time_seconds=max_time_seconds)
     return json_values(
         {
             "release_id": payload["id"],

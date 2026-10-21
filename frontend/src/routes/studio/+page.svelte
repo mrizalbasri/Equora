@@ -105,7 +105,7 @@
 <svelte:head><title>Studio simulasi · Equora</title></svelte:head>
 <WorkspaceShell
   title="Studio simulasi"
-  subtitle="Atur bobot kebutuhan, anggaran dan kapasitas. Bandingkan alokasi dengan dua baseline menggunakan batasan yang sama."
+  subtitle="Atur kebutuhan dan anggaran, simpan skenario, lalu uji keputusan, pemerataan antarprovinsi, dan bukti sumbernya."
 >
   <form class="studio-form" onsubmit={calculate}>
     <section class="work-panel">

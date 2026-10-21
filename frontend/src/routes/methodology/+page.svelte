@@ -186,6 +186,26 @@
             </p>
           </div>
           <h3>Status hasil</h3>
+          <p>
+            Setelah menyimpan skenario di <a href="/studio">Studio simulasi</a>, buka Uji Keputusan
+            untuk mengubah asumsi hingga ±25%. Uji otomatis mengubah anggaran, biaya, dan tiap
+            bobot positif satu per satu sebesar ±10%; bobot dinormalisasi kembali ke total 100%.
+            Biaya seluruh wilayah, termasuk penyesuaian, dibulatkan HALF_UP ke rupiah dengan minimum Rp1.
+          </p>
+          <h3>Cek pemerataan dan bukti</h3>
+          <p>
+            Pilihan jangkauan memaksimalkan jumlah provinsi penerima terlebih dahulu. Jika maksimum
+            terbukti, tahap kedua memaksimalkan skor kebutuhan dengan jangkauan tersebut. Kedua pilihan
+            memakai anggaran, biaya, kapasitas, dan minimum awal yang sama. Ukuran ini tidak membuktikan
+            pemerataan antarsekolah atau siswa. Telusur Bukti menghubungkan nilai akses, kebutuhan,
+            bobot, kontribusi skor, dan sel sumber pada input snapshot.
+          </p>
+          <p>
+            Tiap percobaan memiliki batas solver satu detik. Timeout tanpa solusi dikeluarkan dari
+            hitungan kestabilan; perubahan yang melewati batas input ditandai tidak valid.
+            Perbedaan alokasi dapat berasal dari solusi dengan skor setara. Unduhan bukti JSON
+            menyertakan snapshot, parameter, versi metode, dan hasil tiap percobaan untuk diperiksa ulang.
+          </p>
           <div class="status-table" role="table" aria-label="Arti status model">
             <div role="row"><span class="status-name" role="cell">optimal</span><span role="cell">Solusi terbaik dibuktikan untuk model dan batas waktu yang dinyatakan.</span></div>
             <div role="row"><span class="status-name" role="cell">feasible</span><span role="cell">Solusi memenuhi constraint, tetapi optimum belum terbukti.</span></div>

@@ -5,6 +5,8 @@ export type Observation = components['schemas']['ObservationView'];
 export type Observations = components['schemas']['ObservationsView'];
 export type Snapshot = components['schemas']['ScenarioView'];
 export type SavedScenario = components['schemas']['SavedScenarioView'];
+export type Review = components['schemas']['DecisionReview'];
+export type ReviewTrial = components['schemas']['ReviewTrial'];
 export const labels: Record<string, string> = {
   institutions_count: 'Jumlah sekolah',
   internet_count: 'Sekolah dengan internet',
