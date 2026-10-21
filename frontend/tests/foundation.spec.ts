@@ -44,4 +44,3 @@ test('methodology page exposes documented sections and anchors', async ({ page }
   await expect(page.getByRole('heading', { name: 'Optimal menurut model bukan bukti keadilan universal.' })).toBeVisible();
   await expect(page.getByText('Bukan keputusan anggaran resmi.').first()).toBeVisible();
 });
-
