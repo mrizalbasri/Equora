@@ -16,7 +16,7 @@ Dokumen membedakan fondasi aktual dengan rancangan MVP. Frontend memakai pnpm se
 - [Data readiness](../data-readiness.md): provenance, irisan data dan gerbang kualitas.
 - [Rencana peta](../map-plan.md): boundary, join, atribusi dan fallback.
 - [Keputusan terbuka](../decisions.md) dan [setup stack](../setup-stack.md): status implementasi dan batas operasi.
-- [Desain Equora](../DESIGN_Equora.md): palet Soft Gray/Coral yang dikonfirmasi pengguna untuk diagram.
+- [Desain Equora](../DESIGN_Equora.md): baseline v1.2 Clean Education Blue yang dikonfirmasi pada 20 Oktober 2026, diterapkan pada HTML diagram dan gambar dalam Word. Isi/status teknis dokumen tetap snapshot 19 Oktober 2026.
 - [API aktual](../../backend/openapi.json), [Compose backend](../../backend/compose.yaml), serta kode dan manifest aplikasi saat dokumen disusun.
 
 ## Template dan diagram
@@ -24,5 +24,7 @@ Dokumen membedakan fondasi aktual dengan rancangan MVP. Frontend memakai pnpm se
 Dokumen menggunakan salinan template System Design dari openai-templates. Ukuran halaman, margin, styles, font tertanam, tabel, numbering dan struktur 12 bagian dipertahankan. Isi instruksional diganti dengan rancangan Equora; gambar placeholder diganti diagram baru. Dua spacer diberi keep-with-next agar judul alternatif tetap bersama tabelnya. Template sumber tidak diubah.
 
 Diagram mengikuti skill diagram-design dan token proyek. Terdapat tujuh komponen serta enam konektor ortogonal; garis putus-putus dan label menjelaskan komponen/relasi yang belum tersedia. HTML memuat font publik melalui Google Fonts, dengan fallback sistem jika offline. Gambar yang disisipkan ke Word sudah memuat hasil render font tersebut.
+
+Verifikasi tema 20 Oktober 2026: hanya `word/media/image1.png` dalam DOCX yang diganti. Teks, XML style/tabel, relasi dan ukuran slot gambar tetap identik dengan sumber. Renderer LibreOffice tidak tersedia pada lingkungan Windows ini; dokumen diekspor read-only melalui Microsoft Word 16.0, lalu dirasterisasi dengan Poppler. Ketujuh halaman ditinjau, termasuk diagram biru pada halaman 3; tidak ditemukan clipping atau perubahan susunan halaman. PDF/PNG pemeriksaan disimpan lokal sebagai artefak QA, bukan dokumen submission tambahan.
 
 Keputusan mengenai target database, sumber data, biaya, autentikasi dan SLO masih terbuka. Tinjau kembali dokumen setelah audit dataset dan sebelum membuat schema domain.
