@@ -71,4 +71,3 @@ keyboard, dan overflow. API riil/PostgreSQL lokal dan render PDF diperiksa terpi
 
 Lingkup hanya audit skenario tersimpan; tidak ada migrasi database atau perubahan
 data mentah. Definisi pemerataan, perubahan bobot, dan batas klaim eksplisit.
-Replit telah dicoba, tetapi koneksi akun tidak tersedia; implementasi tetap lokal.

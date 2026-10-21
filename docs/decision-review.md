@@ -115,5 +115,5 @@ Satu pengamatan API lokal memerlukan 0,136 detik; ini bukan benchmark performa.
   status solusi eksplisit, dan data lokal/sintetis diberi konteks. Screenshot lokal
   di atas serta suite browser mendukung pemeriksaan visual dan fungsi.
 
-Replit dicoba melalui konektor, tetapi akun belum terhubung. Implementasi memakai
-komponen lokal dan tidak menambah dependensi frontend atau layanan hosting.
+Implementasi memakai komponen lokal dan tidak menambah dependensi frontend atau
+layanan hosting.
