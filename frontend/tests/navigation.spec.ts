@@ -32,4 +32,3 @@ for (const width of [390, 1024, 1440]) {
     await expect(page).toHaveURL(/\/compare$/);
   });
 }
-
