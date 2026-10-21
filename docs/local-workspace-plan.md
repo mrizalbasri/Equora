@@ -12,12 +12,14 @@ Admin lokal memakai token dari environment, origin guard dan batas payload; oper
 
 Kriteria selesai:
 
-- [ ] Sepuluh file diproses dengan skala dan header eksplisit; hash, null, quality dan source-cell terjaga.
-- [ ] Katalog/detail/API observasi/quality/provenance dan ekspor berjalan tanpa data sintetis tersembunyi.
-- [ ] Explorer, detail wilayah, chart dan peta/fallback teruji pada mobile/desktop.
-- [ ] Studio, baseline, status solver, snapshot immutable, compare dan ekspor teruji.
-- [ ] Admin lokal dan validasi input terlindungi; database proyek lain tidak disentuh.
-- [ ] Build, backend termasuk PostgreSQL, E2E browser dan smoke test lokal lulus.
-- [ ] PR berisi hasil validasi dan batas penggunaan yang nyata; main tidak di-merge otomatis.
+- [x] Sepuluh file diproses dengan skala dan header eksplisit; hash, null, quality dan source-cell terjaga.
+- [x] Katalog/detail/API observasi/quality/provenance dan ekspor berjalan tanpa data sintetis tersembunyi.
+- [x] Explorer, detail wilayah, chart dan peta/fallback teruji pada mobile/desktop.
+- [x] Studio, baseline, status solver, snapshot immutable, compare dan ekspor teruji.
+- [x] Admin lokal dan validasi input terlindungi; database proyek lain tidak disentuh.
+- [x] Build, backend termasuk PostgreSQL, E2E browser dan smoke test lokal lulus.
+- [x] PR berisi hasil validasi dan batas penggunaan yang nyata; main tidak di-merge otomatis.
 
 Arah UI: Clean Education Blue, ENERGY 2 / RHYTHM 2 / MOTION 1. Panel sumber tetap dekat angka; workspace mengutamakan tabel/grafik dan satu area analisis utama. Token dan shell bersama digunakan pada halaman katalog/metodologi agar navigasi tidak mengubah tema global.
+
+Hasil pemeriksaan lokal dicatat pada [laporan validasi](local-workspace-validation.md). Integrasi tersedia dalam [PR #27](https://github.com/mrizalbasri/Equora/pull/27), di atas registry #24. Hosting belum dipilih dan main tetap menunggu review pemilik.
