@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { Map as LibreMap, GeoJSONSource } from 'maplibre-gl';
+  import type { Map as LibreMap, GeoJSONSource, Popup } from 'maplibre-gl';
   import type { FeatureCollection } from 'geojson';
   import type { Observation } from '$lib/api/workspace';
   import 'maplibre-gl/dist/maplibre-gl.css';
@@ -20,6 +20,7 @@
   } = $props();
   let container: HTMLDivElement;
   let map: LibreMap | undefined;
+  let popup: Popup | undefined;
   let geo = $state<(FeatureCollection & { attribution: string }) | null>(null);
   let ready = $state(false);
   let rendered = $state(false);
@@ -43,6 +44,7 @@
               ? '#d8dce0'
               : colors[Math.min(4, Math.floor((Number(value) / max) * 5))],
           selected: code === selected,
+          tooltip: `${feature.properties?.name ?? code} · ${value == null ? 'Data tidak tersedia / di luar filter' : new Intl.NumberFormat('id-ID', { maximumFractionDigits: 2 }).format(Number(value)) + (percent ? '%' : ' sekolah')}`,
         },
       };
     });
@@ -93,6 +95,11 @@
           attributionControl: false,
         });
         map.addControl(new libre.NavigationControl({ showCompass: false }));
+        popup = new libre.Popup({
+          closeButton: false,
+          closeOnClick: false,
+          offset: 10,
+        });
         map.on('load', () => {
           map!.addSource('provinces', { type: 'geojson', data });
           map!.addLayer({
@@ -109,7 +116,7 @@
               'line-color': [
                 'case',
                 ['boolean', ['get', 'selected'], false],
-                '#c05110',
+                '#0e4faf',
                 '#ffffff',
               ],
               'line-width': [
@@ -127,6 +134,16 @@
           const code = event.features?.[0]?.properties?.code;
           if (code) onselect(String(code));
         });
+        map.on('mousemove', 'province-fill', (event) => {
+          map!.getCanvas().style.cursor = 'pointer';
+          const tooltip = event.features?.[0]?.properties?.tooltip;
+          if (tooltip)
+            popup?.setLngLat(event.lngLat).setText(String(tooltip)).addTo(map!);
+        });
+        map.on('mouseleave', 'province-fill', () => {
+          if (map) map.getCanvas().style.cursor = '';
+          popup?.remove();
+        });
         map.on('idle', () => {
           if (ready && map?.isSourceLoaded('provinces')) rendered = true;
         });
@@ -142,6 +159,7 @@
     })();
     return () => {
       disposed = true;
+      popup?.remove();
       map?.remove();
       map = undefined;
     };
@@ -150,13 +168,15 @@
 
 <div
   class="map"
+  hidden={!!failure}
   bind:this={container}
   role="img"
+  aria-busy={!rendered && !failure}
   aria-label="Peta sebaran indikator provinsi; gunakan tabel untuk memilih wilayah dengan keyboard."
 ></div>
 {#if failure}<p role="status" class="work-muted">{failure}</p>
   <button class="eq-button" onclick={onretry}>Muat ulang peta</button>{/if}
-{#if rendered && !failure}<p role="status" class="work-muted">
+{#if rendered && !failure}<p role="status" class="map-ready">
     Peta siap · 38 batas provinsi.
   </p>{/if}
 <div class="legend">
@@ -168,23 +188,28 @@
     style:background="#d8dce0"
   ></span><span>Tanpa data / di luar filter</span>
 </div>
-<p class="work-muted">
+<p class="map-scale">
   {percent
     ? 'Persentase akses: 0–20, 20–40, 40–60, 60–80, 80–100%.'
     : 'Jumlah sekolah: lima interval sama terhadap maksimum hasil filter.'} Batas
   komunitas yang disederhanakan; tanpa basemap.
 </p>
-{#if geo}<p class="attribution">
-    {geo.attribution}
-    <a href="https://creativecommons.org/licenses/by/4.0/">Lisensi CC BY 4.0</a>
-  </p>{/if}
+{#if geo}<details class="attribution">
+    <summary>Batas komunitas: Deny Herianto · CC BY 4.0</summary>
+    <p>
+      {geo.attribution}
+      <a href="https://creativecommons.org/licenses/by/4.0/"
+        >Lisensi CC BY 4.0</a
+      >
+    </p>
+  </details>{/if}
 
 <style>
   .map {
-    height: 420px;
+    height: 320px;
     width: 100%;
     border: 1px solid var(--eq-border);
-    border-radius: 12px;
+    border-radius: 8px;
   }
   .legend {
     display: flex;
@@ -200,9 +225,32 @@
     border: 1px solid #9ba9b6;
   }
   .attribution {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--eq-text-secondary);
     margin-top: 10px;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--eq-border);
+  }
+  .attribution summary {
+    font-weight: 400;
+    min-height: 32px;
+    cursor: pointer;
+    font-size: 11px;
+  }
+  .attribution p {
+    font-size: 12px;
+    line-height: 1.6;
+    margin-block: 6px;
+  }
+  .map-ready {
+    font-size: 11px;
+    color: var(--eq-text-secondary);
+    margin-top: 8px;
+  }
+  .map-scale {
+    font-size: 11px;
+    color: var(--eq-text-secondary);
+    line-height: 1.7;
   }
   @media (max-width: 600px) {
     .map {

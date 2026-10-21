@@ -65,7 +65,7 @@
 </script>
 
 <WorkspaceShell
-  title="Bandingkan keputusan simulasi."
+  title="Perbandingan skenario"
   subtitle="Perubahan paket dan peringkat dibaca pada versi data, jenjang, metode, dan model yang kompatibel."
 >
   <form onsubmit={compare}>
