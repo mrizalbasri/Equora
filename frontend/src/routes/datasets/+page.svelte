@@ -27,7 +27,7 @@
 
 <svelte:head><title>Katalog dataset · Equora</title></svelte:head>
 <WorkspaceShell
-  title="Sumber yang bisa ditelusuri."
+  title="Katalog dataset"
   subtitle="Sepuluh indikator dari berkas pendidikan yang Anda sediakan, dengan definisi, skala, hash, dan pemeriksaan kualitas."
 >
   {#if error}<p role="alert" class="work-error">{error}</p>{:else if !loaded}<p

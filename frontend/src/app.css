@@ -22,7 +22,10 @@
   --eq-chart-blue: #3979ab;
   --eq-chart-blue-light: #83a9c7;
   --eq-success: #246f56;
+  --eq-success-tint: #edf6f1;
   --eq-warning: #8d5d13;
+  --eq-warning-tint: #fff6df;
+  --eq-warning-border: #ebd7aa;
   --eq-danger: #b83a28;
   --eq-info: #205f9a;
   --eq-focus: #0e4faf;

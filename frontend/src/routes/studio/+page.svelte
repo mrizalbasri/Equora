@@ -104,12 +104,12 @@
 
 <svelte:head><title>Studio simulasi · Equora</title></svelte:head>
 <WorkspaceShell
-  title="Uji pilihan sebelum menetapkan prioritas."
+  title="Studio simulasi"
   subtitle="Atur bobot kebutuhan, anggaran dan kapasitas. Bandingkan alokasi dengan dua baseline menggunakan batasan yang sama."
 >
-  <form onsubmit={calculate}>
+  <form class="studio-form" onsubmit={calculate}>
     <section class="work-panel">
-      <h2>1. Scope dan asumsi biaya</h2>
+      <h2>1. Cakupan dan asumsi biaya</h2>
       <p class="work-muted">
         Angka awal adalah asumsi demo yang dapat diubah. Satu paket adalah unit
         intervensi simulasi; tidak diklaim setara satu sekolah terbantu.
@@ -186,7 +186,15 @@
             /></label
           >{/each}
       </div>
-      <p aria-live="polite">
+      <div class="weight-composition" aria-hidden="true">
+        {#if total === 100}{#each Object.values(weights) as weight, index}<span
+              style:width={weight + '%'}
+              style:background={['#14507c', '#367fb5', '#74a9cf', '#b4d1e8'][
+                index
+              ]}
+            ></span>{/each}{/if}
+      </div>
+      <p class="weight-total" class:invalid={total !== 100} aria-live="polite">
         Total bobot: {total}% {total !== 100 ? '— harus tepat 100%' : ''}
       </p>
     </section>
@@ -270,6 +278,63 @@
 </WorkspaceShell>
 
 <style>
+  .studio-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 20px;
+  }
+  .studio-form .work-panel {
+    margin: 0;
+  }
+  .studio-form .work-muted {
+    font-size: 12px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .studio-form .work-grid {
+    row-gap: 18px;
+  }
+  .studio-form > details,
+  .studio-form > .work-actions {
+    grid-column: 1/-1;
+  }
+  .studio-form > details {
+    background: var(--eq-surface);
+    border: 1px solid var(--eq-border);
+    border-radius: 10px;
+    padding: 18px 24px;
+  }
+  .studio-form > .work-actions {
+    margin: 0;
+    padding-block: 4px 12px;
+  }
+  .weight-composition {
+    height: 8px;
+    border-radius: 5px;
+    background: var(--eq-border);
+    overflow: hidden;
+    display: flex;
+    margin-top: 28px;
+  }
+  .weight-total {
+    background: var(--eq-sidebar);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 16px;
+    color: var(--eq-success);
+  }
+  .weight-total.invalid {
+    color: var(--eq-danger);
+  }
+  @media (max-width: 1100px) {
+    .studio-form {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .region-option {
     padding: 14px 0;
     border-bottom: 1px solid var(--eq-border);
