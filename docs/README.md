@@ -16,6 +16,7 @@ Status diperbarui 21 Oktober 2026. [Audit kesiapan](implementation-readiness.md)
 | [Audit kesiapan dan backlog](implementation-readiness.md) | Status main/PR terkini, hasil pemeriksaan, urutan kerja dan kriteria selesai |
 | [Pembagian kerja dua orang](pembagian-kerja/README.md) | Porsi pemilik/teman, folder tugas per fitur, dependensi dan checklist serah terima |
 | [Data readiness](data-readiness.md) | Gerbang validasi sebelum analisis |
+| [Staging XLSX pendidikan](dataset-staging.md) | Adapter lokal, quality report, provenance, perintah dan batas release |
 | [Submission checklist](submission-checklist.md) | Bukti yang perlu disiapkan per tahap |
 | [Keputusan dan pertanyaan](decisions.md) | Keputusan yang masih perlu dikonfirmasi |
 | [Setup GitHub](github-setup.md) | Publikasi repository, aturan branch dan CI |

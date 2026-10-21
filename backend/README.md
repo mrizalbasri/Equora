@@ -58,7 +58,7 @@ migrations/      # Alembic
 tests/
 ```
 
-Folder ETL masih menyiapkan batas modul. Analisis menyediakan [MCDA sandbox](../docs/priority-sandbox.md), dan optimasi menyediakan [alokasi paket integer sandbox](../docs/allocation-sandbox.md), keduanya diuji memakai kasus sintetis. Engine belum terhubung ke HTTP, database, atau UI. Model domain dan import dataset belum diimplementasikan. Migrasi `0001` menginisialisasi riwayat Alembic tanpa membuat tabel domain sebelum release data ditetapkan.
+ETL menyediakan [adapter staging XLSX pendidikan](../docs/dataset-staging.md) untuk scope satu jenjang/Total, quality report dan provenance lokal. Adapter belum menerbitkan release atau menulis database. Analisis dan optimasi menyediakan sandbox sintetis sesuai [MCDA](../docs/priority-sandbox.md) dan [alokasi](../docs/allocation-sandbox.md), belum terhubung ke HTTP, database atau UI. Model domain/registry dan import admin belum tersedia. Migrasi `0001` hanya menginisialisasi riwayat Alembic.
 
 ## Pemeriksaan
 
