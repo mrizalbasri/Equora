@@ -91,6 +91,15 @@
   .footer { padding-block: 40px; border-top: 1px solid var(--eq-border); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; }
   .footer p { font-size: 13px; color: var(--eq-text-secondary); }
   .disclaimer { text-align: right; }
+  @media (min-width: 1024px) and (max-width: 1199px) {
+    .header { gap: 12px; }
+    nav { gap: 0; }
+    nav a { font-size: 13px; }
+    .nav-link { padding-inline: 8px; }
+    .nav-link.primary-link { padding-inline: 12px; margin-right: 4px; gap: 6px; }
+    .nav-link.reference-start { margin-left: 8px; }
+    .nav-link.reference-start::before { left: -4px; }
+  }
   @media (max-width: 1023px) {
     .public-frame { width: 100%; margin: 0; border-radius: 0; box-shadow: none; }
     .header-bar { border-radius: 0; }
