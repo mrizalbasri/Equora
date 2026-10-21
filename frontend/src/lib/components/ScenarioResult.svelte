@@ -1,5 +1,7 @@
 <script lang="ts">
   import { labels, number, rupiah, type Snapshot } from '$lib/api/workspace';
+  import DecisionReview from './DecisionReview.svelte';
+  import ScenarioEvidence from './ScenarioEvidence.svelte';
   let {
     result,
     names = {},
@@ -76,6 +78,11 @@
       </p>{/each}
   </details>
 </section>
+<nav class="result-tools" aria-label="Periksa hasil skenario">
+  <a class="eq-button eq-button-primary" href="#uji-keputusan">Uji keputusan & pemerataan</a>
+  <a class="eq-button" href="#telusur-bukti">Telusur bukti</a>
+</nav>
+{#key result.id}<DecisionReview snapshot={result} /><ScenarioEvidence snapshot={result} />{/key}
 <div class="work-table">
   <table>
     <caption
@@ -157,3 +164,7 @@
       </p>{/each}
   </details>
 </section>
+
+<style>
+  .result-tools { display: flex; flex-wrap: wrap; gap: 12px; }
+</style>

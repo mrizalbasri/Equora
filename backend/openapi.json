@@ -626,6 +626,56 @@
         }
       }
     },
+    "/api/v1/scenarios/{snapshot_id}/review": {
+      "post": {
+        "summary": "Decision Review",
+        "operationId": "decision_review_api_v1_scenarios__snapshot_id__review_post",
+        "parameters": [
+          {
+            "name": "snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionReview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/scenarios/compare/pdf": {
       "post": {
         "summary": "Export Comparison Pdf",
@@ -1098,6 +1148,79 @@
         ],
         "title": "DatasetView"
       },
+      "DecisionReview": {
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "title": "Snapshot Id"
+          },
+          "release_id": {
+            "type": "string",
+            "title": "Release Id"
+          },
+          "review_version": {
+            "type": "string",
+            "title": "Review Version"
+          },
+          "computed_at": {
+            "type": "string",
+            "title": "Computed At"
+          },
+          "changes": {
+            "$ref": "#/components/schemas/ReviewInput"
+          },
+          "original": {
+            "$ref": "#/components/schemas/ReviewSummary"
+          },
+          "what_if": {
+            "$ref": "#/components/schemas/ReviewTrial"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/ReviewTrial"
+          },
+          "coverage_status": {
+            "type": "string",
+            "title": "Coverage Status"
+          },
+          "sensitivity": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewTrial"
+            },
+            "type": "array",
+            "title": "Sensitivity"
+          },
+          "stability": {
+            "items": {
+              "$ref": "#/components/schemas/StabilityRow"
+            },
+            "type": "array",
+            "title": "Stability"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "snapshot_id",
+          "release_id",
+          "review_version",
+          "computed_at",
+          "changes",
+          "original",
+          "what_if",
+          "coverage",
+          "coverage_status",
+          "sensitivity",
+          "stability",
+          "limitations"
+        ],
+        "title": "DecisionReview"
+      },
       "Evaluation": {
         "properties": {
           "budget_used_idr": {
@@ -1478,6 +1601,79 @@
         ],
         "title": "RankedRegion"
       },
+      "RegionChange": {
+        "properties": {
+          "region_code": {
+            "type": "string",
+            "title": "Region Code"
+          },
+          "before_packages": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before Packages"
+          },
+          "after_packages": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After Packages"
+          },
+          "delta": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delta"
+          },
+          "before_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before Rank"
+          },
+          "after_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After Rank"
+          }
+        },
+        "type": "object",
+        "required": [
+          "region_code",
+          "before_packages",
+          "after_packages",
+          "delta",
+          "before_rank",
+          "after_rank"
+        ],
+        "title": "RegionChange"
+      },
       "RegionOption": {
         "properties": {
           "region_code": {
@@ -1540,6 +1736,182 @@
           "capacity"
         ],
         "title": "RegionParameters"
+      },
+      "ReviewInput": {
+        "properties": {
+          "budget_change_percent": {
+            "type": "integer",
+            "maximum": 25.0,
+            "minimum": -25.0,
+            "title": "Budget Change Percent",
+            "default": 10
+          },
+          "cost_change_percent": {
+            "type": "integer",
+            "maximum": 25.0,
+            "minimum": -25.0,
+            "title": "Cost Change Percent",
+            "default": 0
+          },
+          "weight_indicator": {
+            "type": "string",
+            "title": "Weight Indicator",
+            "default": "sanitation_percent"
+          },
+          "weight_change_percent": {
+            "type": "integer",
+            "maximum": 25.0,
+            "minimum": -25.0,
+            "title": "Weight Change Percent",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ReviewInput"
+      },
+      "ReviewSummary": {
+        "properties": {
+          "eligible_regions": {
+            "type": "integer",
+            "title": "Eligible Regions"
+          },
+          "excluded_regions": {
+            "type": "integer",
+            "title": "Excluded Regions"
+          },
+          "receiving_regions": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Receiving Regions"
+          },
+          "total_packages": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Packages"
+          },
+          "budget_used_idr": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Budget Used Idr"
+          },
+          "budget_remaining_idr": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Budget Remaining Idr"
+          },
+          "objective_units": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Objective Units"
+          }
+        },
+        "type": "object",
+        "required": [
+          "eligible_regions",
+          "excluded_regions",
+          "receiving_regions",
+          "total_packages",
+          "budget_used_idr",
+          "budget_remaining_idr",
+          "objective_units"
+        ],
+        "title": "ReviewSummary"
+      },
+      "ReviewTrial": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/RegionChange"
+            },
+            "type": "array",
+            "title": "Changes"
+          },
+          "perturbation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReviewInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "budget_idr": {
+            "type": "integer",
+            "title": "Budget Idr"
+          },
+          "weights": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Weights"
+          },
+          "objective_comparable": {
+            "type": "boolean",
+            "title": "Objective Comparable"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/PriorityResult"
+          },
+          "case": {
+            "$ref": "#/components/schemas/AllocationCase"
+          },
+          "allocation": {
+            "$ref": "#/components/schemas/AllocationResult"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/ReviewSummary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "changes",
+          "budget_idr",
+          "weights",
+          "objective_comparable",
+          "priority",
+          "case",
+          "allocation",
+          "summary"
+        ],
+        "title": "ReviewTrial"
       },
       "SavedScenarioView": {
         "properties": {
@@ -1967,6 +2339,87 @@
           "quality"
         ],
         "title": "SourceView"
+      },
+      "StabilityRow": {
+        "properties": {
+          "region_code": {
+            "type": "string",
+            "title": "Region Code"
+          },
+          "evaluated_trials": {
+            "type": "integer",
+            "title": "Evaluated Trials"
+          },
+          "same_packages_trials": {
+            "type": "integer",
+            "title": "Same Packages Trials"
+          },
+          "receiving_trials": {
+            "type": "integer",
+            "title": "Receiving Trials"
+          },
+          "eligible_trials": {
+            "type": "integer",
+            "title": "Eligible Trials"
+          },
+          "min_packages": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Packages"
+          },
+          "max_packages": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Packages"
+          },
+          "min_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Rank"
+          },
+          "max_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Rank"
+          }
+        },
+        "type": "object",
+        "required": [
+          "region_code",
+          "evaluated_trials",
+          "same_packages_trials",
+          "receiving_trials",
+          "eligible_trials",
+          "min_packages",
+          "max_packages",
+          "min_rank",
+          "max_rank"
+        ],
+        "title": "StabilityRow"
       },
       "ValidationError": {
         "properties": {

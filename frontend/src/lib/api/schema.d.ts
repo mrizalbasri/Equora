@@ -260,6 +260,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/scenarios/{snapshot_id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Decision Review */
+        post: operations["decision_review_api_v1_scenarios__snapshot_id__review_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/scenarios/compare/pdf": {
         parameters: {
             query?: never;
@@ -440,6 +457,29 @@ export interface components {
             /** Limitations */
             limitations: string[];
         };
+        /** DecisionReview */
+        DecisionReview: {
+            /** Snapshot Id */
+            snapshot_id: string;
+            /** Release Id */
+            release_id: string;
+            /** Review Version */
+            review_version: string;
+            /** Computed At */
+            computed_at: string;
+            changes: components["schemas"]["ReviewInput"];
+            original: components["schemas"]["ReviewSummary"];
+            what_if: components["schemas"]["ReviewTrial"];
+            coverage: components["schemas"]["ReviewTrial"];
+            /** Coverage Status */
+            coverage_status: string;
+            /** Sensitivity */
+            sensitivity: components["schemas"]["ReviewTrial"][];
+            /** Stability */
+            stability: components["schemas"]["StabilityRow"][];
+            /** Limitations */
+            limitations: string[];
+        };
         /** Evaluation */
         Evaluation: {
             /** Budget Used Idr */
@@ -572,6 +612,21 @@ export interface components {
                 [key: string]: string;
             };
         };
+        /** RegionChange */
+        RegionChange: {
+            /** Region Code */
+            region_code: string;
+            /** Before Packages */
+            before_packages: number | null;
+            /** After Packages */
+            after_packages: number | null;
+            /** Delta */
+            delta: number | null;
+            /** Before Rank */
+            before_rank: number | null;
+            /** After Rank */
+            after_rank: number | null;
+        };
         /** RegionOption */
         RegionOption: {
             /** Region Code */
@@ -599,6 +654,66 @@ export interface components {
              * @default 0
              */
             minimum_packages: number;
+        };
+        /** ReviewInput */
+        ReviewInput: {
+            /**
+             * Budget Change Percent
+             * @default 10
+             */
+            budget_change_percent: number;
+            /**
+             * Cost Change Percent
+             * @default 0
+             */
+            cost_change_percent: number;
+            /**
+             * Weight Indicator
+             * @default sanitation_percent
+             */
+            weight_indicator: string;
+            /**
+             * Weight Change Percent
+             * @default 0
+             */
+            weight_change_percent: number;
+        };
+        /** ReviewSummary */
+        ReviewSummary: {
+            /** Eligible Regions */
+            eligible_regions: number;
+            /** Excluded Regions */
+            excluded_regions: number;
+            /** Receiving Regions */
+            receiving_regions: number | null;
+            /** Total Packages */
+            total_packages: number | null;
+            /** Budget Used Idr */
+            budget_used_idr: number | null;
+            /** Budget Remaining Idr */
+            budget_remaining_idr: number | null;
+            /** Objective Units */
+            objective_units: number | null;
+        };
+        /** ReviewTrial */
+        ReviewTrial: {
+            /** Label */
+            label: string;
+            /** Changes */
+            changes: components["schemas"]["RegionChange"][];
+            perturbation?: components["schemas"]["ReviewInput"] | null;
+            /** Budget Idr */
+            budget_idr: number;
+            /** Weights */
+            weights: {
+                [key: string]: string;
+            };
+            /** Objective Comparable */
+            objective_comparable: boolean;
+            priority: components["schemas"]["PriorityResult"];
+            case: components["schemas"]["AllocationCase"];
+            allocation: components["schemas"]["AllocationResult"];
+            summary: components["schemas"]["ReviewSummary"];
         };
         /** SavedScenarioView */
         SavedScenarioView: {
@@ -758,6 +873,27 @@ export interface components {
             quality: {
                 [key: string]: components["schemas"]["QualityCount"];
             };
+        };
+        /** StabilityRow */
+        StabilityRow: {
+            /** Region Code */
+            region_code: string;
+            /** Evaluated Trials */
+            evaluated_trials: number;
+            /** Same Packages Trials */
+            same_packages_trials: number;
+            /** Receiving Trials */
+            receiving_trials: number;
+            /** Eligible Trials */
+            eligible_trials: number;
+            /** Min Packages */
+            min_packages: number | null;
+            /** Max Packages */
+            max_packages: number | null;
+            /** Min Rank */
+            min_rank: number | null;
+            /** Max Rank */
+            max_rank: number | null;
         };
         /** ValidationError */
         ValidationError: {
@@ -1248,6 +1384,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ScenarioView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    decision_review_api_v1_scenarios__snapshot_id__review_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DecisionReview"];
                 };
             };
             /** @description Validation Error */

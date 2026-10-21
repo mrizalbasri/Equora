@@ -17,6 +17,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.analysis.priority import PriorityResult
+from app.api.decision_views import DecisionReview, ReviewInput
 from app.api.views import (
     CatalogView,
     DatasetView,
@@ -394,6 +395,17 @@ def compare(body: CompareInput, session: DBSession):
 @router.get("/scenarios/{snapshot_id}", response_model=ScenarioView)
 def scenario(snapshot_id: UUID, session: DBSession):
     return get_snapshot(session, snapshot_id)
+
+
+@router.post("/scenarios/{snapshot_id}/review", response_model=DecisionReview)
+def decision_review(snapshot_id: UUID, body: ReviewInput, session: DBSession):
+    from app.services.decision_review import review_snapshot
+
+    snapshot = get_snapshot(session, snapshot_id)
+    try:
+        return review_snapshot(snapshot, ScenarioInput.model_validate(snapshot["parameters"]), body)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
 
 
 @router.post("/scenarios/compare/pdf")

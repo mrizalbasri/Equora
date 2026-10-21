@@ -2,7 +2,7 @@
   <div class="journey-heading"><h2>Mulai dari mana?</h2><p>Akses lokal tanpa login. Pilih langkah sesuai kebutuhan Anda.</p></div>
   <ol>
     <li><a href="/explore"><span class="step">01</span><strong>Jelajahi data</strong><span aria-hidden="true">→</span></a><p>Lihat peta, pilih provinsi, lalu buka detail wilayah dan sumbernya.</p></li>
-    <li><a href="/studio"><span class="step">02</span><strong>Buat simulasi</strong><span aria-hidden="true">→</span></a><p>Atur bobot dan anggaran. Hitung untuk menyimpan hasil sebagai snapshot.</p><a class="saved" href="/studio#skenario-tersimpan">Buka skenario tersimpan →</a></li>
+    <li><a href="/studio"><span class="step">02</span><strong>Buat simulasi</strong><span aria-hidden="true">→</span></a><p>Atur bobot dan anggaran. Buka hasil tersimpan untuk menguji keputusan, pemerataan, dan bukti sumber.</p><a class="saved" href="/studio#skenario-tersimpan">Buka skenario tersimpan →</a></li>
     <li><a href="/compare"><span class="step">03</span><strong>Bandingkan hasil</strong><span aria-hidden="true">→</span></a><p>Pilih dua snapshot tersimpan untuk menilai perubahan prioritas dan alokasi.</p></li>
   </ol>
   <p class="references">Periksa sumber di <a href="/datasets">katalog dataset</a> dan cara hitung di <a href="/methodology">metodologi</a>. Impor data tersedia melalui menu pengelolaan lokal dan memerlukan token admin.</p>
