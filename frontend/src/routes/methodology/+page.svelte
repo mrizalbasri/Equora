@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { navigation } from '$lib/api/workspace';
   import PublicShell from '$lib/components/PublicShell.svelte';
 
@@ -10,6 +11,36 @@
     { id: 'glossary', label: 'Glosarium' },
     { id: 'limits', label: 'Batasan' }
   ];
+  let activeSection = $state('sources');
+
+  onMount(() => {
+    const targets = sections.map(({ id }) => document.getElementById(id));
+    const header = document.querySelector('.header-bar');
+    let frame = 0;
+    function updateActiveSection() {
+      frame = 0;
+      const readingLine = Math.max(128, (header?.getBoundingClientRect().bottom ?? 0) + 24);
+      let current = sections[0].id;
+      targets.forEach((target, index) => {
+        if (target && target.getBoundingClientRect().top <= readingLine) current = sections[index].id;
+      });
+      if (window.scrollY > 0 && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+        current = sections[sections.length - 1].id;
+      }
+      activeSection = current;
+    }
+    function scheduleUpdate() {
+      if (!frame) frame = requestAnimationFrame(updateActiveSection);
+    }
+    updateActiveSection();
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+    };
+  });
 
   const glossary = [
     ['Coverage', 'Proporsi atau cakupan input yang tersedia dan dapat dipakai pada suatu perhitungan. Coverage rendah tidak otomatis berarti data salah.'],
@@ -50,7 +81,7 @@
       <aside class="toc" aria-label="Daftar isi">
         <p class="toc-title">Di halaman ini</p>
         {#each sections as section}
-          <a href={`#${section.id}`}>{section.label}</a>
+          <a href={`#${section.id}`} aria-current={activeSection === section.id ? 'location' : undefined}>{section.label}</a>
         {/each}
       </aside>
 
@@ -190,6 +221,7 @@
 </PublicShell>
 
 <style>
+  :global(html:has(.methodology)) { scroll-behavior: smooth; }
   .methodology {
     padding-block: 48px 80px;
   }
@@ -266,6 +298,8 @@
     align-self: start;
     position: sticky;
     top: 128px;
+    max-height: calc(100dvh - 152px);
+    overflow-y: auto;
   }
   .toc-title {
     color: var(--eq-text-muted);
@@ -280,17 +314,20 @@
     border-radius: 0 var(--eq-radius-sm) var(--eq-radius-sm) 0;
     color: var(--eq-text-secondary);
     display: block;
+    min-height: 44px;
     font-size: 0.875rem;
     padding: 8px 0 8px 14px;
     text-decoration: none;
     transition: color 140ms ease, border-color 140ms ease, background-color 140ms ease;
   }
   .toc a:hover,
-  .toc a:focus-visible {
+  .toc a:focus-visible,
+  .toc a[aria-current='location'] {
     border-color: var(--eq-primary);
     background-color: var(--eq-primary-tint);
     color: var(--eq-primary);
   }
+  .toc a[aria-current='location'] { font-weight: 650; }
   .content {
     min-width: 0;
   }
@@ -493,12 +530,15 @@
       margin-bottom: 32px;
       padding-bottom: 24px;
       position: static;
+      max-height: none;
+      overflow: visible;
     }
     .toc a {
       background: var(--eq-surface-subtle);
       border-left: none;
       border-radius: var(--eq-radius-sm);
       display: inline-block;
+      align-content: center;
       margin-bottom: 6px;
       margin-right: 8px;
       padding: 6px 12px;
