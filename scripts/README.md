@@ -37,6 +37,7 @@ docker compose -f backend/compose.yaml stop api
 
 ## Alat Python
 
+- `audit_local_education.py`: audit 10 workbook pengguna dari `data/datamentah/` dengan hash yang dipin, quality report dan rekonsiliasi persentase/denominator; tanpa perubahan raw/database. Lihat [audit tambahan](../docs/additional-source-audit-2026-10-21.md).
 - `check_docs.py`: memeriksa tautan file lokal dari Markdown root dan `docs/`.
 - `export_openapi.py`: mengekspor kontrak backend tanpa server HTTP atau koneksi database.
 - `test_postgres.py`: menjalankan pytest backend dengan `TEST_DATABASE_URL` dari environment atau `.env` lokal; hanya menerima database `equora_test`. Jalankan dari `backend/` memakai `uv run python ../scripts/test_postgres.py`.

@@ -9,7 +9,7 @@ for (const width of [360, 390, 768, 1024, 1440]) {
     await expect(page).toHaveTitle(/Equora/);
     await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
     await expect(page.getByRole('main')).toHaveCount(1);
-    await expect(page.getByText('Explorer belum tersedia.')).toBeVisible();
+    await expect(page.getByText('Explorer lokal tersedia.')).toBeVisible();
     const preview = page.getByRole('group', { name: 'Pilih mode pratinjau antarmuka' });
     await expect(page.getByText('Contoh antarmuka · belum terhubung data atau engine')).toBeVisible();
     await expect(page.getByText('78.4%', { exact: true })).toHaveCount(0);
@@ -34,12 +34,12 @@ for (const width of [360, 390, 768, 1024, 1440]) {
 
     await page.getByRole('button', { name: 'Simulasi alokasi', exact: true }).focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByText('Studio skenario belum tersedia.')).toBeVisible();
+    await expect(page.getByText('Studio lokal tersedia.')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Simulasi alokasi', exact: true })).toHaveAttribute('aria-pressed', 'true');
     await page.getByRole('link', { name: 'Baca batas penggunaan simulasi' }).click();
     await expect(page).toHaveURL(/#metode$/);
     await page.getByRole('button', { name: 'Perbandingan akses', exact: true }).click();
-    await expect(page.getByText('Explorer belum tersedia.')).toBeVisible();
+    await expect(page.getByText('Explorer lokal tersedia.')).toBeVisible();
 
     for (const label of ['Bagaimana data kosong diperlakukan?', 'Apa arti hasil alokasi?', 'Apakah semua skenario memiliki solusi?']) {
       const summary = page.getByText(label, { exact: true });
@@ -53,7 +53,7 @@ for (const width of [360, 390, 768, 1024, 1440]) {
     await expect(page.locator('details').first()).not.toHaveAttribute('open', '');
     await page.getByText('Bagaimana prioritas disusun?', { exact: true }).click();
 
-    for (const label of ['Lihat alur perbandingan', 'Pahami cara simulasi']) {
+    for (const label of ['Pahami cara simulasi']) {
       await page.getByRole('link', { name: label, exact: true }).click();
     }
     if (width < 1024) {
@@ -76,11 +76,11 @@ for (const width of [360, 390, 768, 1024, 1440]) {
       if (width < 1024) await expect(page.getByRole('button', { name: 'Menu', exact: true })).toHaveAttribute('aria-expanded', 'false');
     }
     await expect(page.locator('a[href^="https://data.kemendikdasmen.go.id/"]')).toHaveCount(4);
-    await expect(page.locator('a[href="/explore"], a[href="/studio"]')).toHaveCount(0);
+    await expect(page.locator('a[href="/explore"], a[href="/studio"]')).toHaveCount(2);
     await page.getByRole('link', { name: 'Katalog dataset', exact: true }).click();
     await expect(page).toHaveURL(/\/datasets$/);
-    await page.getByRole('link', { name: 'Beranda', exact: true }).click();
-    await page.getByRole('link', { name: 'Metodologi', exact: true }).click();
+    await page.goto('/');
+    await page.getByRole('link', { name: 'Metodologi', exact: true }).last().click();
     await expect(page).toHaveURL(/\/methodology$/);
     await page.getByRole('link', { name: 'Kembali ke beranda', exact: true }).click();
     await page.goto('/');

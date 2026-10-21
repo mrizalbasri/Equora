@@ -33,7 +33,7 @@ class SourceMetadata(FrozenModel):
     year: int = Field(strict=True, ge=1900, le=9999)
     academic_year: str = Field(pattern=r"^\d{4}/\d{4}$")
     unit: Literal["percent", "school_count"]
-    retrieved_at: datetime
+    retrieved_at: datetime | None = None
     license_status: str = Field(min_length=1)
 
     @field_validator("title", "publisher", "license_status")
@@ -45,8 +45,8 @@ class SourceMetadata(FrozenModel):
 
     @field_validator("retrieved_at")
     @classmethod
-    def timezone_required(cls, value: datetime) -> datetime:
-        if value.utcoffset() is None:
+    def timezone_required(cls, value: datetime | None) -> datetime | None:
+        if value is not None and value.utcoffset() is None:
             raise ValueError("retrieved_at requires an explicit timezone")
         return value
 

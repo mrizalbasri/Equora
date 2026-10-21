@@ -38,7 +38,7 @@
         <h1 id="hero-title">Beda wilayah,<br /><span>beda kebutuhan.</span></h1>
         <p class="intro">Dari air minum hingga akses digital, setiap wilayah punya konteksnya. Kenali kesenjangan fasilitas pendidikan dan pahami dasar pilihan alokasinya.</p>
         <div class="actions">
-          <a class="eq-button eq-button-primary hero-primary" href="#pratinjau">Lihat alur perbandingan <span class="hero-arrow" aria-hidden="true">↓</span></a>
+          <a class="eq-button eq-button-primary hero-primary" href="/explore">Buka Explorer <span class="hero-arrow" aria-hidden="true">↓</span></a>
           <a class="eq-button hero-secondary" href="#metode">Pahami cara simulasi</a>
         </div>
         <p class="hero-note"><span class="development-label">Dalam pengembangan</span><br />Simulasi, bukan keputusan anggaran resmi.</p>
@@ -262,7 +262,7 @@
           <span class="step-label">01 / Baca kebutuhan</span>
           <h3>Bandingkan hal <span class="break-desktop"><br /></span>yang setara.</h3>
           <p>Sanitasi, air minum, internet, dan komputer memberi sudut pandang berbeda. Periode, jenjang, dan satuan menentukan apakah nilainya bisa dibandingkan.</p>
-          <p class="availability">Explorer belum tersedia.<br />Menunggu release data terverifikasi.</p>
+          <p class="availability">Explorer lokal tersedia.<br /><a href="/explore">Telusuri data 38 provinsi →</a></p>
         </div>
         <div class="facility-list">
           {#each facilities as facility}
@@ -282,7 +282,7 @@
           <span class="step-label">02 / Uji pilihan</span>
           <h3>Satu anggaran. <span class="break-desktop"><br /></span>Pilihan yang berbeda.</h3>
           <p>Ubah bobot kebutuhan, biaya per paket, kapasitas, dan batas pemerataan. Bandingkan alokasi serta trade-off pada data yang sama.</p>
-          <p class="availability">Studio skenario belum tersedia.<br />Model biaya dan kendala belum dibekukan.</p>
+          <p class="availability">Studio lokal tersedia.<br /><a href="/studio">Hitung dan bandingkan skenario →</a></p>
         </div>
         <div class="allocation-explainer">
           <dl>
@@ -326,9 +326,9 @@
       <div class="source-intro">
         <p class="eq-kicker">Sumber sebelum kesimpulan</p>
         <h2 id="sources-title">Nilai yang bisa<br />ditelusuri asalnya.</h2>
-        <p>Calon sumber dari portal data Kemendikdasmen. Tautan ini menuju halaman penerbit, bukan dataset yang sudah dirilis oleh Equora.</p>
-        <AvailabilityNotice title="Belum ada release data">
-          <p>File, lisensi, cakupan, dan kesesuaian antarindikator masih perlu diaudit. Belum ada statistik resmi yang ditampilkan di Equora.</p>
+        <p>Empat indikator inti dari portal data Kemendikdasmen. Tautan ini menuju halaman penerbit; definisi, hash, dan kualitas berkas tersedia pada katalog lokal.</p>
+        <AvailabilityNotice title="Data tersedia untuk review lokal">
+          <p>Sepuluh berkas pengguna telah diperiksa. Tanggal unduh dan lisensi redistribusi belum terverifikasi; data ini belum menjadi release publik Equora.</p>
         </AvailabilityNotice>
       </div>
       <div class="source-list">
@@ -368,7 +368,7 @@
       </details>
       <details>
         <summary>Apakah semua skenario memiliki solusi?</summary>
-        <p>Tidak selalu. Anggaran dan kendala dapat saling bertentangan. Studio harus menjelaskan skenario yang terbukti tidak layak; proses yang berhenti tanpa solusi tidak otomatis berarti tidak layak. Solver final serta benchmark belum ditetapkan.</p>
+        <p>Tidak selalu. Anggaran dan kendala dapat saling bertentangan. Studio harus menjelaskan skenario yang terbukti tidak layak; proses yang berhenti tanpa solusi tidak otomatis berarti tidak layak. Studio lokal memakai OR-Tools CP-SAT dengan baseline merata dan greedy.</p>
       </details>
       <AvailabilityNotice title="Batas penggunaan">
         <p>Equora mendukung eksplorasi dan pembelajaran. Simulasi berbasis data dan asumsi, bukan keputusan anggaran resmi pemerintah atau pengganti kajian lapangan.</p>

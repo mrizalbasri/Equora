@@ -19,6 +19,7 @@ coverage/
 playwright-report/
 test-results/
 data/raw/
+data/datamentah/
 data/processed/
 tmp/
 output/

@@ -38,10 +38,422 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/geometry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Boundary */
+        get: operations["boundary_api_v1_geometry_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workspace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Workspace */
+        get: operations["workspace_api_v1_workspace_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/datasets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Datasets */
+        get: operations["datasets_api_v1_datasets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/datasets/{source_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dataset */
+        get: operations["dataset_api_v1_datasets__source_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/datasets/{source_id}/quality": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Quality */
+        get: operations["quality_api_v1_datasets__source_id__quality_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/regions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Regions */
+        get: operations["regions_api_v1_regions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/regions/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Region */
+        get: operations["region_api_v1_regions__code__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/observations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Observations */
+        get: operations["observations_api_v1_observations_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/observations/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export Observations */
+        get: operations["export_observations_api_v1_observations_export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/priority/compute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Compute Priority */
+        post: operations["compute_priority_api_v1_priority_compute_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scenarios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Scenarios */
+        get: operations["list_scenarios_api_v1_scenarios_get"];
+        put?: never;
+        /** Create Scenario */
+        post: operations["create_scenario_api_v1_scenarios_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scenarios/compare": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Compare */
+        post: operations["compare_api_v1_scenarios_compare_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scenarios/{snapshot_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Scenario */
+        get: operations["scenario_api_v1_scenarios__snapshot_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scenarios/compare/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Export Comparison Pdf */
+        post: operations["export_comparison_pdf_api_v1_scenarios_compare_pdf_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scenarios/{snapshot_id}/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export Scenario */
+        get: operations["export_scenario_api_v1_scenarios__snapshot_id__export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scenarios/{snapshot_id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export Pdf */
+        get: operations["export_pdf_api_v1_scenarios__snapshot_id__pdf_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Admin Import */
+        post: operations["admin_import_api_v1_admin_import_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AllocationCase */
+        AllocationCase: {
+            /** Budget Idr */
+            budget_idr: number;
+            /** Priority Scale */
+            priority_scale: number;
+            /** Regions */
+            regions: components["schemas"]["RegionOption"][];
+            /**
+             * Cost Source Type
+             * @default demo_assumption
+             */
+            cost_source_type: string;
+        };
+        /** AllocationResult */
+        AllocationResult: {
+            /** Status */
+            status: string;
+            /** Allocations */
+            allocations?: {
+                [key: string]: number;
+            } | null;
+            evaluation?: components["schemas"]["Evaluation"] | null;
+            /** Best Bound Units */
+            best_bound_units?: number | null;
+            /** Absolute Gap Units */
+            absolute_gap_units?: number | null;
+            /** Reason */
+            reason?: string | null;
+            /**
+             * Model Version
+             * @default single-intervention-demo-v1
+             */
+            model_version: string;
+            /** Solver Version */
+            solver_version?: string | null;
+            /** Max Time Seconds */
+            max_time_seconds?: number | null;
+            /** Workers */
+            workers?: number | null;
+            /** Seed */
+            seed?: number | null;
+        };
+        /** CatalogView */
+        CatalogView: {
+            /** Release Id */
+            release_id: string;
+            /** Status */
+            status: string;
+            /** Items */
+            items: components["schemas"]["SourceView"][];
+        };
+        /** CompareInput */
+        CompareInput: {
+            /**
+             * Left
+             * Format: uuid
+             */
+            left: string;
+            /**
+             * Right
+             * Format: uuid
+             */
+            right: string;
+        };
+        /** DatasetView */
+        DatasetView: {
+            /** Source Id */
+            source_id: string;
+            /** Title */
+            title: string;
+            /** Publisher */
+            publisher: string;
+            /**
+             * Source Url
+             * Format: uri
+             */
+            source_url: string;
+            /** Sha256 */
+            sha256: string;
+            /** Year */
+            year: number;
+            /** Academic Year */
+            academic_year: string;
+            /**
+             * Unit
+             * @enum {string}
+             */
+            unit: "percent" | "school_count";
+            /** Retrieved At */
+            retrieved_at?: string | null;
+            /** License Status */
+            license_status: string;
+            /** Definition */
+            definition: string;
+            /** Storage Scale */
+            storage_scale: string;
+            /** Quality */
+            quality: {
+                [key: string]: components["schemas"]["QualityCount"];
+            };
+            /** Release Id */
+            release_id: string;
+            /** Status */
+            status: string;
+            /** Limitations */
+            limitations: string[];
+        };
+        /** Evaluation */
+        Evaluation: {
+            /** Budget Used Idr */
+            budget_used_idr: number;
+            /** Budget Remaining Idr */
+            budget_remaining_idr: number;
+            /** Objective Units */
+            objective_units: number;
+        };
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
         /** HealthResponse */
         HealthResponse: {
             /**
@@ -51,6 +463,341 @@ export interface components {
             status: "ok" | "unavailable";
             /** Service */
             service: string;
+        };
+        /** ObservationView */
+        ObservationView: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Value */
+            value: string | null;
+            /** Source Value */
+            source_value: string | null;
+            /** Denominator */
+            denominator: string | null;
+            /** Source Cell */
+            source_cell: string;
+            /** Status */
+            status: string;
+        };
+        /** ObservationsView */
+        ObservationsView: {
+            /** Release Id */
+            release_id: string;
+            /** Status */
+            status: string;
+            /** Year */
+            year: number;
+            /** Academic Year */
+            academic_year: string;
+            /** Education Level */
+            education_level: string;
+            /** Ownership */
+            ownership: string;
+            source: components["schemas"]["SourceView"];
+            /** Rows */
+            rows: components["schemas"]["ObservationView"][];
+            /** Limitations */
+            limitations: string[];
+        };
+        /** PriorityInput */
+        PriorityInput: {
+            /** Release Id */
+            release_id: string;
+            /**
+             * Education Level
+             * @default SD
+             * @enum {string}
+             */
+            education_level: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+            /** Weights */
+            weights: {
+                [key: string]: number | string;
+            };
+            /** Region Codes */
+            region_codes?: string[] | null;
+        };
+        /** PriorityResult */
+        PriorityResult: {
+            /** Method Version */
+            method_version: string;
+            /** Missing Policy */
+            missing_policy: string;
+            /** Input Regions */
+            input_regions: number;
+            /** Ranked */
+            ranked: components["schemas"]["RankedRegion"][];
+            /** Excluded */
+            excluded: {
+                [key: string]: string[];
+            };
+            /** Weights */
+            weights: {
+                [key: string]: string;
+            };
+        };
+        /** ProvinceView */
+        ProvinceView: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Values */
+            values: {
+                [key: string]: string | null;
+            };
+            /** Cells */
+            cells: {
+                [key: string]: string;
+            };
+        };
+        /** QualityCount */
+        QualityCount: {
+            /** Missing */
+            missing: number;
+            /** Numeric */
+            numeric: number;
+        };
+        /** RankedRegion */
+        RankedRegion: {
+            /** Region Code */
+            region_code: string;
+            /** Rank */
+            rank: number;
+            /** Score */
+            score: string;
+            /** Contributions */
+            contributions: {
+                [key: string]: string;
+            };
+        };
+        /** RegionOption */
+        RegionOption: {
+            /** Region Code */
+            region_code: string;
+            /** Cost Idr */
+            cost_idr: number;
+            /** Capacity */
+            capacity: number;
+            /** Priority Units */
+            priority_units: number;
+            /**
+             * Minimum Packages
+             * @default 0
+             */
+            minimum_packages: number;
+        };
+        /** RegionParameters */
+        RegionParameters: {
+            /** Cost Idr */
+            cost_idr: number;
+            /** Capacity */
+            capacity: number;
+            /**
+             * Minimum Packages
+             * @default 0
+             */
+            minimum_packages: number;
+        };
+        /** SavedScenarioView */
+        SavedScenarioView: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Created At */
+            created_at: string;
+            /** Status */
+            status: string;
+            /** Release Id */
+            release_id: string;
+        };
+        /** ScenarioInput */
+        "ScenarioInput-Input": {
+            /** Cost Idr */
+            cost_idr: number;
+            /** Capacity */
+            capacity: number;
+            /**
+             * Minimum Packages
+             * @default 0
+             */
+            minimum_packages: number;
+            /** Release Id */
+            release_id: string;
+            /**
+             * Education Level
+             * @default SD
+             * @enum {string}
+             */
+            education_level: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+            /** Weights */
+            weights: {
+                [key: string]: number | string;
+            };
+            /** Region Codes */
+            region_codes?: string[] | null;
+            /** Budget Idr */
+            budget_idr: number;
+            /** Name */
+            name: string;
+            /**
+             * Cost Source Type
+             * @default demo_assumption
+             * @constant
+             */
+            cost_source_type: "demo_assumption";
+            /** Overrides */
+            overrides?: {
+                [key: string]: components["schemas"]["RegionParameters"];
+            };
+        };
+        /** ScenarioInput */
+        "ScenarioInput-Output": {
+            /** Cost Idr */
+            cost_idr: number;
+            /** Capacity */
+            capacity: number;
+            /**
+             * Minimum Packages
+             * @default 0
+             */
+            minimum_packages: number;
+            /** Release Id */
+            release_id: string;
+            /**
+             * Education Level
+             * @default SD
+             * @enum {string}
+             */
+            education_level: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+            /** Weights */
+            weights: {
+                [key: string]: string;
+            };
+            /** Region Codes */
+            region_codes?: string[] | null;
+            /** Budget Idr */
+            budget_idr: number;
+            /** Name */
+            name: string;
+            /**
+             * Cost Source Type
+             * @default demo_assumption
+             * @constant
+             */
+            cost_source_type: "demo_assumption";
+            /** Overrides */
+            overrides?: {
+                [key: string]: components["schemas"]["RegionParameters"];
+            };
+        };
+        /** ScenarioView */
+        ScenarioView: {
+            /** Id */
+            id: string;
+            /** Release Id */
+            release_id: string;
+            /** Data Status */
+            data_status: string;
+            /** Created At */
+            created_at: string;
+            /** Region Names */
+            region_names: {
+                [key: string]: string;
+            };
+            /** Input Rows */
+            input_rows: components["schemas"]["ProvinceView"][];
+            parameters: components["schemas"]["ScenarioInput-Output"];
+            priority: components["schemas"]["PriorityResult"];
+            allocation: components["schemas"]["AllocationResult"];
+            /** Baselines */
+            baselines: {
+                [key: string]: components["schemas"]["AllocationResult"];
+            };
+            case: components["schemas"]["AllocationCase"];
+            /** Sources */
+            sources: components["schemas"]["SourceView"][];
+            /** Limitations */
+            limitations: string[];
+        };
+        /** SourceView */
+        SourceView: {
+            /** Source Id */
+            source_id: string;
+            /** Title */
+            title: string;
+            /** Publisher */
+            publisher: string;
+            /**
+             * Source Url
+             * Format: uri
+             */
+            source_url: string;
+            /** Sha256 */
+            sha256: string;
+            /** Year */
+            year: number;
+            /** Academic Year */
+            academic_year: string;
+            /**
+             * Unit
+             * @enum {string}
+             */
+            unit: "percent" | "school_count";
+            /** Retrieved At */
+            retrieved_at?: string | null;
+            /** License Status */
+            license_status: string;
+            /** Definition */
+            definition: string;
+            /** Storage Scale */
+            storage_scale: string;
+            /** Quality */
+            quality: {
+                [key: string]: components["schemas"]["QualityCount"];
+            };
+        };
+        /** ValidationError */
+        ValidationError: {
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
+        };
+        /** WorkspaceView */
+        WorkspaceView: {
+            /** Id */
+            id: string;
+            /** Status */
+            status: string;
+            /** Academic Year */
+            academic_year: string;
+            /** Year */
+            year: number;
+            /** Ownership */
+            ownership: string;
+            /** Adapter Version */
+            adapter_version: string;
+            /** Region Namespace */
+            region_namespace: string;
+            /** Sources */
+            sources: components["schemas"]["SourceView"][];
+            /** Limitations */
+            limitations: string[];
+            /** Education Levels */
+            education_levels: string[];
+            /** Region Count */
+            region_count: number;
+            /** Core Indicators */
+            core_indicators: string[];
         };
     };
     responses: never;
@@ -106,6 +853,536 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthResponse"];
+                };
+            };
+        };
+    };
+    boundary_api_v1_geometry_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    workspace_api_v1_workspace_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkspaceView"];
+                };
+            };
+        };
+    };
+    datasets_api_v1_datasets_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogView"];
+                };
+            };
+        };
+    };
+    dataset_api_v1_datasets__source_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                source_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DatasetView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    quality_api_v1_datasets__source_id__quality_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                source_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    regions_api_v1_regions_get: {
+        parameters: {
+            query?: {
+                education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    region_api_v1_regions__code__get: {
+        parameters: {
+            query?: {
+                education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+            };
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    observations_api_v1_observations_get: {
+        parameters: {
+            query?: {
+                indicator?: string;
+                education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+                q?: string;
+                region_code?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObservationsView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_observations_api_v1_observations_export_get: {
+        parameters: {
+            query?: {
+                indicator?: string;
+                education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+                q?: string;
+                region_code?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    compute_priority_api_v1_priority_compute_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PriorityInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PriorityResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_scenarios_api_v1_scenarios_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedScenarioView"][];
+                };
+            };
+        };
+    };
+    create_scenario_api_v1_scenarios_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScenarioInput-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScenarioView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    compare_api_v1_scenarios_compare_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CompareInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    scenario_api_v1_scenarios__snapshot_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScenarioView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_comparison_pdf_api_v1_scenarios_compare_pdf_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CompareInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_scenario_api_v1_scenarios__snapshot_id__export_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_pdf_api_v1_scenarios__snapshot_id__pdf_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    admin_import_api_v1_admin_import_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
