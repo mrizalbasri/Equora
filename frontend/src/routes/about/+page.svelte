@@ -8,15 +8,15 @@
   <meta name="description" content="Tujuan, status pengembangan, dan batas penggunaan Equora, platform perbandingan akses fasilitas pendidikan dan simulasi alokasi sumber daya." />
 </svelte:head>
 
-<PublicShell links={[{ label: 'Alur analisis', href: '/#alur' }, { label: 'Sumber data', href: '/#sumber' }, { label: 'Metode & batasan', href: '/#metode' }, { label: 'Tentang Equora', href: '/about' }]}>
+<PublicShell>
   <article class="eq-container about">
     <p class="eq-kicker">Tentang Equora</p>
     <h1>Keputusan lebih terukur dimulai dari data yang bisa diperiksa.</h1>
     <p class="lead">Akses fasilitas pendidikan dapat berbeda antardaerah. Equora dirancang untuk membantu membaca perbedaan itu, memahami prioritas kebutuhan, dan membandingkan pilihan alokasi sumber daya.</p>
     <div class="content">
       <section aria-labelledby="purpose"><h2 id="purpose">Mengapa dibangun?</h2><p>Angka dari beberapa sumber tidak selalu bisa langsung dibandingkan. Tahun, jenjang, satuan, dan cakupan wilayah dapat berbeda. Equora menempatkan konteks tersebut bersama data, lalu memperlihatkan bagaimana bobot serta asumsi memengaruhi prioritas dan alokasi.</p></section>
-      <section aria-labelledby="users"><h2 id="users">Untuk siapa?</h2><p>Publik, mahasiswa, dan peneliti yang ingin menelusuri data pendidikan, serta analis yang ingin belajar menguji skenario. Akses publik direncanakan tanpa login; operasi data administratif memerlukan perlindungan tersendiri.</p></section>
-      <section aria-labelledby="status"><h2 id="status">Status pengembangan</h2><p>Fondasi SvelteKit dan FastAPI serta halaman pengenalan tersedia. Audit dataset, explorer, pemeringkatan prioritas, simulasi, perbandingan skenario, dan peta masih dalam pengembangan. Equora disiapkan untuk Web In Action, MIA 2026.</p><a href="https://github.com/mrizalbasri/Equora">Lihat kode dan dokumentasi proyek</a></section>
+      <section aria-labelledby="users"><h2 id="users">Untuk siapa?</h2><p>Publik, mahasiswa, dan peneliti yang ingin menelusuri data pendidikan, serta analis yang ingin belajar menguji skenario. Aplikasi lokal dapat digunakan tanpa login. Impor data memerlukan token admin.</p></section>
+      <section aria-labelledby="status"><h2 id="status">Status pengembangan</h2><p>Explorer, peta provinsi, katalog dataset, simulasi, penyimpanan snapshot, dan perbandingan skenario tersedia untuk review lokal. Hosting publik belum dipilih; lisensi redistribusi data masih perlu diverifikasi. Equora disiapkan untuk Web In Action, MIA 2026.</p><a href="https://github.com/mrizalbasri/Equora">Lihat kode dan dokumentasi proyek</a></section>
       <AvailabilityNotice title="Batas penggunaan"><p>Hasil alokasi adalah simulasi berbasis data dan asumsi, bukan keputusan anggaran resmi, prediksi dampak pendidikan, atau pengganti kajian lapangan. Data yang hilang tidak diperlakukan sebagai nol.</p></AvailabilityNotice>
       <a class="eq-button eq-button-primary" href="/#pratinjau">Kenali alur analisis</a>
     </div>

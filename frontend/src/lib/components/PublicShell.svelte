@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import { page } from '$app/state';
+  import { navigation } from '$lib/api/workspace';
 
-  let { children, links = [] }: {
+  let { children, links = navigation }: {
     children: Snippet;
     links?: { label: string; href: string }[];
   } = $props();

@@ -266,7 +266,7 @@
   {#if error}<p class="work-error" role="alert">{error}</p>{/if}
   {#if result}<ScenarioResult {result} {names} />{/if}
   <section class="work-panel">
-    <h2>Skenario tersimpan</h2>
+    <h2 id="skenario-tersimpan" style="scroll-margin-top: 100px">Skenario tersimpan</h2>
     {#if !saved.length}<p>
         Belum ada snapshot. Hasil akan tersimpan setelah perhitungan.
       </p>{/if}{#each saved as item}<p>
