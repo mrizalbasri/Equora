@@ -25,7 +25,9 @@ Gunakan pnpm untuk semua operasi frontend. Konfigurasi override dependency berad
 
 Alternatif dari root dengan PowerShell: `.\scripts\equora.ps1 frontend`. Perintah gabungan tersedia di [panduan scripts](../scripts/README.md).
 
-http://localhost:5173/ saat ini mengembalikan JSON status fondasi. Halaman produk belum dibuat. `/health` memeriksa server web; `/api/health` memeriksa koneksi server web ke liveness backend dan mengembalikan 503 jika backend tidak tersedia. `API_BASE_URL` hanya dipakai server, sehingga tidak mengirim alamat internal lewat konfigurasi browser.
+http://localhost:5173/ menampilkan landing page dan `/about` menjelaskan tujuan proyek. Landing menjelaskan perbandingan akses fasilitas pendidikan, alur simulasi, calon sumber, dan batas metode. Explorer/studio belum tersedia; CTA menuju penjelasan pada halaman yang sama. Tidak ada statistik atau hasil alokasi rekaan. `/health` memeriksa server web; `/api/health` memeriksa koneksi server web ke liveness backend dan mengembalikan 503 jika backend tidak tersedia. `API_BASE_URL` hanya dipakai server, sehingga tidak mengirim alamat internal lewat konfigurasi browser.
+
+Tema publik mengikuti [DESIGN v1.2 Clean Education Blue](../docs/DESIGN_Equora.md): latar abu-abu sangat muda, panel putih, tombol biru dan ilustrasi sekolah SVG lokal. Token, frame publik dan status ketersediaan dipakai bersama oleh Landing/About. Tidak ada aset font/gambar eksternal yang harus diunduh agar halaman tampil.
 
 ECharts, MapLibre dan PMTiles sudah menjadi dependensi, tetapi grafik, peta, basemap, boundary dan dataset belum dimuat. Integrasi tersebut mengikuti audit data/lisensi dan desain produk.
 
@@ -42,9 +44,7 @@ pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-Tes E2E menggunakan Playwright pada hasil build. Jalankan `pnpm exec
-playwright install chromium` sekali sebelum tes lokal; workflow GitHub Actions
-mengunduh Chromium secara otomatis dengan dependensi sistemnya.
+Tes E2E menggunakan Playwright pada hasil build. Jalankan `pnpm exec playwright install chromium` sekali sebelum tes lokal; workflow GitHub Actions mengunduh Chromium secara otomatis dengan dependensi sistemnya. Pada Windows dengan Microsoft Edge terpasang, dapat memakai `$env:PLAYWRIGHT_CHANNEL = 'msedge'`. Screenshot disimpan pada `test-results/` (diabaikan Git). CI memasang Chromium sebelum tes. Jalankan `pnpm build` terlebih dahulu; tes memakai preview hasil build.
 
 `src/lib/api/schema.d.ts` dihasilkan dari `backend/openapi.json`. Setelah backend mengekspor schema baru:
 

@@ -11,7 +11,7 @@ Status: baseline kerja, diperbarui 19 Oktober 2026. Dokumentasi menjelaskan renc
 | [Setup stack](setup-stack.md) | Fondasi implementasi, struktur folder, runtime dan petunjuk menjalankan aplikasi |
 | [System Design](system-design/README.md) | Dokumen Word dari template, diagram arsitektur, kontrak dan kesiapan operasi |
 | [Rencana peta](map-plan.md) | MapLibre/Protomaps, sumber layer, gerbang geografis, atribusi dan fallback |
-| [Desain UI](DESIGN_Equora.md) | Baseline Soft Gray Enterprise / Coral |
+| [Desain UI](DESIGN_Equora.md) | Baseline Clean Education Blue v1.2 |
 | [Project plan](project-plan.md) | Prioritas, jadwal kerja usulan dan risiko |
 | [Pembagian kerja dua orang](pembagian-kerja/README.md) | Porsi pemilik/teman, folder tugas per fitur, dependensi dan checklist serah terima |
 | [Data readiness](data-readiness.md) | Gerbang validasi sebelum analisis |
@@ -32,4 +32,4 @@ Materi utama review: PDF Technical Meeting MIA 2026 yang diberikan pengguna (40 
 
 Untuk aturan yang tercantum di PDF, koreksi lama mengenai satu subtema, tanggal 2 November, dan penamaan 2025 digantikan oleh catatan Technical Meeting. Review ini merupakan snapshot materi, bukan verifikasi pengumuman terbaru panitia. Guidebook asli belum tersedia untuk dibandingkan.
 
-Untuk visual, gunakan DESIGN versi 1.1; PRD diselaraskan ke baseline tersebut. Perubahan scope masih memerlukan keputusan pemilik project.
+Untuk visual, gunakan DESIGN versi 1.2 (Clean Education Blue), disetujui 20 Oktober 2026; PRD dan system design diselaraskan ke baseline tersebut. Perubahan scope masih memerlukan keputusan pemilik project.

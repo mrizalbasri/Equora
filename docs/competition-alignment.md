@@ -14,7 +14,7 @@ Subtema utama yang disarankan: **Data-Driven Decision Support**. Open Government
 |---|---:|---|---|
 | Orisinalitas ide dan konsep | 20% | Perbandingan skenario dengan kontribusi bobot dan asumsi terbuka | Studi pembanding, catatan kontribusi tim, aset berlisensi |
 | Fungsionalitas website | 25% | Explorer, ranking, simulator dan perbandingan | Aplikasi berjalan, responsive check, pengujian end-to-end |
-| Desain dan estetika | 20% | Baseline UI Soft Gray / Coral | Mockup terverifikasi dan UI browser nyata |
+| Desain dan estetika | 20% | Baseline UI Clean Education Blue | Mockup terverifikasi dan UI browser nyata |
 | Konten dan informasi | 20% | Provenance, metode, tahun dan disclaimer | File sumber, kamus data, hasil quality check |
 | Kesesuaian tema/subtema | 15% | Data publik menjadi insight keputusan | Demo yang membuktikan alur data hingga insight |
 
