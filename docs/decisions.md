@@ -22,5 +22,6 @@ Terakhir diperbarui: 21 Oktober 2026. Status keputusan mengikuti bukti di repo d
 | D-16 | Peta | MapLibre GL JS + Protomaps/PMTiles + basemap OSM disetujui untuk perencanaan pada 19 Okt; layer analisis bergantung audit boundary. [Rencana peta](map-plan.md) mencatat alasan, atribusi, missing, compare dan fallback; belum diimplementasikan |
 | D-17 | Aset dan hosting peta | Sumber boundary, subset/zoom PMTiles, hosting dan target performa belum ditetapkan; audit lisensi, join, biaya dan pengujian deployment diperlukan |
 | D-18 | Pembagian kerja | Pengguna menyetujui porsi mayoritas/inti di pemilik; perkiraan 75-80% pemilik dan 20-25% teman. [Panduan per fitur](pembagian-kerja/README.md) menetapkan landing/about, katalog, metodologi dan QA untuk teman; halaman pendukung sudah tersedia di main, pengukuran jam belum ada |
+| D-19 | Database lokal | Pengguna mengonfirmasi memakai PostgreSQL Docker yang sudah ada, tanpa instance baru. Database `equora` dan `equora_test` dibuat 21 Oktober 2026 pada `postgres-local` dengan owner terpisah; migrasi/tes mengikuti [registry draft](dataset-registry.md). Target produksi belum dipilih |
 
 Pertanyaan panitia disiapkan untuk pengguna; belum dikirim kepada siapa pun. Tidak ada deadline jam yang ditebak. Setelah mendapat jawaban, catat tanggal, kanal, isi keputusan dan dokumen yang perlu diperbarui.

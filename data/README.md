@@ -9,3 +9,5 @@
 Compose backend memasang direktori ini read-only untuk API. Jalankan proses ETL terpisah dengan akses tulis saat implementasi import tersedia.
 
 [Staging XLSX lokal](../docs/dataset-staging.md) tersedia melalui `python -m app.etl.stage_education` dari `backend/`. Output JSON berada di `processed/` yang diabaikan Git, dengan status staged/invalid dan kode sumber belum dipetakan. Lolos staging tidak mengubah status release/lisensi atau mengizinkan API memakai data tersebut sebagai published release.
+
+Hasil staging dapat dicatat pada [registry draft PostgreSQL](../docs/dataset-registry.md) melalui `python -m app.etl.register_education`, secara eksplisit dan tanpa publish. Registrasi ulang report identik tidak menambah baris; konflik metadata/report ditolak.

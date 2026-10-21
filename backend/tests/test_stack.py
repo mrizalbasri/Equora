@@ -8,6 +8,7 @@ from alembic.config import Config
 from openpyxl import Workbook, load_workbook
 from ortools.sat.python import cp_model
 from sqlalchemy import inspect
+from sqlalchemy.engine import make_url
 
 from app.core.config import Settings
 from app.db.session import build_engine
@@ -38,6 +39,8 @@ def test_data_and_solver_dependencies(tmp_path: Path):
 @pytest.mark.skipif(not os.getenv("TEST_DATABASE_URL"), reason="TEST_DATABASE_URL is not set")
 def test_postgres_migration_round_trip(monkeypatch):
     url = os.environ["TEST_DATABASE_URL"]
+    if make_url(url).database != "equora_test":
+        pytest.fail("Migration round-trip requires the dedicated equora_test database")
     monkeypatch.setenv("DATABASE_URL", url)
     from app.core.config import get_settings
 
@@ -47,6 +50,7 @@ def test_postgres_migration_round_trip(monkeypatch):
     try:
         command.upgrade(config, "head")
         assert "alembic_version" in inspect(engine).get_table_names()
+        assert "staged_observations" in inspect(engine).get_table_names()
         command.downgrade(config, "base")
         command.upgrade(config, "head")
     finally:

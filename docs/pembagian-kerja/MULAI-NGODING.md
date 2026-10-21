@@ -32,7 +32,7 @@ Perintah membuat branch baru; jika `feat/landing-about` sudah ada, gunakan branc
 - Jika backend belum berjalan, `/api/health` mengembalikan 503. Ini tidak berarti instalasi frontend gagal.
 - `API_BASE_URL` pada `.env` menunjuk backend yang disepakati. Port default contoh 8000; mesin pemilik memakai 18000. Jangan menyalin kredensial database pemilik.
 
-Jika pnpm belum tersedia, ikuti [panduan frontend](../../frontend/README.md). Untuk integrasi backend, minta kontrak dan URL kepada pemilik. PostgreSQL memakai instance bersama yang sudah ada; target database/schema Equora belum dibuat. Jangan membuat server/database baru atau menjalankan migrasi saat mengerjakan UI.
+Jika pnpm belum tersedia, ikuti [panduan frontend](../../frontend/README.md). Untuk integrasi backend, minta kontrak dan URL kepada pemilik. PostgreSQL memakai instance bersama yang sudah ada; database lokal `equora`/`equora_test` dan registry draft tersedia sesuai [panduan registry](../dataset-registry.md). Jangan membuat server/database baru atau menjalankan migrasi saat mengerjakan UI.
 
 ## Pemeriksaan sebelum push
 

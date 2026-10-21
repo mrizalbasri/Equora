@@ -45,7 +45,9 @@ Setiap baris menjadi paket branch/PR sendiri. Jangan mencentang selesai hanya ka
 | P1 · Integrasi/deployment | Jalankan Explorer → Studio → Compare; konfigurasi hosting/API/database dan pengukuran kapasitas | Tes kontrak/E2E, loading/error, mobile/keyboard, provenance, smoke test URL deploy; target performa ditetapkan sebelum benchmark |
 | P1 · Submission | Identitas tim, screenshot build aktual, PDF first draft, proposal/surat/video final dan bukti pengumpulan | Ikuti [checklist submission](submission-checklist.md); ukuran/halaman/nama file diperiksa; jangan klaim sudah dikirim tanpa bukti |
 
-Input yang belum tersedia dalam repo: target database/schema dan hosting, ketentuan sumber yang berlaku, pilihan unit analisis final, asumsi biaya/kapasitas/fairness, identitas tim, serta boundary/PMTiles. Kredensial tetap di konfigurasi lokal; tidak diminta di chat. Pekerjaan kontrak/fixture dan pengujian sintetis dapat dilanjutkan sambil menyelesaikan input tersebut.
+Pembaruan paket berikutnya, 21 Oktober 2026: [staging XLSX](dataset-staging.md) dan [registry draft PostgreSQL](dataset-registry.md) tersedia pada branch paket masing-masing. Database lokal `equora`/`equora_test` sudah dibuat di instance Docker yang ada dan tes PostgreSQL telah dijalankan. Tabel backlog tetap membedakan registry draft dari published release/API; hasil baseline di bawah berasal dari audit sebelum paket tersebut.
+
+Input yang masih diperlukan: target hosting/konfigurasi produksi, ketentuan sumber yang berlaku, pilihan unit analisis final, asumsi biaya/kapasitas/fairness, identitas tim, serta boundary/PMTiles. Kredensial tetap di konfigurasi lokal; tidak diminta di chat.
 
 ## Bukti validasi
 
