@@ -1,0 +1,45 @@
+{
+  "checked_at": "2026-10-19",
+  "publisher": "Pusat Data dan Teknologi Informasi, Kemendikdasmen",
+  "academic_year": "2025/2026",
+  "license_status": "not_found_in_dataset_pages_or_workbook_metadata",
+  "release_status": "not_approved",
+  "sources": [
+    {
+      "id": "sanitation",
+      "filename": "sanitation.xlsx",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/persentase-sekolah-dengan-akses-terhadap-fasilitas-sanitasi-dasar-2025-indonesia",
+      "download_url": "https://cdn.data-portal.belajar.id/Aset-Dataset/20260310/70bcc03482deb774cf73a878fac06cf844c31fc6b411d32486635364826b4682.xlsx",
+      "sha256": "2bae4aa1fa8b6386cde29340dfc230889b06d7253d1c4fdba55d0227d9edc8e6",
+      "unit": "percent",
+      "uploaded_at": "2026-03-10"
+    },
+    {
+      "id": "water",
+      "filename": "water.xlsx",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/persentase-sekolah-dengan-akses-terhadap-air-minum-layak-2025",
+      "download_url": "https://cdn.data-portal.belajar.id/Aset-Dataset/20260223/cb4b396b824c91512d8ad94039d24ab38fbe29f9e54471cf55a0859e92be2934.xlsx",
+      "sha256": "4b70b15de08d4f3b446a23c714ee938403ff7fcf63c271a5dd4f4ccad2411bf1",
+      "unit": "percent",
+      "uploaded_at": "2026-02-25"
+    },
+    {
+      "id": "internet",
+      "filename": "internet.xlsx",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/jumlah-sekolah-dengan-akses-internet-untuk-pengajaran-2025-2",
+      "download_url": "https://cdn.data-portal.belajar.id/Aset-Dataset/20260220/e54f850054c836a7bc9af5b940a09dc3f68ca473abc692720278f218942b98ab.xlsx",
+      "sha256": "995798cd19ccac05add5b16a04309284a23d2398bad6f035a21ace8430115086",
+      "unit": "school_count",
+      "uploaded_at": "2026-03-03"
+    },
+    {
+      "id": "computers",
+      "filename": "computers.xlsx",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/jumlah-sekolah-dengan-akses-komputer-untuk-pengajaran-2025-2",
+      "download_url": "https://cdn.data-portal.belajar.id/Aset-Dataset/20260220/916d843221ad4da7723637f94896d57cf5da98215c7c1c2d0b9534ad3a95fd48.xlsx",
+      "sha256": "fb37ee39657fc76ebfb68d732e79782ba3b288c30cdd8dd91d25c691311607bd",
+      "unit": "school_count",
+      "uploaded_at": "2026-03-03"
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 Porsi perkiraan 75-80%. Kamu memegang keputusan teknis utama dan integrasi akhir. Teman memiliki halaman pendukung yang dijelaskan di [indeks pembagian](../README.md).
 
+Status paket, dependensi dan siklus satu branch/PR per pekerjaan tersedia pada [urutan implementasi](urutan-implementasi.md). Landing/about juga dikerjakan pada sesi ini atas permintaan eksplisit pengguna; pembagian paket pendukung lainnya tetap berlaku.
+
 | Kelompok | Yang dikerjakan | Hasil yang harus tersedia |
 |---|---|---|
 | Fondasi | SvelteKit/TypeScript, FastAPI, PostgreSQL, migrasi, konfigurasi lokal, CI, layout/tokens/navigasi bersama | Aplikasi bisa dijalankan dengan petunjuk yang benar; komponen bersama tersedia untuk teman |

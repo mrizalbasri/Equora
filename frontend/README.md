@@ -40,10 +40,11 @@ pnpm check
 pnpm test
 pnpm check:api
 pnpm build
+pnpm exec playwright install chromium
 pnpm test:e2e
 ```
 
-Playwright memeriksa HTML landing, health, interaksi, keyboard, serta overflow pada lebar 360/390/768/1024/1440px. Pasang browser dengan `pnpm exec playwright install chromium` sebelum `pnpm test:e2e`. Pada Windows dengan Microsoft Edge terpasang, dapat memakai `$env:PLAYWRIGHT_CHANNEL = 'msedge'`. Screenshot disimpan pada `test-results/` (diabaikan Git). CI memasang Chromium sebelum tes. Jalankan `pnpm build` terlebih dahulu; tes memakai preview hasil build.
+Tes E2E menggunakan Playwright pada hasil build. Jalankan `pnpm exec playwright install chromium` sekali sebelum tes lokal; workflow GitHub Actions mengunduh Chromium secara otomatis dengan dependensi sistemnya. Pada Windows dengan Microsoft Edge terpasang, dapat memakai `$env:PLAYWRIGHT_CHANNEL = 'msedge'`. Screenshot disimpan pada `test-results/` (diabaikan Git). CI memasang Chromium sebelum tes. Jalankan `pnpm build` terlebih dahulu; tes memakai preview hasil build.
 
 `src/lib/api/schema.d.ts` dihasilkan dari `backend/openapi.json`. Setelah backend mengekspor schema baru:
 
