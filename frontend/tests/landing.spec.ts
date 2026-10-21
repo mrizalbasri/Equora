@@ -10,6 +10,21 @@ for (const width of [360, 390, 768, 1024, 1440]) {
     await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
     await expect(page.getByRole('main')).toHaveCount(1);
     await expect(page.getByText('Explorer belum tersedia.')).toBeVisible();
+    const preview = page.getByRole('group', { name: 'Pilih mode pratinjau antarmuka' });
+    await expect(page.getByText('Contoh antarmuka · belum terhubung data atau engine')).toBeVisible();
+    await expect(page.getByText('78.4%', { exact: true })).toHaveCount(0);
+    const allocation = preview.getByRole('button', { name: 'Simulasi Alokasi', exact: true });
+    await allocation.focus();
+    await page.keyboard.press('Enter');
+    await expect(allocation).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByText('Belum dihitung', { exact: true })).toHaveCount(2);
+    await expect(page.getByText('Belum ada hasil solver. Biaya, kapasitas, dan kendala pemerataan belum ditetapkan.')).toBeVisible();
+    await expect(page.getByText('94.8%', { exact: true })).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: testInfo.outputPath(`allocation-preview-${width}.png`), fullPage: true });
+    await preview.getByRole('button', { name: 'Perbandingan Akses', exact: true }).click();
+    await expect(page.getByText('Nilai akses menunggu release data terverifikasi.')).toBeVisible();
+    await page.goto('/');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 
     await page.keyboard.press('Tab');
@@ -61,7 +76,13 @@ for (const width of [360, 390, 768, 1024, 1440]) {
       if (width < 1024) await expect(page.getByRole('button', { name: 'Menu', exact: true })).toHaveAttribute('aria-expanded', 'false');
     }
     await expect(page.locator('a[href^="https://data.kemendikdasmen.go.id/"]')).toHaveCount(4);
-    await expect(page.locator('a[href="/explore"], a[href="/studio"], a[href="/datasets"], a[href="/methodology"]')).toHaveCount(0);
+    await expect(page.locator('a[href="/explore"], a[href="/studio"]')).toHaveCount(0);
+    await page.getByRole('link', { name: 'Katalog dataset', exact: true }).click();
+    await expect(page).toHaveURL(/\/datasets$/);
+    await page.getByRole('link', { name: 'Beranda', exact: true }).click();
+    await page.getByRole('link', { name: 'Metodologi', exact: true }).click();
+    await expect(page).toHaveURL(/\/methodology$/);
+    await page.getByRole('link', { name: 'Kembali ke beranda', exact: true }).click();
     await page.goto('/');
     await page.screenshot({ path: testInfo.outputPath(`landing-${width}.png`), fullPage: true });
     if (width < 1024) {

@@ -27,7 +27,9 @@ Alternatif dari root dengan PowerShell: `.\scripts\equora.ps1 frontend`. Perinta
 
 http://localhost:5173/ menampilkan landing page dan `/about` menjelaskan tujuan proyek. Landing menjelaskan perbandingan akses fasilitas pendidikan, alur simulasi, calon sumber, dan batas metode. Explorer/studio belum tersedia; CTA menuju penjelasan pada halaman yang sama. Tidak ada statistik atau hasil alokasi rekaan. `/health` memeriksa server web; `/api/health` memeriksa koneksi server web ke liveness backend dan mengembalikan 503 jika backend tidak tersedia. `API_BASE_URL` hanya dipakai server, sehingga tidak mengirim alamat internal lewat konfigurasi browser.
 
-Tema publik mengikuti [DESIGN v1.2 Clean Education Blue](../docs/DESIGN_Equora.md): latar abu-abu sangat muda, panel putih, tombol biru dan ilustrasi sekolah SVG lokal. Token, frame publik dan status ketersediaan dipakai bersama oleh Landing/About. Tidak ada aset font/gambar eksternal yang harus diunduh agar halaman tampil.
+Route `/datasets` dan `/datasets/[datasetId]` menampilkan fixture berlabel, pencarian dan metadata; `/methodology` menjelaskan rumus dan batas sandbox. Keduanya dapat dicapai dari footer Landing/About. Pratinjau hero hanya contoh antarmuka, belum hasil data atau solver. Internet/komputer masih memerlukan denominator untuk proporsi; bobot contoh pada hero bukan konfigurasi engine.
+
+Tema publik mengikuti [DESIGN v1.2 Clean Education Blue](../docs/DESIGN_Equora.md): latar abu-abu sangat muda, panel putih, tombol biru dan ilustrasi sekolah SVG lokal. Token, frame publik dan status ketersediaan dipakai bersama oleh Landing/About. Katalog/detail/metodologi masih memiliki CSS lama; penyatuan shell/token tercatat di [backlog](../docs/implementation-readiness.md). Tidak ada aset font/gambar eksternal yang harus diunduh agar halaman tampil.
 
 ECharts, MapLibre dan PMTiles sudah menjadi dependensi, tetapi grafik, peta, basemap, boundary dan dataset belum dimuat. Integrasi tersebut mengikuti audit data/lisensi dan desain produk.
 

@@ -93,22 +93,21 @@
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                 </svg>
               </span>
-              <span class="url-text">equora.studio <em>/ workspace-preview</em></span>
+              <span class="url-text">Equora <em>/ contoh antarmuka</em></span>
             </div>
             <div class="window-tag">
-              <span>Kemendikdasmen 2025</span>
+              <span>Belum ada release data</span>
             </div>
           </div>
 
           <!-- Window Toolbar with Interactive Tabs -->
           <div class="window-toolbar">
-            <div class="toolbar-tabs" role="tablist" aria-label="Pilih mode pratinjau antarmuka">
+            <div class="toolbar-tabs" role="group" aria-label="Pilih mode pratinjau antarmuka">
               <button
                 type="button"
-                role="tab"
                 class="tb-btn"
                 class:active={heroPreviewTab === 'access'}
-                aria-selected={heroPreviewTab === 'access'}
+                aria-pressed={heroPreviewTab === 'access'}
                 onclick={() => heroPreviewTab = 'access'}
               >
                 <span class="tb-dot" aria-hidden="true"></span>
@@ -116,10 +115,9 @@
               </button>
               <button
                 type="button"
-                role="tab"
                 class="tb-btn"
                 class:active={heroPreviewTab === 'allocation'}
-                aria-selected={heroPreviewTab === 'allocation'}
+                aria-pressed={heroPreviewTab === 'allocation'}
                 onclick={() => heroPreviewTab = 'allocation'}
               >
                 <span class="tb-dot" aria-hidden="true"></span>
@@ -128,66 +126,67 @@
             </div>
             <div class="toolbar-meta">
               <span class="live-indicator" aria-hidden="true"></span>
-              <span class="live-text">Pratinjau Interaktif</span>
+              <span class="live-text">Contoh antarmuka</span>
             </div>
           </div>
 
           <!-- Window Body Content -->
           <div class="window-body">
+            <p class="preview-disclaimer">Contoh antarmuka · belum terhubung data atau engine</p>
             {#if heroPreviewTab === 'access'}
               <div class="preview-split">
                 <!-- Left: Metrics with animated bars -->
                 <div class="preview-metrics">
                   <div class="metrics-header">
                     <h3>Indikator Fasilitas Sekolah</h3>
-                    <p>Agregat akses fasilitas dasar per wilayah (Release 2025)</p>
+                    <p>Nilai akses menunggu release data terverifikasi.</p>
                   </div>
 
                   <div class="metrics-list">
                     <div class="metric-row">
                       <div class="metric-top">
                         <span class="metric-title">Sanitasi Dasar</span>
-                        <span class="metric-val">78.4%</span>
+                        <span class="metric-val">Belum tersedia</span>
                       </div>
                       <div class="progress-track">
-                        <div class="progress-bar bar-blue" style="--target-width: 78.4%;"></div>
+                        <div class="progress-bar bar-blue" style="--target-width: 0%;"></div>
                       </div>
                     </div>
 
                     <div class="metric-row">
                       <div class="metric-top">
                         <span class="metric-title">Air Minum Layak</span>
-                        <span class="metric-val">82.1%</span>
+                        <span class="metric-val">Belum tersedia</span>
                       </div>
                       <div class="progress-track">
-                        <div class="progress-bar bar-teal" style="--target-width: 82.1%;"></div>
+                        <div class="progress-bar bar-teal" style="--target-width: 0%;"></div>
                       </div>
                     </div>
 
                     <div class="metric-row">
                       <div class="metric-top">
                         <span class="metric-title">Internet Pengajaran</span>
-                        <span class="metric-val">54.6%</span>
+                        <span class="metric-val">Perlu denominator</span>
                       </div>
                       <div class="progress-track">
-                        <div class="progress-bar bar-indigo" style="--target-width: 54.6%;"></div>
+                        <div class="progress-bar bar-indigo" style="--target-width: 0%;"></div>
                       </div>
                     </div>
 
                     <div class="metric-row">
                       <div class="metric-top">
                         <span class="metric-title">Komputer Pengajaran</span>
-                        <span class="metric-val">41.2%</span>
+                        <span class="metric-val">Perlu denominator</span>
                       </div>
                       <div class="progress-track">
-                        <div class="progress-bar bar-purple" style="--target-width: 41.2%;"></div>
+                        <div class="progress-bar bar-purple" style="--target-width: 0%;"></div>
                       </div>
                     </div>
                   </div>
 
                   <div class="preview-insight">
-                    <span class="insight-pill">Temuan Prioritas</span>
-                    <span class="insight-text">Akses digital & laboratorium komputer menunjukkan kesenjangan tertinggi antar wilayah.</span>
+                    <span class="insight-pill">Status data</span>
+                    <span class="insight-text">Belum ada temuan wilayah. Sumber internet dan komputer berupa jumlah sekolah, bukan persentase akses.</span>
                   </div>
                 </div>
 
@@ -202,32 +201,32 @@
               <div class="preview-split allocation-mode">
                 <div class="allocation-showcase">
                   <div class="metrics-header">
-                    <h3>Simulasi Alokasi Sumber Daya (MCDA)</h3>
-                    <p>Optimasi paket intervensi berdasarkan prioritas kebutuhan & batas anggaran</p>
+                    <h3>Contoh tampilan simulasi alokasi</h3>
+                    <p>Input dan integrasi solver belum tersedia pada pratinjau ini.</p>
                   </div>
 
                   <div class="alloc-cards-grid">
                     <div class="alloc-card">
                       <span class="alloc-card-label">Paket Teralokasi</span>
-                      <span class="alloc-card-number">24 <small>Paket</small></span>
-                      <span class="alloc-card-sub">Air, Sanitasi & Fasilitas Digital</span>
+                      <span class="alloc-card-number">Belum dihitung</span>
+                      <span class="alloc-card-sub">Menunggu input dan integrasi engine</span>
                     </div>
 
                     <div class="alloc-card">
-                      <span class="alloc-card-label">Efisiensi Anggaran</span>
-                      <span class="alloc-card-number">94.8%</span>
-                      <span class="alloc-card-sub">Sisa: Rp 52 Juta (Buffer)</span>
+                      <span class="alloc-card-label">Penggunaan Anggaran</span>
+                      <span class="alloc-card-number">Belum dihitung</span>
+                      <span class="alloc-card-sub">Penggunaan anggaran bukan ukuran dampak</span>
                     </div>
 
                     <div class="alloc-card">
                       <span class="alloc-card-label">Metode Pembobotan</span>
                       <span class="alloc-card-number">MCDA</span>
-                      <span class="alloc-card-sub">Normalisasi Standar Terbuka</span>
+                      <span class="alloc-card-sub">Sandbox sintetis, belum terhubung UI</span>
                     </div>
                   </div>
 
                   <div class="alloc-weights-box">
-                    <span class="weights-title">Distribusi Bobot Kriteria</span>
+                    <span class="weights-title">Contoh bobot tampilan · asumsi ilustratif, tidak digunakan engine</span>
                     <div class="weights-bar">
                       <div class="w-segment w-sanitasi" style="width: 35%;"><span>Sanitasi 35%</span></div>
                       <div class="w-segment w-digital" style="width: 45%;"><span>Digital 45%</span></div>
@@ -236,8 +235,8 @@
                   </div>
 
                   <div class="preview-insight">
-                    <span class="insight-pill status-ready">Status Model</span>
-                    <span class="insight-text">Solusi optimal ditemukan dengan kendala pemerataan (equity constraints) terpenuhi.</span>
+                    <span class="insight-pill">Status Model</span>
+                    <span class="insight-text">Belum ada hasil solver. Biaya, kapasitas, dan kendala pemerataan belum ditetapkan.</span>
                   </div>
                 </div>
               </div>
@@ -625,14 +624,18 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: var(--eq-success);
-    box-shadow: 0 0 0 2px rgba(36, 111, 86, 0.2);
+    background: var(--eq-text-muted);
   }
 
   /* Window Body & Panels */
   .window-body {
     padding: 24px;
     background: #fafcff;
+  }
+  .preview-disclaimer {
+    margin-bottom: 16px;
+    color: var(--eq-text-secondary);
+    font-size: 13px;
   }
   .preview-split {
     display: grid;
@@ -713,10 +716,6 @@
     border-radius: 6px;
     flex-shrink: 0;
   }
-  .insight-pill.status-ready {
-    background: #e6f4ea;
-    color: #137333;
-  }
   .insight-text {
     color: var(--eq-text-secondary);
   }
@@ -773,11 +772,6 @@
     font-size: 24px;
     font-weight: 700;
     color: var(--eq-text);
-  }
-  .alloc-card-number small {
-    font-size: 13px;
-    font-weight: 550;
-    color: var(--eq-text-secondary);
   }
   .alloc-card-sub {
     font-size: 11px;

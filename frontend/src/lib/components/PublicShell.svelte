@@ -54,6 +54,8 @@
   <div><a class="wordmark" href="/" aria-label="Equora, beranda">equora<span>.</span></a>
     <p>Public Resource Decision Intelligence</p></div>
   <a href="https://github.com/mrizalbasri/Equora">Repositori proyek</a>
+  <a href="/datasets">Katalog dataset</a>
+  <a href="/methodology">Metodologi</a>
   <p class="disclaimer">Simulasi berbasis data dan asumsi.<br />Bukan keputusan anggaran resmi.</p>
 </footer>
 </div>

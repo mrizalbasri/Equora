@@ -2,7 +2,7 @@
 
 Platform web untuk membandingkan akses fasilitas pendidikan dari data publik dan menguji simulasi prioritas alokasi sumber daya yang dapat dijelaskan. Disiapkan untuk Web In Action (WIA), MIA 2026.
 
-**Status 20 Oktober 2026: fondasi backend/frontend, priority engine, allocation engine, dan landing/about interaktif tersedia; explorer, skenario, serta release dataset resmi belum terintegrasi ke main.**
+**Status 21 Oktober 2026: fondasi backend/frontend, priority engine dan allocation engine sandbox, landing/about interaktif, katalog fixture, serta metodologi tersedia di main. Explorer, skenario, dan release dataset resmi belum tersedia.** Lihat [audit kesiapan dan backlog](docs/implementation-readiness.md) untuk bukti pengujian, status PR, dan urutan pekerjaan berikutnya.
 
 ## Dokumentasi
 
@@ -43,7 +43,7 @@ cp -n .env.example .env
 pnpm dev
 ```
 
-`cp -n` tidak menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend saat ini berupa JSON status fondasi, belum halaman produk. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
+`cp -n` tidak menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root menampilkan landing page; `/about`, `/datasets`, dan `/methodology` tersedia. Status server web tersedia di `/health`. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
 
 ### Windows PowerShell
 
@@ -102,8 +102,10 @@ pnpm test:e2e
 - [x] Struktur docs, template issue/PR, dan workflow pemeriksaan docs.
 - [x] Fondasi backend/frontend, Compose backend, migrasi awal, kontrak OpenAPI dan CI stack.
 - [x] Panduan clone, setup dan menjalankan fondasi pada macOS/Linux serta Windows.
-- [ ] Audit file dataset dan lisensi.
+- [x] Audit awal empat file dataset dan join provinsi; [hasil dan batasan](docs/source-audit-2026-10-19.md).
+- [ ] Verifikasi ketentuan penggunaan dan persetujuan release data.
 - [x] Landing page dan About responsif dengan penjelasan sumber/metode serta status fitur yang belum tersedia.
+- [x] Katalog dan detail dataset memakai fixture berlabel; halaman metodologi sandbox.
 - [ ] Explorer berjalan dengan release data terverifikasi.
 - [ ] Simulasi, perbandingan skenario, dan pengujian.
 - [x] Repository publik [mrizalbasri/Equora](https://github.com/mrizalbasri/Equora).
@@ -111,6 +113,6 @@ pnpm test:e2e
 
 ## Batasan
 
-Hasil alokasi adalah simulasi berbasis data dan asumsi, bukan keputusan anggaran resmi. Data tahunan ditampilkan dengan tahun dan waktu pengambilan; tidak disebut real-time. Belum ada dataset yang diunduh atau diverifikasi dalam repository ini.
+Hasil alokasi adalah simulasi berbasis data dan asumsi, bukan keputusan anggaran resmi. Data tahunan ditampilkan dengan tahun dan waktu pengambilan; tidak disebut real-time. Empat file telah diunduh lokal dan diaudit; metadata/hash tersedia di repository, raw data diabaikan Git. Belum ada release data yang disetujui. Pratinjau landing belum terhubung ke engine dan tidak menampilkan hasil wilayah atau alokasi nyata.
 
 Lihat [panduan kontribusi](CONTRIBUTING.md) dan [setup GitHub](docs/github-setup.md). Lisensi publikasi kode belum dipilih pemilik project; repository publik tidak otomatis memberi izin penggunaan ulang.
