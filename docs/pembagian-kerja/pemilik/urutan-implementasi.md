@@ -14,6 +14,7 @@ Pembaruan 21 Oktober 2026: status terkini dan backlog lengkap ada pada [audit ke
 | Audit sumber | `docs/source-data-audit` | main, independen | [PR #5](https://github.com/mrizalbasri/Equora/pull/5), empat file dipin hash dan diperiksa; [audit](../../source-audit-2026-10-19.md) menunggu review release |
 | MCDA sandbox | `feat/priority-engine` | definisi metode eksplisit, fixture sintetis | [PR #6](https://github.com/mrizalbasri/Equora/pull/6), 20 golden/edge tests, kontribusi/bobot/missing/tie-break; belum terhubung ke HTTP/data nyata |
 | Optimasi sandbox | `feat/allocation-engine` | skor kebutuhan, biaya/kapasitas eksplisit per kasus | [PR #7](https://github.com/mrizalbasri/Equora/pull/7), 35 tests, validator independen, enumerasi, baseline, sensitivitas/status; bukan solver final produksi |
+| Staging XLSX lokal | `feat/dataset-staging-import` | manifest dan audit dipin hash, tanpa database | [Adapter staging](../../dataset-staging.md), scope satu jenjang/Total, quality report, kode wilayah sumber belum dipetakan; belum publish/API |
 | Registry/import/kontrak | `feat/dataset-release-api` | audit/review scope, ketentuan data, target PostgreSQL | Belum dikerjakan; menjadi input katalog teman |
 | Explorer/ekspor | `feat/regional-explorer` | published release, kontrak observasi, fondasi UI | Belum dikerjakan; grafik/tabel lebih dulu, tidak menunggu peta |
 | Studio/snapshot | `feat/scenario-studio` | engine teruji, biaya/fairness disepakati, registry | Belum dikerjakan; snapshot immutable dan status solusi jelas |
