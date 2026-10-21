@@ -2,6 +2,8 @@
 
 Tanggal akses dan unduh: 19 Oktober 2026. Status: **audit file selesai; release belum disetujui**. Audit ini tidak mengubah status lisensi, model, database atau peta.
 
+Pembaruan 21 Oktober: pengguna menyediakan 10 workbook di `data/datamentah/`, termasuk kandidat denominator dan persentase internet/komputer. [Audit tambahan](additional-source-audit-2026-10-21.md) mencatat skala Excel dan rekonsiliasi; batas “denominator belum tersedia” di dokumen ini tetap merujuk empat file awal, bukan inventaris terbaru.
+
 ## Bukti dan reproduksi
 
 Empat halaman resmi di [manifest sumber](../data/metadata/source-candidates.json) berhasil dibuka. Tautan XLSX diambil dari URL `src` pada preview Office yang ditautkan halaman penerbit. File asli tersimpan lokal di `data/raw/source-audit-2026-10-19/`, tidak masuk Git. Manifest mencatat halaman, URL download, tanggal unggah penerbit, dan SHA256. [Laporan mesin](../data/metadata/source-audit.json) mencatat ukuran, waktu unduh UTC, struktur dan quality counts.

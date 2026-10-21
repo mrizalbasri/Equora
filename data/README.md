@@ -1,6 +1,7 @@
 # Data Equora
 
 - `raw/`: file sumber asli, immutable setelah dicatat hash dan metadata sumbernya.
+- `datamentah/`: 10 workbook unduhan pengguna; diabaikan Git, lihat [audit tambahan](../docs/additional-source-audit-2026-10-21.md).
 - `processed/`: hasil pengolahan yang dapat dibuat ulang dari sumber dan konfigurasi.
 - `fixtures/`: data sintetis berlabel untuk pengujian, boleh masuk Git.
 
