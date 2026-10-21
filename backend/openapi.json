@@ -56,10 +56,1084 @@
           }
         }
       }
+    },
+    "/api/v1/geometry": {
+      "get": {
+        "summary": "Boundary",
+        "operationId": "boundary_api_v1_geometry_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workspace": {
+      "get": {
+        "summary": "Workspace",
+        "operationId": "workspace_api_v1_workspace_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets": {
+      "get": {
+        "summary": "Datasets",
+        "operationId": "datasets_api_v1_datasets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets/{source_id}": {
+      "get": {
+        "summary": "Dataset",
+        "operationId": "dataset_api_v1_datasets__source_id__get",
+        "parameters": [
+          {
+            "name": "source_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatasetView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/datasets/{source_id}/quality": {
+      "get": {
+        "summary": "Quality",
+        "operationId": "quality_api_v1_datasets__source_id__quality_get",
+        "parameters": [
+          {
+            "name": "source_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/regions": {
+      "get": {
+        "summary": "Regions",
+        "operationId": "regions_api_v1_regions_get",
+        "parameters": [
+          {
+            "name": "education_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "TK",
+                "SD",
+                "SMP",
+                "SMA",
+                "SMK",
+                "SLB"
+              ],
+              "type": "string",
+              "default": "SD",
+              "title": "Education Level"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/regions/{code}": {
+      "get": {
+        "summary": "Region",
+        "operationId": "region_api_v1_regions__code__get",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Code"
+            }
+          },
+          {
+            "name": "education_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "TK",
+                "SD",
+                "SMP",
+                "SMA",
+                "SMK",
+                "SLB"
+              ],
+              "type": "string",
+              "default": "SD",
+              "title": "Education Level"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/observations": {
+      "get": {
+        "summary": "Observations",
+        "operationId": "observations_api_v1_observations_get",
+        "parameters": [
+          {
+            "name": "indicator",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "sanitation_percent",
+              "title": "Indicator"
+            }
+          },
+          {
+            "name": "education_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "TK",
+                "SD",
+                "SMP",
+                "SMA",
+                "SMK",
+                "SLB"
+              ],
+              "type": "string",
+              "default": "SD",
+              "title": "Education Level"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "region_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region Code"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/observations/export": {
+      "get": {
+        "summary": "Export Observations",
+        "operationId": "export_observations_api_v1_observations_export_get",
+        "parameters": [
+          {
+            "name": "indicator",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "sanitation_percent",
+              "title": "Indicator"
+            }
+          },
+          {
+            "name": "education_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "TK",
+                "SD",
+                "SMP",
+                "SMA",
+                "SMK",
+                "SLB"
+              ],
+              "type": "string",
+              "default": "SD",
+              "title": "Education Level"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "region_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region Code"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/priority/compute": {
+      "post": {
+        "summary": "Compute Priority",
+        "operationId": "compute_priority_api_v1_priority_compute_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PriorityInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriorityResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios": {
+      "get": {
+        "summary": "List Scenarios",
+        "operationId": "list_scenarios_api_v1_scenarios_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SavedScenarioView"
+                  },
+                  "type": "array",
+                  "title": "Response List Scenarios Api V1 Scenarios Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Scenario",
+        "operationId": "create_scenario_api_v1_scenarios_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioInput-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios/compare": {
+      "post": {
+        "summary": "Compare",
+        "operationId": "compare_api_v1_scenarios_compare_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompareInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios/{snapshot_id}": {
+      "get": {
+        "summary": "Scenario",
+        "operationId": "scenario_api_v1_scenarios__snapshot_id__get",
+        "parameters": [
+          {
+            "name": "snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios/compare/pdf": {
+      "post": {
+        "summary": "Export Comparison Pdf",
+        "operationId": "export_comparison_pdf_api_v1_scenarios_compare_pdf_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompareInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios/{snapshot_id}/export": {
+      "get": {
+        "summary": "Export Scenario",
+        "operationId": "export_scenario_api_v1_scenarios__snapshot_id__export_get",
+        "parameters": [
+          {
+            "name": "snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios/{snapshot_id}/pdf": {
+      "get": {
+        "summary": "Export Pdf",
+        "operationId": "export_pdf_api_v1_scenarios__snapshot_id__pdf_get",
+        "parameters": [
+          {
+            "name": "snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/import": {
+      "post": {
+        "summary": "Admin Import",
+        "operationId": "admin_import_api_v1_admin_import_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AllocationCase": {
+        "properties": {
+          "budget_idr": {
+            "type": "integer",
+            "title": "Budget Idr"
+          },
+          "priority_scale": {
+            "type": "integer",
+            "title": "Priority Scale"
+          },
+          "regions": {
+            "items": {
+              "$ref": "#/components/schemas/RegionOption"
+            },
+            "type": "array",
+            "title": "Regions"
+          },
+          "cost_source_type": {
+            "type": "string",
+            "title": "Cost Source Type",
+            "default": "demo_assumption"
+          }
+        },
+        "type": "object",
+        "required": [
+          "budget_idr",
+          "priority_scale",
+          "regions"
+        ],
+        "title": "AllocationCase"
+      },
+      "AllocationResult": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "allocations": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allocations"
+          },
+          "evaluation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Evaluation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "best_bound_units": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Best Bound Units"
+          },
+          "absolute_gap_units": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Absolute Gap Units"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "model_version": {
+            "type": "string",
+            "title": "Model Version",
+            "default": "single-intervention-demo-v1"
+          },
+          "solver_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solver Version"
+          },
+          "max_time_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Time Seconds"
+          },
+          "workers": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workers"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "AllocationResult"
+      },
+      "CatalogView": {
+        "properties": {
+          "release_id": {
+            "type": "string",
+            "title": "Release Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SourceView"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "release_id",
+          "status",
+          "items"
+        ],
+        "title": "CatalogView"
+      },
+      "CompareInput": {
+        "properties": {
+          "left": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Left"
+          },
+          "right": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Right"
+          }
+        },
+        "type": "object",
+        "required": [
+          "left",
+          "right"
+        ],
+        "title": "CompareInput"
+      },
+      "DatasetView": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$",
+            "title": "Source Id"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Title"
+          },
+          "publisher": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Publisher"
+          },
+          "source_url": {
+            "type": "string",
+            "maxLength": 2083,
+            "minLength": 1,
+            "format": "uri",
+            "title": "Source Url"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Sha256"
+          },
+          "year": {
+            "type": "integer",
+            "maximum": 9999.0,
+            "minimum": 1900.0,
+            "title": "Year"
+          },
+          "academic_year": {
+            "type": "string",
+            "pattern": "^\\d{4}/\\d{4}$",
+            "title": "Academic Year"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "percent",
+              "school_count"
+            ],
+            "title": "Unit"
+          },
+          "retrieved_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retrieved At"
+          },
+          "license_status": {
+            "type": "string",
+            "minLength": 1,
+            "title": "License Status"
+          },
+          "definition": {
+            "type": "string",
+            "title": "Definition"
+          },
+          "storage_scale": {
+            "type": "string",
+            "title": "Storage Scale"
+          },
+          "quality": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/QualityCount"
+            },
+            "type": "object",
+            "title": "Quality"
+          },
+          "release_id": {
+            "type": "string",
+            "title": "Release Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_id",
+          "title",
+          "publisher",
+          "source_url",
+          "sha256",
+          "year",
+          "academic_year",
+          "unit",
+          "license_status",
+          "definition",
+          "storage_scale",
+          "quality",
+          "release_id",
+          "status",
+          "limitations"
+        ],
+        "title": "DatasetView"
+      },
+      "Evaluation": {
+        "properties": {
+          "budget_used_idr": {
+            "type": "integer",
+            "title": "Budget Used Idr"
+          },
+          "budget_remaining_idr": {
+            "type": "integer",
+            "title": "Budget Remaining Idr"
+          },
+          "objective_units": {
+            "type": "integer",
+            "title": "Objective Units"
+          }
+        },
+        "type": "object",
+        "required": [
+          "budget_used_idr",
+          "budget_remaining_idr",
+          "objective_units"
+        ],
+        "title": "Evaluation"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
       "HealthResponse": {
         "properties": {
           "status": {
@@ -81,6 +1155,938 @@
           "service"
         ],
         "title": "HealthResponse"
+      },
+      "ObservationView": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "source_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Value"
+          },
+          "denominator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Denominator"
+          },
+          "source_cell": {
+            "type": "string",
+            "title": "Source Cell"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name",
+          "value",
+          "source_value",
+          "denominator",
+          "source_cell",
+          "status"
+        ],
+        "title": "ObservationView"
+      },
+      "ObservationsView": {
+        "properties": {
+          "release_id": {
+            "type": "string",
+            "title": "Release Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "academic_year": {
+            "type": "string",
+            "title": "Academic Year"
+          },
+          "education_level": {
+            "type": "string",
+            "title": "Education Level"
+          },
+          "ownership": {
+            "type": "string",
+            "title": "Ownership"
+          },
+          "source": {
+            "$ref": "#/components/schemas/SourceView"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/ObservationView"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "release_id",
+          "status",
+          "year",
+          "academic_year",
+          "education_level",
+          "ownership",
+          "source",
+          "rows",
+          "limitations"
+        ],
+        "title": "ObservationsView"
+      },
+      "PriorityInput": {
+        "properties": {
+          "release_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Release Id"
+          },
+          "education_level": {
+            "type": "string",
+            "enum": [
+              "TK",
+              "SD",
+              "SMP",
+              "SMA",
+              "SMK",
+              "SLB"
+            ],
+            "title": "Education Level",
+            "default": "SD"
+          },
+          "weights": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Weights"
+          },
+          "region_codes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 38,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Codes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "release_id",
+          "weights"
+        ],
+        "title": "PriorityInput"
+      },
+      "PriorityResult": {
+        "properties": {
+          "method_version": {
+            "type": "string",
+            "title": "Method Version"
+          },
+          "missing_policy": {
+            "type": "string",
+            "title": "Missing Policy"
+          },
+          "input_regions": {
+            "type": "integer",
+            "title": "Input Regions"
+          },
+          "ranked": {
+            "items": {
+              "$ref": "#/components/schemas/RankedRegion"
+            },
+            "type": "array",
+            "title": "Ranked"
+          },
+          "excluded": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "object",
+            "title": "Excluded"
+          },
+          "weights": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Weights"
+          }
+        },
+        "type": "object",
+        "required": [
+          "method_version",
+          "missing_policy",
+          "input_regions",
+          "ranked",
+          "excluded",
+          "weights"
+        ],
+        "title": "PriorityResult"
+      },
+      "ProvinceView": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "values": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Values"
+          },
+          "cells": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Cells"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name",
+          "values",
+          "cells"
+        ],
+        "title": "ProvinceView"
+      },
+      "QualityCount": {
+        "properties": {
+          "missing": {
+            "type": "integer",
+            "title": "Missing"
+          },
+          "numeric": {
+            "type": "integer",
+            "title": "Numeric"
+          }
+        },
+        "type": "object",
+        "required": [
+          "missing",
+          "numeric"
+        ],
+        "title": "QualityCount"
+      },
+      "RankedRegion": {
+        "properties": {
+          "region_code": {
+            "type": "string",
+            "title": "Region Code"
+          },
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
+          },
+          "score": {
+            "type": "string",
+            "title": "Score"
+          },
+          "contributions": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Contributions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "region_code",
+          "rank",
+          "score",
+          "contributions"
+        ],
+        "title": "RankedRegion"
+      },
+      "RegionOption": {
+        "properties": {
+          "region_code": {
+            "type": "string",
+            "title": "Region Code"
+          },
+          "cost_idr": {
+            "type": "integer",
+            "title": "Cost Idr"
+          },
+          "capacity": {
+            "type": "integer",
+            "title": "Capacity"
+          },
+          "priority_units": {
+            "type": "integer",
+            "title": "Priority Units"
+          },
+          "minimum_packages": {
+            "type": "integer",
+            "title": "Minimum Packages",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "region_code",
+          "cost_idr",
+          "capacity",
+          "priority_units"
+        ],
+        "title": "RegionOption"
+      },
+      "RegionParameters": {
+        "properties": {
+          "cost_idr": {
+            "type": "integer",
+            "maximum": 1000000000000.0,
+            "minimum": 1.0,
+            "title": "Cost Idr"
+          },
+          "capacity": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Capacity"
+          },
+          "minimum_packages": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Minimum Packages",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cost_idr",
+          "capacity"
+        ],
+        "title": "RegionParameters"
+      },
+      "SavedScenarioView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "release_id": {
+            "type": "string",
+            "title": "Release Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "created_at",
+          "status",
+          "release_id"
+        ],
+        "title": "SavedScenarioView"
+      },
+      "ScenarioInput-Input": {
+        "properties": {
+          "cost_idr": {
+            "type": "integer",
+            "maximum": 1000000000000.0,
+            "minimum": 1.0,
+            "title": "Cost Idr"
+          },
+          "capacity": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Capacity"
+          },
+          "minimum_packages": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Minimum Packages",
+            "default": 0
+          },
+          "release_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Release Id"
+          },
+          "education_level": {
+            "type": "string",
+            "enum": [
+              "TK",
+              "SD",
+              "SMP",
+              "SMA",
+              "SMK",
+              "SLB"
+            ],
+            "title": "Education Level",
+            "default": "SD"
+          },
+          "weights": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Weights"
+          },
+          "region_codes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 38,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Codes"
+          },
+          "budget_idr": {
+            "type": "integer",
+            "maximum": 10000000000000.0,
+            "minimum": 0.0,
+            "title": "Budget Idr"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "cost_source_type": {
+            "type": "string",
+            "const": "demo_assumption",
+            "title": "Cost Source Type",
+            "default": "demo_assumption"
+          },
+          "overrides": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RegionParameters"
+            },
+            "type": "object",
+            "maxProperties": 38,
+            "title": "Overrides"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cost_idr",
+          "capacity",
+          "release_id",
+          "weights",
+          "budget_idr",
+          "name"
+        ],
+        "title": "ScenarioInput"
+      },
+      "ScenarioInput-Output": {
+        "properties": {
+          "cost_idr": {
+            "type": "integer",
+            "maximum": 1000000000000.0,
+            "minimum": 1.0,
+            "title": "Cost Idr"
+          },
+          "capacity": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Capacity"
+          },
+          "minimum_packages": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Minimum Packages",
+            "default": 0
+          },
+          "release_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Release Id"
+          },
+          "education_level": {
+            "type": "string",
+            "enum": [
+              "TK",
+              "SD",
+              "SMP",
+              "SMA",
+              "SMK",
+              "SLB"
+            ],
+            "title": "Education Level",
+            "default": "SD"
+          },
+          "weights": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Weights"
+          },
+          "region_codes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 38,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Codes"
+          },
+          "budget_idr": {
+            "type": "integer",
+            "maximum": 10000000000000.0,
+            "minimum": 0.0,
+            "title": "Budget Idr"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "cost_source_type": {
+            "type": "string",
+            "const": "demo_assumption",
+            "title": "Cost Source Type",
+            "default": "demo_assumption"
+          },
+          "overrides": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RegionParameters"
+            },
+            "type": "object",
+            "maxProperties": 38,
+            "title": "Overrides"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cost_idr",
+          "capacity",
+          "release_id",
+          "weights",
+          "budget_idr",
+          "name"
+        ],
+        "title": "ScenarioInput"
+      },
+      "ScenarioView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "release_id": {
+            "type": "string",
+            "title": "Release Id"
+          },
+          "data_status": {
+            "type": "string",
+            "title": "Data Status"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "region_names": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Region Names"
+          },
+          "input_rows": {
+            "items": {
+              "$ref": "#/components/schemas/ProvinceView"
+            },
+            "type": "array",
+            "title": "Input Rows"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/ScenarioInput-Output"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/PriorityResult"
+          },
+          "allocation": {
+            "$ref": "#/components/schemas/AllocationResult"
+          },
+          "baselines": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/AllocationResult"
+            },
+            "type": "object",
+            "title": "Baselines"
+          },
+          "case": {
+            "$ref": "#/components/schemas/AllocationCase"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceView"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "release_id",
+          "data_status",
+          "created_at",
+          "region_names",
+          "input_rows",
+          "parameters",
+          "priority",
+          "allocation",
+          "baselines",
+          "case",
+          "sources",
+          "limitations"
+        ],
+        "title": "ScenarioView"
+      },
+      "SourceView": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$",
+            "title": "Source Id"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Title"
+          },
+          "publisher": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Publisher"
+          },
+          "source_url": {
+            "type": "string",
+            "maxLength": 2083,
+            "minLength": 1,
+            "format": "uri",
+            "title": "Source Url"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Sha256"
+          },
+          "year": {
+            "type": "integer",
+            "maximum": 9999.0,
+            "minimum": 1900.0,
+            "title": "Year"
+          },
+          "academic_year": {
+            "type": "string",
+            "pattern": "^\\d{4}/\\d{4}$",
+            "title": "Academic Year"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "percent",
+              "school_count"
+            ],
+            "title": "Unit"
+          },
+          "retrieved_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retrieved At"
+          },
+          "license_status": {
+            "type": "string",
+            "minLength": 1,
+            "title": "License Status"
+          },
+          "definition": {
+            "type": "string",
+            "title": "Definition"
+          },
+          "storage_scale": {
+            "type": "string",
+            "title": "Storage Scale"
+          },
+          "quality": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/QualityCount"
+            },
+            "type": "object",
+            "title": "Quality"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_id",
+          "title",
+          "publisher",
+          "source_url",
+          "sha256",
+          "year",
+          "academic_year",
+          "unit",
+          "license_status",
+          "definition",
+          "storage_scale",
+          "quality"
+        ],
+        "title": "SourceView"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WorkspaceView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "academic_year": {
+            "type": "string",
+            "title": "Academic Year"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "ownership": {
+            "type": "string",
+            "title": "Ownership"
+          },
+          "adapter_version": {
+            "type": "string",
+            "title": "Adapter Version"
+          },
+          "region_namespace": {
+            "type": "string",
+            "title": "Region Namespace"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceView"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          },
+          "education_levels": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Education Levels"
+          },
+          "region_count": {
+            "type": "integer",
+            "title": "Region Count"
+          },
+          "core_indicators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Core Indicators"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "academic_year",
+          "year",
+          "ownership",
+          "adapter_version",
+          "region_namespace",
+          "sources",
+          "limitations",
+          "education_levels",
+          "region_count",
+          "core_indicators"
+        ],
+        "title": "WorkspaceView"
       }
     }
   }

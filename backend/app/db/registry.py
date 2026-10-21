@@ -101,3 +101,18 @@ class QualityIssue(Base):
     code: Mapped[str] = mapped_column(Text)
     severity: Mapped[str] = mapped_column(Text)
     source_cell: Mapped[str | None] = mapped_column(Text)
+
+
+class LocalRelease(Base):
+    __tablename__ = "local_releases"
+    id: Mapped[str] = mapped_column(Text, primary_key=True)
+    payload: Mapped[dict] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class ScenarioSnapshot(Base):
+    __tablename__ = "scenario_snapshots"
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    release_id: Mapped[str] = mapped_column(ForeignKey("local_releases.id"), index=True)
+    payload: Mapped[dict] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

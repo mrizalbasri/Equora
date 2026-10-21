@@ -3,60 +3,20 @@
 import os
 from datetime import UTC, datetime
 from decimal import Decimal
-from pathlib import Path
 from uuid import uuid4
 
 import pytest
-from alembic import command
-from alembic.config import Config
 from sqlalchemy import func, select
 from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.engine import make_url
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
 
-from app.core.config import Settings, get_settings
 from app.db.registry import Dataset, DatasetVersion, QualityIssue, StagedObservation, StagingImport
-from app.db.session import build_engine
 from app.etl.education import Issue, Observation, SourceMetadata, StagingResult
 from app.etl.registry import RegistryConflict, register_staging
 
 pytestmark = pytest.mark.skipif(
     not os.getenv("TEST_DATABASE_URL"), reason="TEST_DATABASE_URL is not set"
 )
-
-
-@pytest.fixture(scope="module")
-def registry_engine():
-    url = os.environ["TEST_DATABASE_URL"]
-    if make_url(url).database != "equora_test":
-        pytest.fail("Registry tests require the dedicated equora_test database")
-    with pytest.MonkeyPatch.context() as patch:
-        patch.setenv("DATABASE_URL", url)
-        get_settings.cache_clear()
-        try:
-            command.upgrade(
-                Config(str(Path(__file__).resolve().parents[1] / "alembic.ini")), "head"
-            )
-        finally:
-            get_settings.cache_clear()
-    engine = build_engine(Settings(database_url=url, _env_file=None))
-    try:
-        yield engine
-    finally:
-        engine.dispose()
-
-
-@pytest.fixture
-def session(registry_engine):
-    with registry_engine.connect() as connection:
-        transaction = connection.begin()
-        try:
-            with Session(bind=connection, join_transaction_mode="create_savepoint") as session:
-                with session.begin():
-                    yield session
-        finally:
-            transaction.rollback()
 
 
 @pytest.fixture
