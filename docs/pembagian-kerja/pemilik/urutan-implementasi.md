@@ -15,6 +15,7 @@ Pembaruan 21 Oktober 2026: status terkini dan backlog lengkap ada pada [audit ke
 | MCDA sandbox | `feat/priority-engine` | definisi metode eksplisit, fixture sintetis | [PR #6](https://github.com/mrizalbasri/Equora/pull/6), 20 golden/edge tests, kontribusi/bobot/missing/tie-break; belum terhubung ke HTTP/data nyata |
 | Optimasi sandbox | `feat/allocation-engine` | skor kebutuhan, biaya/kapasitas eksplisit per kasus | [PR #7](https://github.com/mrizalbasri/Equora/pull/7), 35 tests, validator independen, enumerasi, baseline, sensitivitas/status; bukan solver final produksi |
 | Staging XLSX lokal | `feat/dataset-staging-import` | manifest dan audit dipin hash, tanpa database | [Adapter staging](../../dataset-staging.md), scope satu jenjang/Total, quality report, kode wilayah sumber belum dipetakan; belum publish/API |
+| Registry draft lokal | `feat/dataset-registry` | staging, database `equora`/`equora_test` pada container PostgreSQL yang sudah ada | [Migrasi dan registry draft](../../dataset-registry.md); registrasi transaksional/idempotent; belum published API |
 | Registry/import/kontrak | `feat/dataset-release-api` | audit/review scope, ketentuan data, target PostgreSQL | Belum dikerjakan; menjadi input katalog teman |
 | Explorer/ekspor | `feat/regional-explorer` | published release, kontrak observasi, fondasi UI | Belum dikerjakan; grafik/tabel lebih dulu, tidak menunggu peta |
 | Studio/snapshot | `feat/scenario-studio` | engine teruji, biaya/fairness disepakati, registry | Belum dikerjakan; snapshot immutable dan status solusi jelas |
@@ -37,7 +38,7 @@ Nama branch untuk paket yang belum dimulai adalah rencana, bukan branch atau imp
 ## Input pemilik yang masih diperlukan
 
 - Review scope usulan SD/provinsi/2025–2026 serta ketentuan penggunaan empat file. Persetujuan memakai data nyata belum diberikan.
-- Nama target database/schema Equora pada PostgreSQL bersama. Jangan mengirim password di chat; konfigurasi rahasia tetap lokal.
+- Target lokal `equora`/`equora_test` disetujui dan dibuat pada PostgreSQL Docker yang sudah ada, 21 Oktober 2026. Target hosting produksi belum ditentukan. Konfigurasi rahasia tetap lokal.
 - Sumber atau asumsi biaya paket, kapasitas dan kendala pemerataan untuk demo yang akan ditampilkan.
 - Boundary/lisensi, konfigurasi PMTiles dan hosting deployment, serta kebutuhan admin/auth.
 

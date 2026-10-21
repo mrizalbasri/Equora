@@ -41,4 +41,4 @@ Halaman resmi [sanitasi](https://data.kemendikdasmen.go.id/dataset/p/prioritas-d
 
 ## Berikutnya
 
-Registry/migrasi PostgreSQL dan published API memerlukan target database khusus, kontrak metadata yang ditinjau, crosswalk wilayah, ketentuan penggunaan dan persetujuan release. Staging tidak mengubah status `not_approved` pada manifest sumber.
+Paket [registry draft PostgreSQL](dataset-registry.md) menambahkan penyimpanan transaksional hasil staging pada target lokal khusus yang disetujui pengguna. Registry published/API masih memerlukan kontrak metadata yang ditinjau, crosswalk wilayah, ketentuan penggunaan dan persetujuan release. Staging tidak mengubah status `not_approved` pada manifest sumber.

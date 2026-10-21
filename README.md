@@ -66,9 +66,9 @@ pnpm dev
 
 Pasang uv bila belum tersedia dengan `python -m pip install uv`. Jangan menimpa `.env` yang sudah disesuaikan. Jika pnpm belum tersedia, aktifkan pnpm 11.18.0 melalui Corepack seperti dijelaskan di [panduan frontend](frontend/README.md). Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend menampilkan landing page; `/about` menjelaskan tujuan dan batas penggunaan. Status server web tetap tersedia di `/health`. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
 
-Frontend dijalankan langsung melalui `pnpm dev`. Untuk menjalankan API dalam container, jalankan `docker compose up --build -d` dari `backend/`; file Compose hanya tersedia di backend. API memakai network PostgreSQL yang sudah ada. Database/schema Equora belum dibuat; isi koneksi setelah target disiapkan, lalu jalankan migrasi secara manual sesuai panduan backend.
+Frontend dijalankan langsung melalui `pnpm dev`. Untuk menjalankan API dalam container, jalankan `docker compose up --build -d` dari `backend/`; file Compose hanya tersedia di backend. API memakai network PostgreSQL yang sudah ada. Database lokal `equora` dan `equora_test` sudah disiapkan pada instance tersebut; [registry draft dan panduan migrasi](docs/dataset-registry.md) menjelaskan target dan pengujiannya. Koneksi tetap di `.env` lokal dan migrasi dijalankan manual.
 
-Belum ada seed statistik atau tabel domain sebelum audit dataset. Migrasi awal hanya membentuk riwayat Alembic. Test memakai data sintetis sementara.
+Migrasi awal membentuk riwayat Alembic; migrasi `0002` menambah registry draft untuk menyimpan hasil staging, bukan release publik. Test memakai data sintetis; file sumber nyata dan artefak olahannya tetap di luar Git.
 
 Setelah dependensi terpasang dan `.env` disiapkan, perintah berikut dapat dijalankan dari root menggunakan PowerShell:
 

@@ -42,7 +42,7 @@ Riwayat verifikasi setup awal pada 19 Oktober 2026 di Windows dan Docker Linux, 
 
 Starlette memberi satu peringatan deprecation terkait transport httpx pada test client; seluruh tes backend tetap lulus. Workflow GitHub Actions sudah dikonfigurasi tetapi belum dijalankan di GitHub.
 
-Koreksi pengguna: container PostgreSQL dan migrasi buatan setup awal sudah dihentikan dan dibersihkan, volume database lamanya dipertahankan. Konfigurasi baru memakai server `postgres-local` yang sudah ada di port 5434 dan network `tera_default`. Database/schema Equora belum dibuat pada server bersama, dan tidak ada migrasi yang dijalankan terhadap database proyek lain. API dapat berjalan tanpa koneksi target; readiness mengembalikan 503 sampai target dikonfigurasi. Frontend tetap di 5173 dan API lokal di 18000.
+Koreksi pengguna: container PostgreSQL dan migrasi buatan setup awal sudah dihentikan dan dibersihkan, volume database lamanya dipertahankan. Konfigurasi memakai server `postgres-local` yang sudah ada di port 5434 dan network `tera_default`. Pada 21 Oktober 2026, database khusus `equora` dan `equora_test` dibuat pada instance yang sama sesuai persetujuan pengguna; [registry draft](dataset-registry.md) menjelaskan migrasi dan tes aktual. Tidak ada migrasi terhadap database proyek lain. API tetap dapat berjalan tanpa koneksi target; readiness mengembalikan 503 bila koneksi belum dikonfigurasi. Frontend tetap di 5173 dan port API mengikuti konfigurasi lokal.
 
 Verifikasi setelah koreksi: koneksi read-only `SELECT 1` ke server bersama lulus; 6 tes backend lulus dan 1 tes migrasi dilewati karena target pengujian belum dikonfigurasi; Ruff lulus. CI tidak membuat server/database PostgreSQL; uji migrasi memerlukan target test yang disiapkan tersendiri.
 

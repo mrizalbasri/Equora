@@ -96,8 +96,8 @@ Tidak ada pembuatan database atau migrasi otomatis.
         Start-Backend
     }
     'check' {
-        Invoke-Backend -CommandArguments @('ruff', 'check', '.', '../scripts/export_openapi.py')
-        Invoke-Backend -CommandArguments @('ruff', 'format', '--check', '.', '../scripts/export_openapi.py')
+        Invoke-Backend -CommandArguments @('ruff', 'check', '.', '../scripts/export_openapi.py', '../scripts/test_postgres.py')
+        Invoke-Backend -CommandArguments @('ruff', 'format', '--check', '.', '../scripts/export_openapi.py', '../scripts/test_postgres.py')
         Invoke-Backend -CommandArguments @('python', '../scripts/check_docs.py')
         Invoke-Frontend -CommandArguments @('check')
         Invoke-Frontend -CommandArguments @('check:api')
