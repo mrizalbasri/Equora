@@ -2,6 +2,7 @@
   import { tick, type Snippet } from 'svelte';
   import { page } from '$app/state';
   import Icon from './Icon.svelte';
+  import AnalysisJourney from './AnalysisJourney.svelte';
   let {
     title,
     subtitle,
@@ -18,7 +19,6 @@
   ] as const;
   const reference = [
     { href: '/methodology', label: 'Metodologi', icon: 'book' },
-    { href: '/admin', label: 'Impor data', icon: 'shield' },
   ] as const;
   function active(href: string) {
     return (
@@ -29,7 +29,7 @@
   }
   const location = $derived(
     [...primary, ...reference].find((item) => active(item.href))?.label ??
-      'Workspace',
+      (page.url.pathname === '/admin' ? 'Impor data' : 'Workspace'),
   );
   function closeMenu() {
     menuOpen = false;
@@ -84,6 +84,8 @@
           onclick={() => (menuOpen = false)}
           ><Icon name={item.icon} /><span>{item.label}</span></a
         >{/each}
+      <p class="nav-section reference-heading">Pengelolaan lokal</p>
+      <a href="/admin" class="sidebar-link" aria-current={page.url.pathname === '/admin' ? 'page' : undefined} onclick={() => (menuOpen = false)}><Icon name="shield" /><span>Impor data</span></a>
     </nav>
     <div class="sidebar-bottom">
       <a class="studio-shortcut" href="/studio"
@@ -150,6 +152,7 @@
           pengguna; hasil bukan keputusan anggaran resmi.
         </p>
       </details>
+      <details class="journey-guide"><summary>Panduan alur dan halaman</summary><AnalysisJourney /></details>
       {@render children()}
       <footer class="app-footer">
         <span>equora. <span>· Transparansi di setiap langkah.</span></span><a
@@ -162,6 +165,8 @@
 </div>
 
 <style>
+  .journey-guide { margin-block: 16px 24px; }
+  .journey-guide > summary { cursor: pointer; min-height: 44px; align-content: center; color: var(--eq-primary-hover); font-weight: 600; }
   .app-frame {
     min-height: 100dvh;
     background: var(--eq-bg);

@@ -19,9 +19,11 @@ export const labels: Record<string, string> = {
 };
 export const navigation = [
   { label: 'Explorer', href: '/explore' },
-  { label: 'Studio', href: '/studio' },
-  { label: 'Dataset', href: '/datasets' },
+  { label: 'Studio simulasi', href: '/studio' },
+  { label: 'Perbandingan', href: '/compare' },
+  { label: 'Katalog dataset', href: '/datasets' },
   { label: 'Metodologi', href: '/methodology' },
+  { label: 'Tentang Equora', href: '/about' },
 ];
 export const number = (value: string | number | null | undefined, digits = 2) =>
   value == null

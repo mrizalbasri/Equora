@@ -65,19 +65,16 @@ for (const width of [360, 390, 768, 1024, 1440]) {
       await expect(menu).toHaveAttribute('aria-expanded', 'false');
     }
     for (const label of ['Alur analisis', 'Sumber data', 'Metode & batasan']) {
-      if (width < 1024) await page.getByRole('button', { name: 'Menu', exact: true }).click();
-      await page.getByRole('navigation').getByRole('link', { name: label, exact: true }).click();
+      await page.getByRole('navigation', { name: 'Di beranda ini' }).getByRole('link', { name: label, exact: true }).click();
       const fragment = new URL(page.url()).hash;
       await expect(page.locator(fragment)).toBeVisible();
-      await expect(page.locator('#public-navigation').getByRole('link', { name: label, exact: true, includeHidden: true })).toHaveAttribute('aria-current', 'location');
       const header = await page.locator('header').boundingBox();
       const section = await page.locator(fragment).boundingBox();
       expect(section!.y).toBeGreaterThanOrEqual(header!.y + header!.height);
-      if (width < 1024) await expect(page.getByRole('button', { name: 'Menu', exact: true })).toHaveAttribute('aria-expanded', 'false');
     }
     await expect(page.locator('a[href^="https://data.kemendikdasmen.go.id/"]')).toHaveCount(4);
-    await expect(page.locator('a[href="/explore"], a[href="/studio"]')).toHaveCount(2);
-    await page.getByRole('link', { name: 'Katalog dataset', exact: true }).click();
+    await expect(page.getByRole('region', { name: 'Mulai menggunakan Equora' })).toBeVisible();
+    await page.locator('footer').getByRole('link', { name: 'Katalog dataset', exact: true }).click();
     await expect(page).toHaveURL(/\/datasets$/);
     await page.goto('/');
     await page.getByRole('link', { name: 'Metodologi', exact: true }).last().click();

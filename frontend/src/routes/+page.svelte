@@ -1,4 +1,5 @@
 <script lang="ts">
+  import AnalysisJourney from '#lib/components/AnalysisJourney.svelte';
   import PublicShell from '#lib/components/PublicShell.svelte';
   import AvailabilityNotice from '#lib/components/AvailabilityNotice.svelte';
   import EducationScene from '#lib/components/EducationScene.svelte';
@@ -25,12 +26,7 @@
   <meta name="description" content="Kenali Equora: perbandingan akses fasilitas pendidikan dari data publik dan simulasi alokasi sumber daya dengan sumber, asumsi, dan batasan yang terbuka." />
 </svelte:head>
 
-<PublicShell links={[
-  { label: 'Alur analisis', href: '#alur' },
-  { label: 'Sumber data', href: '#sumber' },
-  { label: 'Metode & batasan', href: '#metode' },
-  { label: 'Tentang Equora', href: '/about' }
-]}>
+<PublicShell>
   <div class="hero-backdrop">
     <section class="eq-container hero" aria-labelledby="hero-title">
       <!-- Centered Header Copy -->
@@ -43,6 +39,9 @@
         </div>
         <p class="hero-note"><span class="development-label">Dalam pengembangan</span><br />Simulasi, bukan keputusan anggaran resmi.</p>
       </div>
+
+      <div class="entry-guide"><AnalysisJourney /></div>
+      <nav class="landing-sections" aria-label="Di beranda ini"><a href="#alur">Alur analisis</a><a href="#sumber">Sumber data</a><a href="#metode">Metode &amp; batasan</a></nav>
 
       <!-- Outcrowd-inspired Interactive Product Showcase -->
       <div class="hero-showcase">
@@ -96,7 +95,7 @@
               <span class="url-text">Equora <em>/ contoh antarmuka</em></span>
             </div>
             <div class="window-tag">
-              <span>Belum ada release data</span>
+              <span>Pratinjau ilustratif</span>
             </div>
           </div>
 
@@ -378,6 +377,9 @@
 </PublicShell>
 
 <style>
+  .entry-guide { width: 100%; margin-block: 32px 12px; }
+  .landing-sections { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; margin-bottom: 24px; }
+  .landing-sections a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; }
   /* Base Hero Backdrop */
   .hero-backdrop {
     position: relative;
