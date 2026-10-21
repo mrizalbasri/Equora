@@ -326,9 +326,9 @@
       <div class="source-intro">
         <p class="eq-kicker">Sumber sebelum kesimpulan</p>
         <h2 id="sources-title">Nilai yang bisa<br />ditelusuri asalnya.</h2>
-        <p>Calon sumber dari portal data Kemendikdasmen. Tautan ini menuju halaman penerbit, bukan dataset yang sudah dirilis oleh Equora.</p>
-        <AvailabilityNotice title="Belum ada release data">
-          <p>File, lisensi, cakupan, dan kesesuaian antarindikator masih perlu diaudit. Belum ada statistik resmi yang ditampilkan di Equora.</p>
+        <p>Empat indikator inti dari portal data Kemendikdasmen. Tautan ini menuju halaman penerbit; definisi, hash, dan kualitas berkas tersedia pada katalog lokal.</p>
+        <AvailabilityNotice title="Data tersedia untuk review lokal">
+          <p>Sepuluh berkas pengguna telah diperiksa. Tanggal unduh dan lisensi redistribusi belum terverifikasi; data ini belum menjadi release publik Equora.</p>
         </AvailabilityNotice>
       </div>
       <div class="source-list">
