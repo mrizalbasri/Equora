@@ -2,6 +2,7 @@
   import type { Snippet } from 'svelte';
   import { page } from '$app/state';
   import { navigation } from '$lib/api/workspace';
+  import Icon from './Icon.svelte';
 
   let { children, links = navigation }: {
     children: Snippet;
@@ -31,7 +32,7 @@
 <div class="public-frame">
 <header class="header-bar">
 <div class="eq-container header">
-  <a href="/" class="wordmark" aria-label="Equora, beranda">equora<span>.</span></a>
+  <a href="/" class="wordmark header-brand" aria-label="Equora, beranda"><span class="brand-name">equora<span>.</span></span><span class="brand-caption">Data untuk keputusan</span></a>
   {#if links.length}
     <button class="menu" bind:this={menuButton} aria-expanded={menuOpen}
       aria-controls="public-navigation" onclick={() => menuOpen = !menuOpen}>
@@ -40,8 +41,8 @@
     </button>
     <nav id="public-navigation" class:open={menuOpen} aria-label="Navigasi utama">
       {#each links as link}
-        <a href={link.href} class="nav-link" class:about-link={link.href === '/about'} aria-current={currentFor(link.href)} onclick={() => menuOpen = false}>
-          {link.label}{#if link.href === '/about'}<span aria-hidden="true">↗</span>{/if}
+        <a href={link.href} class="nav-link" class:primary-link={link.href === '/explore'} class:reference-start={link.href === '/methodology'} aria-current={currentFor(link.href)} onclick={() => menuOpen = false}>
+          {#if link.href === '/explore'}<Icon name="compass" size={17} />{/if}{link.label}{#if link.href === '/explore'}<Icon name="arrow" size={15} />{/if}
         </a>
       {/each}
     </nav>
@@ -63,16 +64,22 @@
 
 <style>
   .public-frame { width: calc(100% - 48px); max-width: 1360px; margin: 24px auto; background: var(--eq-surface); border-radius: 28px; box-shadow: 0 12px 48px rgb(31 45 61 / 5.5%); }
-  .header-bar { position: sticky; top: 0; z-index: 20; background: var(--eq-surface); border-radius: 28px 28px 0 0; border-bottom: 1px solid var(--eq-border); }
+  .header-bar { position: sticky; top: 0; z-index: 20; background: rgb(255 255 255 / 96%); backdrop-filter: blur(12px); border-radius: 28px 28px 0 0; border-bottom: 1px solid var(--eq-border); box-shadow: 0 4px 18px rgb(31 45 61 / 3%); }
   .header { min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
   .wordmark { display: inline-flex; align-items: center; min-height: 44px; font-size: 32px; font-weight: 750; letter-spacing: -1.6px; text-decoration: none; }
   .wordmark span { color: var(--eq-primary); }
+  .header-brand { flex-direction: column; align-items: flex-start; justify-content: center; flex-shrink: 0; gap: 3px; }
+  .header-brand .brand-name { color: var(--eq-text); line-height: 1; }
+  .header-brand .brand-caption { color: var(--eq-text-secondary); font-size: 11px; font-weight: 500; letter-spacing: 0.025em; line-height: 1.4; }
   nav { display: flex; align-items: center; gap: 4px; }
   nav a, .footer > a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 550; text-decoration: none; }
-  .nav-link { position: relative; padding: 10px 14px; border-radius: 10px; color: var(--eq-text-secondary); gap: 14px; }
+  .nav-link { position: relative; padding: 10px 12px; border-radius: 8px; color: var(--eq-text-secondary); gap: 8px; white-space: nowrap; transition: color 160ms ease, background-color 160ms ease; }
   .nav-link:hover, .nav-link[aria-current] { background: var(--eq-primary-tint); color: var(--eq-primary-hover); }
   .nav-link[aria-current]::after { content: ''; position: absolute; bottom: 4px; left: 14px; right: 14px; height: 2px; background: var(--eq-primary); }
-  .nav-link.about-link { margin-left: 16px; border: 1px solid var(--eq-control-border); color: var(--eq-text); }
+  .nav-link.reference-start { margin-left: 12px; }
+  .nav-link.reference-start::before { content: ''; position: absolute; left: -8px; top: 12px; bottom: 12px; width: 1px; background: var(--eq-border); }
+  .nav-link.primary-link { padding-inline: 16px; margin-right: 8px; background: var(--eq-primary); color: white; font-weight: 650; box-shadow: 0 3px 8px rgb(18 100 216 / 15%); }
+  .nav-link.primary-link:hover { background: var(--eq-primary-hover); }
   .footer > a:hover { color: var(--eq-primary-hover); text-decoration: underline; }
   .menu { display: none; }
   .menu-icon { width: 18px; display: grid; gap: 5px; }
@@ -84,15 +91,27 @@
   .footer { padding-block: 40px; border-top: 1px solid var(--eq-border); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; }
   .footer p { font-size: 13px; color: var(--eq-text-secondary); }
   .disclaimer { text-align: right; }
+  @media (min-width: 1024px) and (max-width: 1199px) {
+    .header { gap: 12px; }
+    nav { gap: 0; }
+    nav a { font-size: 13px; }
+    .nav-link { padding-inline: 8px; }
+    .nav-link.primary-link { padding-inline: 12px; margin-right: 4px; gap: 6px; }
+    .nav-link.reference-start { margin-left: 8px; }
+    .nav-link.reference-start::before { left: -4px; }
+  }
   @media (max-width: 1023px) {
     .public-frame { width: 100%; margin: 0; border-radius: 0; box-shadow: none; }
     .header-bar { border-radius: 0; }
     .header { min-height: 76px; flex-wrap: wrap; gap: 12px; padding-block: 14px; }
+    .header-brand .brand-caption { font-size: 10px; }
     .menu { display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 10px 14px; min-height: 44px; border: 1px solid var(--eq-control-border); border-radius: 10px; font-size: 14px; font-weight: 600; }
     nav { display: none; width: 100%; flex-direction: column; align-items: stretch; gap: 4px; padding-block: 12px 4px; border-top: 1px solid var(--eq-border); max-height: calc(100dvh - 112px); overflow-y: auto; }
     nav.open { display: flex; }
     .nav-link { padding: 12px 14px; }
-    .nav-link.about-link { margin: 8px 0 0; justify-content: space-between; }
+    .nav-link.primary-link { margin: 0 0 8px; justify-content: center; }
+    .nav-link.reference-start { margin: 8px 0 0; border-top: 1px solid var(--eq-border); border-radius: 0; padding-top: 16px; }
+    .nav-link.reference-start::before { display: none; }
     .footer { align-items: flex-start; flex-direction: column; }
     .disclaimer { text-align: left; }
   }
