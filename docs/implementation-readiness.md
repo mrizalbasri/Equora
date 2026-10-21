@@ -1,5 +1,7 @@
 # Audit kesiapan implementasi
 
+**Pembaruan workspace lokal 21 Oktober 2026:** branch integrasi menyambungkan sepuluh workbook, API katalog/observasi, Explorer dengan peta/fallback, Studio, snapshot, Compare, CSV/PDF dan admin token. Lihat [panduan lokal dan batasnya](local-workspace.md). Bagian audit main serta backlog di bawah adalah baseline sebelum integrasi, bukan klaim bahwa fitur lokal masih belum tersedia. Release publik, hosting, operasi produksi dan submission tetap terpisah.
+
 Pemeriksaan 21 Oktober 2026 terhadap main `b1037c11b2394dca45a4531aba6bca54a858c911`, setelah `git pull --ff-only` menghasilkan `Already up to date`. Dokumen ini menggantikan klaim status terkini pada laporan lama, tanpa mengubah bukti historisnya. Prioritas di bawah mengikuti dependensi PRD, bukan perubahan scope atau jadwal kompetisi.
 
 ## Yang tersedia

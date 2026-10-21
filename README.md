@@ -2,7 +2,7 @@
 
 Platform web untuk membandingkan akses fasilitas pendidikan dari data publik dan menguji simulasi prioritas alokasi sumber daya yang dapat dijelaskan. Disiapkan untuk Web In Action (WIA), MIA 2026.
 
-**Status 21 Oktober 2026: fondasi backend/frontend, priority engine dan allocation engine sandbox, landing/about interaktif, katalog fixture, serta metodologi tersedia di main. Explorer, skenario, dan release dataset resmi belum tersedia.** Lihat [audit kesiapan dan backlog](docs/implementation-readiness.md) untuk bukti pengujian, status PR, dan urutan pekerjaan berikutnya.
+**Status workspace 21 Oktober 2026: Explorer, peta 38 provinsi, katalog API, Studio, snapshot, Compare, ekspor CSV/PDF dan impor admin lokal tersedia pada branch integrasi.** Sepuluh workbook pengguna menghasilkan 2.280 observasi berstatus `local_review`. Hosting dan release publik belum disiapkan; branch belum otomatis digabung ke main. Ikuti [panduan workspace lokal](docs/local-workspace.md) dan [audit kesiapan](docs/implementation-readiness.md).
 
 ## Dokumentasi
 
@@ -12,7 +12,7 @@ Dokumen utama hanya disimpan di `docs/`: [BRD](docs/BRD_Equora.md), [PRD](docs/P
 
 Tema visual terbaru: **Clean Education Blue (DESIGN v1.2)**, disetujui 20 Oktober 2026. Landing/About memakai panel putih, latar abu-abu sangat muda dan biru utama; diagram serta dokumen System Design mengikuti palet yang sama.
 
-Untuk kontributor yang mulai coding, ikuti [panduan mengambil fondasi](docs/pembagian-kerja/MULAI-NGODING.md). Pekerjaan frontend dapat dimulai tanpa database; fondasi UI publik tersedia dalam [panduan UI](docs/ui-foundation.md), sedangkan kontrak katalog belum tersedia.
+Untuk kontributor yang mulai coding, ikuti [panduan mengambil fondasi](docs/pembagian-kerja/MULAI-NGODING.md). Fondasi UI publik tersedia dalam [panduan UI](docs/ui-foundation.md); kontrak workspace terdapat pada OpenAPI dan tipe TypeScript hasil generate.
 
 ## Stack
 
