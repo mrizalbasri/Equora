@@ -1,6 +1,6 @@
 # Dokumentasi Equora
 
-Status: baseline kerja, diperbarui 19 Oktober 2026. Dokumentasi menjelaskan rencana; tidak membuktikan implementasi sudah tersedia.
+Status diperbarui 21 Oktober 2026. [Audit kesiapan](implementation-readiness.md) membedakan implementasi teruji, rencana, dan dependensi yang belum terpenuhi. Laporan QA bertanggal sebelumnya tetap merupakan bukti historis pada commit masing-masing.
 
 | Dokumen | Kegunaan |
 |---|---|
@@ -13,6 +13,7 @@ Status: baseline kerja, diperbarui 19 Oktober 2026. Dokumentasi menjelaskan renc
 | [Rencana peta](map-plan.md) | MapLibre/Protomaps, sumber layer, gerbang geografis, atribusi dan fallback |
 | [Desain UI](DESIGN_Equora.md) | Baseline Clean Education Blue v1.2 |
 | [Project plan](project-plan.md) | Prioritas, jadwal kerja usulan dan risiko |
+| [Audit kesiapan dan backlog](implementation-readiness.md) | Status main/PR terkini, hasil pemeriksaan, urutan kerja dan kriteria selesai |
 | [Pembagian kerja dua orang](pembagian-kerja/README.md) | Porsi pemilik/teman, folder tugas per fitur, dependensi dan checklist serah terima |
 | [Data readiness](data-readiness.md) | Gerbang validasi sebelum analisis |
 | [Submission checklist](submission-checklist.md) | Bukti yang perlu disiapkan per tahap |

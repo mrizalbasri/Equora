@@ -58,7 +58,7 @@ migrations/      # Alembic
 tests/
 ```
 
-Folder ETL, analisis dan optimasi baru menyiapkan batas modul. Model domain, import dataset dan formula produk belum diimplementasikan. Migrasi `0001` menginisialisasi riwayat Alembic tanpa membuat tabel domain sebelum audit dataset.
+Folder ETL masih menyiapkan batas modul. Analisis menyediakan [MCDA sandbox](../docs/priority-sandbox.md), dan optimasi menyediakan [alokasi paket integer sandbox](../docs/allocation-sandbox.md), keduanya diuji memakai kasus sintetis. Engine belum terhubung ke HTTP, database, atau UI. Model domain dan import dataset belum diimplementasikan. Migrasi `0001` menginisialisasi riwayat Alembic tanpa membuat tabel domain sebelum release data ditetapkan.
 
 ## Pemeriksaan
 
