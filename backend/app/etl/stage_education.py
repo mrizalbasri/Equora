@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from app.etl.additional_education import audited_additional_source, stage_additional_workbook
 from app.etl.education import LEVELS, SourceMetadata, stage_workbook
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -43,15 +44,21 @@ def write_staging(output: Path, result) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-id", required=True)
+    parser.add_argument("--source-set", choices=("original", "additional"), default="original")
     parser.add_argument("--file", required=True, type=Path)
     parser.add_argument("--education-level", required=True, choices=LEVELS)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args(argv)
     try:
-        manifest = json.loads((ROOT / "data/metadata/source-candidates.json").read_text("utf-8"))
-        audit = json.loads((ROOT / "data/metadata/source-audit.json").read_text("utf-8"))
-        source = audited_source(args.source_id, manifest, audit)
-        result = stage_workbook(args.file, source, education_level=args.education_level)
+        prefix = "additional-" if args.source_set == "additional" else ""
+        manifest = json.loads(
+            (ROOT / f"data/metadata/{prefix}source-candidates.json").read_text("utf-8")
+        )
+        audit = json.loads((ROOT / f"data/metadata/{prefix}source-audit.json").read_text("utf-8"))
+        resolve = audited_additional_source if args.source_set == "additional" else audited_source
+        stage = stage_additional_workbook if args.source_set == "additional" else stage_workbook
+        source = resolve(args.source_id, manifest, audit)
+        result = stage(args.file, source, education_level=args.education_level)
         write_staging(args.output, result)
     except (OSError, ValueError, KeyError) as exc:
         parser.exit(2, f"Staging failed: {exc}\n")
@@ -63,6 +70,15 @@ def main(argv: list[str] | None = None) -> int:
                 "missing": result.missing_values,
                 "errors": result.error_count,
                 "release_status": "not_approved",
+                **(
+                    {
+                        "warnings": sum(issue.severity == "warning" for issue in result.issues),
+                        "unimported_issues": len(result.unimported_issues),
+                        "unsupported_levels": result.unsupported_levels,
+                    }
+                    if args.source_set == "additional"
+                    else {}
+                ),
             }
         )
     )

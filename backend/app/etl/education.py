@@ -107,11 +107,7 @@ def _number(value, unit: str) -> tuple[Decimal | None, str | None]:
     return number, None
 
 
-def stage_workbook(
-    path: Path, source: SourceMetadata, *, education_level: EducationLevel
-) -> StagingResult:
-    if education_level not in LEVELS:
-        raise ValueError("Select one supported education level explicitly")
+def open_verified_workbook(path: Path, source: SourceMetadata):
     if path.stat().st_size > MAX_FILE_BYTES:
         raise ValueError("Workbook exceeds staging file size limit")
     payload = path.read_bytes()
@@ -126,7 +122,16 @@ def stage_workbook(
                 raise ValueError("Workbook exceeds unpacked size limit")
     except BadZipFile as exc:
         raise ValueError("Workbook must be an XLSX archive") from exc
-    book = load_workbook(BytesIO(payload), read_only=True, data_only=False, keep_links=False)
+    return load_workbook(BytesIO(payload), read_only=True, data_only=False, keep_links=False)
+
+
+def stage_workbook(
+    path: Path, source: SourceMetadata, *, education_level: EducationLevel
+) -> StagingResult:
+    if education_level not in LEVELS:
+        raise ValueError("Select one supported education level explicitly")
+    book = open_verified_workbook(path, source)
+    digest = source.sha256
     try:
         if not {"Data", "Metadata"} <= set(book.sheetnames):
             raise ValueError("Workbook requires Data and Metadata sheets")
