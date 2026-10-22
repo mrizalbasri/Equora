@@ -6,6 +6,9 @@ Platform web untuk membandingkan akses fasilitas pendidikan dari data publik dan
 
 ## Dokumentasi
 
+Panduan [coverage di GitHub](docs/coverage.md) menjelaskan laporan backend dan
+frontend, aktivasi Codecov, dan perintah lokal.
+
 Mulai dari [indeks docs](docs/README.md) dan [evaluasi kesesuaian lomba](docs/competition-alignment.md).
 
 Dokumen utama hanya disimpan di `docs/`: [BRD](docs/BRD_Equora.md), [PRD](docs/PRD_Equora.md), dan [desain](docs/DESIGN_Equora.md).

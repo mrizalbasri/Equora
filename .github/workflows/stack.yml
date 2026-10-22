@@ -11,6 +11,9 @@ permissions:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     defaults:
       run:
         working-directory: backend
@@ -25,7 +28,23 @@ jobs:
           uv sync --locked --extra dev
       - run: uv run ruff check . ../scripts/export_openapi.py
       - run: uv run ruff format --check . ../scripts/export_openapi.py
-      - run: uv run pytest
+      - name: Test with coverage
+        run: uv run pytest --cov --cov-report=term-missing --cov-report=xml --cov-report=html
+      - name: Save backend coverage
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-backend
+          path: backend/coverage/
+          if-no-files-found: warn
+      - name: Upload backend coverage to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          use_oidc: true
+          files: backend/coverage/coverage.xml
+          flags: backend
+          disable_search: true
+          fail_ci_if_error: true
       - name: Check OpenAPI schema
         run: |
           uv run python ../scripts/export_openapi.py
@@ -36,6 +55,9 @@ jobs:
 
   frontend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     defaults:
       run:
         working-directory: frontend
@@ -54,7 +76,23 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run check:api
       - run: pnpm run check
-      - run: pnpm test
+      - name: Test with coverage
+        run: pnpm run test:coverage
+      - name: Save frontend coverage
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-frontend
+          path: frontend/coverage/
+          if-no-files-found: warn
+      - name: Upload frontend coverage to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          use_oidc: true
+          files: frontend/coverage/lcov.info
+          flags: frontend
+          disable_search: true
+          fail_ci_if_error: true
       - run: pnpm run build
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run test:e2e

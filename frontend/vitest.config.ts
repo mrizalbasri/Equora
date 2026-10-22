@@ -1,3 +1,14 @@
 import { defineConfig } from 'vitest/config';
 
-export default defineConfig({ test: { include: ['src/**/*.test.ts'] } });
+export default defineConfig({
+  test: {
+    include: ['src/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.test.ts', 'src/**/*.d.ts'],
+      reporter: ['text-summary', 'lcov', 'html'],
+      reportsDirectory: 'coverage'
+    }
+  }
+});
