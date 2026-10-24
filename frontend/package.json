@@ -19,11 +19,15 @@
     "check:api": "node scripts/check-api.mjs"
   },
   "dependencies": {
+    "@clerk/backend": "^3.26.1",
+    "@clerk/clerk-js": "^6.40.0",
+    "@clerk/ui": "^1.41.1",
     "echarts": "^6.0.0",
     "maplibre-gl": "^6.15.0",
     "pmtiles": "^4.0.0"
   },
   "devDependencies": {
+    "@clerk/testing": "^2.2.49",
     "@sveltejs/adapter-node": "^5.5.7",
     "@sveltejs/kit": "^2.70.3",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",

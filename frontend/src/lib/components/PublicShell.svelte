@@ -3,6 +3,7 @@
   import { page } from '$app/state';
   import { navigation } from '$lib/api/workspace';
   import Icon from './Icon.svelte';
+  import AccountControls from './AccountControls.svelte';
 
   let { children, links = navigation }: {
     children: Snippet;
@@ -45,6 +46,7 @@
           {#if link.href === '/explore'}<Icon name="compass" size={17} />{/if}{link.label}{#if link.href === '/explore'}<Icon name="arrow" size={15} />{/if}
         </a>
       {/each}
+      <AccountControls />
     </nav>
   {/if}
 </div>

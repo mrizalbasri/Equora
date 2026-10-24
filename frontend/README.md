@@ -35,6 +35,31 @@ ECharts, MapLibre dan PMTiles sudah menjadi dependensi, tetapi grafik, peta, bas
 
 Frontend dijalankan langsung melalui pnpm. Isi `API_BASE_URL` pada `.env` sesuai port backend, misalnya `http://localhost:18000` untuk konfigurasi lokal mesin ini.
 
+## Akun Clerk
+
+Halaman `/sign-in`, `/sign-up`, dan `/account` terhubung ke Clerk. Tombol Masuk
+atau Akun saya/Keluar tersedia pada navigasi publik dan workspace. Halaman akun
+memverifikasi cookie sesi di server; login tidak otomatis memberikan izin impor
+admin. Eksplorasi publik dan simulasi yang sudah ada tetap tersedia tanpa login.
+
+Keys development disimpan pada `.env.local` yang diabaikan Git. Jalankan Clerk
+CLI dari folder `frontend` untuk menarik keys, lalu tambahkan
+`PUBLIC_CLERK_PUBLISHABLE_KEY` dan `CLERK_AUTHORIZED_PARTIES` sesuai
+[panduan autentikasi](../docs/clerk-auth.md). Jangan menyalin secret ke variabel
+berawalan `PUBLIC_` atau `VITE_`.
+
+Tes verifikasi JWT berjalan melalui `pnpm test`. Tes Clerk nyata memerlukan
+instance development serta opt-in berikut, setelah `pnpm build`:
+
+```powershell
+$env:EQUORA_CLERK_LIVE='1'
+node --env-file=.env.local node_modules/@playwright/test/cli.js test tests/clerk-auth.live.spec.ts --workers=1
+```
+
+Tes membuat akun sintetis melalui UI, memakai kode verifikasi khusus testing
+Clerk, dan menghapus akun sintetis setelah pengujian. `CLERK_AUTHORIZED_PARTIES`
+harus mencakup origin preview `http://127.0.0.1:4173` untuk tes tersebut.
+
 ## Pemeriksaan dan kontrak
 
 ```powershell
