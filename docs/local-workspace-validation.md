@@ -29,3 +29,11 @@ E2E memakai fixture sintetis berlabel melalui intercept browser. Bukti itu tidak
 - Snapshot eksperimen awal yang dibuat oleh tes integrasi sebelum format lengkap dibuang; snapshot terbaru bisa dibuka ulang. Berkas sumber pengguna tidak diedit.
 
 Screenshot dan PDF dengan angka nyata disimpan lokal di `tmp/`, bukan dikomit karena ketentuan redistribusi sumber belum diverifikasi. Snapshot biaya tetap asumsi demo, bukan rekomendasi kebijakan atau klaim dampak. Hasil ini tidak membuktikan deployment, benchmark kapasitas produksi, backup/restore produksi, ataupun submission lomba.
+
+## Validasi basemap — 21 Oktober 2026
+
+- `pnpm check`: nol error/warning; `pnpm test`: dua tes lulus; `pnpm build`: lulus (peringatan ukuran chunk MapLibre tetap ada).
+- `tests/basemap.spec.ts`: empat tes lulus, mencakup archive PMTiles/HTTP Range, tampilan dan pemilihan provinsi pada 360/1440 px, fallback basemap serta retry setelah koneksi pulih. Tes memakai geometry/indikator sintetis dan basemap lokal asli; font glyph memakai GitHub yang dipin.
+- `tests/workspace.spec.ts`: 12 tes lulus, termasuk filter, fallback boundary, Studio, Compare dan navigasi.
+- Smoke adapter Node hasil build pada port sementara: `Range: bytes=0-126` menghasilkan `206`, `Content-Range: bytes 0-126/3246304` dan 127 byte.
+- Smoke dengan data lokal asli belum dapat diulang: `API_BASE_URL` lokal menunjuk port 18000 yang tidak sedang melayani backend. Port 8000 yang aktif mengembalikan 404 untuk endpoint workspace/geometry. Pemeriksaan ini tidak mengubah konfigurasi backend atau database.

@@ -31,9 +31,18 @@ Route `/datasets` dan `/datasets/[datasetId]` menampilkan fixture berlabel, penc
 
 Tema publik mengikuti [DESIGN v1.2 Clean Education Blue](../docs/DESIGN_Equora.md): latar abu-abu sangat muda, panel putih, tombol biru dan ilustrasi sekolah SVG lokal. Token, frame publik dan status ketersediaan dipakai bersama oleh Landing/About. Katalog/detail/metodologi masih memiliki CSS lama; penyatuan shell/token tercatat di [backlog](../docs/implementation-readiness.md). Tidak ada aset font/gambar eksternal yang harus diunduh agar halaman tampil.
 
-ECharts, MapLibre dan PMTiles sudah menjadi dependensi, tetapi grafik, peta, basemap, boundary dan dataset belum dimuat. Integrasi tersebut mengikuti audit data/lisensi dan desain produk.
+Explorer memakai MapLibre dengan boundary GeoJSON lokal dan basemap Protomaps/PMTiles berbasis OpenStreetMap. Subset Indonesia zoom 0–7 serta sprite disertakan di `static/maps/`; font glyph dimuat dari GitHub pada commit yang dipin. Atribusi tersedia pada peta dan kegagalan basemap mempertahankan layer indikator/tabel. Lihat [workspace lokal](../docs/local-workspace.md) dan [provenance aset](static/maps/README.md).
 
 Frontend dijalankan langsung melalui pnpm. Isi `API_BASE_URL` pada `.env` sesuai port backend, misalnya `http://localhost:18000` untuk konfigurasi lokal mesin ini.
+
+## Akses publik
+
+Eksplorasi data, profil daerah, simulasi, perbandingan dan ekspor dapat digunakan
+langsung tanpa akun. Tidak ada halaman masuk, daftar atau akun, dan tidak diperlukan
+layanan autentikasi eksternal. Snapshot masih tersimpan di workspace bersama,
+bukan koleksi pribadi per pengguna.
+
+Impor data melalui `/admin` tetap memerlukan token admin backend yang terpisah.
 
 ## Pemeriksaan dan kontrak
 

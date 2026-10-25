@@ -19,9 +19,13 @@ Terakhir diperbarui: 21 Oktober 2026. Status keputusan mengikuti bukti di repo d
 | D-13 | Solver final | CP-SAT kandidat awal untuk paket integer/boolean; evaluasi MIP sesuai model. Pilihan final menunggu audit data, validasi, dan benchmark yang setara |
 | D-14 | Bukti hasil engine | Sandbox sintetis di main: 20 tes MCDA dan 35 tes alokasi lulus pada 21 Oktober; enumerasi, baseline, sensitivitas, status dan reproduksibilitas dicakup. Belum merupakan benchmark data produksi atau validasi integrasi |
 | D-15 | Target performa | Tetapkan ukuran kasus, latensi, memori dan concurrency setelah data/hosting diketahui, sebelum benchmark; belum ada angka yang disepakati |
-| D-16 | Peta | MapLibre GL JS + Protomaps/PMTiles + basemap OSM disetujui untuk perencanaan pada 19 Okt; layer analisis bergantung audit boundary. [Rencana peta](map-plan.md) mencatat alasan, atribusi, missing, compare dan fallback; belum diimplementasikan |
-| D-17 | Aset dan hosting peta | Sumber boundary, subset/zoom PMTiles, hosting dan target performa belum ditetapkan; audit lisensi, join, biaya dan pengujian deployment diperlukan |
+| D-16 | Peta | MapLibre GL JS + Protomaps/PMTiles + basemap OSM diimplementasikan lokal pada 21 Okt. Layer indikator GeoJSON, label basemap, atribusi dan fallback tetap tersedia; lihat [rencana peta](map-plan.md) |
+| D-17 | Aset dan hosting peta | Subset Indonesia bbox 94,-12,142,7, zoom 0–7 dari Protomaps 4.15.2 disajikan sebagai aset lokal. Versi/hash di [manifest](../data/metadata/basemap-local.json); font GitHub dipin. Hosting produksi, target performa serta audit boundary untuk redistribusi publik tetap terbuka |
 | D-18 | Pembagian kerja | Pengguna menyetujui porsi mayoritas/inti di pemilik; perkiraan 75-80% pemilik dan 20-25% teman. [Panduan per fitur](pembagian-kerja/README.md) menetapkan landing/about, katalog, metodologi dan QA untuk teman; halaman pendukung sudah tersedia di main, pengukuran jam belum ada |
 | D-19 | Database lokal | Pengguna mengonfirmasi memakai PostgreSQL Docker yang sudah ada, tanpa instance baru. Database `equora` dan `equora_test` dibuat 21 Oktober 2026 pada `postgres-local` dengan owner terpisah; migrasi/tes mengikuti [registry draft](dataset-registry.md). Target produksi belum dipilih |
 
 Pertanyaan panitia disiapkan untuk pengguna; belum dikirim kepada siapa pun. Tidak ada deadline jam yang ditebak. Setelah mendapat jawaban, catat tanggal, kanal, isi keputusan dan dokumen yang perlu diperbarui.
+
+## Akses publik — 25 Oktober 2026
+
+Eksplorasi data, profil daerah dan simulasi tersedia tanpa akun. Integrasi Clerk dan halaman masuk, daftar serta akun dihapus karena belum ada fungsi pribadi per pengguna. Snapshot tetap memakai workspace bersama. Impor data tetap dibatasi dengan token admin backend.

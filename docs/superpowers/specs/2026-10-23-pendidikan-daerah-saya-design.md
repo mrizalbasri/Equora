@@ -1,8 +1,8 @@
 # Pendidikan di Daerah Saya
 
 Tanggal: 23 Oktober 2026.
-Status: arah fitur disetujui dalam percakapan; rancangan implementasi untuk ditinjau.
-Fitur belum diimplementasikan oleh perubahan dokumentasi ini.
+Status: arah fitur dan implementasi disetujui dalam percakapan. Alur lokal
+diimplementasikan pada 23 Oktober 2026; lihat [hasil implementasi](../../public-region.md).
 
 ## Tujuan dan pengguna
 
@@ -50,10 +50,10 @@ dan membagikan temuan beserta sumbernya.
 
 ## Integrasi dengan aplikasi
 
-Perluas halaman `/regions/[code]` sebagai profil publik, memakai data wilayah,
-observasi dan metadata sumber dari API yang sudah ada. Explorer menyediakan
-pintu pemilihan provinsi dan jenjang. Rincian sel spreadsheet tetap tersedia
-melalui penelusuran sumber, setelah penjelasan kondisi yang mudah dibaca.
+Alur publik tersedia di `/daerah`, memakai data wilayah dan metadata sumber
+dari API yang sudah ada. Halaman teknis `/regions/[code]` tetap tersedia dengan
+tautan ke profil publik pada rilis yang sama. Explorer menyediakan pintu masuk
+ke profil. Rincian sel spreadsheet tersedia setelah penjelasan kondisi.
 
 Pisahkan penyusunan ringkasan dan pemeriksaan kompatibilitas data dari komponen
 tampilan. Perbandingan wilayah memakai observasi; halaman Compare yang sudah
