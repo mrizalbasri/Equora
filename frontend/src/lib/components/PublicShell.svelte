@@ -4,6 +4,7 @@
   import { navigation, type NavigationEntry } from '$lib/api/workspace';
   import BrandMark from './BrandMark.svelte';
   import Icon from './Icon.svelte';
+  import AccountControls from './AccountControls.svelte';
 
   let { children, links = navigation, calm = false }: {
     children: Snippet;
@@ -100,6 +101,7 @@
           <a href={link.href} class="nav-link" aria-current={currentFor(link.href)} onclick={closeNavigation}>{link.label}</a>
         {/if}
       {/each}
+      <AccountControls />
       <a class="nav-link primary-link" href="/daerah" aria-current={currentFor('/daerah')} onclick={closeNavigation}>Daerah Saya<Icon name="map" size={18} /></a>
     </nav>
   {/if}
