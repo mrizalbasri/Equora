@@ -2,7 +2,9 @@
 
 Platform web untuk membandingkan akses fasilitas pendidikan dari data publik dan menguji simulasi prioritas alokasi sumber daya yang dapat dijelaskan. Disiapkan untuk Web In Action (WIA), MIA 2026.
 
-**Status 20 Oktober 2026: fondasi backend/frontend, priority engine, allocation engine, dan landing/about interaktif tersedia; explorer, skenario, serta release dataset resmi belum terintegrasi ke main.**
+**Status workspace 21 Oktober 2026: Explorer, peta 38 provinsi, katalog API, Studio, snapshot, Compare, ekspor CSV/PDF dan impor admin lokal tersedia pada branch integrasi.** Sepuluh workbook pengguna menghasilkan 2.280 observasi berstatus `local_review`. Hosting dan release publik belum disiapkan; branch belum otomatis digabung ke main. Ikuti [panduan workspace lokal](docs/local-workspace.md) dan [audit kesiapan](docs/implementation-readiness.md).
+
+**Pembaruan lokal 24 Oktober 2026:** [Pendidikan di Daerah Saya](docs/public-region.md) tersedia di `/daerah`: profil provinsi, perbandingan fasilitas, berbagi temuan dan melanjutkan ke Studio pada rilis yang sama. Ringkasan hasil simulasi membedakan jangkauan wilayah dari pemerataan antarsekolah serta tidak menyimpulkan penyebab alokasi tanpa bukti.
 
 ## Dokumentasi
 
@@ -15,7 +17,7 @@ Dokumen utama hanya disimpan di `docs/`: [BRD](docs/BRD_Equora.md), [PRD](docs/P
 
 Tema visual terbaru: **Clean Education Blue (DESIGN v1.2)**, disetujui 20 Oktober 2026. Landing/About memakai panel putih, latar abu-abu sangat muda dan biru utama; diagram serta dokumen System Design mengikuti palet yang sama.
 
-Untuk kontributor yang mulai coding, ikuti [panduan mengambil fondasi](docs/pembagian-kerja/MULAI-NGODING.md). Pekerjaan frontend dapat dimulai tanpa database; fondasi UI publik tersedia dalam [panduan UI](docs/ui-foundation.md), sedangkan kontrak katalog belum tersedia.
+Untuk kontributor yang mulai coding, ikuti [panduan mengambil fondasi](docs/pembagian-kerja/MULAI-NGODING.md). Fondasi UI publik tersedia dalam [panduan UI](docs/ui-foundation.md); kontrak workspace terdapat pada OpenAPI dan tipe TypeScript hasil generate.
 
 ## Stack
 
@@ -46,7 +48,7 @@ cp -n .env.example .env
 pnpm dev
 ```
 
-`cp -n` tidak menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend saat ini berupa JSON status fondasi, belum halaman produk. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
+`cp -n` tidak menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root menampilkan landing page; `/about`, `/datasets`, dan `/methodology` tersedia. Status server web tersedia di `/health`. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
 
 ### Windows PowerShell
 
@@ -69,9 +71,9 @@ pnpm dev
 
 Pasang uv bila belum tersedia dengan `python -m pip install uv`. Jangan menimpa `.env` yang sudah disesuaikan. Jika pnpm belum tersedia, aktifkan pnpm 11.18.0 melalui Corepack seperti dijelaskan di [panduan frontend](frontend/README.md). Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend menampilkan landing page; `/about` menjelaskan tujuan dan batas penggunaan. Status server web tetap tersedia di `/health`. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
 
-Frontend dijalankan langsung melalui `pnpm dev`. Untuk menjalankan API dalam container, jalankan `docker compose up --build -d` dari `backend/`; file Compose hanya tersedia di backend. API memakai network PostgreSQL yang sudah ada. Database/schema Equora belum dibuat; isi koneksi setelah target disiapkan, lalu jalankan migrasi secara manual sesuai panduan backend.
+Frontend dijalankan langsung melalui `pnpm dev`. Untuk menjalankan API dalam container, jalankan `docker compose up --build -d` dari `backend/`; file Compose hanya tersedia di backend. API memakai network PostgreSQL yang sudah ada. Database lokal `equora` dan `equora_test` sudah disiapkan pada instance tersebut; [registry draft dan panduan migrasi](docs/dataset-registry.md) menjelaskan target dan pengujiannya. Koneksi tetap di `.env` lokal dan migrasi dijalankan manual.
 
-Belum ada seed statistik atau tabel domain sebelum audit dataset. Migrasi awal hanya membentuk riwayat Alembic. Test memakai data sintetis sementara.
+Migrasi awal membentuk riwayat Alembic; migrasi `0002` menambah registry draft untuk menyimpan hasil staging, bukan release publik. Test memakai data sintetis; file sumber nyata dan artefak olahannya tetap di luar Git.
 
 Setelah dependensi terpasang dan `.env` disiapkan, perintah berikut dapat dijalankan dari root menggunakan PowerShell:
 
@@ -105,8 +107,10 @@ pnpm test:e2e
 - [x] Struktur docs, template issue/PR, dan workflow pemeriksaan docs.
 - [x] Fondasi backend/frontend, Compose backend, migrasi awal, kontrak OpenAPI dan CI stack.
 - [x] Panduan clone, setup dan menjalankan fondasi pada macOS/Linux serta Windows.
-- [ ] Audit file dataset dan lisensi.
+- [x] Audit awal empat file dataset dan join provinsi; [hasil dan batasan](docs/source-audit-2026-10-19.md).
+- [ ] Verifikasi ketentuan penggunaan dan persetujuan release data.
 - [x] Landing page dan About responsif dengan penjelasan sumber/metode serta status fitur yang belum tersedia.
+- [x] Katalog dan detail dataset memakai fixture berlabel; halaman metodologi sandbox.
 - [ ] Explorer berjalan dengan release data terverifikasi.
 - [ ] Simulasi, perbandingan skenario, dan pengujian.
 - [x] Repository publik [mrizalbasri/Equora](https://github.com/mrizalbasri/Equora).
@@ -114,6 +118,6 @@ pnpm test:e2e
 
 ## Batasan
 
-Hasil alokasi adalah simulasi berbasis data dan asumsi, bukan keputusan anggaran resmi. Data tahunan ditampilkan dengan tahun dan waktu pengambilan; tidak disebut real-time. Belum ada dataset yang diunduh atau diverifikasi dalam repository ini.
+Hasil alokasi adalah simulasi berbasis data dan asumsi, bukan keputusan anggaran resmi. Data tahunan ditampilkan dengan tahun dan waktu pengambilan; tidak disebut real-time. Empat file telah diunduh lokal dan diaudit; metadata/hash tersedia di repository, raw data diabaikan Git. Belum ada release data yang disetujui. Pratinjau landing belum terhubung ke engine dan tidak menampilkan hasil wilayah atau alokasi nyata.
 
 Lihat [panduan kontribusi](CONTRIBUTING.md) dan [setup GitHub](docs/github-setup.md). Lisensi publikasi kode belum dipilih pemilik project; repository publik tidak otomatis memberi izin penggunaan ulang.

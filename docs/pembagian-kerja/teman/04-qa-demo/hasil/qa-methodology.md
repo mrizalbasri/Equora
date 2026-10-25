@@ -22,6 +22,7 @@ Tanggal pengujian: 20 Oktober 2026
 | METH-04 / missing | Halaman terbuka | Baca bagian missing dan coverage | Missing tidak disebut nol; kebijakan dinyatakan eksplisit | `exclude`, nilai nol, missing, dan coverage dibedakan | Lulus | Tidak ada |
 | METH-05 / status alokasi | Halaman terbuka | Baca tabel status model | Feasible tidak disamakan dengan optimal; no_solution tidak disebut infeasible | `optimal`, `feasible`, `infeasible`, dan `no_solution` dijelaskan terpisah | Lulus | Tidak ada |
 | METH-06 / batasan | Halaman terbuka | Baca bagian batas interpretasi | Optimal menurut model dibedakan dari dampak/keadilan nyata | Batasan sandbox, demo assumption, dan kebutuhan verifikasi lapangan ditampilkan | Lulus | Tidak ada |
+| METH-07 / shell dan tema | Production preview berjalan | Buka `/methodology`, periksa header, skip-link, dan footer | Halaman terbungkus PublicShell bersama, tidak menimpa CSS body global, dan memakai token Clean Education Blue | Header sticky, skip-link `#main-content`, footer bersama, dan token `--eq-*` aktif tanpa `:global(body)` | Lulus | Tidak ada |
 | FLOW-01 / Explorer | Belum tersedia | Buka `/explore` | Route yang belum dibuat ditandai belum diuji, bukan lulus | Belum diuji; route belum tersedia pada branch ini | Terblokir | Menunggu implementasi pemilik |
 | FLOW-02 / Studio dan Compare | Belum tersedia | Buka `/studio` dan `/studio/compare` | Alur belum diklaim selesai sebelum UI/API tersedia | Belum diuji; route dan integrasi belum tersedia | Terblokir | Menunggu implementasi pemilik |
 

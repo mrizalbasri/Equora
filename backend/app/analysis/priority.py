@@ -1,4 +1,4 @@
-"""Weighted normalized-needs calculations, currently validated with synthetic cases only."""
+"""Weighted normalized-needs calculations with explicit missing and tie policies."""
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass

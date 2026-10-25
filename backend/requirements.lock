@@ -12,6 +12,8 @@ anyio==4.15.1
     # via
     #   starlette
     #   watchfiles
+charset-normalizer==3.5.2
+    # via reportlab
 click==8.5.0
     # via uvicorn
 et-xmlfile==2.0.0
@@ -42,6 +44,8 @@ ortools==9.15.6755
     # via equora-backend
 pandas==3.0.6
     # via ortools
+pillow==13.0.0
+    # via reportlab
 polars==1.44.2
     # via equora-backend
 polars-runtime-32==1.44.2
@@ -69,6 +73,8 @@ python-dotenv==1.2.4
     #   uvicorn
 pyyaml==6.0.3
     # via uvicorn
+reportlab==5.0.1
+    # via equora-backend
 six==1.17.0
     # via python-dateutil
 sqlalchemy==2.1.5

@@ -15,7 +15,7 @@ uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 Jangan menimpa `.env` yang sudah berisi konfigurasi sendiri. Untuk macOS/Linux, ganti `Copy-Item` dengan `cp`. Database memakai instance Docker `postgres-local` yang sudah ada (PostgreSQL 18, host port 5434, network `tera_default`). Compose Equora tidak menyediakan layanan PostgreSQL atau volume database.
 
-Database/schema Equora belum dibuat pada instance tersebut. Setelah target disiapkan, isi `DATABASE_URL` untuk proses lokal dan `DOCKER_DATABASE_URL` untuk container menggunakan contoh pada `.env.example`. Password harus di-URL-encode dan disimpan hanya pada `.env` lokal. Jangan arahkan migrasi ke database `postgres`, `tera`, `hygeia`, atau database proyek lain.
+Per 21 Oktober 2026, database lokal `equora` dan `equora_test` sudah dibuat pada instance tersebut dengan role owner terpisah. Detail ada pada [registry draft](../docs/dataset-registry.md). Kontributor lain menyiapkan target khususnya sendiri, lalu mengisi `DATABASE_URL` untuk proses lokal dan `DOCKER_DATABASE_URL` untuk container menggunakan contoh `.env.example`. Password harus di-URL-encode dan disimpan hanya pada `.env` lokal. Jangan arahkan migrasi ke database `postgres`, `tera`, `hygeia`, atau database proyek lain.
 
 - API: http://localhost:8000/docs
 - Liveness: http://localhost:8000/api/v1/health/live
@@ -58,7 +58,7 @@ migrations/      # Alembic
 tests/
 ```
 
-Folder ETL, analisis dan optimasi baru menyiapkan batas modul. Model domain, import dataset dan formula produk belum diimplementasikan. Migrasi `0001` menginisialisasi riwayat Alembic tanpa membuat tabel domain sebelum audit dataset.
+ETL menyediakan [adapter staging XLSX pendidikan](../docs/dataset-staging.md) untuk scope satu jenjang/Total, quality report dan provenance lokal. [Registry draft](../docs/dataset-registry.md) dapat mencatat hasil staging secara transaksional di PostgreSQL; belum menerbitkan release. Analisis dan optimasi menyediakan sandbox sintetis sesuai [MCDA](../docs/priority-sandbox.md) dan [alokasi](../docs/allocation-sandbox.md), belum terhubung ke HTTP, database atau UI. Import admin, registry published dan API domain belum tersedia. Migrasi `0001` menginisialisasi riwayat; `0002` menambah lima tabel registry draft.
 
 ## Pemeriksaan
 
@@ -75,6 +75,8 @@ Tes PostgreSQL dilewati bila `TEST_DATABASE_URL` tidak tersedia. Untuk menjalank
 $env:TEST_DATABASE_URL = 'postgresql+psycopg://USER:PASSWORD@localhost:5434/equora_test'
 uv run pytest
 ```
+
+Jika `TEST_DATABASE_URL` sudah tersimpan pada `.env` lokal, gunakan `uv run python ../scripts/test_postgres.py`. Skrip hanya memuat URL tes dan menolak database selain `equora_test`. Tes registry di-rollback; tes migrasi melakukan downgrade/upgrade pada target tersebut.
 
 CI tidak membuat PostgreSQL atau database baru. Uji migrasi bersifat opt-in setelah database pengujian khusus disiapkan. Jangan arahkan variabel pengujian ke database bersama milik proyek lain atau production.
 

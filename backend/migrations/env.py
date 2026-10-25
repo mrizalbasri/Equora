@@ -1,6 +1,7 @@
 from alembic import context
 
 from app.core.config import get_settings
+from app.db import registry  # noqa: F401
 from app.db.base import Base
 from app.db.session import build_engine
 
