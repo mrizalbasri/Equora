@@ -1,0 +1,20 @@
+fixes:
+  - "^app/::backend/app/"
+  - "^src/::frontend/src/"
+
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
+
+flags:
+  backend:
+    paths:
+      - backend/app/
+  frontend:
+    paths:
+      - frontend/src/

@@ -7,6 +7,7 @@ Status diperbarui 21 Oktober 2026. [Audit kesiapan](implementation-readiness.md)
 | [Kesesuaian kompetisi](competition-alignment.md) | Penilaian konsep terhadap PPT dan gap submission |
 | [BRD](BRD_Equora.md) | Masalah, tujuan, stakeholder dan scope bisnis |
 | [PRD](PRD_Equora.md) | Fitur, acceptance criteria, stack dan model domain usulan |
+| [Pendidikan di Daerah Saya](public-region.md) | Alur publik lokal: profil provinsi, perbandingan wilayah, simulasi dan berbagi temuan; tindak lanjut validasi dan perbaikan ringkasan 24 Oktober 2026 |
 | [Stack teknis](technical-stack.md) | Alasan pemilihan, alternatif solver, validasi hasil dan protokol benchmark |
 | [Setup stack](setup-stack.md) | Fondasi implementasi, struktur folder, runtime dan petunjuk menjalankan aplikasi |
 | [System Design](system-design/README.md) | Dokumen Word dari template, diagram arsitektur, kontrak dan kesiapan operasi |

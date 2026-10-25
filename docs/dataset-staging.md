@@ -1,5 +1,7 @@
 # Staging impor sumber pendidikan
 
+Enam workbook audit tambahan memakai [adapter terpisah dengan kontrak skala dan layout eksplisit](additional-source-staging.md). Gunakan `--source-set additional`; default empat sumber di dokumen ini tetap sama.
+
 Paket P0 setelah audit sumber: adapter XLSX lokal yang menghasilkan observasi dan quality report untuk ditinjau, sebelum registry/database/API publik. Dasar: PRD EP-01/EP-02 dan [audit sumber](source-audit-2026-10-19.md).
 
 ## Batas dan keputusan

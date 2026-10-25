@@ -1,24 +1,182 @@
-<section class="journey" aria-label="Mulai menggunakan Equora">
-  <div class="journey-heading"><h2>Mulai dari mana?</h2><p>Akses lokal tanpa login. Pilih langkah sesuai kebutuhan Anda.</p></div>
+<section class="journey" aria-label="Alur Analisis dan Simulasi Equora">
+  <div class="journey-heading">
+    <h2>Mulai Simulasi atau Audit Keputusan</h2>
+    <p>Akses langsung tanpa login. Pilih tahapan analisis sesuai kebutuhan pengujian Anda.</p>
+  </div>
   <ol>
-    <li><a href="/explore"><span class="step">01</span><strong>Jelajahi data</strong><span aria-hidden="true">→</span></a><p>Lihat peta, pilih provinsi, lalu buka detail wilayah dan sumbernya.</p></li>
-    <li><a href="/studio"><span class="step">02</span><strong>Buat simulasi</strong><span aria-hidden="true">→</span></a><p>Atur bobot dan anggaran. Buka hasil tersimpan untuk menguji keputusan, pemerataan, dan bukti sumber.</p><a class="saved" href="/studio#skenario-tersimpan">Buka skenario tersimpan →</a></li>
-    <li><a href="/compare"><span class="step">03</span><strong>Bandingkan hasil</strong><span aria-hidden="true">→</span></a><p>Pilih dua snapshot tersimpan untuk menilai perubahan prioritas dan alokasi.</p></li>
+    <li class="journey-card card-studio">
+      <div class="card-body">
+        <span class="step-num">01 · Simulasi Alokasi</span>
+        <strong>Uji Formula & Anggaran</strong>
+        <p>Atur bobot prioritas (Sanitasi vs TIK) dan plafon anggaran. Solver CP-SAT menghitung alokasi paket paling optimal ke 38 provinsi.</p>
+      </div>
+      <a class="step-cta cta-primary" href="/studio">
+        <span>Buka Studio Simulasi</span>
+      </a>
+    </li>
+
+    <li class="journey-card card-compare">
+      <div class="card-body">
+        <span class="step-num">02 · Sandingkan Skenario</span>
+        <strong>Bandingkan 2 Kebijakan</strong>
+        <p>Sandingkan dua hasil simulasi berdampingan. Lihat daerah mana yang bergeser nasib alokasinya dan verifikasi konsistensi parameter.</p>
+      </div>
+      <a class="step-cta" href="/compare">
+        <span>Bandingkan Skenario</span>
+      </a>
+    </li>
+
+    <li class="journey-card card-explore">
+      <div class="card-body">
+        <span class="step-num">03 · Verifikasi Data</span>
+        <strong>Telusuri Peta & Sumber</strong>
+        <p>Periksa data dasar agregat 38 provinsi yang dipakai simulasi. Cek kelengkapan indikator dan tautan provenance resmi Kemendikdasmen.</p>
+      </div>
+      <a class="step-cta" href="/explore">
+        <span>Buka Data Explorer</span>
+      </a>
+    </li>
   </ol>
-  <p class="references">Periksa sumber di <a href="/datasets">katalog dataset</a> dan cara hitung di <a href="/methodology">metodologi</a>. Impor data tersedia melalui menu pengelolaan lokal dan memerlukan token admin.</p>
+  <div class="references">
+    <div class="ref-item">
+      <span>Metadata & unduhan berkas di <a href="/datasets">katalog dataset</a></span>
+    </div>
+    <div class="ref-item">
+      <span>Formula matematis di <a href="/methodology">metodologi simulasi</a></span>
+    </div>
+  </div>
 </section>
 
 <style>
-  .journey { text-align: left; border: 1px solid var(--eq-border); border-radius: 16px; padding: 24px; background: var(--eq-surface); }
-  .journey-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; margin-bottom: 20px; }
-  h2 { font-size: 20px; margin: 0; }
-  p { color: var(--eq-text-secondary); font-size: 14px; line-height: 1.6; margin: 0; }
-  ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
-  li > a:first-child { display: flex; gap: 10px; align-items: center; min-height: 44px; text-decoration: none; color: var(--eq-primary-hover); }
-  li > a:first-child:hover strong { text-decoration: underline; }
-  .step { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--eq-text-secondary); }
-  li p { margin-top: 4px; }
-  .saved { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; }
-  .references { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--eq-border); }
-  @media (max-width: 700px) { .journey { padding: 20px; } ol { grid-template-columns: 1fr; gap: 16px; } }
+  .journey {
+    text-align: left;
+    border: 1px solid var(--eq-border);
+    border-radius: 22px;
+    padding: 28px;
+    background: var(--eq-surface);
+    box-shadow: 0 4px 20px rgb(31 45 61 / 3%);
+  }
+  .journey-heading {
+    margin-bottom: 24px;
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+    color: var(--eq-text);
+  }
+  p {
+    color: var(--eq-text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+  }
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .journey-card {
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    border-radius: 16px;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+    transition: border-color 180ms ease;
+  }
+  .journey-card:hover {
+    border-color: var(--eq-primary);
+  }
+  .card-studio {
+    border-color: var(--eq-primary);
+    background: var(--eq-surface);
+  }
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .step-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--eq-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .card-body strong {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--eq-text);
+    letter-spacing: -0.01em;
+  }
+  .card-body p {
+    font-size: 13px;
+    color: var(--eq-text-secondary);
+    line-height: 1.55;
+  }
+  .step-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--eq-text);
+    background: var(--eq-surface);
+    border: 1px solid var(--eq-border);
+    text-decoration: none;
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+  .step-cta:hover {
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary);
+    border-color: var(--eq-primary);
+  }
+  .step-cta.cta-primary {
+    background: var(--eq-primary);
+    color: white;
+    border-color: var(--eq-primary);
+  }
+  .step-cta.cta-primary:hover {
+    background: var(--eq-primary-hover);
+    color: white;
+  }
+  .references {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--eq-border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--eq-text-secondary);
+  }
+  .ref-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .ref-item a {
+    color: var(--eq-primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .ref-item a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 900px) {
+    ol {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
 </style>

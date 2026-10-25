@@ -4,6 +4,7 @@
   import Icon from './Icon.svelte';
   import AnalysisJourney from './AnalysisJourney.svelte';
   import AccountControls from './AccountControls.svelte';
+  import BrandMark from './BrandMark.svelte';
   let {
     title,
     subtitle,
@@ -12,7 +13,9 @@
   let menuOpen = $state(false);
   let menuButton = $state<HTMLButtonElement>();
   let closeButton = $state<HTMLButtonElement>();
+  let sidebar = $state<HTMLElement>();
   const primary = [
+    { href: '/daerah', label: 'Daerah Saya', icon: 'map' },
     { href: '/explore', label: 'Explorer', icon: 'compass' },
     { href: '/studio', label: 'Studio simulasi', icon: 'sliders' },
     { href: '/compare', label: 'Perbandingan', icon: 'compare' },
@@ -32,8 +35,9 @@
     [...primary, ...reference].find((item) => active(item.href))?.label ??
       (page.url.pathname === '/admin' ? 'Impor data' : 'Workspace'),
   );
-  function closeMenu() {
+  async function closeMenu() {
     menuOpen = false;
+    await tick();
     menuButton?.focus();
   }
   async function toggleMenu() {
@@ -44,22 +48,28 @@
   }
   function onKey(event: KeyboardEvent) {
     if (event.key === 'Escape' && menuOpen) closeMenu();
+    if (event.key !== 'Tab' || !menuOpen || !sidebar) return;
+    const controls = [...sidebar.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')].filter((element) => element.getClientRects().length);
+    const first = controls[0];
+    const last = controls.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
   }
 </script>
 
-<svelte:window onkeydown={onKey} />
+<svelte:window onkeydown={onKey} onresize={() => { if (window.innerWidth > 900 && menuOpen) closeMenu(); }} />
 <a class="workspace-skip" href="#main-content">Lewati ke konten utama</a>
 <div class="app-frame">
   {#if menuOpen}<button
       class="nav-backdrop"
+      tabindex="-1"
       aria-label="Tutup menu navigasi"
       onclick={closeMenu}
     ></button>{/if}
-  <aside class="app-sidebar" class:open={menuOpen} id="workspace-sidebar">
+  <aside class="app-sidebar" class:open={menuOpen} id="workspace-sidebar" bind:this={sidebar}>
     <div class="sidebar-brand">
       <a href="/" class="app-wordmark" aria-label="Equora, beranda"
-        >equora<span>.</span></a
-      ><button
+        ><BrandMark compact /></a><button
         class="sidebar-close"
         bind:this={closeButton}
         aria-label="Tutup menu"
@@ -74,7 +84,7 @@
           aria-current={active(item.href) ? 'page' : undefined}
           class="sidebar-link"
           onclick={() => (menuOpen = false)}
-          ><Icon name={item.icon} /><span>{item.label}</span
+          ><Icon name={item.icon} size={20} /><span>{item.label}</span
           >{#if active(item.href)}<span class="active-marker"></span>{/if}</a
         >{/each}
       <p class="nav-section reference-heading">Referensi</p>
@@ -83,27 +93,26 @@
           aria-current={active(item.href) ? 'page' : undefined}
           class="sidebar-link"
           onclick={() => (menuOpen = false)}
-          ><Icon name={item.icon} /><span>{item.label}</span></a
+          ><Icon name={item.icon} size={20} /><span>{item.label}</span></a
         >{/each}
       <p class="nav-section reference-heading">Pengelolaan lokal</p>
-      <a href="/admin" class="sidebar-link" aria-current={page.url.pathname === '/admin' ? 'page' : undefined} onclick={() => (menuOpen = false)}><Icon name="shield" /><span>Impor data</span></a>
+      <a href="/admin" class="sidebar-link" aria-current={page.url.pathname === '/admin' ? 'page' : undefined} onclick={() => (menuOpen = false)}><Icon name="shield" size={20} /><span>Impor data</span></a>
     </nav>
     <div class="sidebar-bottom">
       <a class="studio-shortcut" href="/studio"
-        ><span class="shortcut-icon"><Icon name="chart" /></span><strong
+        ><strong
           >Dari data ke skenario</strong
         ><span>Uji bobot dan pilihan alokasi Anda.</span><span
           class="shortcut-action"
-          >Buka Studio <Icon name="arrow" size={16} /></span
-        ></a
-      >
+          >Buka Studio</span
+        ></a>
       <a class="sidebar-link public-home" href="/"
-        ><Icon name="home" /><span>Beranda publik</span></a
+        ><Icon name="home" size={20} /><span>Beranda publik</span></a
       >
       <p class="sidebar-caption">Public Resource<br />Decision Intelligence</p>
     </div>
   </aside>
-  <div class="app-body">
+  <div class="app-body" inert={menuOpen}>
     <header class="app-topbar">
       <div class="topbar-location">
         <button
@@ -114,8 +123,7 @@
           aria-controls="workspace-sidebar"
           onclick={toggleMenu}><Icon name="menu" /></button
         ><a class="mobile-brand" href="/" aria-label="Equora, beranda"
-          >equora<span>.</span></a
-        >
+          ><BrandMark compact /></a>
         <p class="breadcrumbs">
           <span>Ruang analisis</span><Icon name="chevron" size={14} /><strong
             >{location}</strong
@@ -128,14 +136,12 @@
           href="/methodology"
           class="help-link"
           aria-label="Panduan metodologi"
-          ><Icon name="book" size={18} /><span>Panduan</span></a
-        >
+          ><Icon name="book" size={18} /><span>Panduan</span></a>
       </div>
     </header>
     <main id="main-content" tabindex="-1" class="workspace">
       <header class="workspace-heading">
         <div>
-          <p class="eq-kicker">DATA PENDIDIKAN INDONESIA</p>
           <h1>{title}</h1>
           <p class="workspace-subtitle">{subtitle}</p>
         </div>
@@ -159,8 +165,7 @@
       <footer class="app-footer">
         <span>equora. <span>· Transparansi di setiap langkah.</span></span><a
           href="https://github.com/mrizalbasri/Equora"
-          >Repositori proyek <Icon name="arrow" size={14} /></a
-        >
+          >Repositori proyek</a>
       </footer>
     </main>
   </div>
@@ -211,10 +216,6 @@
     line-height: 1.3;
     text-decoration: none;
   }
-  .app-wordmark span,
-  .mobile-brand span {
-    color: var(--eq-primary);
-  }
   .brand-caption {
     color: var(--eq-text-secondary);
     font-size: 12px;
@@ -232,7 +233,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    min-height: 46px;
+    min-height: 48px;
     padding: 10px 14px;
     color: var(--eq-text-secondary);
     text-decoration: none;
@@ -275,15 +276,6 @@
     border-radius: 12px;
     text-decoration: none;
     font-size: 13px;
-  }
-  .studio-shortcut > span:not(.shortcut-icon, .shortcut-action) {
-    font-size: 12px;
-    color: var(--eq-text-secondary);
-    line-height: 1.5;
-  }
-  .shortcut-icon {
-    color: var(--eq-primary);
-    margin-bottom: 4px;
   }
   .shortcut-action {
     color: var(--eq-primary-hover);
@@ -359,11 +351,6 @@
     gap: 20px;
     margin-bottom: 18px;
     max-width: none;
-  }
-  .workspace-heading .eq-kicker {
-    font-size: 10px;
-    letter-spacing: 0.13em;
-    color: var(--eq-text-muted);
   }
   .workspace-heading h1 {
     font-size: clamp(24px, 2.3vw, 32px);
@@ -461,7 +448,7 @@
     margin-bottom: 16px;
   }
   .app-frame :global(.work-field) {
-    font-size: 13px;
+    font-size: 15px;
     gap: 8px;
   }
   .app-frame :global(.work-grid) {
@@ -475,7 +462,7 @@
     font-variant-numeric: tabular-nums;
   }
   .app-frame :global(.work-controls label) {
-    font-size: 13px;
+    font-size: 15px;
   }
   .app-frame :global(.eq-button) {
     gap: 8px;
@@ -533,8 +520,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 44px;
-      min-height: 44px;
+      min-width: 48px;
+      min-height: 48px;
       border: 1px solid var(--eq-border);
       background: var(--eq-surface);
       border-radius: 8px;

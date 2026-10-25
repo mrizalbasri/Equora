@@ -83,6 +83,7 @@
   title="Explorer pendidikan"
   subtitle="Telusuri akses fasilitas sekolah, bandingkan wilayah, dan periksa sumber di balik angkanya."
 >
+  <p style="margin-bottom: 18px;"><a class="eq-button" href="/daerah">Pendidikan di Daerah Saya</a> Pilih provinsi untuk membaca kondisi fasilitas dengan penjelasan sederhana.</p>
   <section class="explorer-filters" aria-label="Filter data pendidikan">
     <label class="indicator-filter"
       >Indikator<select
@@ -121,8 +122,14 @@
   {#if loading}<div class="explorer-loading" role="status">
       <span class="loading-line"></span>Memuat observasi pendidikan…
     </div>{/if}
-  {#if error}<div class="work-error" role="alert">{error}</div>
-    <button class="eq-button" onclick={load}>Coba lagi</button>{/if}
+  {#if error}
+    <div class="work-error" role="alert">
+      <Icon name="alert" size={18} />
+      <span>{error}</span>
+      <button class="eq-button" style="margin-left: auto; min-height: 36px; padding: 6px 14px;" onclick={load}>Coba lagi</button>
+    </div>
+  {/if}
+
   {#if data}
     <section class="data-summary" aria-label="Ringkasan hasil filter">
       <div>
@@ -176,8 +183,7 @@
           >{#if detail}<button
               aria-label="Hapus pilihan wilayah"
               onclick={() => (selected = '')}
-              ><Icon name="close" size={17} /></button
-            >{/if}
+              ><Icon name="close" size={17} /></button>{/if}
         </div>
         {#if detail}
           <section class="selected-region" aria-live="polite">
@@ -185,8 +191,8 @@
             <h2>{detail.name}</h2>
             <p class="selected-value">
               {number(detail.value)}{#if detail.value !== null}<span
-                  >{isPercent ? '%' : 'sekolah'}</span
-                >{/if}
+                  >{isPercent ? '%' : 'sekolah'}</span>
+                {/if}
             </p>
             <p class="selected-label">{labels[indicator]} · {level}</p>
             <dl>
@@ -207,9 +213,8 @@
             </dl>
             <a
               class="eq-button region-detail-link"
-              href={'/regions/' + detail.code + '?level=' + level}
-              >Seluruh indikator wilayah <Icon name="arrow" size={16} /></a
-            >
+              href={'/daerah?' + new URLSearchParams({ province: detail.code, level, release: data.release_id })}
+              >Pahami kondisi wilayah</a>
           </section>
         {:else}
           <div class="region-intro">
@@ -235,8 +240,8 @@
                 ><span class="shortlist-index">{index + 1}</span><span
                   >{shortName(row.name)}</span
                 ><strong>{number(row.value)}{isPercent ? '%' : ''}</strong
-                ></button
-              >{/each}{#if !shortlist.length}<p class="work-muted">
+                ></button>
+              {/each}{#if !shortlist.length}<p class="work-muted">
                 Belum ada nilai pada hasil filter ini.
               </p>{/if}
           </div>
@@ -262,10 +267,8 @@
         </div>
         <div class="table-actions">
           <a class="eq-button" href={'/datasets/' + indicator}
-            ><Icon name="database" size={16} />Sumber & kualitas</a
-          ><a class="eq-button eq-button-primary" href={exportUrl}
-            ><Icon name="download" size={16} />Unduh CSV hasil filter</a
-          >
+            >Sumber & kualitas</a><a class="eq-button eq-button-primary" href={exportUrl}
+            >Unduh CSV hasil filter</a>
         </div>
       </header>
       <div class="table-toolbar">
@@ -274,10 +277,9 @@
           <span class="unit-label">{isPercent ? '(%)' : '(sekolah)'}</span>
         </p>
         <button class="sort-button" onclick={() => (descending = !descending)}
-          ><Icon name="sliders" size={16} />Urutan: {descending
+          >Urutan: {descending
             ? 'nilai tertinggi'
-            : 'nilai terendah'}</button
-        >
+            : 'nilai terendah'}</button>
       </div>
       <div class="observation-table">
         <table>
@@ -291,18 +293,18 @@
               ></tr
             ></thead
           ><tbody>
-            {#each filtered as row}<tr class:selected={selected === row.code}
-                ><td
-                  ><button
+            {#each filtered as row}<tr class:selected={selected === row.code}>
+                <td>
+                  <button
                     class="region-pick"
                     aria-pressed={selected === row.code}
                     onclick={() => (selected = row.code)}
                     >{row.name}<span class="row-arrow"
-                      ><Icon name="arrow" size={15} /></span
-                    ></button
-                  ></td
-                ><td
-                  ><div class="value-cell">
+                      ></span
+                    ></button>
+                  </td>
+                <td>
+                  <div class="value-cell">
                     <span>{number(row.value)}</span
                     >{#if row.value !== null}<span class="value-track"
                         ><span
@@ -310,32 +312,32 @@
                             0.5,
                             (Number(row.value) / max) * 100,
                           ) + '%'}
-                        ></span></span
-                      >{/if}
-                  </div></td
-                ><td
-                  >{#if row.status === 'available'}<span
+                        ></span></span>
+                      {/if}
+                  </div></td>
+                <td>
+                  {#if row.status === 'available'}<span
                       class="quality-available">Tersedia</span
                     >{:else}<span class="quality-missing"
                       >{row.status === 'no_schools'
                         ? 'Tidak ada sekolah pada scope ini'
-                        : 'Data tidak tersedia'}</span
-                    >{/if}</td
-                ><td class="source-cell">{row.source_cell}</td></tr
-              >{/each}
-            {#if !filtered.length}<tr
-                ><td colspan="4" class="empty-results"
-                  >Tidak ada provinsi yang sesuai pencarian.</td
-                ></tr
-              >{/if}
+                        : 'Data tidak tersedia'}</span>
+                    {/if}</td>
+                <td class="source-cell">{row.source_cell}</td></tr>
+              {/each}
+            {#if !filtered.length}<tr>
+                <td colspan="4" class="empty-results">
+                  <p>Tidak ada provinsi yang sesuai pencarian "{query}".</p>
+                  <button class="eq-button" style="min-height: 36px; padding: 6px 14px; font-size: 12px; margin-top: 8px;" onclick={() => (query = '')}>Hapus filter pencarian</button></td>
+                </tr>
+              {/if}
           </tbody>
         </table>
       </div>
       <footer class="table-provenance">
         <span>Snapshot <span class="snapshot-id">{data.release_id}</span></span
         ><a href={data.source.source_url} target="_blank" rel="noreferrer"
-          >Sumber asli <Icon name="arrow" size={14} /></a
-        >
+          >Sumber asli</a>
       </footer>
     </section>
   {/if}

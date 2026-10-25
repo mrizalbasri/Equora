@@ -23,6 +23,7 @@ from app.api.views import (
     DatasetView,
     ObservationsView,
     ProvinceView,
+    RegionProfileView,
     SavedScenarioView,
     SourceView,
     WorkspaceView,
@@ -139,8 +140,8 @@ class ScenarioView(BaseModel):
 
 
 @router.get("/workspace", response_model=WorkspaceView)
-def workspace(session: DBSession):
-    payload = local_release(session)
+def workspace(session: DBSession, release_id: str | None = None):
+    payload = local_release(session, release_id)
     return {key: value for key, value in payload.items() if key != "scopes"} | {
         "education_levels": list(payload["scopes"]),
         "region_count": len(payload["scopes"]["SD"]),
@@ -183,22 +184,36 @@ def quality(source_id: str, session: DBSession):
 
 
 @router.get("/regions")
-def regions(session: DBSession, education_level: EducationLevel = "SD"):
-    payload = local_release(session)
+def regions(
+    session: DBSession, education_level: EducationLevel = "SD", release_id: str | None = None
+):
+    payload = local_release(session, release_id)
+    if education_level not in payload["scopes"]:
+        raise HTTPException(422, "Jenjang tidak tersedia pada rilis ini")
     return [
         {"code": row["code"], "name": row["name"]} for row in payload["scopes"][education_level]
     ]
 
 
-@router.get("/regions/{code}")
-def region(code: str, session: DBSession, education_level: EducationLevel = "SD"):
-    payload = local_release(session)
+@router.get("/regions/{code}", response_model=RegionProfileView)
+def region(
+    code: str,
+    session: DBSession,
+    education_level: EducationLevel = "SD",
+    release_id: str | None = None,
+):
+    payload = local_release(session, release_id)
+    if education_level not in payload["scopes"]:
+        raise HTTPException(422, "Jenjang tidak tersedia pada rilis ini")
     row = next((row for row in payload["scopes"][education_level] if row["code"] == code), None)
     if row is None:
         raise HTTPException(404, "Wilayah tidak ditemukan")
     return {
         **row,
         "release_id": payload["id"],
+        "status": payload["status"],
+        "academic_year": payload["academic_year"],
+        "ownership": payload["ownership"],
         "education_level": education_level,
         "sources": payload["sources"],
         "limitations": payload["limitations"],

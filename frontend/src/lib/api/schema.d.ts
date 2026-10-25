@@ -655,6 +655,35 @@ export interface components {
              */
             minimum_packages: number;
         };
+        /** RegionProfileView */
+        RegionProfileView: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Values */
+            values: {
+                [key: string]: string | null;
+            };
+            /** Cells */
+            cells: {
+                [key: string]: string;
+            };
+            /** Release Id */
+            release_id: string;
+            /** Status */
+            status: string;
+            /** Academic Year */
+            academic_year: string;
+            /** Ownership */
+            ownership: string;
+            /** Education Level */
+            education_level: string;
+            /** Sources */
+            sources: components["schemas"]["SourceView"][];
+            /** Limitations */
+            limitations: string[];
+        };
         /** ReviewInput */
         ReviewInput: {
             /**
@@ -1015,7 +1044,9 @@ export interface operations {
     };
     workspace_api_v1_workspace_get: {
         parameters: {
-            query?: never;
+            query?: {
+                release_id?: string | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1029,6 +1060,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkspaceView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -1119,6 +1159,7 @@ export interface operations {
         parameters: {
             query?: {
                 education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+                release_id?: string | null;
             };
             header?: never;
             path?: never;
@@ -1150,6 +1191,7 @@ export interface operations {
         parameters: {
             query?: {
                 education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+                release_id?: string | null;
             };
             header?: never;
             path: {
@@ -1165,7 +1207,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RegionProfileView"];
                 };
             };
             /** @description Validation Error */

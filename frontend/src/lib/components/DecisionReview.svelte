@@ -93,7 +93,6 @@
   aria-labelledby="review-heading"
 >
   <header class="review-heading">
-    <span class="review-symbol"><Icon name="sliders" size={26} /></span>
     <div>
       <p class="eq-kicker">PERIKSA PILIHAN ALOKASI</p>
       <h2 id="review-heading">Bagaimana jika asumsinya berubah?</h2>
@@ -148,10 +147,9 @@
       </div>
       <div class="review-submit">
         <button class="eq-button eq-button-primary"
-          ><Icon name="chart" size={18} />{busy
+          >{busy
             ? 'Menguji dan memvalidasi…'
-            : 'Jalankan uji keputusan'}</button
-        >
+            : 'Jalankan uji keputusan'}</button>
         <p>Perubahan −25% sampai +25%. Skenario awal tetap tersimpan.</p>
       </div>
     </fieldset>
@@ -405,8 +403,7 @@
           </p>
         </div>
         <button class="eq-button" onclick={download}
-          ><Icon name="download" size={18} />Unduh bukti uji (JSON)</button
-        >
+          >Unduh bukti uji (JSON)</button>
       </div>
       <details>
         <summary>Metode dan batas uji keputusan</summary>
@@ -441,18 +438,6 @@
     padding: 26px;
     background: var(--eq-sidebar);
     border-bottom: 1px solid var(--eq-border);
-  }
-  .review-symbol {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    flex: 0 0 52px;
-    color: var(--eq-primary);
-    border: 1px solid var(--eq-border);
-    border-radius: 12px;
-    background: var(--eq-surface);
   }
   .review-heading h2 {
     font-size: clamp(1.35rem, 2.2vw, 1.8rem);
@@ -630,11 +615,6 @@
     .review-heading {
       padding: 20px 18px;
       gap: 12px;
-    }
-    .review-symbol {
-      width: 40px;
-      height: 40px;
-      flex-basis: 40px;
     }
     form,
     .review-output {

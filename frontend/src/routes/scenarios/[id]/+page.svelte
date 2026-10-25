@@ -3,6 +3,7 @@
   import { page } from '$app/state';
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ScenarioResult from '$lib/components/ScenarioResult.svelte';
+  import Icon from '$lib/components/Icon.svelte';
   import { api, type Snapshot } from '$lib/api/workspace';
   let result = $state<Snapshot>();
   let names = $state<Record<string, string>>({});
@@ -21,15 +22,28 @@
   });
 </script>
 
+<svelte:head><title>Snapshot skenario · Equora</title></svelte:head>
 <WorkspaceShell
   title="Snapshot skenario"
   subtitle="Parameter dan hasil perhitungan tersimpan bersama versi data yang digunakan."
-  ><a href="/studio">← Studio</a>{#if error}<p class="work-error" role="alert">
-      {error}
-    </p>{:else if !result}<p role="status">
-      Memuat snapshot…
-    </p>{/if}{#if result}<ScenarioResult
-      {result}
-      {names}
-    />{/if}</WorkspaceShell
 >
+  <a href="/studio" class="eq-back-link">
+    Kembali ke Studio Simulasi
+  </a>
+
+  {#if error}
+    <div class="work-error" role="alert">
+      <Icon name="alert" size={18} />
+      <span>{error}</span>
+    </div>
+  {:else if !result}
+    <div class="empty-state">
+      <div class="empty-state-icon"><Icon name="chart" size={22} /></div>
+      <p>Memuat snapshot skenario…</p>
+    </div>
+  {/if}
+
+  {#if result}
+    <ScenarioResult {result} {names} />
+  {/if}
+</WorkspaceShell>

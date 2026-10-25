@@ -86,6 +86,7 @@ Prinsip: (1) **Clarity over decoration** — angka beserta satuan, cakupan, tahu
 - Borders `1px` subtle; shadows only for dropdown, floating action, modal and occasional active card.
 - Blue accent concentrated on primary CTA, selected workflow step and actionable review callout; never substitute brand color for chart semantics.
 - Typography carries hierarchy; use restrained icons, spacious padding and concise labels.
+- Ikon memakai `carbon-icons-svelte` melalui komponen `Icon.svelte`, dengan import langsung per ikon. Sidebar dashboard/workspace dan tautan bantuan boleh memakai ikon untuk memudahkan pemindaian navigasi. Tombol aksi berlabel, menu publik, preset, dan label formulir mengandalkan teks tanpa ikon dekoratif. Ikon juga dipakai untuk kontrol tanpa teks (menu/tutup), pencarian, status, dan penunjuk struktur seperti breadcrumb. Ukuran mengikuti konteks 16–20 px dan warna mengikuti teks; jangan menambahkan badge ikon berwarna atau panah pada setiap CTA.
 - Public landing page can be more expressive; app workspace should prioritize scanability and dense information.
 
 ### 3.4 Ilustrasi pendidikan dan batas referensi
@@ -93,6 +94,26 @@ Prinsip: (1) **Clarity over decoration** — angka beserta satuan, cakupan, tahu
 - Gunakan SVG lokal yang ringan untuk bentuk sederhana; beri nama aksesibel jika informatif. Tidak perlu maskot khusus, karakter mengambang, avatar rekaan atau ikon finansial dari referensi.
 - Ilustrasi kecil dapat membantu empty state dengan langkah berikutnya yang jelas; explorer/studio tetap memprioritaskan data dan sumber.
 - Bayangan tipis boleh membedakan satu bingkai workspace dari canvas luar. Hindari bayangan pada setiap baris/kartu; radius dibedakan menurut peran kontrol/panel.
+
+### 3.5 Penyederhanaan landing `/` — 22 Oktober 2026
+
+Referensi FitMe dari pengguna memandu komposisi landing yang lebih tenang: ruang putih, judul dua warna, kontrol teks sederhana, dan satu bagian kontras. Pengguna menegaskan bahwa palet biru Equora tetap dipertahankan; referensi tidak mengubah identitas warna. Untuk visual hero, pengguna memilih opsi ketiga: ilustrasi editorial fasilitas sekolah, menggantikan blok screenshot workspace yang padat. Rincian ada di [arah visual landing](./landing-visual-direction.md), [provenance aset](../frontend/static/images/landing/README.md), dan [prompt ekspor ilustrasi](../frontend/static/images/landing/school-editorial-prompt.md). Referensi hanya memandu komposisi dan ritme, bukan konten, merek, atau klaim produk.
+
+`PublicShell` memakai opsi `calm` hanya pada `/`; default tetap `false`. Opsi ini menyederhanakan komposisi shell dan tetap memakai token Clean Education Blue berikut. Warna hero dan bidang skenario dibatasi pada landing:
+
+| Token/peran landing | Nilai | Pemakaian |
+|---|---|---|
+| `--eq-text` | `#1F2D3D` | Teks utama |
+| `--eq-text-secondary` | `#536276` | Penjelasan dan navigasi sekunder |
+| `--eq-primary` | `#1264D8` | CTA dan baris kedua judul hero |
+| `--eq-primary-hover` | `#0E4FAF` | Hover CTA |
+| `--eq-primary-tint` | `#EAF3FF` | Pilihan navigasi |
+| `--eq-border` | `#DCE4EE` | Pemisah ringan |
+| Surface | `#FFFFFF` | Latar baca putih |
+| Judul hero sekunder | `#637489` | Baris pertama judul dua warna |
+| Bagian skenario | `#163A5F` | Satu bidang biru tua dengan teks terang yang terbaca |
+
+CTA hero memakai biru `#1264D8`, hover `#0E4FAF`, teks putih, radius 24px dan tinggi minimum 46px. Font sans-serif UI yang ada tetap digunakan. Shell calm menghapus bayangan bingkai, memakai header non-sticky, serta menyembunyikan deskriptor kecil wordmark. Header publik bersama memakai putih solid tanpa blur atau bayangan. Titik wordmark tetap biru `#1264D8`. Dashboard/workspace tetap memakai Clean Education Blue dan ikon navigasi Carbon sesuai §3.3; kontrol publik berlabel tetap mengandalkan teks. Catatan hasil workspace memakai putih polos, border netral, dan penomoran biru; aksi PDF hasil memakai tombol biru biasa.
 
 ## 4. Typography, spacing & grid
 - Fonts (web-safe fallback): `Inter, system-ui, sans-serif` for UI; optional `Manrope` for headings, with proper font licenses and font-display swap. Avoid downloading or embedding proprietary reference-site fonts.
@@ -157,30 +178,30 @@ Navigation item terdiri dari ikon, label, active background putih/hampir putih d
 **Tujuan:** dalam 10 detik menjelaskan *data → prioritas → skenario* dan mengarahkan pengunjung ke pengalaman nyata.
 
 ```text
-[logo]       Alur analisis   Sumber data   Metode & batasan   Tentang Equora
+[logo]       Navigasi produk dan referensi
 
-[Eyebrow: Data publik untuk pendidikan]
-[Hero: Beda wilayah, beda kebutuhan.]
-[Deskripsi: air minum, fasilitas digital dan konteks kebutuhan wilayah]
-[Lihat alur perbandingan] [Pahami cara simulasi]
-[Status pengembangan + caveat simulator]
-[Ilustrasi lingkungan sekolah yang dominan, tanpa panel pilihan fasilitas]
+[Hero terpusat: Beda wilayah. / Beda kebutuhan.]
+[Penjelasan singkat tentang fasilitas, prioritas, dan simulasi anggaran]
+[Buka Studio Simulasi] [Telusuri data pendidikan]
+[Pilihan tujuan: Explorer | Studio simulasi]
+[Ilustrasi editorial sekolah utuh, tanpa border/kartu]
+[Ilustrasi fasilitas pendidikan + tautan biru ke workspace terpilih]
 
-[Product preview: contoh explorer, grafik, scenario output yang bisa diklik]
-[3 langkah: Telusuri data > Susun prioritas > Bandingkan skenario]
-[Section: Mengapa Equora? + contoh provenance source]
-[Section: Dataset resmi & periode, update label]
-[Section: Transparansi metode, batasan, dan asumsi]
-[Footer: sumber | metodologi | disclaimer | kontak proyek]
+[3 langkah berbentuk daftar: Telusuri data > Atur prioritas > Bandingkan hasil]
+[Bagian biru tua: anggaran, batasan, jejak keputusan + caveat simulasi]
+[Daftar sumber resmi, satuan, tahun, dan status review lokal]
+[Metodologi dan batasan dalam disclosure]
+[CTA penutup ke Studio]
+[Footer: repositori | katalog dataset | metodologi | disclaimer]
 ```
 
-**Interactions:** CTA navigate; product preview no fake live metrics; no misleading logos/testimonials. Hero motion optional and respects `prefers-reduced-motion`.
+**Komposisi:** arah §3.5 mempertahankan palet biru Equora dan komposisi terbuka hanya untuk `/`. Judul dua baris terpusat, penjelasan singkat, dan satu CTA utama biru mendahului ilustrasi editorial opsi ketiga yang dipilih pengguna. Daftar alur/sumber dan disclosure metode memberi variasi ritme tanpa kartu pada setiap item. Bagian skenario biru tua tetap menyatakan bahwa simulasi bukan keputusan anggaran resmi.
 
-**Latar dan respons hero:** gradien putih menuju tint biru dibatasi pada pengantar untuk memisahkan area baca dari lingkungan ilustrasi. Tidak ada glow, grid atau glass. Ilustrasi statis memiliki nama aksesibel yang menyatakan bahwa ini bukan data sekolah nyata. Panel pilihan fasilitas dan keterangannya dihapus agar hero ringkas; penjelasan indikator berada di pratinjau berikutnya. Respons tekan CTA tetap mengikuti reduced motion.
+**Ilustrasi dan kontrol native:** `/images/landing/school-editorial.webp` (1738 × 905) adalah artwork ImageGen fasilitas sekolah: ruang kelas, komputer, dan air/cuci tangan. Tampilkan utuh sesuai aspect ratio, tanpa crop, border, atau kartu pembungkus. Raster hanya berisi ilustrasi; selector, caption, dan tautan tetap berupa Svelte/HTML native. Selector Explorer/Studio memakai `aria-pressed` dan hanya mengubah tautan tujuan, bukan gambar: `Telusuri data pendidikan` ke `/explore`, atau `Atur simulasi anggaran` ke `/studio`. Caption tetap `Ilustrasi fasilitas pendidikan`; alt menyatakan konteks ilustratif. Gambar bukan sekolah nyata, peta, dataset, atau hasil alokasi, dan tidak membawa klaim data atau dampak. Screenshot Explorer/Studio terdahulu hanya aset historis dan tidak digunakan pada landing.
 
-**Navbar publik:** header sticky putih solid, logo di kiri dan menu di kanan. Tentang Equora dibedakan dengan outline; bagian aktif memakai tint biru, garis bawah dan `aria-current`. Landing dan About memakai menu yang sama. Di bawah 1024px menu buka/tutup memiliki target minimum 44px, Escape mengembalikan fokus, dan pilihan tautan menutup menu. Tinggi menu dibatasi viewport dan dapat digulir. Offset anchor 112px menjaga judul bagian tetap terbaca di bawah header.
+**Interaksi dan navbar:** CTA hero menuju `/studio` dan `/explore` yang tersedia. Header calm putih non-sticky memakai navigasi teks; bagian aktif memiliki tint biru, garis bawah dan `aria-current`. Di bawah 1024px, menu buka/tutup memiliki target minimum 44px, Escape mengembalikan fokus ke tombol, pilihan tautan menutup menu, dan tinggi menu dibatasi viewport dengan scroll. Selector tujuan, tautan sumber, disclosure metode, dan navigasi harus tetap berfungsi melalui keyboard. Gerak opsional menghormati `prefers-reduced-motion`; logo/testimoni yang menyesatkan tetap dilarang.
 
-**Hero publik saat ini:** komposisi teks dan ilustrasi terbuka, bukan kartu status berisi daftar metadata. Headline dua baris menonjolkan kebutuhan antardaerah, dengan ilustrasi kampus/sekolah SVG di sebelahnya. Buku, air dan perangkat digital hanya memberi konteks fasilitas, bukan bukti data sekolah nyata. Metadata dan rincian alur tetap di section berikutnya. Pada mobile ilustrasi ditumpuk setelah teks/tindakan, tanpa label kecil tertanam di SVG. CTA menuju anchor penjelasan yang tersedia sampai explorer/studio siap; jangan membuat link aktif ke route yang belum ada.
+**Respons dan batasan:** pada mobile teks/tindakan membungkus dan bagian dua kolom menjadi satu kolom. Ilustrasi mengecil dengan aspect ratio penuh tanpa memotong fasilitas; caption dan caveat di luar gambar tetap terbaca (minimum 13px). Analisis nyata tersedia melalui tautan workspace. Token landing sebagian masih literal CSS pada route/shell; tabel §3.5 mencatat implementasi saat ini, bukan klaim bahwa seluruh palet landing sudah dapat diganti lewat token global.
 
 ### 6.2 `/explore` — Regional Equity Explorer (P0)
 Header: title, source snapshot/year, selected education level. Toolbar: pilih indikator, wilayah, tahun, jenjang, urutkan. Body desktop: peta *jika coverage geometri valid* or ranked bar chart, companion metrics cards, detail table. On mobile: chart then searchable table; no sideways forced scrolling. Click a region => details. Every indicator has `Lihat sumber`, unit, year, and warnings.
@@ -352,10 +373,10 @@ apps/web/src/
 - [ ] Sidebar groups and active/nested navigation match the approved reference *principles*, not a copied design.
 - [ ] Import UI advertises only formats actually supported by backend.
 - [ ] Source conflict review has evidence, manual approval, reason and audit trace.
-- [ ] Primary CTA uses blue; charts preserve analytical semantics rather than brand-only colors.
+- [ ] Landing and workspace primary CTAs use Equora blue; charts preserve analytical semantics rather than brand-only colors.
 
 ## 15. Decisions to confirm later
-- Clean Education Blue v1.2 is the approved baseline; apply it to actual **landing + dataset review + scenario studio** as each route becomes available. Do not add placeholder routes just to demonstrate the theme.
+- Clean Education Blue v1.2 remains the approved baseline for landing and workspace, including dataset review and scenario studio. Landing `/` uses the simplified composition in §3.5 and §6.1 while retaining this blue palette. Do not add placeholder routes just to demonstrate the theme.
 - Decide whether `Manrope` headings improve visual identity; otherwise use Inter throughout.
 - Verify accessible contrast of any final palette.
 - Confirm downloaded dataset fields, region granularity and official licensing before final chart design.

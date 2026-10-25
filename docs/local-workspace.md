@@ -34,6 +34,20 @@ Frontend: [beranda lokal](http://localhost:5173), [Explorer](http://localhost:51
 
 ## Alur penggunaan
 
+### API dari lingkungan Python lokal
+
+Pada pemeriksaan 25 Oktober 2026, PostgreSQL berjalan di container yang sudah ada dan API berjalan dari lingkungan Python proyek. Cara ini dapat dipakai ketika unduhan image API belum selesai. Dari root repository, jalankan di terminal pertama:
+
+```powershell
+.\scripts\equora.ps1 backend-local
+```
+
+Di terminal kedua, jalankan `./scripts/equora.ps1 frontend`. Pastikan konfigurasi frontend menunjuk ke `API_BASE_URL=http://127.0.0.1:18000`. Jangan menimpa `.env` yang sudah berisi koneksi. Untuk frontend preview pada port 4173 atau port khusus, origin tersebut harus masuk ke `CORS_ORIGINS` backend dan `CLERK_AUTHORIZED_PARTIES` frontend. Restart layanan setelah konfigurasi berubah. Berkas contoh mendukung port 5173 dan 4173; workspace pengguna saat ini juga mengizinkan loopback port 4185 pada konfigurasi privatnya.
+
+Gunakan host database `127.0.0.1` untuk port host PostgreSQL yang hanya terikat ke IPv4. API dari container tetap memakai hostname container pada `DOCKER_DATABASE_URL`. Hasil pemeriksaan fitur dan batas kesiapan ada di [validasi lokal 25 Oktober](local-readiness-2026-10-25.md).
+
+### Membaca data dan mencoba skenario
+
 1. Explorer: pilih indikator dan jenjang, cari provinsi, urutkan tabel, pilih wilayah dari peta atau tombol tabel. Nilai, denominator, sel sumber, kualitas dan provenance dapat ditelusuri; CSV mengikuti filter.
 2. Studio: tentukan bobot empat indikator (persen bulat, total 100), wilayah, anggaran, biaya paket, kapasitas dan minimum. Penyesuaian per wilayah tersedia. Biaya/kapasitas selalu berlabel asumsi demo. Satu paket tidak diklaim sama dengan satu sekolah terbantu.
 3. Hasil: peringkat/kontribusi, wilayah exclude, status solver, bound/gap, penggunaan anggaran dan baseline merata/greedy. Snapshot menyimpan parameter, input, nama wilayah, sumber dan versi metode/model/solver. Tidak ada endpoint edit snapshot.
@@ -48,7 +62,7 @@ Boundary komunitas dipin ke commit/hash dalam `data/metadata/boundary-local.json
 
 Crosswalk eksplisit menggunakan feature ID, bukan `KODE_PROV` yang berulang pada provinsi Papua baru. Pemetaan 91-A→91, 92-A→92, 91-C→93, 91-D→94, 91-B→95, 92-B→96; 32 wilayah lain dipetakan eksplisit satu per satu. Hash, jumlah fitur, nama dan keunikan kode diperiksa sebelum disajikan.
 
-MapLibre memakai GeoJSON lokal tanpa basemap/PMTiles; tidak memerlukan layanan peta eksternal saat runtime. Worker v6 dibundel memakai `?worker&url` dan `setWorkerUrl`, mengikuti [panduan Vite resmi](https://maplibre.org/maplibre-gl-js/docs/). WebGL/aset gagal menampilkan status dan retry khusus peta, dengan tabel, filter, detail serta CSV tetap tersedia. Nilai missing/di luar filter berwarna abu-abu, terpisah dari nol.
+MapLibre menampilkan GeoJSON indikator di atas basemap Protomaps/OSM. Archive PMTiles Indonesia (3.246.304 byte, zoom 0–7) dan sprite grayscale disajikan dari `frontend/static/maps/`; browser membacanya melalui HTTP Range. Font Noto Sans masih dimuat dari GitHub pada commit yang dipin, sehingga belum diklaim siap offline. Provenance, lisensi, bbox dan hash ada di [manifest](../data/metadata/basemap-local.json), dengan petunjuk reproduksi pada [README aset](../frontend/static/maps/README.md). Worker v6 dibundel memakai `?worker&url` dan `setWorkerUrl`. Basemap gagal atau melewati batas waktu 15 detik mempertahankan layer indikator serta menyediakan retry; WebGL/boundary gagal menyediakan fallback tabel. Nilai missing/di luar filter berwarna abu-abu, terpisah dari nol. Atribusi OSM/Protomaps/Natural Earth tersedia melalui kontrol peta; sumber boundary ditampilkan terpisah.
 
 ## Validasi dan batas penyelesaian
 
@@ -67,4 +81,4 @@ pnpm build
 pnpm test:e2e
 ```
 
-Belum termasuk hosting/domain, akun multiuser/role produksi, upload sumber baru/publish, backup/restore operasional produksi, basemap PMTiles, validasi biaya/fairness kebijakan, benchmark kapasitas representatif, atau submission lomba. Semua itu tetap dibedakan dari alur aplikasi lokal yang dapat dijalankan. Sumber resmi, identitas tim dan ketentuan kompetisi tidak diisi dengan data rekaan.
+Belum termasuk hosting/domain, akun multiuser/role produksi, upload sumber baru/publish, backup/restore operasional produksi, validasi biaya/fairness kebijakan, benchmark kapasitas representatif, atau submission lomba. Semua itu tetap dibedakan dari alur aplikasi lokal yang dapat dijalankan. Sumber resmi, identitas tim dan ketentuan kompetisi tidak diisi dengan data rekaan.

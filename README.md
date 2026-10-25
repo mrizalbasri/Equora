@@ -4,7 +4,12 @@ Platform web untuk membandingkan akses fasilitas pendidikan dari data publik dan
 
 **Status workspace 21 Oktober 2026: Explorer, peta 38 provinsi, katalog API, Studio, snapshot, Compare, ekspor CSV/PDF dan impor admin lokal tersedia pada branch integrasi.** Sepuluh workbook pengguna menghasilkan 2.280 observasi berstatus `local_review`. Hosting dan release publik belum disiapkan; branch belum otomatis digabung ke main. Ikuti [panduan workspace lokal](docs/local-workspace.md) dan [audit kesiapan](docs/implementation-readiness.md).
 
+**Pembaruan lokal 24 Oktober 2026:** [Pendidikan di Daerah Saya](docs/public-region.md) tersedia di `/daerah`: profil provinsi, perbandingan fasilitas, berbagi temuan dan melanjutkan ke Studio pada rilis yang sama. Ringkasan hasil simulasi membedakan jangkauan wilayah dari pemerataan antarsekolah serta tidak menyimpulkan penyebab alokasi tanpa bukti.
+
 ## Dokumentasi
+
+Panduan [coverage di GitHub](docs/coverage.md) menjelaskan laporan backend dan
+frontend, aktivasi Codecov, dan perintah lokal.
 
 Mulai dari [indeks docs](docs/README.md) dan [evaluasi kesesuaian lomba](docs/competition-alignment.md).
 

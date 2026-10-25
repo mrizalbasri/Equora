@@ -4,8 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "packageManager": "pnpm@11.18.0",
-  "engines": { "node": ">=24.11 <25" },
-  "imports": { "#lib/*": "./src/lib/*" },
+  "engines": {
+    "node": ">=24.11 <25"
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*"
+  },
   "scripts": {
     "dev": "vite dev --host 0.0.0.0",
     "build": "vite build",
@@ -14,6 +18,7 @@
     "prepare": "svelte-kit sync",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "generate:api": "openapi-typescript ../backend/openapi.json -o src/lib/api/schema.d.ts",
     "check:api": "node scripts/check-api.mjs"
@@ -22,19 +27,22 @@
     "@clerk/backend": "^3.26.1",
     "@clerk/clerk-js": "^6.40.0",
     "@clerk/ui": "^1.41.1",
+    "@protomaps/basemaps": "^5.7.2",
+    "carbon-icons-svelte": "^13.16.0",
     "echarts": "^6.0.0",
     "maplibre-gl": "^6.15.0",
     "pmtiles": "^4.0.0"
   },
   "devDependencies": {
     "@clerk/testing": "^2.2.49",
+    "@playwright/test": "^1.64.1",
     "@sveltejs/adapter-node": "^5.5.7",
     "@sveltejs/kit": "^2.70.3",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/vite": "^4.0.0",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^24.0.0",
-    "@playwright/test": "^1.64.1",
+    "@vitest/coverage-v8": "5.0.5",
     "openapi-typescript": "^7.0.0",
     "svelte": "^5.57.2",
     "svelte-check": "^4.0.0",

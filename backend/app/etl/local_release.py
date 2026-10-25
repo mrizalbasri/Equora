@@ -9,6 +9,13 @@ from pathlib import Path
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
+from app.etl.additional_education import (
+    PROFILES,
+    PUBLISHER,
+    AdditionalSourceMetadata,
+    audited_additional_source,
+    stage_additional_workbook,
+)
 from app.etl.education import LEVELS, Issue, Observation, SourceMetadata, StagingResult, _number
 
 ADAPTER = "education-header-and-scale-v2"
@@ -30,6 +37,33 @@ CORE = ("sanitation_percent", "water_percent", "internet_percent", "computers_pe
 
 
 def read_source(path: Path, record: dict, publisher: str = "Pusdatin Kemendikdasmen"):
+    if record["id"] in PROFILES:
+        metadata = AdditionalSourceMetadata(
+            source_id=record["id"],
+            title=record["title"],
+            publisher=PUBLISHER,
+            source_url=record["source_url"],
+            sha256=record["sha256"],
+            year=2025,
+            academic_year="2025/2026",
+            unit=record["unit"],
+            retrieved_at=record["downloaded_at"],
+            license_status="not_verified_for_public_release",
+            storage_scale=record["storage_scale"],
+            layout=PROFILES[record["id"]][2],
+        )
+        results = {
+            level: stage_additional_workbook(path, metadata, education_level=level)
+            for level in LEVELS
+        }
+        if any(
+            result.status != "staged" or result.province_rows != 38 for result in results.values()
+        ):
+            raise ValueError(
+                "Additional source has invalid Total slices or incomplete province coverage; "
+                "stage it for a detailed report"
+            )
+        return results
     content = path.read_bytes()
     if len(content) > 5 * 1024 * 1024 or hashlib.sha256(content).hexdigest() != record["sha256"]:
         raise ValueError("Source size or SHA256 differs from the audited file")
@@ -147,8 +181,11 @@ def build_release(data_dir: Path):
     manifest = json.loads(
         (data_dir / "metadata/additional-source-candidates.json").read_text("utf-8")
     )
+    audit = json.loads((data_dir / "metadata/additional-source-audit.json").read_text("utf-8"))
     sources, scopes, staged = [], {level: {} for level in LEVELS}, []
     for record in manifest["sources"]:
+        if record["id"] in PROFILES:
+            audited_additional_source(record["id"], manifest, audit)
         results = read_source(data_dir / "datamentah" / record["filename"], record)
         sample = results["SD"]
         sources.append(

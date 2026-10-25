@@ -22,13 +22,30 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.11,<1", "uv>=0.9,<1"]
+dev = [
+    "pytest>=8,<10",
+    "pytest-cov>=7,<8",
+    "httpx>=0.28,<1",
+    "ruff>=0.11,<1",
+    "uv>=0.9,<1",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["app"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+relative_files = true
+
+[tool.coverage.xml]
+output = "coverage/coverage.xml"
+
+[tool.coverage.html]
+directory = "coverage/html"
 
 [tool.ruff]
 target-version = "py314"

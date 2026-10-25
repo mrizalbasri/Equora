@@ -77,6 +77,24 @@
       "get": {
         "summary": "Workspace",
         "operationId": "workspace_api_v1_workspace_get",
+        "parameters": [
+          {
+            "name": "release_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Release Id"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -84,6 +102,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/WorkspaceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -207,6 +235,22 @@
               "default": "SD",
               "title": "Education Level"
             }
+          },
+          {
+            "name": "release_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Release Id"
+            }
           }
         ],
         "responses": {
@@ -262,6 +306,22 @@
               "default": "SD",
               "title": "Education Level"
             }
+          },
+          {
+            "name": "release_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Release Id"
+            }
           }
         ],
         "responses": {
@@ -269,7 +329,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/RegionProfileView"
+                }
               }
             }
           },
@@ -1736,6 +1798,88 @@
           "capacity"
         ],
         "title": "RegionParameters"
+      },
+      "RegionProfileView": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "values": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Values"
+          },
+          "cells": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Cells"
+          },
+          "release_id": {
+            "type": "string",
+            "title": "Release Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "academic_year": {
+            "type": "string",
+            "title": "Academic Year"
+          },
+          "ownership": {
+            "type": "string",
+            "title": "Ownership"
+          },
+          "education_level": {
+            "type": "string",
+            "title": "Education Level"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceView"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name",
+          "values",
+          "cells",
+          "release_id",
+          "status",
+          "academic_year",
+          "ownership",
+          "education_level",
+          "sources",
+          "limitations"
+        ],
+        "title": "RegionProfileView"
       },
       "ReviewInput": {
         "properties": {

@@ -19,6 +19,7 @@ Pasang dependensi terlebih dahulu sesuai [README utama](../README.md). Jalankan 
 | `dev` | Menjalankan API Docker di background, lalu `pnpm dev` di terminal yang sama |
 | `frontend` | Menjalankan frontend lokal saja |
 | `backend` | Menjalankan API melalui `backend/compose.yaml` |
+| `backend-local` | Menjalankan API dari lingkungan Python proyek pada `127.0.0.1:18000`; PostgreSQL yang sudah ada tetap digunakan |
 | `check` | Ruff, tautan dokumentasi, typecheck, kontrak TypeScript dan pemeriksaan whitespace Git |
 | `test` | pytest, Vitest, build frontend dan tes HTTP Playwright |
 | `openapi` | Mengekspor schema FastAPI dan membuat ulang tipe TypeScript; kedua artefak berubah jika kontrak berubah |
@@ -26,6 +27,8 @@ Pasang dependensi terlebih dahulu sesuai [README utama](../README.md). Jalankan 
 Skrip menghentikan rangkaian perintah jika ada kegagalan dan mengembalikan direktori kerja semula. Lokasi proyek ditentukan dari lokasi skrip, sehingga tetap bekerja jika dipanggil dari direktori lain menggunakan path lengkap.
 
 `dev` dan `backend` memerlukan Docker Desktop serta instance PostgreSQL bersama dan network yang sudah ada. Keduanya tidak membuat database, menjalankan migrasi, atau menimpa `.env`. Frontend memerlukan `API_BASE_URL` yang sesuai port API, seperti dijelaskan di [panduan frontend](../frontend/README.md).
+
+Jika ingin memakai dependensi Python yang sudah terpasang tanpa membangun image API, jalankan `backend-local` di terminal pertama dan `frontend` di terminal kedua. Gunakan `API_BASE_URL=http://127.0.0.1:18000` pada konfigurasi frontend. Ctrl+C pada terminal pertama menghentikan API lokal; PostgreSQL tetap berjalan.
 
 Ctrl+C pada `dev` menghentikan frontend. API Docker tetap berjalan. Untuk menghentikan API dari root:
 
