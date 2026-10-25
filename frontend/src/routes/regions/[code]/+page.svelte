@@ -103,7 +103,10 @@
               </td>
               <td><code class="cell-ref">{data.cells[source.source_id]}</code></td>
               <td>
-                <a href={'/datasets/' + source.source_id} class="provenance-link">
+                <a
+                  href={'/datasets/' + source.source_id + '?' + new URLSearchParams({ release_id: data.release_id })}
+                  class="provenance-link"
+                >
                   Sumber & kualitas
                 </a>
               </td>

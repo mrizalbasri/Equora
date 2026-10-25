@@ -86,7 +86,9 @@ def validate_case(case: AllocationCase):
             raise ValueError(f"Total {name} exceeds exact integer reporting range")
 
 
-def evaluate_allocation(case: AllocationCase, allocations: Mapping[str, int]) -> Evaluation:
+def evaluate_allocation(
+    case: AllocationCase, allocations: Mapping[str, int], *, allow_zero: bool = False
+) -> Evaluation:
     """Check returned quantities directly, independently of any solver model or status."""
     validate_case(case)
     if set(allocations) != {region.region_code for region in case.regions}:
@@ -95,7 +97,8 @@ def evaluate_allocation(case: AllocationCase, allocations: Mapping[str, int]) ->
     for region in case.regions:
         quantity = allocations[region.region_code]
         _integer(quantity, 0, "quantity")
-        if not region.minimum_packages <= quantity <= region.capacity:
+        minimum = 0 if allow_zero else region.minimum_packages
+        if not minimum <= quantity <= region.capacity:
             raise ValueError("Allocation violates minimum or capacity")
         cost += quantity * region.cost_idr
         objective += quantity * region.priority_units
