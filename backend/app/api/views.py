@@ -72,6 +72,16 @@ class ProvinceView(BaseModel):
     cells: dict[str, str]
 
 
+class RegionProfileView(ProvinceView):
+    release_id: str
+    status: str
+    academic_year: str
+    ownership: str
+    education_level: str
+    sources: list[SourceView]
+    limitations: list[str]
+
+
 class SavedScenarioView(BaseModel):
     id: str
     name: str

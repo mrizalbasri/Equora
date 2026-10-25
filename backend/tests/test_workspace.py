@@ -184,6 +184,44 @@ def test_write_guard_and_admin_auth():
         )
 
 
+def test_public_profiles_preserve_requested_release(payload, monkeypatch):
+    import importlib
+
+    module = importlib.import_module("app.api.workspace")
+    older = copy.deepcopy(payload)
+    older["id"] = "synthetic-older"
+    older["scopes"]["SD"][0]["values"][CORE[0]] = "12"
+
+    def release_for(_session, release_id=None):
+        if release_id == older["id"]:
+            return older
+        if release_id in (None, payload["id"]):
+            return payload
+        from fastapi import HTTPException
+
+        raise HTTPException(404, "Rilis tidak ditemukan")
+
+    monkeypatch.setattr(module, "local_release", release_for)
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[session_for] = lambda: None
+    with TestClient(app) as client:
+        query = {"release_id": older["id"], "education_level": "SD"}
+        assert client.get("/api/v1/workspace", params=query).json()["id"] == older["id"]
+        assert client.get("/api/v1/regions", params=query).json()[0]["code"] == "11"
+        result = client.get("/api/v1/regions/11", params=query).json()
+        assert result["release_id"] == older["id"]
+        assert result["values"][CORE[0]] == "12"
+        assert result["status"] == "local_review"
+        assert result["academic_year"] == "2025/2026"
+        assert result["ownership"] == "Total"
+        for path in ("workspace", "regions", "regions/11"):
+            assert client.get("/api/v1/" + path, params={"release_id": "absent"}).status_code == 404
+        assert client.get("/api/v1/regions/99", params=query).status_code == 404
+        for path in ("regions", "regions/11"):
+            response = client.get("/api/v1/" + path, params={"education_level": "SMP"})
+            assert response.status_code == 422
+
+
 @pytest.mark.skipif(not os.getenv("TEST_DATABASE_URL"), reason="TEST_DATABASE_URL is not set")
 def test_postgres_snapshot_routes(payload, session):
     session.add(LocalRelease(id=payload["id"], payload=payload))
@@ -217,3 +255,16 @@ def test_postgres_snapshot_routes(payload, session):
         assert observed["rows"][2]["source_value"] == "0"
         assert observed["rows"][2]["value"] is None
         assert client.get("/api/v1/datasets/absent").status_code == 404
+        older = copy.deepcopy(payload)
+        older["id"] = "synthetic-profile-pinned"
+        older["scopes"]["SD"][0]["values"][CORE[0]] = "12"
+        session.add(LocalRelease(id=older["id"], payload=older))
+        session.flush()
+        for release in (payload, older):
+            query = {"release_id": release["id"]}
+            assert client.get("/api/v1/workspace", params=query).json()["id"] == release["id"]
+            assert client.get("/api/v1/regions", params=query).status_code == 200
+            pinned = client.get("/api/v1/regions/11", params=query).json()
+            assert pinned["release_id"] == release["id"]
+            assert pinned["values"][CORE[0]] == release["scopes"]["SD"][0]["values"][CORE[0]]
+        assert client.get("/api/v1/workspace?release_id=absent").status_code == 404
