@@ -31,9 +31,9 @@ def solve_coverage(case: AllocationCase, *, max_time_seconds: float = 1.0) -> Co
     regions = sorted(case.regions, key=lambda row: row.region_code)
     quantities, receiving = {}, {}
     for row in regions:
-        quantity = model.new_int_var(row.minimum_packages, row.capacity, row.region_code)
+        quantity = model.new_int_var(0, row.capacity, row.region_code)
         present = model.new_bool_var("receiving_" + row.region_code)
-        model.add(quantity >= 1).only_enforce_if(present)
+        model.add(quantity >= max(1, row.minimum_packages)).only_enforce_if(present)
         model.add(quantity == 0).only_enforce_if(present.Not())
         quantities[row.region_code], receiving[row.region_code] = quantity, present
     model.add(sum(row.cost_idr * quantities[row.region_code] for row in regions) <= case.budget_idr)
@@ -85,7 +85,7 @@ def solve_coverage(case: AllocationCase, *, max_time_seconds: float = 1.0) -> Co
                 }
                 final_status = "optimal" if status == cp_model.OPTIMAL else "feasible"
                 bound = solver.best_objective_bound
-        evaluation = evaluate_allocation(case, allocations)
+        evaluation = evaluate_allocation(case, allocations, allow_zero=True)
         if sum(value > 0 for value in allocations.values()) != count:
             raise ValueError("Independent coverage validation failed")
         if bound is not None:

@@ -36,7 +36,7 @@ def test_coverage_matches_independent_lexicographic_enumeration(budget):
         ),
     )
     expected = []
-    for quantities in product(range(5), range(1, 3), range(3), range(1)):
+    for quantities in product(range(5), range(3), range(3), range(1)):
         if sum(q * row.cost_idr for q, row in zip(quantities, case.regions, strict=True)) <= budget:
             expected.append(
                 (
@@ -48,16 +48,12 @@ def test_coverage_matches_independent_lexicographic_enumeration(budget):
                 )
             )
     result = solve_coverage(case)
-    if not expected:
-        assert result.allocation.status == "infeasible"
-    else:
-        assert result.coverage_status == result.allocation.status == "optimal"
-        assert (result.receiving_regions, result.allocation.evaluation.objective_units) == max(
-            expected
-        )
-        assert (
-            evaluate_allocation(case, result.allocation.allocations) == result.allocation.evaluation
-        )
+    assert result.coverage_status == result.allocation.status == "optimal"
+    assert (result.receiving_regions, result.allocation.evaluation.objective_units) == max(expected)
+    assert (
+        evaluate_allocation(case, result.allocation.allocations, allow_zero=True)
+        == result.allocation.evaluation
+    )
 
 
 def test_coverage_timeout_and_execution_failure(monkeypatch):
@@ -86,6 +82,21 @@ def test_coverage_can_trade_need_for_more_receiving_regions():
     assert result.receiving_regions == 2
     assert result.allocation.allocations == {"A": 1, "B": 1}
     assert result.allocation.evaluation.objective_units == 110
+
+
+def test_coverage_can_select_subset_when_minimum_packages_exceed_budget():
+    case = AllocationCase(
+        2,
+        100,
+        (
+            RegionOption("A", 2, 4, 100, 1),
+            RegionOption("B", 2, 4, 90, 1),
+        ),
+    )
+    result = solve_coverage(case)
+    assert result.coverage_status == result.allocation.status == "optimal"
+    assert result.receiving_regions == 1
+    assert sum(value > 0 for value in result.allocation.allocations.values()) == 1
 
 
 def test_coverage_keeps_valid_first_stage_when_need_search_times_out(monkeypatch):
