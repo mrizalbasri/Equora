@@ -2,15 +2,16 @@
   import { onMount } from 'svelte';
   import { navigation } from '$lib/api/workspace';
   import PublicShell from '$lib/components/PublicShell.svelte';
+  import Icon from '$lib/components/Icon.svelte';
 
   const sections = [
-    { id: 'sources', label: 'Sumber dan kesiapan data' },
-    { id: 'priority', label: 'Skor prioritas' },
-    { id: 'missing', label: 'Missing dan coverage' },
-    { id: 'allocation', label: 'Alokasi sandbox' },
-    { id: 'glossary', label: 'Glosarium' },
-    { id: 'limits', label: 'Batasan' }
-  ];
+    { id: 'sources', label: 'Sumber dan kesiapan data', icon: 'database' },
+    { id: 'priority', label: 'Skor prioritas', icon: 'chart' },
+    { id: 'missing', label: 'Missing dan coverage', icon: 'search' },
+    { id: 'allocation', label: 'Alokasi sandbox', icon: 'sliders' },
+    { id: 'glossary', label: 'Glosarium', icon: 'book' },
+    { id: 'limits', label: 'Batasan', icon: 'alert' }
+  ] as const;
   let activeSection = $state('sources');
 
   onMount(() => {
@@ -20,7 +21,7 @@
     function updateActiveSection() {
       frame = 0;
       const readingLine = Math.max(128, (header?.getBoundingClientRect().bottom ?? 0) + 24);
-      let current = sections[0].id;
+      let current: string = sections[0].id;
       targets.forEach((target, index) => {
         if (target && target.getBoundingClientRect().top <= readingLine) current = sections[index].id;
       });
@@ -65,7 +66,7 @@
 >
   <article class="eq-container methodology">
     <header class="hero">
-      <p class="eyebrow">Reference · Method v1 sandbox</p>
+      <p class="eyebrow">Panduan membaca data dan simulasi</p>
       <h1>Bagaimana Equora menjelaskan prioritas dan skenario.</h1>
       <p class="intro">
         Halaman ini menjelaskan perhitungan pada snapshot review lokal. Skor dan status model membantu
@@ -75,13 +76,14 @@
         <strong>Status metode</strong>
         <span>Weighted normalized needs v1 · allocation sandbox single-intervention-demo-v1</span>
       </div>
+      <p class="reading-guide">Baru menggunakan Equora? Mulai dengan <a href="/daerah">profil provinsi Anda</a>. Halaman ini menjelaskan sumber angka, cara prioritas dihitung, dan batas kesimpulan dari hasil simulasi.</p>
     </header>
 
     <div class="layout">
       <aside class="toc" aria-label="Daftar isi">
         <p class="toc-title">Di halaman ini</p>
         {#each sections as section}
-          <a href={`#${section.id}`} aria-current={activeSection === section.id ? 'location' : undefined}>{section.label}</a>
+          <a href={`#${section.id}`} aria-current={activeSection === section.id ? 'location' : undefined}><Icon name={section.icon} size={16} /><span>{section.label}</span></a>
         {/each}
       </aside>
 
@@ -94,6 +96,10 @@
             dengan nilai lebih tinggi berarti kebutuhan lebih besar. Tahun, jenjang, unit, wilayah,
             dan versi data harus kompatibel sebelum perhitungan dijalankan.
           </p>
+          <figure class="facilities-artwork">
+            <img src="/images/editorial/school-facilities.webp" alt="Ilustrasi fasilitas cuci tangan, tangki air, dan ruang komputer di sekolah." width="1983" height="793" loading="lazy" decoding="async" />
+            <figcaption>Sanitasi, air, internet, dan komputer menjadi konteks indikator yang dibaca bersama. Ilustrasi fasilitas, bukan dokumentasi sekolah tertentu.</figcaption>
+          </figure>
           <div class="callout">
             <strong>Snapshot review lokal · 2025/2026</strong>
             <p>
@@ -119,7 +125,8 @@
             kendala yang sama. Snapshot menyimpan parameter, hasil, sumber dan versi data/metode/model.</p>
           <p>Compare menolak versi data, jenjang atau metode/model berbeda. Ketika bobot berubah,
             objective tidak dinyatakan sebanding sebagai dampak. Peta memakai batas komunitas yang
-            disederhanakan dan crosswalk eksplisit, tanpa lokasi sekolah rekaan atau basemap.</p>
+            disederhanakan dan crosswalk eksplisit. Basemap memberi konteks geografis, bukan sumber
+            indikator atau lokasi sekolah.</p>
           <a href="/datasets">Periksa sumber dan kualitas →</a>
         </section>
 
@@ -300,6 +307,7 @@
     margin-top: 24px;
     padding: 12px 18px;
   }
+  .reading-guide { max-width: 760px; margin-top: 20px; color: var(--eq-text-secondary); font-size: 14px; line-height: 1.7; }
   .version-note strong {
     font-size: 0.875rem;
     color: var(--eq-text);
@@ -333,7 +341,9 @@
     border-left: 2px solid transparent;
     border-radius: 0 var(--eq-radius-sm) var(--eq-radius-sm) 0;
     color: var(--eq-text-secondary);
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     min-height: 44px;
     font-size: 0.875rem;
     padding: 8px 0 8px 14px;
@@ -348,6 +358,10 @@
     color: var(--eq-primary);
   }
   .toc a[aria-current='location'] { font-weight: 650; }
+  .toc a :global(svg) { flex: 0 0 auto; }
+  .facilities-artwork { max-width: 760px; margin: 28px 0; }
+  .facilities-artwork img { display: block; width: 100%; height: auto; }
+  .facilities-artwork figcaption { margin-top: 12px; color: var(--eq-text-secondary); font-size: 13px; line-height: 1.6; }
   .content {
     min-width: 0;
   }
@@ -557,7 +571,7 @@
       background: var(--eq-surface-subtle);
       border-left: none;
       border-radius: var(--eq-radius-sm);
-      display: inline-block;
+      display: inline-flex;
       align-content: center;
       margin-bottom: 6px;
       margin-right: 8px;

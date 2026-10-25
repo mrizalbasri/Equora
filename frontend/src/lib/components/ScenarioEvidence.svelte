@@ -1,6 +1,5 @@
 <script lang="ts">
   import { labels, number, rupiah, type Snapshot } from '$lib/api/workspace';
-  import Icon from './Icon.svelte';
   let { snapshot }: { snapshot: Snapshot } = $props();
   let code = $state('');
   const selected = $derived(
@@ -40,7 +39,6 @@
   aria-labelledby="evidence-heading"
 >
   <header>
-    <Icon name="book" size={24} />
     <div>
       <h2 id="evidence-heading">Telusur bukti dan alasan prioritas</h2>
       <p class="work-muted">
@@ -146,8 +144,7 @@
                         <a
                           href={source.source_url}
                           target="_blank"
-                          rel="noreferrer">{source.title}</a
-                        >
+                          rel="noreferrer">{source.title}</a>
                       </dd>
                       <dt>Penerbit</dt>
                       <dd>{source.publisher}</dd>
@@ -199,8 +196,7 @@
     </details>
   {:else}<p>
       Input rinci tidak tersedia pada snapshot ini. Buat skenario baru di <a
-        href="/studio">Studio simulasi</a
-      > untuk menelusuri bukti.
+        href="/studio">Studio simulasi</a> untuk menelusuri bukti.
     </p>{/if}
 </section>
 

@@ -3,6 +3,8 @@ export const source = {
   source_id: 'sanitation_percent',
   title: 'Synthetic sanitation source',
   publisher: 'Synthetic test publisher',
+  year: 2025,
+  academic_year: '2025/2026',
   source_url: 'https://example.org/synthetic',
   sha256: 'a'.repeat(64),
   unit: 'percent',

@@ -109,7 +109,7 @@ for (const width of [390, 1440]) {
     expect(artifact.snapshot.id).toBe(snapshot.id);
     expect(artifact.review.snapshot_id).toBe(snapshot.id);
     await page
-      .getByRole('link', { name: 'Telusur bukti', exact: true })
+      .getByRole('link', { name: 'Telusur bukti data', exact: true })
       .click();
     await expect(
       page.getByText('Peringkat 1 · Skor 0,8', { exact: true }),

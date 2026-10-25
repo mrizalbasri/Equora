@@ -19,13 +19,34 @@ export const labels: Record<string, string> = {
   water_percent: 'Ketersediaan air',
   sanitation_percent: 'Sanitasi dasar',
 };
-export const navigation = [
-  { label: 'Explorer', href: '/explore' },
-  { label: 'Studio simulasi', href: '/studio' },
-  { label: 'Perbandingan', href: '/compare' },
-  { label: 'Katalog dataset', href: '/datasets' },
-  { label: 'Metodologi', href: '/methodology' },
-  { label: 'Tentang Equora', href: '/about' },
+export type NavigationItem = {
+  label: string;
+  href: string;
+  description: string;
+  icon: 'map' | 'database' | 'sliders' | 'compare' | 'book';
+};
+export type NavigationEntry =
+  | { label: string; items: NavigationItem[]; href?: never }
+  | { label: string; href: string; items?: never };
+
+export const navigation: NavigationEntry[] = [
+  {
+    label: 'Eksplorasi',
+    items: [
+      { label: 'Pendidikan di Daerah Saya', href: '/daerah', icon: 'map', description: 'Pahami kondisi fasilitas dan bandingkan provinsi Anda.' },
+      { label: 'Peta & Data Pendidikan', href: '/explore', icon: 'map', description: 'Lihat akses fasilitas pendidikan antarprovinsi.' },
+      { label: 'Katalog Dataset', href: '/datasets', icon: 'database', description: 'Periksa sumber dan cakupan data.' },
+    ],
+  },
+  {
+    label: 'Simulasi',
+    items: [
+      { label: 'Studio Simulasi', href: '/studio', icon: 'sliders', description: 'Atur sumber daya, bobot, dan batas alokasi.' },
+      { label: 'Bandingkan Skenario', href: '/compare', icon: 'compare', description: 'Tinjau perbedaan hasil dua skenario.' },
+      { label: 'Metodologi', href: '/methodology', icon: 'book', description: 'Pahami perhitungan dan asumsi simulasi.' },
+    ],
+  },
+  { label: 'Tentang', href: '/about' },
 ];
 export const number = (value: string | number | null | undefined, digits = 2) =>
   value == null
