@@ -22,3 +22,5 @@ Untuk layer peta, jalankan juga [gerbang data geografis](map-plan.md): metadata/
 - Bila irisan data tidak memadai, kurangi indikator atau turunkan scope analisis secara eksplisit.
 
 Raw data disimpan lokal di `data/raw/` (diabaikan Git). Metadata empat calon sumber dan hasil audit awal tersedia di `data/metadata/`. Belum ada release data resmi Equora. Jangan membuat angka statistik atau hasil optimasi seolah berasal dari data resmi.
+
+Adapter [staging lokal](dataset-staging.md) memeriksa hash/struktur/nilai dan menulis artefak review di `data/processed/`. Status staged bukan persetujuan release. Scope satu jenjang/Total serta namespace kode sumber eksplisit; crosswalk registry/boundary dan ketentuan penggunaan tetap menjadi gerbang sebelum publish.

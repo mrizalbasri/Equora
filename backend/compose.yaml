@@ -8,6 +8,7 @@ services:
       DATABASE_URL: ${DOCKER_DATABASE_URL:-}
       CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:5173"]}
       DATA_DIR: /data
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
     volumes:
       - ../data:/data:ro
     networks: [default, postgres]

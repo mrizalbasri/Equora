@@ -18,6 +18,7 @@ dependencies = [
   "polars>=1,<2",
   "openpyxl>=3.1,<4",
   "ortools>=9.15,<10",
+  "reportlab>=5.0.1",
 ]
 
 [project.optional-dependencies]

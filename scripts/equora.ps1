@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('help', 'dev', 'frontend', 'backend', 'check', 'test', 'openapi')]
+    [ValidateSet('help', 'dev', 'frontend', 'backend', 'backend-local', 'check', 'test', 'openapi')]
     [string]$Task = 'help'
 )
 
@@ -76,6 +76,7 @@ Equora: .\scripts\equora.ps1 <perintah>
 dev       Jalankan API Docker, lalu frontend lokal di terminal ini.
 frontend  Jalankan frontend lokal dengan pnpm dev.
 backend   Jalankan API melalui backend/compose.yaml.
+backend-local Jalankan API dari lingkungan Python proyek pada 127.0.0.1:18000.
 check     Periksa lint, format, dokumentasi, tipe dan kontrak API.
 test      Jalankan pytest, Vitest, build dan tes HTTP Playwright.
 openapi   Ekspor OpenAPI dan buat ulang tipe TypeScript.
@@ -95,9 +96,12 @@ Tidak ada pembuatan database atau migrasi otomatis.
     'backend' {
         Start-Backend
     }
+    'backend-local' {
+        Invoke-Backend -CommandArguments @('uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', '18000')
+    }
     'check' {
-        Invoke-Backend -CommandArguments @('ruff', 'check', '.', '../scripts/export_openapi.py')
-        Invoke-Backend -CommandArguments @('ruff', 'format', '--check', '.', '../scripts/export_openapi.py')
+        Invoke-Backend -CommandArguments @('ruff', 'check', '.', '../scripts/export_openapi.py', '../scripts/test_postgres.py')
+        Invoke-Backend -CommandArguments @('ruff', 'format', '--check', '.', '../scripts/export_openapi.py', '../scripts/test_postgres.py')
         Invoke-Backend -CommandArguments @('python', '../scripts/check_docs.py')
         Invoke-Frontend -CommandArguments @('check')
         Invoke-Frontend -CommandArguments @('check:api')

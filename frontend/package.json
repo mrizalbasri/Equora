@@ -4,8 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "packageManager": "pnpm@11.18.0",
-  "engines": { "node": ">=24.11 <25" },
-  "imports": { "#lib/*": "./src/lib/*" },
+  "engines": {
+    "node": ">=24.11 <25"
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*"
+  },
   "scripts": {
     "dev": "vite dev --host 0.0.0.0",
     "build": "vite build",
@@ -19,17 +23,20 @@
     "check:api": "node scripts/check-api.mjs"
   },
   "dependencies": {
+    "@protomaps/basemaps": "^5.7.2",
+    "carbon-icons-svelte": "^13.16.0",
     "echarts": "^6.0.0",
     "maplibre-gl": "^6.15.0",
     "pmtiles": "^4.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@sveltejs/adapter-node": "^5.5.7",
     "@sveltejs/kit": "^2.70.3",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tailwindcss/vite": "^4.0.0",
+    "@types/geojson": "^7946.0.16",
     "@types/node": "^24.0.0",
-    "@playwright/test": "^1.64.1",
     "openapi-typescript": "^7.0.0",
     "svelte": "^5.57.2",
     "svelte-check": "^4.0.0",

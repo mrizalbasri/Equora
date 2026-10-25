@@ -1,6 +1,6 @@
 # Rencana peta Equora
 
-Tanggal: 19 Oktober 2026. Status: pilihan teknologi dan kebutuhan peta diperbarui atas persetujuan pengguna. Belum diimplementasikan; boundary, file PMTiles, penyedia hosting, ukuran unduhan dan biaya belum diverifikasi.
+Tanggal rencana: 19 Oktober 2026. Implementasi lokal diperbarui pada 21 Oktober 2026: MapLibre menampilkan subset Protomaps/OSM Indonesia melalui PMTiles lokal, dengan label, atribusi dan fallback layer indikator. Archive 3.246.304 byte mencakup bbox 94,-12,142,7 pada zoom 0–7. Manifest versi/hash: [basemap-local.json](../data/metadata/basemap-local.json). Hosting produksi, biaya dan benchmark perangkat representatif belum ditetapkan; glyph font masih diambil dari GitHub pada commit yang dipin.
 
 ## Pilihan dan alasan
 

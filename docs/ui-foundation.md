@@ -13,13 +13,15 @@ ENERGY 2 / RHYTHM 2 / MOTION 1. Identitas Clean Education Blue: canvas abu-abu s
 - `AvailabilityNotice.svelte`: judul dan snippet isi untuk status ketersediaan. Tidak memakai live region untuk informasi statis.
 - `EducationScene.svelte`: ilustrasi sekolah lokal dengan nama aksesibel. Warna memakai token UI; tidak memuat angka, aset eksternal, atau hasil analisis.
 
-Hero memakai headline dua baris dan ilustrasi sekolah statis. Panel Kenali fasilitas sekolah, pilihan fasilitas, caption dan state seleksinya dihapus pada `feat/public-navbar-refinement`, sesuai tinjauan pengguna. Penjelasan indikator tetap tersedia pada pratinjau. Nama aksesibel ilustrasi menjelaskan bahwa ini bukan data sekolah nyata. Status pengembangan tetap di dekat CTA.
+Hero terbaru di main berasal dari PR #21: headline dua baris, ilustrasi sekolah dan contoh workspace dengan dua mode. Per 21 Oktober, angka akses/alokasi tanpa sumber diganti status belum tersedia/belum dihitung. Bobot pada contoh diberi label ilustratif dan tidak digunakan engine. Kelompok tombol mode memakai `aria-pressed`, dapat diaktifkan dengan keyboard, dan belum menjalankan API/solver. Nama aksesibel ilustrasi menjelaskan bahwa ini bukan data sekolah nyata. Status pengembangan tetap di dekat CTA.
 
 Latar putih menuju tint biru hanya pada hero memisahkan area baca dari ilustrasi, tanpa glow, glass atau grid. CTA utama memiliki tepi bawah biru gelap untuk respons tekan, tanpa menggeser layout. ENERGY 2 / RHYTHM 2 / MOTION 1 tetap berlaku.
 
 Navbar publik memakai header sticky putih solid, penanda aktif dengan `aria-current` dan outline pada Tentang Equora. Landing dan About memakai daftar menu yang sama. Breakpoint menu 1024px mencegah menu berdesakan di tablet; bingkai luar juga menjadi penuh di bawah breakpoint ini. Menu buka/tutup mendukung Escape, penutupan setelah navigasi, dan batas tinggi viewport dengan scroll. Offset anchor 112px menghindari judul tertutup header. Transisi ikon menu mengikuti reduced motion global.
 
 Shell dipasang oleh halaman publik yang membutuhkannya. Endpoint `/health` dan `/api/health` tetap terpisah dari UI. Tidak ada sidebar dashboard atau navigasi admin sebelum route serta kontrol aksesnya tersedia.
+
+Footer Landing/About menautkan `/datasets` dan `/methodology` yang sudah tersedia. Katalog/detail/metodologi masih memakai layout dan CSS lama; penyatuan token/shell masuk [backlog integrasi](implementation-readiness.md). Jangan menganggap seluruh route sudah mengikuti fondasi bersama hanya karena landing menggunakannya.
 
 ## Pemisahan pekerjaan
 

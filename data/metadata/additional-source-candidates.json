@@ -1,0 +1,129 @@
+{
+  "checked_at": "2026-10-21",
+  "local_directory": "data/datamentah",
+  "academic_year": "2025/2026",
+  "release_status": "not_approved",
+  "provenance_note": "User-provided local files; exact download timestamps are unknown. Source pages were checked for six additions; four byte hashes match the prior audit. No claim of re-downloading all files from the publisher.",
+  "sources": [
+    {
+      "id": "institutions_count",
+      "filename": "jumlah-satuan-pendidikan-2025-indonesia.xlsx",
+      "sha256": "bd7d04577ec1e9b43e47016bf9a299de6633ea591b741c55bc09e639fd403ca0",
+      "unit": "school_count",
+      "storage_scale": "count",
+      "title": "Jumlah Satuan Pendidikan, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/jumlah-satuan-pendidikan-2025-indonesia",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": null
+    },
+    {
+      "id": "internet_count",
+      "filename": "jumlah-sekolah-dengan-akses-internet-untuk-pengajaran-2025-2.xlsx",
+      "sha256": "995798cd19ccac05add5b16a04309284a23d2398bad6f035a21ace8430115086",
+      "unit": "school_count",
+      "storage_scale": "count",
+      "title": "Jumlah Sekolah dengan Akses Internet untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/jumlah-sekolah-dengan-akses-internet-untuk-pengajaran-2025-2",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": "internet"
+    },
+    {
+      "id": "computers_count",
+      "filename": "jumlah-sekolah-dengan-akses-komputer-untuk-pengajaran-2025-2.xlsx",
+      "sha256": "fb37ee39657fc76ebfb68d732e79782ba3b288c30cdd8dd91d25c691311607bd",
+      "unit": "school_count",
+      "storage_scale": "count",
+      "title": "Jumlah Sekolah dengan Akses Komputer untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/jumlah-sekolah-dengan-akses-komputer-untuk-pengajaran-2025-2",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": "computers"
+    },
+    {
+      "id": "electricity_count",
+      "filename": "jumlah-sekolah-dengan-akses-listrik-2025-2.xlsx",
+      "sha256": "8cefda46aa96ad55b5078e0ed28f75f0488e2ed2ea3b1dc9265979b04f00322f",
+      "unit": "school_count",
+      "storage_scale": "count",
+      "title": "Jumlah Sekolah dengan Akses Listrik, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/jumlah-sekolah-dengan-akses-listrik-2025-2",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": null
+    },
+    {
+      "id": "water_count",
+      "filename": "jumlah-sekolah-dengan-akses-terhadap-air-minum-layak-2025-2.xlsx",
+      "sha256": "6542abe616da1079f69ce0e25a8519b8ac8f3757ca6764b686c711cec9906c43",
+      "unit": "school_count",
+      "storage_scale": "count",
+      "title": "Jumlah Sekolah dengan Akses terhadap Air Minum Layak, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/jumlah-sekolah-dengan-akses-terhadap-air-minum-layak-2025-2",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": null
+    },
+    {
+      "id": "handwashing_count",
+      "filename": "jumlah-sekolah-dengan-fasilitas-cuci-tangan-2025-2.xlsx",
+      "sha256": "45d3e6dffb40726144a3c5add9ce5dbc9e030fbb56de04cfbd0f5b87b91f260b",
+      "unit": "school_count",
+      "storage_scale": "count",
+      "title": "Jumlah Sekolah dengan Fasilitas Cuci Tangan, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/jumlah-sekolah-dengan-fasilitas-cuci-tangan-2025-2",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": null
+    },
+    {
+      "id": "internet_percent",
+      "filename": "persentase-sekolah-dengan-akses-internet-untuk-pengajaran-2025-2.xlsx",
+      "sha256": "117fe85accd4e781ce06c31a5b3c393a5801719e8c953bbb7e19cf40afc57cfb",
+      "unit": "percent",
+      "storage_scale": "fraction_with_percent_format",
+      "title": "Persentase Sekolah dengan Akses Internet untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/persentase-sekolah-dengan-akses-internet-untuk-pengajaran-2025-2",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": null
+    },
+    {
+      "id": "computers_percent",
+      "filename": "persentase-sekolah-dengan-akses-komputer-untuk-pengajaran-2025.xlsx",
+      "sha256": "c5cc99989c77a68f719fbc8960cee75650cbf50a8d1393d8f9e2b5ce236a64de",
+      "unit": "percent",
+      "storage_scale": "fraction_with_percent_format",
+      "title": "Persentase Sekolah dengan Akses Komputer untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/persentase-sekolah-dengan-akses-komputer-untuk-pengajaran-2025",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": null
+    },
+    {
+      "id": "water_percent",
+      "filename": "persentase-sekolah-dengan-akses-terhadap-air-minum-layak-2025.xlsx",
+      "sha256": "4b70b15de08d4f3b446a23c714ee938403ff7fcf63c271a5dd4f4ccad2411bf1",
+      "unit": "percent",
+      "storage_scale": "percentage_points",
+      "title": "Persentase Sekolah dengan Akses terhadap Air Minum Layak, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/persentase-sekolah-dengan-akses-terhadap-air-minum-layak-2025",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": "water"
+    },
+    {
+      "id": "sanitation_percent",
+      "filename": "persentase-sekolah-dengan-akses-terhadap-fasilitas-sanitasi-dasar-2025-indonesia (1).xlsx",
+      "sha256": "2bae4aa1fa8b6386cde29340dfc230889b06d7253d1c4fdba55d0227d9edc8e6",
+      "unit": "percent",
+      "storage_scale": "percentage_points",
+      "title": "Persentase Sekolah dengan Akses terhadap Fasilitas Sanitasi Dasar, Tahun Ajaran 2025/2026",
+      "source_url": "https://data.kemendikdasmen.go.id/dataset/p/prioritas-data/persentase-sekolah-dengan-akses-terhadap-fasilitas-sanitasi-dasar-2025-indonesia",
+      "downloaded_at": null,
+      "provided_by": "user",
+      "matches_prior_source": "sanitation"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 Sebelum mulai, baca [aturan kontributor](ATURAN-KONTRIBUTOR.md): batas file, branch/PR, review, pengujian dan keamanan repository publik.
 
-Disepakati pengguna pada 19 Oktober 2026: pemilik project (kamu) memegang pekerjaan utama, teman memegang fitur pendukung dengan kompleksitas terbatas. Nama anggota dan kapasitas jam belum dicatat. Fondasi backend/frontend sudah tersedia; halaman produk dan engine belum diimplementasikan. Mulai dari [panduan mengambil fondasi](MULAI-NGODING.md).
+Disepakati pengguna pada 19 Oktober 2026: pemilik project (kamu) memegang pekerjaan utama, teman memegang fitur pendukung dengan kompleksitas terbatas. Nama anggota dan kapasitas jam belum dicatat. Per 21 Oktober, fondasi, Landing/About, katalog fixture, metodologi dan engine sandbox tersedia di main. Integrasi data/Explorer/Studio belum tersedia; lihat [status dan backlog](../implementation-readiness.md). Mulai dari [panduan mengambil fondasi](MULAI-NGODING.md).
 
 Perkiraan beban: **75-80% pemilik / 20-25% teman** berdasarkan kompleksitas, integrasi, dan tanggung jawab. Ini perkiraan scope, bukan pengukuran jam atau jumlah fitur. Teman memiliki kemampuan full-stack; pembagian dibuat untuk mengurangi ketergantungan dan risiko, bukan berdasarkan anggapan bahwa dia pemula.
 

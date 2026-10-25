@@ -1,0 +1,631 @@
+{
+  "checked_at": "2026-10-21",
+  "release_status": "not_approved",
+  "downloaded_at": null,
+  "raw_directory": "data/datamentah",
+  "sources": [
+    {
+      "id": "institutions_count",
+      "filename": "jumlah-satuan-pendidikan-2025-indonesia.xlsx",
+      "sha256": "bd7d04577ec1e9b43e47016bf9a299de6633ea591b741c55bc09e639fd403ca0",
+      "bytes": 28383,
+      "title": "Jumlah Satuan Pendidikan, Tahun Ajaran 2025/2026",
+      "unit": "school_count",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "count",
+      "audit_value_unit": "school_count",
+      "columns_in_file": 53,
+      "education_levels": [
+        "TK",
+        "KB",
+        "TPA",
+        "SPS",
+        "Kursus",
+        "PKBM",
+        "SKB",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 1368,
+        "numeric": 1330,
+        "zeros": 190,
+        "formula_not_allowed": 38
+      },
+      "issues": [
+        {
+          "cell": "I6",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I7",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I8",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I9",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I10",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I11",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I12",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I13",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I14",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I15",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I16",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I17",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I18",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I19",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I20",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I21",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I22",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I23",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I24",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I25",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I26",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I27",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I28",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I29",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I30",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I31",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I32",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I33",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I34",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I35",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I36",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I37",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I38",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I39",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I40",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I41",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I42",
+          "issue": "formula_not_allowed"
+        },
+        {
+          "cell": "I43",
+          "issue": "formula_not_allowed"
+        }
+      ],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": null
+    },
+    {
+      "id": "internet_count",
+      "filename": "jumlah-sekolah-dengan-akses-internet-untuk-pengajaran-2025-2.xlsx",
+      "sha256": "995798cd19ccac05add5b16a04309284a23d2398bad6f035a21ace8430115086",
+      "bytes": 22258,
+      "title": "Jumlah Sekolah dengan Akses Internet untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "unit": "school_count",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "count",
+      "audit_value_unit": "school_count",
+      "columns_in_file": 21,
+      "education_levels": [
+        "TK",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 7
+      },
+      "issues": [],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": "internet"
+    },
+    {
+      "id": "computers_count",
+      "filename": "jumlah-sekolah-dengan-akses-komputer-untuk-pengajaran-2025-2.xlsx",
+      "sha256": "fb37ee39657fc76ebfb68d732e79782ba3b288c30cdd8dd91d25c691311607bd",
+      "bytes": 22027,
+      "title": "Jumlah Sekolah dengan Akses Komputer untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "unit": "school_count",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "count",
+      "audit_value_unit": "school_count",
+      "columns_in_file": 21,
+      "education_levels": [
+        "TK",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 684,
+        "numeric": 683,
+        "zeros": 35,
+        "missing": 1
+      },
+      "issues": [
+        {
+          "cell": "H35",
+          "issue": "missing"
+        }
+      ],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": "computers"
+    },
+    {
+      "id": "electricity_count",
+      "filename": "jumlah-sekolah-dengan-akses-listrik-2025-2.xlsx",
+      "sha256": "8cefda46aa96ad55b5078e0ed28f75f0488e2ed2ea3b1dc9265979b04f00322f",
+      "bytes": 23845,
+      "title": "Jumlah Sekolah dengan Akses Listrik, Tahun Ajaran 2025/2026",
+      "unit": "school_count",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "count",
+      "audit_value_unit": "school_count",
+      "columns_in_file": 21,
+      "education_levels": [
+        "TK",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 7
+      },
+      "issues": [],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": null
+    },
+    {
+      "id": "water_count",
+      "filename": "jumlah-sekolah-dengan-akses-terhadap-air-minum-layak-2025-2.xlsx",
+      "sha256": "6542abe616da1079f69ce0e25a8519b8ac8f3757ca6764b686c711cec9906c43",
+      "bytes": 22021,
+      "title": "Jumlah Sekolah dengan Akses terhadap Air Minum Layak, Tahun Ajaran 2025/2026",
+      "unit": "school_count",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "count",
+      "audit_value_unit": "school_count",
+      "columns_in_file": 21,
+      "education_levels": [
+        "TK",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 7
+      },
+      "issues": [],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": null
+    },
+    {
+      "id": "handwashing_count",
+      "filename": "jumlah-sekolah-dengan-fasilitas-cuci-tangan-2025-2.xlsx",
+      "sha256": "45d3e6dffb40726144a3c5add9ce5dbc9e030fbb56de04cfbd0f5b87b91f260b",
+      "bytes": 22389,
+      "title": "Jumlah Sekolah dengan Fasilitas Cuci Tangan, Tahun Ajaran 2025/2026",
+      "unit": "school_count",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "count",
+      "audit_value_unit": "school_count",
+      "columns_in_file": 21,
+      "education_levels": [
+        "TK",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 7
+      },
+      "issues": [],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": null
+    },
+    {
+      "id": "internet_percent",
+      "filename": "persentase-sekolah-dengan-akses-internet-untuk-pengajaran-2025-2.xlsx",
+      "sha256": "117fe85accd4e781ce06c31a5b3c393a5801719e8c953bbb7e19cf40afc57cfb",
+      "bytes": 26662,
+      "title": "Persentase Sekolah dengan Akses Internet untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "unit": "percent",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "fraction_with_percent_format",
+      "audit_value_unit": "percentage_points",
+      "columns_in_file": 21,
+      "education_levels": [
+        "TK",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 7
+      },
+      "issues": [],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": null
+    },
+    {
+      "id": "computers_percent",
+      "filename": "persentase-sekolah-dengan-akses-komputer-untuk-pengajaran-2025.xlsx",
+      "sha256": "c5cc99989c77a68f719fbc8960cee75650cbf50a8d1393d8f9e2b5ce236a64de",
+      "bytes": 22415,
+      "title": "Persentase Sekolah dengan Akses Komputer untuk Pengajaran, Tahun Ajaran 2025/2026",
+      "unit": "percent",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "fraction_with_percent_format",
+      "audit_value_unit": "percentage_points",
+      "columns_in_file": 21,
+      "education_levels": [
+        "TK",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 36
+      },
+      "issues": [],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": null
+    },
+    {
+      "id": "water_percent",
+      "filename": "persentase-sekolah-dengan-akses-terhadap-air-minum-layak-2025.xlsx",
+      "sha256": "4b70b15de08d4f3b446a23c714ee938403ff7fcf63c271a5dd4f4ccad2411bf1",
+      "bytes": 26385,
+      "title": "Persentase Sekolah dengan Akses terhadap Air Minum Layak, Tahun Ajaran 2025/2026",
+      "unit": "percent",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "percentage_points",
+      "audit_value_unit": "percentage_points",
+      "columns_in_file": 21,
+      "education_levels": [
+        "TK",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 7
+      },
+      "issues": [],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": "water"
+    },
+    {
+      "id": "sanitation_percent",
+      "filename": "persentase-sekolah-dengan-akses-terhadap-fasilitas-sanitasi-dasar-2025-indonesia (1).xlsx",
+      "sha256": "2bae4aa1fa8b6386cde29340dfc230889b06d7253d1c4fdba55d0227d9edc8e6",
+      "bytes": 26641,
+      "title": "Persentase Sekolah dengan Akses terhadap Fasilitas Sanitasi Dasar, Tahun Ajaran 2025/2026",
+      "unit": "percent",
+      "sheets": [
+        "Data",
+        "Metadata"
+      ],
+      "storage_scale": "percentage_points",
+      "audit_value_unit": "percentage_points",
+      "columns_in_file": 21,
+      "education_levels": [
+        "TK",
+        "SD",
+        "SMP",
+        "SMA",
+        "SMK",
+        "SLB"
+      ],
+      "province_rows": 38,
+      "duplicate_region_codes": [],
+      "excluded_aggregates": [
+        "Luar Negeri",
+        "Indonesia"
+      ],
+      "quality": {
+        "observations": 684,
+        "numeric": 684,
+        "zeros": 12
+      },
+      "issues": [],
+      "ownership_total_mismatches": [],
+      "metadata_license_field_present": false,
+      "matches_prior_source": "sanitation"
+    }
+  ],
+  "province_join": {
+    "union": 38,
+    "intersection": 38,
+    "name_mismatches": {
+      "institutions_count": [],
+      "internet_count": [],
+      "computers_count": [],
+      "electricity_count": [],
+      "water_count": [],
+      "handwashing_count": [],
+      "internet_percent": [],
+      "computers_percent": [],
+      "water_percent": [],
+      "sanitation_percent": []
+    }
+  },
+  "count_bounds": {
+    "internet_count": {
+      "checked": 684,
+      "exceeds_denominator": []
+    },
+    "computers_count": {
+      "checked": 683,
+      "exceeds_denominator": []
+    },
+    "water_count": {
+      "checked": 684,
+      "exceeds_denominator": []
+    },
+    "electricity_count": {
+      "checked": 684,
+      "exceeds_denominator": []
+    },
+    "handwashing_count": {
+      "checked": 684,
+      "exceeds_denominator": []
+    }
+  },
+  "percentage_reconciliation": {
+    "internet": {
+      "tolerance_percentage_points": "1E-8",
+      "outcomes": {
+        "match": 678,
+        "zero_denominator": 6
+      },
+      "sd_total_outcomes": {
+        "match": 38
+      },
+      "max_absolute_difference_percentage_points": "1.0487444608567208271787296898079764E-14",
+      "mismatch_keys": []
+    },
+    "computers": {
+      "tolerance_percentage_points": "1E-8",
+      "outcomes": {
+        "match": 677,
+        "zero_denominator": 6,
+        "missing_or_invalid": 1
+      },
+      "sd_total_outcomes": {
+        "match": 38
+      },
+      "max_absolute_difference_percentage_points": "9.958847736625514403292181069958848E-15",
+      "mismatch_keys": []
+    },
+    "water": {
+      "tolerance_percentage_points": "1E-8",
+      "outcomes": {
+        "match": 678,
+        "zero_denominator": 6
+      },
+      "sd_total_outcomes": {
+        "match": 38
+      },
+      "max_absolute_difference_percentage_points": "1.4889336016096579476861167002012072E-14",
+      "mismatch_keys": []
+    }
+  }
+}
