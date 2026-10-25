@@ -1,0 +1,51 @@
+{
+  "source_url": "https://build.protomaps.com/20261021.pmtiles",
+  "tileset_version": "4.15.2",
+  "osm_replication_time": "2026-10-21T04:00:00Z",
+  "retrieved_at": "2026-10-21",
+  "extract_cli": "go-pmtiles 1.31.2",
+  "bbox": [
+    94,
+    -12,
+    142,
+    7
+  ],
+  "minzoom": 0,
+  "maxzoom": 7,
+  "license": "ODbL Produced Work; attribution OpenStreetMap, Protomaps, Natural Earth",
+  "style_package": "@protomaps/basemaps 5.7.2",
+  "flavor": "grayscale",
+  "palette_overrides": { "background": "#edf2f5", "water": "#edf2f5", "earth": "#fafafa" },
+  "label_language": "id",
+  "assets_commit": "028c18f713baecad011301ff7a69acc39bcc2ae7",
+  "glyphs_url": "https://raw.githubusercontent.com/protomaps/basemaps-assets/028c18f713baecad011301ff7a69acc39bcc2ae7/fonts/{fontstack}/{range}.pbf",
+  "glyphs_license": "SIL Open Font License",
+  "sprites_license": "MIT (tangrams/icons)",
+  "files": [
+    {
+      "path": "frontend/static/maps/indonesia.pmtiles",
+      "bytes": 3246304,
+      "sha256": "fdb5812152055e736fcf2fbaf8a0409cf1126c9ba6e5e58e902771278dba4d17"
+    },
+    {
+      "path": "frontend/static/maps/sprites/grayscale.json",
+      "bytes": 1267,
+      "sha256": "ac20291dac76986ff124918e1ac636a7f6a1e47a085b00780bbafc78337c0309"
+    },
+    {
+      "path": "frontend/static/maps/sprites/grayscale.png",
+      "bytes": 5560,
+      "sha256": "245818d5aa6aaa8e2aa78035cb958930fd8d252324864e5dddd097f1cf81cb9c"
+    },
+    {
+      "path": "frontend/static/maps/sprites/grayscale@2x.json",
+      "bytes": 1276,
+      "sha256": "74be4f748575cb62ebef6ed21e3da220f2cf5e228927a4d784e3e03b5cbdbf0b"
+    },
+    {
+      "path": "frontend/static/maps/sprites/grayscale@2x.png",
+      "bytes": 6187,
+      "sha256": "4bb5f77cca2ee3fc71f52517f9b3d25d1c84a9fd65c4b82e066f86c97dbd4e35"
+    }
+  ]
+}

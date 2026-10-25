@@ -1,5 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import {
+    addBasemap,
+    BASEMAP_SOURCE,
+    initialMapStyle,
+    registerPMTiles,
+    removeBasemap,
+  } from '$lib/maps/basemap';
   import type { Map as LibreMap, GeoJSONSource, Popup } from 'maplibre-gl';
   import type { FeatureCollection } from 'geojson';
   import type { Observation } from '$lib/api/workspace';
@@ -25,6 +32,7 @@
   let ready = $state(false);
   let rendered = $state(false);
   let failure = $state('');
+  let basemapStatus = $state<'loading' | 'ready' | 'failed'>('loading');
   const colors = ['#e8f1fa', '#b4d1e8', '#74a9cf', '#367fb5', '#14507c'];
   function paint() {
     if (!map || !ready || !geo) return;
@@ -63,6 +71,13 @@
   });
   onMount(() => {
     let disposed = false;
+    let basemapTimer: ReturnType<typeof setTimeout> | undefined;
+    function basemapFailed() {
+      if (disposed || basemapStatus === 'failed') return;
+      basemapStatus = 'failed';
+      clearTimeout(basemapTimer);
+      if (map) removeBasemap(map);
+    }
     (async () => {
       try {
         const [libre, response] = await Promise.all([
@@ -74,26 +89,26 @@
         if (disposed) return;
         geo = data;
         libre.setWorkerUrl(workerUrl);
+        registerPMTiles(libre);
         map = new libre.Map({
           container,
-          style: {
-            version: 8,
-            sources: {},
-            layers: [
-              {
-                id: 'background',
-                type: 'background',
-                paint: { 'background-color': '#f3f7fa' },
-              },
-            ],
-          },
+          style: initialMapStyle(),
           bounds: [
             [94, -12],
             [142, 7],
           ],
           fitBoundsOptions: { padding: 15 },
+          maxZoom: 7,
+          maxBounds: [
+            [90, -16],
+            [146, 11],
+          ],
           attributionControl: false,
         });
+        map.addControl(
+          new libre.AttributionControl({ compact: true }),
+          'bottom-right',
+        );
         map.addControl(new libre.NavigationControl({ showCompass: false }));
         popup = new libre.Popup({
           closeButton: false,
@@ -106,7 +121,7 @@
             id: 'province-fill',
             type: 'fill',
             source: 'provinces',
-            paint: { 'fill-color': ['get', 'fill'] },
+            paint: { 'fill-color': ['get', 'fill'], 'fill-opacity': 0.72 },
           });
           map!.addLayer({
             id: 'province-line',
@@ -129,6 +144,12 @@
           });
           ready = true;
           paint();
+          basemapTimer = setTimeout(basemapFailed, 15000);
+          try {
+            addBasemap(map!, data);
+          } catch {
+            basemapFailed();
+          }
         });
         map.on('click', 'province-fill', (event) => {
           const code = event.features?.[0]?.properties?.code;
@@ -147,9 +168,23 @@
         map.on('idle', () => {
           if (ready && map?.isSourceLoaded('provinces')) rendered = true;
         });
-        map.on('error', () => {
-          failure =
-            'Sebagian peta gagal dimuat. Tabel tetap tersedia di bawah.';
+        map.on('sourcedata', (event) => {
+          if (
+            event.sourceId === BASEMAP_SOURCE &&
+            event.isSourceLoaded &&
+            basemapStatus !== 'failed'
+          ) {
+            basemapStatus = 'ready';
+            clearTimeout(basemapTimer);
+          }
+          if (ready && map?.isSourceLoaded('provinces')) rendered = true;
+        });
+        map.on('error', (event) => {
+          if ('sourceId' in event && event.sourceId === 'provinces') {
+            failure = 'Layer provinsi gagal dimuat. Tabel tetap tersedia di bawah.';
+          } else {
+            basemapFailed();
+          }
         });
       } catch {
         if (!disposed)
@@ -159,6 +194,7 @@
     })();
     return () => {
       disposed = true;
+      clearTimeout(basemapTimer);
       popup?.remove();
       map?.remove();
       map = undefined;
@@ -177,8 +213,16 @@
 {#if failure}<p role="status" class="work-muted">{failure}</p>
   <button class="eq-button" onclick={onretry}>Muat ulang peta</button>{/if}
 {#if rendered && !failure}<p role="status" class="map-ready">
-    Peta siap · 38 batas provinsi.
+    Peta siap · {geo?.features.length ?? 0} batas provinsi.
   </p>{/if}
+{#if !failure}
+  {#if basemapStatus === 'loading'}<p role="status" class="map-ready">Memuat basemap OpenStreetMap…</p>{/if}
+  {#if basemapStatus === 'ready'}<p role="status" class="map-ready">Basemap OpenStreetMap · Protomaps · zoom hingga 7.</p>{/if}
+  {#if basemapStatus === 'failed'}
+    <p role="status" class="map-ready">Basemap gagal dimuat. Layer indikator dan tabel tetap tersedia.</p>
+    <button class="eq-button" onclick={onretry}>Coba lagi basemap</button>
+  {/if}
+{/if}
 <div class="legend">
   <span>Rendah</span>{#each colors as color}<span
       style:background={color}
@@ -192,7 +236,7 @@
   {percent
     ? 'Persentase akses: 0–20, 20–40, 40–60, 60–80, 80–100%.'
     : 'Jumlah sekolah: lima interval sama terhadap maksimum hasil filter.'} Batas
-  komunitas yang disederhanakan; tanpa basemap.
+  komunitas yang disederhanakan; basemap bukan sumber indikator pendidikan.
 </p>
 {#if geo}<details class="attribution">
     <summary>Batas komunitas: Deny Herianto · CC BY 4.0</summary>
