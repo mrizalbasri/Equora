@@ -1,123 +1,192 @@
-# Equora
+<p align="center">
+  <img src="frontend/static/images/brand/equora-logo.webp" alt="Logo Equora" width="144" height="144">
+</p>
 
-Platform web untuk membandingkan akses fasilitas pendidikan dari data publik dan menguji simulasi prioritas alokasi sumber daya yang dapat dijelaskan. Disiapkan untuk Web In Action (WIA), MIA 2026.
+<h1 align="center">Equora</h1>
 
-**Status workspace 21 Oktober 2026: Explorer, peta 38 provinsi, katalog API, Studio, snapshot, Compare, ekspor CSV/PDF dan impor admin lokal tersedia pada branch integrasi.** Sepuluh workbook pengguna menghasilkan 2.280 observasi berstatus `local_review`. Hosting dan release publik belum disiapkan; branch belum otomatis digabung ke main. Ikuti [panduan workspace lokal](docs/local-workspace.md) dan [audit kesiapan](docs/implementation-readiness.md).
+<p align="center">
+  Memahami akses fasilitas pendidikan.<br>
+  Menelusuri data daerah dan mencoba prioritas alokasi yang dapat dijelaskan.
+</p>
 
-**Pembaruan lokal 24 Oktober 2026:** [Pendidikan di Daerah Saya](docs/public-region.md) tersedia di `/daerah`: profil provinsi, perbandingan fasilitas, berbagi temuan dan melanjutkan ke Studio pada rilis yang sama. Ringkasan hasil simulasi membedakan jangkauan wilayah dari pemerataan antarsekolah serta tidak menyimpulkan penyebab alokasi tanpa bukti.
+<p align="center">
+  <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square" alt="TypeScript 5.9">
+  <img src="https://img.shields.io/badge/Python-3.14-3776AB?style=flat-square" alt="Python 3.14">
+  <img src="https://img.shields.io/badge/SvelteKit-2-FF3E00?style=flat-square" alt="SvelteKit 2">
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square" alt="FastAPI">
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square" alt="PostgreSQL">
+</p>
 
-## Dokumentasi
+<p align="center">
+  <a href="#fitur">Fitur</a> ·
+  <a href="#bahasa-dan-teknologi">Teknologi</a> ·
+  <a href="#menjalankan-proyek">Instalasi</a> ·
+  <a href="#dokumentasi">Dokumentasi</a> ·
+  <a href="#tim-dan-kontribusi">Tim</a>
+</p>
 
-Panduan [coverage di GitHub](docs/coverage.md) menjelaskan laporan backend dan
-frontend, aktivasi Codecov, dan perintah lokal.
+## Tentang proyek
 
-Mulai dari [indeks docs](docs/README.md) dan [evaluasi kesesuaian lomba](docs/competition-alignment.md).
+Equora adalah aplikasi web untuk mengeksplorasi data fasilitas pendidikan di Indonesia, membandingkan kondisi antardaerah, dan menguji skenario alokasi sumber daya. Pengguna dapat menelusuri sumber indikator, mengubah asumsi simulasi, lalu membandingkan hasilnya.
 
-Dokumen utama hanya disimpan di `docs/`: [BRD](docs/BRD_Equora.md), [PRD](docs/PRD_Equora.md), dan [desain](docs/DESIGN_Equora.md).
+Proyek ini disiapkan untuk Web In Action (WIA), MIA 2026. Antarmuka menggunakan Bahasa Indonesia, dengan penjelasan untuk publik serta rincian metode, sumber, dan batas data.
 
-Tema visual terbaru: **Clean Education Blue (DESIGN v1.2)**, disetujui 20 Oktober 2026. Landing/About memakai panel putih, latar abu-abu sangat muda dan biru utama; diagram serta dokumen System Design mengikuti palet yang sama.
+> **Status:** aplikasi tersedia untuk pengembangan dan penggunaan lokal. Hosting publik dan rilis data terverifikasi belum tersedia. Data workspace berstatus `local_review`; hasil simulasi bukan keputusan anggaran resmi.
 
-Untuk kontributor yang mulai coding, ikuti [panduan mengambil fondasi](docs/pembagian-kerja/MULAI-NGODING.md). Fondasi UI publik tersedia dalam [panduan UI](docs/ui-foundation.md); kontrak workspace terdapat pada OpenAPI dan tipe TypeScript hasil generate.
+## Fitur
 
-## Stack
+| Bagian | Yang dapat dilakukan |
+| --- | --- |
+| Pendidikan di Daerah Saya | Membaca profil provinsi, membandingkan indikator fasilitas, menelusuri sumber, dan membagikan tautan temuan. |
+| Explorer | Menjelajahi peta dan tabel provinsi dengan filter indikator dan jenjang, lalu mengekspor data ke CSV. |
+| Studio | Mengatur bobot indikator, wilayah, anggaran, biaya paket, serta kapasitas untuk mencoba skenario prioritas dan alokasi. |
+| Snapshot dan Compare | Menyimpan parameter serta hasil skenario, membandingkan dua snapshot yang kompatibel, dan mengekspor perbandingan PDF. |
+| Katalog dan metodologi | Membaca metadata dataset, definisi indikator, metode perhitungan, dan batas penggunaannya. |
+| Akun opsional | Masuk dan mendaftar melalui Clerk. Eksplorasi dan simulasi publik tetap tersedia tanpa akun. |
+| Impor admin | Menyiapkan data lokal melalui manifest yang diaudit, dengan token admin backend yang terpisah. |
 
-SvelteKit, TypeScript, Tailwind CSS, ECharts, MapLibre/PMTiles; FastAPI, PostgreSQL, SQLAlchemy/Alembic; Polars, openpyxl dan OR-Tools. Manifest dan lockfile tersedia di masing-masing aplikasi. Pemilihan solver final menunggu audit model/data dan benchmark. Lihat [alasan, alternatif dan protokol pembuktian](docs/technical-stack.md).
+Fitur yang memerlukan data membutuhkan backend, database, dan rilis lokal yang sudah disiapkan. Snapshot saat ini berada di workspace bersama, belum menjadi koleksi pribadi per akun.
 
-## Menjalankan project
+## Bahasa dan teknologi
 
-Clone [repository Equora](https://github.com/mrizalbasri/Equora), lalu siapkan Node.js 24, pnpm 11.18.0, Python 3.14, uv dan Docker Desktop yang berjalan. PostgreSQL memakai instance Docker yang sudah ada, bukan server baru dari Compose Equora. Petunjuk lengkap: [backend](backend/README.md), [frontend](frontend/README.md), dan [data](data/README.md).
+Bahasa utama proyek adalah **TypeScript** pada frontend dan **Python** pada backend. Svelte menyusun komponen antarmuka, CSS mengatur tampilan, dan PowerShell menyediakan perintah pengembangan lintas aplikasi.
 
-### macOS/Linux
+| Lapisan | Teknologi | Peran |
+| --- | --- | --- |
+| Frontend | Svelte 5, SvelteKit 2, TypeScript 5.9 | Halaman publik, workspace, routing, dan integrasi API. |
+| Tampilan | Tailwind CSS 4, Carbon Icons | Styling dan ikon antarmuka. |
+| Peta dan grafik | MapLibre GL, PMTiles, ECharts | Peta provinsi, basemap, dan visualisasi indikator. |
+| Backend | Python 3.14, FastAPI, Pydantic 2 | API, validasi input, dan kontrak OpenAPI. |
+| Database | PostgreSQL, SQLAlchemy 2, Alembic | Registry dataset, rilis lokal, snapshot, dan migrasi. |
+| Pengolahan data | Polars, openpyxl | Membaca workbook, staging, dan pemeriksaan kualitas data. |
+| Analisis dan alokasi | MCDA, OR-Tools | Peringkat prioritas dan simulasi alokasi dengan batas anggaran serta kapasitas. |
+| Autentikasi | Clerk | Identitas pengguna dan sesi akun opsional. |
+| Pengujian | pytest, Vitest, Playwright | Pengujian backend, unit frontend, dan alur browser. |
+| Tooling | uv, pnpm, Ruff, Docker, GitHub Actions | Dependensi, pemeriksaan kode, container API, dan CI. |
 
-Jalankan dari root repository. Terminal pertama menjalankan API:
+Alasan pemilihan stack ada di [panduan teknis](docs/technical-stack.md). Dependensi dikunci dalam `backend/uv.lock` dan `frontend/pnpm-lock.yaml`.
+
+## Menjalankan proyek
+
+### 1. Persiapan
+
+Siapkan Python **3.14**, Node.js **24.11 atau lebih baru dalam seri 24**, pnpm **11.18.0**, dan uv. Fitur database memerlukan instance PostgreSQL khusus Equora yang dapat diakses.
+
+```sh
+git clone https://github.com/mrizalbasri/Equora.git
+cd Equora
+```
+
+Salin `backend/.env.example` menjadi `backend/.env` dan `frontend/.env.example` menjadi `frontend/.env`. Jangan menimpa konfigurasi lokal yang sudah ada.
+
+- Isi `DATABASE_URL` backend untuk database Equora milikmu. Migrasi tidak berjalan otomatis saat aplikasi dimulai.
+- Sesuaikan `API_BASE_URL` frontend dengan alamat API, secara default `http://127.0.0.1:8000`.
+- Untuk fitur akun, siapkan keys development sesuai [panduan autentikasi](docs/clerk-auth.md). Simpan secret hanya dalam berkas environment yang diabaikan Git.
+
+Compose backend memakai instance dan network PostgreSQL yang sudah ada; Compose tidak membuat server database baru. Lihat [setup backend](backend/README.md) untuk koneksi, target pengujian, dan alternatif Docker.
+
+### 2. Jalankan backend
+
+Di terminal pertama, dari root repository:
 
 ```sh
 cd backend
-python3 -m pip install --user uv  # hanya jika uv belum tersedia
 uv sync --locked --extra dev
-cp -n .env.example .env
 uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Terminal kedua menjalankan frontend:
+Setelah database khusus Equora dan koneksinya siap, jalankan `uv run alembic upgrade head` dari folder `backend/`. Untuk menyiapkan rilis data lokal beserta workbook sumbernya, ikuti [panduan workspace lokal](docs/local-workspace.md).
+
+### 3. Jalankan frontend
+
+Di terminal kedua, dari root repository:
 
 ```sh
 cd frontend
 pnpm install --frozen-lockfile
-cp -n .env.example .env
 pnpm dev
 ```
 
-`cp -n` tidak menimpa `.env` yang sudah disesuaikan. Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root menampilkan landing page; `/about`, `/datasets`, dan `/methodology` tersedia. Status server web tersedia di `/health`. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
+| Alamat lokal | Kegunaan |
+| --- | --- |
+| [localhost:5173](http://localhost:5173) | Beranda aplikasi. |
+| [localhost:5173/daerah](http://localhost:5173/daerah) | Profil dan perbandingan provinsi. |
+| [localhost:5173/explore](http://localhost:5173/explore) | Explorer peta dan tabel. |
+| [localhost:5173/studio](http://localhost:5173/studio) | Simulasi prioritas dan alokasi. |
+| [localhost:8000/docs](http://localhost:8000/docs) | Dokumentasi interaktif API. |
+| [localhost:5173/api/health](http://localhost:5173/api/health) | Pemeriksaan koneksi frontend ke backend. |
 
-### Windows PowerShell
+Petunjuk Windows, macOS/Linux, Corepack, dan konfigurasi lanjutan tersedia di [README frontend](frontend/README.md) serta [README backend](backend/README.md).
 
-```powershell
-cd backend
-python -m pip install uv
-uv sync --locked --extra dev
-Copy-Item .env.example .env
-uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+## Struktur repository
+
+```text
+Equora/
+├── frontend/       Aplikasi SvelteKit, komponen, peta, dan aset merek
+├── backend/        API FastAPI, ETL, analisis, solver, dan migrasi
+├── data/           Metadata sumber, fixture sintetis, dan panduan data
+├── docs/           Requirements, desain, metode, audit, dan panduan tim
+├── scripts/        Pemeriksaan dokumentasi dan alat pengembangan
+└── .github/        Workflow CI serta template issue dan pull request
 ```
 
-Di terminal kedua:
+## Pemeriksaan pengembangan
 
-```powershell
-cd frontend
-pnpm install --frozen-lockfile
-Copy-Item .env.example .env
-pnpm dev
-```
-
-Pasang uv bila belum tersedia dengan `python -m pip install uv`. Jangan menimpa `.env` yang sudah disesuaikan. Jika pnpm belum tersedia, aktifkan pnpm 11.18.0 melalui Corepack seperti dijelaskan di [panduan frontend](frontend/README.md). Frontend tersedia di http://localhost:5173 dan API docs di http://localhost:8000/docs. Root frontend menampilkan landing page; `/about` menjelaskan tujuan dan batas penggunaan. Status server web tetap tersedia di `/health`. Periksa koneksi frontend ke API di http://localhost:5173/api/health.
-
-Frontend dijalankan langsung melalui `pnpm dev`. Untuk menjalankan API dalam container, jalankan `docker compose up --build -d` dari `backend/`; file Compose hanya tersedia di backend. API memakai network PostgreSQL yang sudah ada. Database lokal `equora` dan `equora_test` sudah disiapkan pada instance tersebut; [registry draft dan panduan migrasi](docs/dataset-registry.md) menjelaskan target dan pengujiannya. Koneksi tetap di `.env` lokal dan migrasi dijalankan manual.
-
-Migrasi awal membentuk riwayat Alembic; migrasi `0002` menambah registry draft untuk menyimpan hasil staging, bukan release publik. Test memakai data sintetis; file sumber nyata dan artefak olahannya tetap di luar Git.
-
-Setelah dependensi terpasang dan `.env` disiapkan, perintah berikut dapat dijalankan dari root menggunakan PowerShell:
-
-```powershell
-.\scripts\equora.ps1 dev
-.\scripts\equora.ps1 check
-.\scripts\equora.ps1 test
-.\scripts\equora.ps1 openapi
-```
-
-`dev` menjalankan API Docker di background dan frontend lokal pada terminal yang sama. Ctrl+C menghentikan frontend; API tetap berjalan. Tidak ada database atau migrasi yang dibuat otomatis. Detail semua perintah dan pembagian alat tersedia di [panduan scripts](scripts/README.md).
-
-Untuk memeriksa tautan dokumentasi dengan Python 3:
+Dari root repository:
 
 ```sh
 python scripts/check_docs.py
 ```
 
-Untuk menjalankan tes E2E frontend secara lokal, unduh Chromium Playwright
-sekali dari folder `frontend/`:
+Backend, dari folder `backend/`:
 
 ```sh
-pnpm exec playwright install chromium
-pnpm test:e2e
+uv run ruff check .
+uv run pytest
 ```
 
-## Progress
+Frontend, dari folder `frontend/`:
 
-- [x] BRD, PRD dan baseline desain.
-- [x] Evaluasi materi Technical Meeting dan checklist submission.
-- [x] Struktur docs, template issue/PR, dan workflow pemeriksaan docs.
-- [x] Fondasi backend/frontend, Compose backend, migrasi awal, kontrak OpenAPI dan CI stack.
-- [x] Panduan clone, setup dan menjalankan fondasi pada macOS/Linux serta Windows.
-- [x] Audit awal empat file dataset dan join provinsi; [hasil dan batasan](docs/source-audit-2026-10-19.md).
-- [ ] Verifikasi ketentuan penggunaan dan persetujuan release data.
-- [x] Landing page dan About responsif dengan penjelasan sumber/metode serta status fitur yang belum tersedia.
-- [x] Katalog dan detail dataset memakai fixture berlabel; halaman metodologi sandbox.
-- [ ] Explorer berjalan dengan release data terverifikasi.
-- [ ] Simulasi, perbandingan skenario, dan pengujian.
-- [x] Repository publik [mrizalbasri/Equora](https://github.com/mrizalbasri/Equora).
-- [ ] Deployment, screenshot, PDF dan video submission.
+```sh
+pnpm check
+pnpm test
+pnpm check:api
+pnpm build
+```
 
-## Batasan
+Untuk tes browser, jalankan `pnpm exec playwright install chromium` sekali, lalu `pnpm test:e2e` setelah build. Tes database memerlukan `TEST_DATABASE_URL` yang menunjuk ke target pengujian khusus. Lihat [perintah repository](scripts/README.md) dan [panduan coverage](docs/coverage.md) untuk pemeriksaan gabungan serta laporan pengujian.
 
-Hasil alokasi adalah simulasi berbasis data dan asumsi, bukan keputusan anggaran resmi. Data tahunan ditampilkan dengan tahun dan waktu pengambilan; tidak disebut real-time. Empat file telah diunduh lokal dan diaudit; metadata/hash tersedia di repository, raw data diabaikan Git. Belum ada release data yang disetujui. Pratinjau landing belum terhubung ke engine dan tidak menampilkan hasil wilayah atau alokasi nyata.
+## Dokumentasi
 
-Lihat [panduan kontribusi](CONTRIBUTING.md) dan [setup GitHub](docs/github-setup.md). Lisensi publikasi kode belum dipilih pemilik project; repository publik tidak otomatis memberi izin penggunaan ulang.
+| Kebutuhan | Panduan |
+| --- | --- |
+| Mulai membaca proyek | [Indeks dokumentasi](docs/README.md) |
+| Menjalankan fitur dan data lokal | [Workspace lokal](docs/local-workspace.md) |
+| Memahami kebutuhan produk | [BRD](docs/BRD_Equora.md) · [PRD](docs/PRD_Equora.md) |
+| Memahami tampilan dan arsitektur | [Desain produk](docs/DESIGN_Equora.md) · [System Design](docs/system-design/README.md) |
+| Memahami alur profil provinsi | [Pendidikan di Daerah Saya](docs/public-region.md) |
+| Menyiapkan dan memeriksa sumber | [Panduan data](data/README.md) · [Staging dataset](docs/dataset-staging.md) |
+| Memulai kontribusi | [CONTRIBUTING.md](CONTRIBUTING.md) · [Panduan tim](docs/pembagian-kerja/README.md) |
+
+Dokumen audit bertanggal mencatat kondisi pada waktu pemeriksaan, bukan jaminan kesiapan versi terbaru.
+
+## Data dan batas penggunaan
+
+- Indikator berasal dari agregat provinsi. Angka tersebut tidak menggambarkan kondisi setiap sekolah atau membuktikan penyebab kesenjangan.
+- Data tahunan disertai periode dan sumber. Data ini bukan data real-time.
+- Biaya dan paket intervensi pada simulasi merupakan asumsi demo. Hasil alokasi bukan keputusan anggaran resmi atau bukti dampak pendidikan.
+- Workbook sumber dan hasil olahan lokal tidak disertakan di Git. Repository menyimpan metadata, checksum, dan fixture sintetis; izin redistribusi sumber masih perlu diverifikasi.
+- Rilis data publik, deployment, dan evaluasi bersama calon pengguna masih merupakan pekerjaan terpisah.
+
+## Tim dan kontribusi
+
+| Kontributor | GitHub |
+| --- | --- |
+| M. Rizal Basri | [@mrizalbasri](https://github.com/mrizalbasri) |
+| Sheiren Arnelia | [@sheirenarnelia](https://github.com/sheirenarnelia) |
+
+Mulai pekerjaan pada branch terpisah, gunakan Conventional Commits, dan ajukan pull request sesuai [panduan kontribusi](CONTRIBUTING.md). Logo pada README memakai aset asli Equora yang juga digunakan oleh aplikasi.
+
+## Lisensi
+
+Lisensi kode belum ditetapkan. Repository yang dapat diakses publik tidak otomatis memberi izin penggunaan ulang. Ketentuan penggunaan dataset mengikuti sumber masing-masing.
