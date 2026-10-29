@@ -42,10 +42,9 @@ Proyek ini disiapkan untuk Web In Action (WIA), MIA 2026. Antarmuka menggunakan 
 | Studio | Mengatur bobot indikator, wilayah, anggaran, biaya paket, serta kapasitas untuk mencoba skenario prioritas dan alokasi. |
 | Snapshot dan Compare | Menyimpan parameter serta hasil skenario, membandingkan dua snapshot yang kompatibel, dan mengekspor perbandingan PDF. |
 | Katalog dan metodologi | Membaca metadata dataset, definisi indikator, metode perhitungan, dan batas penggunaannya. |
-| Akun opsional | Masuk dan mendaftar melalui Clerk. Eksplorasi dan simulasi publik tetap tersedia tanpa akun. |
 | Impor admin | Menyiapkan data lokal melalui manifest yang diaudit, dengan token admin backend yang terpisah. |
 
-Fitur yang memerlukan data membutuhkan backend, database, dan rilis lokal yang sudah disiapkan. Snapshot saat ini berada di workspace bersama, belum menjadi koleksi pribadi per akun.
+Seluruh fitur publik dapat digunakan tanpa login atau pendaftaran. Fitur yang memerlukan data membutuhkan backend, database, dan rilis lokal yang sudah disiapkan. Snapshot berada di workspace bersama dan dapat dibaca pengguna lain yang mengakses aplikasi; jangan menyimpan informasi pribadi di dalamnya.
 
 ## Bahasa dan teknologi
 
@@ -60,7 +59,6 @@ Bahasa utama proyek adalah **TypeScript** pada frontend dan **Python** pada back
 | Database | PostgreSQL, SQLAlchemy 2, Alembic | Registry dataset, rilis lokal, snapshot, dan migrasi. |
 | Pengolahan data | Polars, openpyxl | Membaca workbook, staging, dan pemeriksaan kualitas data. |
 | Analisis dan alokasi | MCDA, OR-Tools | Peringkat prioritas dan simulasi alokasi dengan batas anggaran serta kapasitas. |
-| Autentikasi | Clerk | Identitas pengguna dan sesi akun opsional. |
 | Pengujian | pytest, Vitest, Playwright | Pengujian backend, unit frontend, dan alur browser. |
 | Tooling | uv, pnpm, Ruff, Docker, GitHub Actions | Dependensi, pemeriksaan kode, container API, dan CI. |
 
@@ -81,7 +79,7 @@ Salin `backend/.env.example` menjadi `backend/.env` dan `frontend/.env.example` 
 
 - Isi `DATABASE_URL` backend untuk database Equora milikmu. Migrasi tidak berjalan otomatis saat aplikasi dimulai.
 - Sesuaikan `API_BASE_URL` frontend dengan alamat API, secara default `http://127.0.0.1:8000`.
-- Untuk fitur akun, siapkan keys development sesuai [panduan autentikasi](docs/clerk-auth.md). Simpan secret hanya dalam berkas environment yang diabaikan Git.
+- Tidak diperlukan konfigurasi akun atau penyedia login. Lihat [akses publik dan batas workspace bersama](docs/public-access.md).
 
 Compose backend memakai instance dan network PostgreSQL yang sudah ada; Compose tidak membuat server database baru. Lihat [setup backend](backend/README.md) untuk koneksi, target pengujian, dan alternatif Docker.
 

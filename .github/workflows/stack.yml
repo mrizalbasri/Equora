@@ -11,6 +11,20 @@ permissions:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: equora_test
+          POSTGRES_PASSWORD: ci-disposable-password
+          POSTGRES_DB: equora_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U equora_test -d equora_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://equora_test:ci-disposable-password@127.0.0.1:5432/equora_test
     permissions:
       contents: read
       id-token: write

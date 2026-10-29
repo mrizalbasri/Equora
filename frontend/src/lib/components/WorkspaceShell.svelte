@@ -3,7 +3,6 @@
   import { page } from '$app/state';
   import Icon from './Icon.svelte';
   import AnalysisJourney from './AnalysisJourney.svelte';
-  import AccountControls from './AccountControls.svelte';
   import BrandMark from './BrandMark.svelte';
   let {
     title,
@@ -131,7 +130,6 @@
         </p>
       </div>
       <div class="topbar-right">
-        <AccountControls />
         <span class="local-mode">Workspace lokal</span><a
           href="/methodology"
           class="help-link"

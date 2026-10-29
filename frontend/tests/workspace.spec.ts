@@ -1,6 +1,39 @@
 import { expect, test } from '@playwright/test';
 import { mockWorkspace, snapshot } from './workspace-fixture';
 
+test('Studio retries context failure before allowing input', async ({ page }) => {
+  await mockWorkspace(page);
+  let unavailable = true;
+  await page.route('**/api/v1/workspace?*', route => unavailable
+    ? route.fulfill({ status: 503, json: { detail: 'Data sementara tidak tersedia' } })
+    : route.fallback());
+  await page.goto('/studio');
+  await expect(page.getByRole('alert')).toContainText('Data simulasi belum dapat dimuat');
+  await expect(page.getByLabel('Nama skenario', { exact: true })).toBeDisabled();
+  unavailable = false;
+  await page.getByRole('button', { name: 'Coba lagi memuat data', exact: true }).click();
+  await expect(page.getByLabel('Nama skenario', { exact: true })).toBeEnabled();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.getByText('Skenario disimpan di ruang bersama.', { exact: false })).toBeVisible();
+});
+
+test('Studio scenario-list failure does not block calculations or claim an empty list', async ({ page }) => {
+  await mockWorkspace(page);
+  let unavailable = true;
+  await page.route('**/api/v1/scenarios', route => unavailable
+    ? route.fulfill({ status: 503, json: { detail: 'Unavailable' } })
+    : route.fulfill({ json: [] }));
+  await page.goto('/studio');
+  await expect(page.getByRole('button', { name: 'Hitung Alokasi & Simpan Snapshot', exact: true })).toBeEnabled();
+  await expect(page.getByRole('alert')).toContainText('Daftar skenario belum dapat dimuat');
+  await expect(page.getByText('0 tersimpan', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Belum ada snapshot skenario' })).toHaveCount(0);
+  unavailable = false;
+  await page.getByRole('button', { name: 'Coba lagi memuat skenario', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Belum ada snapshot skenario' })).toBeVisible();
+  await expect(page.getByText('0 tersimpan', { exact: true })).toBeVisible();
+});
+
 for (const width of [390, 1440]) {
   test(`explorer filters, missing values, source and map fallback at ${width}px`, async ({
     page,

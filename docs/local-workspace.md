@@ -42,7 +42,7 @@ Pada pemeriksaan 25 Oktober 2026, PostgreSQL berjalan di container yang sudah ad
 .\scripts\equora.ps1 backend-local
 ```
 
-Di terminal kedua, jalankan `./scripts/equora.ps1 frontend`. Pastikan konfigurasi frontend menunjuk ke `API_BASE_URL=http://127.0.0.1:18000`. Jangan menimpa `.env` yang sudah berisi koneksi. Untuk frontend preview pada port 4173 atau port khusus, origin tersebut harus masuk ke `CORS_ORIGINS` backend dan `CLERK_AUTHORIZED_PARTIES` frontend. Restart layanan setelah konfigurasi berubah. Berkas contoh mendukung port 5173 dan 4173; workspace pengguna saat ini juga mengizinkan loopback port 4185 pada konfigurasi privatnya.
+Di terminal kedua, jalankan `./scripts/equora.ps1 frontend`. Pastikan konfigurasi frontend menunjuk ke `API_BASE_URL=http://127.0.0.1:18000`. Jangan menimpa `.env` yang sudah berisi koneksi. Untuk frontend preview pada port 4173 atau port khusus, origin tersebut harus masuk ke `CORS_ORIGINS` backend. Restart layanan setelah konfigurasi berubah. Berkas contoh mendukung port 5173 dan 4173; workspace pengguna saat ini juga mengizinkan loopback port 4185 pada konfigurasi privatnya.
 
 Gunakan host database `127.0.0.1` untuk port host PostgreSQL yang hanya terikat ke IPv4. API dari container tetap memakai hostname container pada `DOCKER_DATABASE_URL`. Hasil pemeriksaan fitur dan batas kesiapan ada di [validasi lokal 25 Oktober](local-readiness-2026-10-25.md).
 

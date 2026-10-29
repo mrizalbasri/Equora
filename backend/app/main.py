@@ -24,7 +24,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app = FastAPI(title=settings.app_name, version="0.1.0", lifespan=lifespan)
     app.state.settings = settings
-    app.add_middleware(WriteGuard, origins=settings.cors_origins)
+    app.add_middleware(
+        WriteGuard,
+        origins=settings.cors_origins,
+        requests_per_minute=settings.write_requests_per_minute,
+    )
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,

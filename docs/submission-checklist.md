@@ -2,6 +2,14 @@
 
 Acuan: materi Technical Meeting yang diberikan pengguna, halaman 15-17 dan 22-27. Semua kotak adalah pekerjaan yang belum dibuktikan selesai. Waktu/jam batas pengumpulan belum tercantum dalam materi yang ditinjau.
 
+Pemeriksaan visual ulang PDF asli: 27 Oktober 2026. Tim yang dikonfirmasi pengguna:
+**Lock In**. Contoh nama berkas: `WIA_FSDMIA2026_Lock In.pdf` dan
+`WIA_PenyisihanMIA2026_Lock In.pdf`. Subtema dan anggota/ketua terdaftar belum
+diverifikasi. [Matriks kesiapan](competition-readiness-2026-10-27.md) memisahkan
+bukti implementasi lokal dari kelengkapan submission. First draft mengikuti
+tanggal 1 November pada slide; perbedaan dengan tanggal 2 November di website
+perlu dikonfirmasi, bukan dianggap perpanjangan otomatis.
+
 ## First Draft - 1 November 2026
 
 - [x] Repository GitHub publik: [mrizalbasri/Equora](https://github.com/mrizalbasri/Equora), visibilitas PUBLIC diverifikasi 18 Oktober 2026.

@@ -14,6 +14,10 @@
   let workspace = $state<Workspace>();
   let regions = $state<{ code: string; name: string }[]>([]);
   let saved = $state<SavedScenario[]>([]);
+  let savedError = $state('');
+  let loadingSaved = $state(true);
+  let savedRequest = 0;
+  let attempt = $state(0);
   let name = $state('Simulasi alokasi fasilitas sekolah');
   let level = $state('SD');
   let budget = $state<number | undefined>(1000000000);
@@ -96,12 +100,28 @@
   }
 
   $effect(() => {
+    attempt;
     const release = page.url.searchParams.get('release');
     const requestedLevel = page.url.searchParams.get('level') ?? 'SD';
     const id = ++contextRequest;
     void loadContext(release, requestedLevel, id);
+    void loadSaved();
     return () => { contextRequest++; regionRequest++; };
   });
+
+  async function loadSaved() {
+    const id = ++savedRequest;
+    loadingSaved = true;
+    savedError = '';
+    try {
+      const snapshots = await api<SavedScenario[]>('scenarios');
+      if (id === savedRequest) saved = snapshots;
+    } catch {
+      if (id === savedRequest) savedError = 'Daftar skenario belum dapat dimuat. Coba lagi.';
+    } finally {
+      if (id === savedRequest) loadingSaved = false;
+    }
+  }
 
   async function loadContext(release: string | null, requestedLevel: string, id: number) {
     workspace = undefined;
@@ -114,15 +134,11 @@
       const current = await api<Workspace>('workspace?' + new URLSearchParams(release ? { release_id: release } : {}));
       if (release && current.id !== release) throw new Error('Rilis yang diminta tidak tersedia.');
       if (!current.education_levels.includes(requestedLevel)) throw new Error('Jenjang tidak tersedia pada rilis ini.');
-      const [list, snapshots] = await Promise.all([
-        api<{ code: string; name: string }[]>('regions?' + new URLSearchParams({ release_id: current.id, education_level: requestedLevel })),
-        api<SavedScenario[]>('scenarios'),
-      ]);
+      const list = await api<{ code: string; name: string }[]>('regions?' + new URLSearchParams({ release_id: current.id, education_level: requestedLevel }));
       if (id !== contextRequest) return;
       level = requestedLevel;
       workspace = current;
       regions = list;
-      saved = snapshots;
       selected = regions.map((row) => row.code);
     } catch (e) {
       if (id === contextRequest) error = (e as Error).message;
@@ -181,7 +197,7 @@
           Object.entries(overrides).filter(([code]) => selected.includes(code)),
         ),
       });
-      saved = await api<SavedScenario[]>('scenarios');
+      await loadSaved();
     } catch (e) {
       error = (e as Error).message;
     } finally {
@@ -220,10 +236,18 @@
     </aside>
   {/if}
   {#if loadingRegions}<p role="status">Memuat cakupan provinsi pada rilis dan jenjang yang dipilih…</p>{/if}
+  {#if error}
+    <div class="work-error" role="alert">
+      <Icon name="alert" size={18} />
+      <div><strong>{!workspace ? 'Data simulasi belum dapat dimuat.' : 'Simulasi belum dapat dilanjutkan.'}</strong><p>{error}</p></div>
+    </div>
+    {#if !workspace && !loadingRegions}<button class="eq-button" onclick={() => attempt++}>Coba lagi memuat data</button>{/if}
+  {/if}
   {#if error && workspace && !regions.length && !loadingRegions}
     <button class="eq-button" onclick={() => changeLevel(level)}>Coba lagi memuat provinsi</button>
   {/if}
   <form class="studio-form" onsubmit={calculate}>
+    <fieldset aria-label="Parameter simulasi" disabled={!workspace || loadingRegions || busy}>
     <section class="work-panel">
       <h2>1. Cakupan dan asumsi biaya</h2>
       <p class="work-muted">
@@ -496,7 +520,8 @@
       </div>
     </details>
 
-    <div class="work-actions">
+    <p class="work-muted" id="public-scenario-notice">Skenario disimpan di ruang bersama. Nama, parameter, dan hasil dapat dibaca pengguna lain. Jangan masukkan data pribadi atau informasi rahasia.</p>
+    <div class="work-actions" aria-describedby="public-scenario-notice">
       <button
         class="eq-button eq-button-primary"
         disabled={busy || loadingRegions || !workspace || total !== 100 || !selected.length}
@@ -509,14 +534,8 @@
         <span>Bandingkan Snapshot</span>
       </a>
     </div>
+    </fieldset>
   </form>
-
-  {#if error}
-    <div class="work-error" role="alert">
-      <Icon name="alert" size={18} />
-      <span>{error}</span>
-    </div>
-  {/if}
 
   {#if result}
     <ScenarioResult {result} {names} />
@@ -528,10 +547,15 @@
         <h2>Skenario tersimpan</h2>
         <p class="work-muted">Snapshot hasil perhitungan yang siap diuji dan dibandingkan.</p>
       </div>
-      <span class="eq-badge eq-badge-neutral">{saved.length} tersimpan</span>
+      {#if !loadingSaved && !savedError}<span class="eq-badge eq-badge-neutral">{saved.length} tersimpan</span>{/if}
     </div>
 
-    {#if !saved.length}
+    {#if loadingSaved}
+      <p role="status">Memuat skenario tersimpan…</p>
+    {:else if savedError}
+      <p role="alert">{savedError}</p>
+      <button class="eq-button" type="button" onclick={loadSaved}>Coba lagi memuat skenario</button>
+    {:else if !saved.length}
       <div class="empty-state">
         <div class="empty-state-icon">
           <Icon name="chart" size={24} />
@@ -577,6 +601,7 @@
 </WorkspaceShell>
 
 <style>
+  fieldset { display: contents; border: 0; padding: 0; margin: 0; min-width: 0; }
   .studio-form {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
@@ -608,11 +633,12 @@
     flex-wrap: wrap;
     margin-bottom: 16px;
   }
-  .studio-form > details,
-  .studio-form > .work-actions {
+  .studio-form fieldset > details,
+  .studio-form fieldset > .work-actions,
+  #public-scenario-notice {
     grid-column: 1/-1;
   }
-  .studio-form > details {
+  .studio-form fieldset > details {
     background: var(--eq-surface);
     border: 1px solid var(--eq-border);
     border-radius: 12px;
@@ -670,7 +696,7 @@
     border-radius: 8px;
     border: 1px solid var(--eq-border);
   }
-  .studio-form > .work-actions {
+  .studio-form fieldset > .work-actions {
     margin: 0;
     padding-block: 4px 12px;
   }
