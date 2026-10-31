@@ -20,10 +20,6 @@
   <section class="landing-hero eq-container" aria-labelledby="hero-title" use:landingScroll>
     <div class="landing-progress" aria-hidden="true"></div>
     <div class="hero-copy">
-      <div class="hero-pill-badge" data-motion="fade">
-        <span class="pill-dot" aria-hidden="true"></span>
-        <span class="pill-text">Web in Action 2026 · Platform Intelijensi Fasilitas Pendidikan</span>
-      </div>
       <h1 id="hero-title" data-motion="focus"><span>Beda wilayah.</span><br />Beda kebutuhan.</h1>
       <p data-motion="fade" data-motion-delay="70">Bagaimana fasilitas sekolah di provinsi Anda?<br class="desktop-break" /> Lihat kondisi sanitasi, air, internet, dan komputer. Bandingkan angkanya dan periksa sumbernya.</p>
       <div class="hero-actions" data-motion="focus" data-motion-delay="140">
@@ -164,32 +160,6 @@
   }
   .landing-progress { position: fixed; inset: 0 0 auto; z-index: 50; height: 3px; background: var(--eq-primary); transform-origin: left; scale: var(--landing-progress, 0) 1; pointer-events: none; }
   .hero-copy { text-align: center; margin-inline: auto; max-width: 850px; position: relative; z-index: 1; }
-
-  .hero-pill-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.88);
-    border: 1px solid rgba(18, 100, 216, 0.22);
-    box-shadow: 0 2px 10px rgba(18, 100, 216, 0.08);
-    backdrop-filter: blur(8px);
-    margin-bottom: 22px;
-  }
-  .pill-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--eq-primary);
-    box-shadow: 0 0 8px rgba(18, 100, 216, 0.6);
-  }
-  .pill-text {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--eq-primary);
-  }
 
   .hero-metrics-ribbon {
     display: inline-flex;
