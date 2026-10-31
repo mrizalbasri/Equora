@@ -45,7 +45,8 @@ def test_readiness_checks_database():
         app.state.settings.require_published_data = True
         assert client.get("/api/v1/health/ready").status_code == 503
         connection.execute.return_value.scalar_one_or_none.return_value = {
-            "status": "published", "scopes": {"SD": [{}]}
+            "status": "published",
+            "scopes": {"SD": [{}]},
         }
         assert client.get("/api/v1/health/ready").status_code == 200
 

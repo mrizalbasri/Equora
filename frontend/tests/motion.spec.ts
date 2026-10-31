@@ -12,12 +12,14 @@ test('reveals content on scroll and animates navigation without blocking control
   await workflow.scrollIntoViewIfNeeded();
   await expect(workflow).toHaveAttribute('data-motion-state', 'visible');
 
+  await page.setViewportSize({ width: 390, height: 844 });
+  const menu = page.getByRole('button', { name: 'Menu', exact: true });
+  await menu.click();
   const nav = page.getByRole('navigation', { name: 'Navigasi utama', exact: true });
-  await nav.getByRole('button', { name: 'Eksplorasi', exact: true }).click();
-  const dropdown = page.locator('#public-group-0');
-  await expect(dropdown).toHaveCSS('animation-name', /dropdown-enter$/);
+  await expect(nav).toHaveCSS('animation-name', /mobile-nav-enter$/);
   await page.keyboard.press('Escape');
-  await expect(dropdown).toBeHidden();
+  await expect(nav).not.toBeVisible();
+  await menu.click();
   await nav.getByRole('link', { name: 'Tentang', exact: true }).click();
   await expect(page).toHaveURL(/\/about$/);
   await expect(page.locator('.about > h1')).not.toHaveAttribute('data-motion-state');
@@ -59,11 +61,9 @@ test('reduced motion disables movement and keeps content and menus usable', asyn
   await page.goto('/');
   await expect(page.locator('#hero-title')).toBeVisible();
   await page.getByRole('button', { name: 'Menu', exact: true }).click();
-  await page.getByRole('button', { name: 'Simulasi', exact: true }).click();
-  await expect(page.locator('#public-group-1')).toHaveCSS('animation-name', 'none');
+  const nav = page.getByRole('navigation', { name: 'Navigasi utama', exact: true });
+  await expect(nav).toHaveCSS('animation-name', 'none');
   expect(await page.evaluate(() => document.getAnimations().filter(animation => animation.playState === 'running').length)).toBe(0);
-  await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', { name: 'Simulasi', exact: true })).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(page.getByRole('button', { name: 'Menu', exact: true })).toBeFocused();
   await page.locator('#alur').scrollIntoViewIfNeeded();

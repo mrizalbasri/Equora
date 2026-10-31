@@ -95,7 +95,7 @@
 </svelte:head>
 
 <WorkspaceShell
-  title={profile ? 'Pendidikan di ' + profile.name : 'Profil Wilayah'}
+  title={profile ? 'Pendidikan di ' + profile.name : 'Pendidikan di Daerah Saya'}
   subtitle="Bagaimana fasilitas sekolah di provinsi Anda? Pilih daerah, baca kondisinya, lalu bandingkan jika perlu."
 >
 <div class="region-page">

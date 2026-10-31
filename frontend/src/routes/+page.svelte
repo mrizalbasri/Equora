@@ -164,7 +164,7 @@
   }
   .landing-progress { position: fixed; inset: 0 0 auto; z-index: 50; height: 3px; background: var(--eq-primary); transform-origin: left; scale: var(--landing-progress, 0) 1; pointer-events: none; }
   .hero-copy { text-align: center; margin-inline: auto; max-width: 850px; position: relative; z-index: 1; }
-  
+
   .hero-pill-badge {
     display: inline-flex;
     align-items: center;
