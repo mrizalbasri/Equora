@@ -10,7 +10,6 @@ for (const width of [360, 390, 768, 1024, 1440]) {
       if (width < 1024) await page.getByRole('button', { name: 'Menu', exact: true }).click();
       const nav = page.getByRole('navigation', { name: 'Navigasi utama', exact: true });
       await expect(nav.getByRole('link', { name: 'Cara Kerja', exact: true })).toHaveAttribute('href', '/methodology');
-      await expect(nav.getByRole('link', { name: 'Dataset', exact: true })).toHaveAttribute('href', '/datasets');
       await expect(nav.getByRole('link', { name: 'Tentang', exact: true })).toHaveAttribute('href', '/about');
       await expect(nav.getByRole('link', { name: 'Mulai Eksplorasi', exact: true })).toHaveAttribute('href', '/explore');
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
