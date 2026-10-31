@@ -26,7 +26,6 @@ export type PublicNavLink = {
 };
 
 export const publicNavLinks: PublicNavLink[] = [
-  { label: 'Jelajahi Data', href: '/explore' },
   { label: 'Cara Kerja', href: '/methodology' },
   { label: 'Dataset', href: '/datasets' },
   { label: 'Tentang', href: '/about' },

@@ -9,7 +9,6 @@ for (const width of [360, 390, 768, 1024, 1440]) {
       await page.goto(entry);
       if (width < 1024) await page.getByRole('button', { name: 'Menu', exact: true }).click();
       const nav = page.getByRole('navigation', { name: 'Navigasi utama', exact: true });
-      await expect(nav.getByRole('link', { name: 'Jelajahi Data', exact: true })).toHaveAttribute('href', '/explore');
       await expect(nav.getByRole('link', { name: 'Cara Kerja', exact: true })).toHaveAttribute('href', '/methodology');
       await expect(nav.getByRole('link', { name: 'Dataset', exact: true })).toHaveAttribute('href', '/datasets');
       await expect(nav.getByRole('link', { name: 'Tentang', exact: true })).toHaveAttribute('href', '/about');
@@ -39,6 +38,6 @@ test('mobile menu can be opened, closed with Escape, and navigated', async ({ pa
   await page.keyboard.press('Escape');
   await expect(nav).not.toBeVisible();
   await menu.click();
-  await nav.getByRole('link', { name: 'Jelajahi Data', exact: true }).click();
+  await nav.getByRole('link', { name: 'Mulai Eksplorasi', exact: true }).click();
   await expect(page).toHaveURL(/\/explore(?:\?|$)/);
 });
