@@ -579,7 +579,7 @@
             <div class="saved-card-top">
               <a href={'/scenarios/' + item.id} class="saved-title">{item.name}</a>
               <span
-                class="eq-badge {item.status === 'OPTIMAL' || item.status === 'FEASIBLE'
+                class="eq-badge {item.status?.toLowerCase() === 'optimal' || item.status?.toLowerCase() === 'feasible'
                   ? 'eq-badge-success'
                   : 'eq-badge-warning'}"
               >
