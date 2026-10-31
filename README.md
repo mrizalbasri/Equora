@@ -19,6 +19,7 @@
 
 <p align="center">
   <a href="#fitur">Fitur</a> ·
+  <a href="#progress-saat-ini">Progress</a> ·
   <a href="#bahasa-dan-teknologi">Teknologi</a> ·
   <a href="#menjalankan-proyek">Instalasi</a> ·
   <a href="#dokumentasi">Dokumentasi</a> ·
@@ -45,6 +46,18 @@ Proyek ini disiapkan untuk Web In Action (WIA), MIA 2026. Antarmuka menggunakan 
 | Impor admin | Menyiapkan data lokal melalui manifest yang diaudit, dengan token admin backend yang terpisah. |
 
 Seluruh fitur publik dapat digunakan tanpa login atau pendaftaran. Fitur yang memerlukan data membutuhkan backend, database, dan rilis lokal yang sudah disiapkan. Snapshot berada di workspace bersama dan dapat dibaca pengguna lain yang mengakses aplikasi; jangan menyimpan informasi pribadi di dalamnya.
+
+## Progress saat ini
+
+Karya sementara yang telah diimplementasikan per tahap First Draft Submission:
+
+- [x] **Landing Page (`/`)**: Antarmuka responsif, narasi masalah, dan alur eksplorasi awal.
+- [x] **Pendidikan di Daerah Saya (`/daerah`)**: Profil fasilitas per provinsi, jenjang sekolah, dan komparasi antardaerah.
+- [x] **Explorer Peta & Data (`/explore`)**: Visualisasi peta tematik MapLibre GL, tabel indikator, filter wilayah, dan ekspor CSV.
+- [x] **Studio Simulasi (`/studio`)**: Penyesuaian bobot prioritas kebutuhan, batasan anggaran, dan kalkulasi alokasi dengan solver optimasi.
+- [x] **Komparasi Skenario (`/compare`)**: Analisis perbandingan antar skenario alokasi anggaran dan pemerataan fasilitas.
+- [x] **Katalog Dataset & Metodologi (`/datasets`, `/methodology`)**: Metadata indikator resmi Kemendikdasmen dan batas penggunaan data.
+- [ ] **Deployment Hosting Publik**: Direncanakan pada tahap akhir penyisihan (aplikasi saat ini siap dijalankan secara lokal dan container Docker).
 
 ## Bahasa dan teknologi
 
