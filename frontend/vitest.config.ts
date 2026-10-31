@@ -7,7 +7,7 @@ export default defineConfig({
       provider: 'v8',
       include: ['src/**/*.ts'],
       exclude: ['src/**/*.test.ts', 'src/**/*.d.ts'],
-      reporter: ['text-summary', 'lcov', 'html'],
+      reporter: ['text-summary', 'lcov', 'html', 'json'],
       reportsDirectory: 'coverage'
     }
   }
