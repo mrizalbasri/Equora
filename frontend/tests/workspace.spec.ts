@@ -34,6 +34,19 @@ test('Studio scenario-list failure does not block calculations or claim an empty
   await expect(page.getByText('0 tersimpan', { exact: true })).toBeVisible();
 });
 
+test('/scenarios redirects to /studio#skenario-tersimpan', async ({ page }) => {
+  await mockWorkspace(page);
+  await page.goto('/scenarios');
+  await expect(page).toHaveURL(/\/studio#skenario-tersimpan$/);
+});
+
+test('Studio pre-selects province and shows context banner when province query param is present', async ({ page }) => {
+  await mockWorkspace(page);
+  await page.goto('/studio?release=synthetic-release&province=11');
+  await expect(page.getByLabel('Konteks dari profil wilayah')).toContainText('Provinsi Synthetic Alpha');
+  await expect(page.locator('summary').filter({ hasText: '1 dari 2 terpilih' })).toBeVisible();
+});
+
 for (const width of [390, 1440]) {
   test(`explorer filters, missing values, source and map fallback at ${width}px`, async ({
     page,
@@ -296,7 +309,7 @@ for (const width of [375, 768, 1024, 1440]) {
       ).toBeFocused();
       await page.keyboard.press('Tab');
       await expect(
-        navigation.getByRole('link', { name: 'Profil Wilayah', exact: true }),
+        navigation.getByRole('link', { name: 'Pendidikan di Daerah Saya', exact: true }),
       ).toBeFocused();
       await page.keyboard.press('Escape');
       await expect(menu).toBeFocused();

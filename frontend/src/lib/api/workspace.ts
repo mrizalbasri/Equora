@@ -48,7 +48,7 @@ export const workspaceNavGroups: WorkspaceNavGroup[] = [
     title: 'Eksplorasi',
     items: [
       { label: 'Explorer', href: '/explore', icon: 'compass', badge: '38 Prov' },
-      { label: 'Profil Wilayah', href: '/daerah', icon: 'map' },
+      { label: 'Pendidikan di Daerah Saya', href: '/daerah', icon: 'map' },
     ],
   },
   {

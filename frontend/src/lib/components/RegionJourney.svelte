@@ -192,7 +192,7 @@
         <p>Di Studio, Anda dapat memilih fasilitas yang lebih diprioritaskan dan mencoba anggaran. Simulasi dimulai dari seluruh provinsi pada rilis dan jenjang yang sama; cakupannya dapat diubah sebelum dihitung.</p>
         <p>Biaya dan jumlah paket adalah asumsi simulasi. Hasilnya belum menyatakan berapa sekolah atau siswa yang terbantu.</p>
         <div class="journey-actions">
-          <a class="eq-button" href={'/studio?' + new URLSearchParams({ level, release: workspace.id })}><Icon name="sliders" />Coba prioritas fasilitas</a>
+          <a class="eq-button" href={'/studio?' + new URLSearchParams({ level, release: workspace.id, province: profile.code })}><Icon name="sliders" />Coba prioritas fasilitas</a>
           <a class="plain-link" href={'/regions/' + encodeURIComponent(profile.code) + '?' + new URLSearchParams({ level, release: workspace.id })}>Lihat data wilayah terperinci<Icon name="arrow" size={18} /></a>
         </div>
       </section>
