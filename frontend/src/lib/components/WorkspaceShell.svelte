@@ -1,116 +1,188 @@
-<script lang="ts">
+﻿<script lang="ts">
   import { tick, type Snippet } from 'svelte';
   import { page } from '$app/state';
   import Icon from './Icon.svelte';
   import AnalysisJourney from './AnalysisJourney.svelte';
   import BrandMark from './BrandMark.svelte';
+  import { workspaceNavGroups, type WorkspaceNavGroup } from '$lib/api/workspace';
+
   let {
     title,
     subtitle,
     children,
   }: { title: string; subtitle: string; children: Snippet } = $props();
+
   let menuOpen = $state(false);
   let menuButton = $state<HTMLButtonElement>();
   let closeButton = $state<HTMLButtonElement>();
   let sidebar = $state<HTMLElement>();
-  const primary = [
-    { href: '/daerah', label: 'Daerah Saya', icon: 'map' },
-    { href: '/explore', label: 'Explorer', icon: 'compass' },
-    { href: '/studio', label: 'Studio simulasi', icon: 'sliders' },
-    { href: '/compare', label: 'Perbandingan', icon: 'compare' },
-    { href: '/datasets', label: 'Katalog dataset', icon: 'database' },
-  ] as const;
-  const reference = [
-    { href: '/methodology', label: 'Metodologi', icon: 'book' },
-  ] as const;
-  function active(href: string) {
-    return (
-      page.url.pathname.startsWith(href) ||
-      (href === '/explore' && page.url.pathname.startsWith('/regions')) ||
-      (href === '/studio' && page.url.pathname.startsWith('/scenarios'))
-    );
+
+  const navGroups: WorkspaceNavGroup[] = workspaceNavGroups;
+
+  function active(href: string, sub?: boolean) {
+    const currentPath = page.url.pathname;
+    if (sub && href.includes('#')) {
+      const [base, hash] = href.split('#');
+      return currentPath === base && page.url.hash === '#' + hash;
+    }
+    if (href === '/studio' && !sub) {
+      return (currentPath === '/studio' && !page.url.hash) || currentPath.startsWith('/scenarios');
+    }
+    if (href === '/explore') {
+      return currentPath === '/explore' || currentPath.startsWith('/regions');
+    }
+    if (href === '/daerah') {
+      return currentPath === '/daerah';
+    }
+    return currentPath === href || (href !== '/' && currentPath.startsWith(href));
   }
+
+  const allItems = $derived(navGroups.flatMap((g) => g.items));
   const location = $derived(
-    [...primary, ...reference].find((item) => active(item.href))?.label ??
+    allItems.find((item) => active(item.href, item.sub))?.label ??
       (page.url.pathname === '/admin' ? 'Impor data' : 'Workspace'),
   );
+
   async function closeMenu() {
     menuOpen = false;
     await tick();
     menuButton?.focus();
   }
+
   async function toggleMenu() {
     if (menuOpen) return closeMenu();
     menuOpen = true;
     await tick();
     closeButton?.focus();
   }
+
   function onKey(event: KeyboardEvent) {
     if (event.key === 'Escape' && menuOpen) closeMenu();
     if (event.key !== 'Tab' || !menuOpen || !sidebar) return;
-    const controls = [...sidebar.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')].filter((element) => element.getClientRects().length);
+    const controls = [
+      ...sidebar.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled])',
+      ),
+    ].filter((element) => element.getClientRects().length);
     const first = controls[0];
     const last = controls.at(-1);
-    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
-    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
   }
 </script>
 
-<svelte:window onkeydown={onKey} onresize={() => { if (window.innerWidth > 900 && menuOpen) closeMenu(); }} />
+<svelte:window
+  onkeydown={onKey}
+  onresize={() => {
+    if (window.innerWidth > 900 && menuOpen) closeMenu();
+  }}
+/>
+
 <a class="workspace-skip" href="#main-content">Lewati ke konten utama</a>
 <div class="app-frame">
-  {#if menuOpen}<button
+  {#if menuOpen}
+    <button
       class="nav-backdrop"
       tabindex="-1"
       aria-label="Tutup menu navigasi"
       onclick={closeMenu}
-    ></button>{/if}
-  <aside class="app-sidebar" class:open={menuOpen} id="workspace-sidebar" bind:this={sidebar}>
+    ></button>
+  {/if}
+
+  <aside
+    class="app-sidebar"
+    class:open={menuOpen}
+    id="workspace-sidebar"
+    bind:this={sidebar}
+  >
     <div class="sidebar-brand">
-      <a href="/" class="app-wordmark" aria-label="Equora, beranda"
-        ><BrandMark compact /></a><button
+      <a href="/" class="app-wordmark" aria-label="Equora, beranda">
+        <BrandMark compact />
+      </a>
+      <button
         class="sidebar-close"
         bind:this={closeButton}
         aria-label="Tutup menu"
-        onclick={closeMenu}><Icon name="close" /></button
+        onclick={closeMenu}
       >
+        <Icon name="close" />
+      </button>
     </div>
-    <p class="brand-caption">Pendidikan dalam data.</p>
-    <nav aria-label="Navigasi workspace">
-      <p class="nav-section">Ruang kerja</p>
-      {#each primary as item}<a
-          href={item.href}
-          aria-current={active(item.href) ? 'page' : undefined}
-          class="sidebar-link"
-          onclick={() => (menuOpen = false)}
-          ><Icon name={item.icon} size={20} /><span>{item.label}</span
-          >{#if active(item.href)}<span class="active-marker"></span>{/if}</a
-        >{/each}
-      <p class="nav-section reference-heading">Referensi</p>
-      {#each reference as item}<a
-          href={item.href}
-          aria-current={active(item.href) ? 'page' : undefined}
-          class="sidebar-link"
-          onclick={() => (menuOpen = false)}
-          ><Icon name={item.icon} size={20} /><span>{item.label}</span></a
-        >{/each}
-      <p class="nav-section reference-heading">Pengelolaan lokal</p>
-      <a href="/admin" class="sidebar-link" aria-current={page.url.pathname === '/admin' ? 'page' : undefined} onclick={() => (menuOpen = false)}><Icon name="shield" size={20} /><span>Impor data</span></a>
+    <p class="brand-caption">Public Resource · Decision Intelligence</p>
+
+    <nav aria-label="Navigasi workspace" class="sidebar-nav">
+      {#each navGroups as group}
+        <div class="nav-group">
+          <p class="nav-section-title">{group.title}</p>
+          {#each group.items as item}
+            <a
+              href={item.href}
+              aria-current={active(item.href, item.sub) ? 'page' : undefined}
+              class="sidebar-link"
+              class:sub-item={item.sub}
+              onclick={() => (menuOpen = false)}
+            >
+              <span class="icon-wrap">
+                <Icon name={item.icon} size={18} />
+              </span>
+              <span class="link-label">{item.label}</span>
+              {#if item.badge}
+                <span class="nav-badge" aria-hidden="true">{item.badge}</span>
+              {/if}
+              {#if active(item.href, item.sub)}
+                <span class="active-indicator" aria-hidden="true"></span>
+              {/if}
+            </a>
+          {/each}
+        </div>
+      {/each}
+
+      {#if page.url.pathname === '/admin'}
+        <div class="nav-group">
+          <p class="nav-section-title">Pengelolaan lokal</p>
+          <a
+            href="/admin"
+            class="sidebar-link"
+            aria-current="page"
+            onclick={() => (menuOpen = false)}
+          >
+            <span class="icon-wrap"><Icon name="shield" size={18} /></span>
+            <span class="link-label">Impor data</span>
+            <span class="active-indicator" aria-hidden="true"></span>
+          </a>
+        </div>
+      {/if}
     </nav>
+
     <div class="sidebar-bottom">
-      <a class="studio-shortcut" href="/studio"
-        ><strong
-          >Dari data ke skenario</strong
-        ><span>Uji bobot dan pilihan alokasi Anda.</span><span
-          class="shortcut-action"
-          >Buka Studio</span
-        ></a>
-      <a class="sidebar-link public-home" href="/"
-        ><Icon name="home" size={20} /><span>Beranda publik</span></a
-      >
-      <p class="sidebar-caption">Public Resource<br />Decision Intelligence</p>
+      <div class="workspace-status-card">
+        <div class="status-indicator">
+          <span class="status-pulse"></span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="status-text">
+          <span class="status-title">Workspace Publik</span>
+          <span class="status-desc">Review Data 2025/2026</span>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a class="footer-link" href="/" onclick={() => (menuOpen = false)}>
+          <Icon name="home" size={16} />
+          <span>Beranda publik</span>
+        </a>
+        <a class="footer-link" href="/about" onclick={() => (menuOpen = false)}>
+          <Icon name="info" size={16} />
+          <span>Tentang Equora</span>
+        </a>
+      </div>
     </div>
   </aside>
+
   <div class="app-body" inert={menuOpen}>
     <header class="app-topbar">
       <div class="topbar-location">
@@ -120,23 +192,32 @@
           aria-label="Menu"
           aria-expanded={menuOpen}
           aria-controls="workspace-sidebar"
-          onclick={toggleMenu}><Icon name="menu" /></button
-        ><a class="mobile-brand" href="/" aria-label="Equora, beranda"
-          ><BrandMark compact /></a>
+          onclick={toggleMenu}
+        >
+          <Icon name="menu" />
+        </button>
+        <a class="mobile-brand" href="/" aria-label="Equora, beranda">
+          <BrandMark compact />
+        </a>
         <p class="breadcrumbs">
-          <span>Ruang analisis</span><Icon name="chevron" size={14} /><strong
-            >{location}</strong
-          >
+          <span>Ruang analisis</span>
+          <Icon name="chevron" size={14} />
+          <strong>{location}</strong>
         </p>
       </div>
       <div class="topbar-right">
-        <span class="local-mode">Workspace lokal</span><a
+        <span class="local-mode">Workspace lokal</span>
+        <a
           href="/methodology"
           class="help-link"
           aria-label="Panduan metodologi"
-          ><Icon name="book" size={18} /><span>Panduan</span></a>
+        >
+          <Icon name="book" size={18} />
+          <span>Panduan</span>
+        </a>
       </div>
     </header>
+
     <main id="main-content" tabindex="-1" class="workspace">
       <header class="workspace-heading">
         <div>
@@ -145,12 +226,13 @@
         </div>
         <span class="review-badge">Review lokal</span>
       </header>
+
       <details class="workspace-context">
-        <summary
-          ><Icon name="info" size={17} /><span
-            >Data agregat provinsi · Simulasi menggunakan asumsi demo</span
-          ><span class="context-more">Tentang data</span></summary
-        >
+        <summary>
+          <Icon name="info" size={17} />
+          <span>Data agregat provinsi · Simulasi menggunakan asumsi demo</span>
+          <span class="context-more">Tentang data</span>
+        </summary>
         <p>
           Data tahun ajaran 2025/2026 berstatus review lokal. Lisensi
           redistribusi dan tanggal unduh pengguna belum diverifikasi. Data
@@ -158,20 +240,33 @@
           pengguna; hasil bukan keputusan anggaran resmi.
         </p>
       </details>
-      <details class="journey-guide"><summary>Panduan alur dan halaman</summary><AnalysisJourney /></details>
+
+      <details class="journey-guide">
+        <summary>Panduan alur dan halaman</summary>
+        <AnalysisJourney />
+      </details>
+
       {@render children()}
+
       <footer class="app-footer">
-        <span>equora. <span>· Transparansi di setiap langkah.</span></span><a
-          href="https://github.com/mrizalbasri/Equora"
-          >Repositori proyek</a>
+        <span>equora. <span>· Transparansi di setiap langkah.</span></span>
+        <a href="https://github.com/mrizalbasri/Equora">Repositori proyek</a>
       </footer>
     </main>
   </div>
 </div>
 
 <style>
-  .journey-guide { margin-block: 16px 24px; }
-  .journey-guide > summary { cursor: pointer; min-height: 44px; align-content: center; color: var(--eq-primary-hover); font-weight: 600; }
+  .journey-guide {
+    margin-block: 16px 24px;
+  }
+  .journey-guide > summary {
+    cursor: pointer;
+    min-height: 44px;
+    align-content: center;
+    color: var(--eq-primary-hover);
+    font-weight: 600;
+  }
   .app-frame {
     min-height: 100dvh;
     background: var(--eq-bg);
@@ -180,7 +275,7 @@
     position: fixed;
     z-index: 100;
     top: -100px;
-    left: 260px;
+    left: 270px;
     background: var(--eq-surface);
     padding: 12px 18px;
     border: 2px solid var(--eq-focus);
@@ -190,110 +285,238 @@
     top: 12px;
   }
   .app-sidebar {
-    width: 232px;
+    width: 252px;
     position: fixed;
     inset: 0 auto 0 0;
-    background: var(--eq-surface);
-    border-right: 1px solid var(--eq-border);
-    padding: 28px 18px 20px;
+    background: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+    padding: 24px 14px 20px;
     z-index: 40;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .sidebar-brand {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-inline: 14px;
+    padding-inline: 10px;
   }
   .app-wordmark {
-    font-size: 34px;
-    letter-spacing: -1.8px;
+    font-size: 32px;
+    letter-spacing: -1.6px;
     font-weight: 750;
     line-height: 1.3;
     text-decoration: none;
   }
-  .brand-caption {
-    color: var(--eq-text-secondary);
-    font-size: 12px;
-    padding: 6px 14px 34px;
+  .sidebar-close {
+    display: none;
   }
-  .nav-section {
+  .brand-caption {
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px 24px;
+    line-height: 1.4;
+  }
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+  }
+  .nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .nav-section-title {
+    font-size: 10.5px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--eq-text-muted);
-    font-size: 10px;
-    font-weight: 650;
-    margin: 0 14px 10px;
+    letter-spacing: 0.12em;
+    color: #64748b;
+    padding: 4px 10px 6px;
+    margin: 0;
   }
   .sidebar-link {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 12px;
-    min-height: 48px;
-    padding: 10px 14px;
-    color: var(--eq-text-secondary);
-    text-decoration: none;
+    gap: 10px;
+    min-height: 40px;
+    padding: 8px 12px;
     border-radius: 8px;
-    font-size: 14px;
-    margin-block: 4px;
-    transition:
-      color 160ms ease,
-      background 160ms ease;
-  }
-  .sidebar-link[aria-current] {
-    background: var(--eq-primary-tint);
-    color: var(--eq-primary-hover);
-    font-weight: 650;
+    color: #334155;
+    font-size: 13.5px;
+    font-weight: 550;
+    text-decoration: none;
+    transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .sidebar-link:hover {
-    background: var(--eq-surface-subtle);
-    color: var(--eq-primary-hover);
+    background: #f1f5f9;
+    color: #0f172a;
+    transform: translateX(3px);
   }
-  .active-marker {
-    width: 5px;
-    height: 5px;
-    background: currentColor;
+  .sidebar-link[aria-current='page'] {
+    background: #e0f2fe;
+    color: #0284c7;
+    font-weight: 700;
+  }
+  .sidebar-link[aria-current='page']:hover {
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+  .icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    color: inherit;
+    flex-shrink: 0;
+  }
+  .link-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .active-indicator {
+    position: absolute;
+    right: 10px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    margin-left: auto;
+    background: #0284c7;
   }
-  .reference-heading {
-    margin-top: 30px;
+  /* Tree line sub-item styling */
+  .sidebar-link.sub-item {
+    margin-left: 18px;
+    font-size: 12.5px;
+    min-height: 36px;
+    padding: 6px 10px;
+    color: #475569;
+  }
+  .sidebar-link.sub-item::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: -6px;
+    bottom: 50%;
+    width: 1px;
+    border-left: 1px solid #cbd5e1;
+  }
+  .sidebar-link.sub-item::after {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    width: 7px;
+    height: 1px;
+    border-top: 1px solid #cbd5e1;
+  }
+  .nav-badge {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: #e2e8f0;
+    color: #475569;
+    letter-spacing: 0.02em;
+  }
+  .sidebar-link[aria-current='page'] .nav-badge {
+    background: #bae6fd;
+    color: #0369a1;
   }
   .sidebar-bottom {
     margin-top: auto;
-    padding-top: 36px;
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
-  .studio-shortcut {
-    display: grid;
-    gap: 7px;
-    padding: 18px 16px;
-    background: var(--eq-sidebar);
-    border: 1px solid var(--eq-border);
-    border-radius: 12px;
-    text-decoration: none;
-    font-size: 13px;
-  }
-  .shortcut-action {
-    color: var(--eq-primary-hover);
+  .workspace-status-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    font-weight: 600;
-    margin-top: 6px;
+    gap: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
   }
-  .public-home {
-    margin-top: 20px;
+  .status-indicator {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .sidebar-caption {
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+  .status-pulse {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #10b981;
+    opacity: 0.3;
+    animation: status-ping 2s infinite;
+  }
+  @keyframes status-ping {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+  .status-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .status-title {
     font-size: 11px;
-    color: var(--eq-text-muted);
-    padding: 12px 14px 0;
-    line-height: 1.6;
+    font-weight: 700;
+    color: #1e293b;
   }
+  .status-desc {
+    font-size: 10px;
+    color: #64748b;
+  }
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .footer-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: #64748b;
+    font-size: 12px;
+    text-decoration: none;
+    transition: all 150ms ease;
+  }
+  .footer-link:hover {
+    color: #0284c7;
+    background: #f1f5f9;
+  }
+
   .app-body {
-    margin-left: 232px;
+    margin-left: 252px;
     min-width: 0;
   }
   .app-topbar {
@@ -320,22 +543,33 @@
   }
   .breadcrumbs strong {
     color: var(--eq-text);
-    font-weight: 550;
   }
-  .topbar-right {
-    gap: 24px;
+  .workspace-menu {
+    display: none;
+  }
+  .mobile-brand {
+    display: none;
   }
   .local-mode {
-    color: var(--eq-text-secondary);
-    font-size: 12px;
-    border-right: 1px solid var(--eq-border);
-    padding-right: 24px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 10px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    border-radius: 6px;
+    color: var(--eq-text-muted);
   }
   .help-link {
-    text-decoration: none;
     font-size: 13px;
-    min-height: 44px;
     color: var(--eq-text-secondary);
+    text-decoration: none;
+    font-weight: 550;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+  .help-link:hover {
+    background: var(--eq-surface-subtle);
+    color: var(--eq-text);
   }
   .workspace {
     padding: 24px 32px 0;
@@ -398,44 +632,118 @@
     margin-left: auto;
     white-space: nowrap;
     font-size: 11px;
-    font-weight: 600;
   }
   .workspace-context p {
+    padding: 0 14px 14px;
     margin: 0;
-    padding: 0 16px 14px 40px;
-    max-width: 900px;
-    line-height: 1.7;
+    line-height: 1.6;
+    color: var(--eq-text-muted);
   }
   .app-footer {
-    padding: 24px 0;
-    margin-top: 30px;
+    margin-top: 64px;
+    padding: 24px 0 32px;
     border-top: 1px solid var(--eq-border);
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 20px;
     font-size: 12px;
-    color: var(--eq-text-secondary);
-  }
-  .app-footer > span {
-    font-weight: 650;
-  }
-  .app-footer > span > span {
-    font-weight: 400;
-    margin-left: 6px;
+    color: var(--eq-text-muted);
   }
   .app-footer a {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    color: var(--eq-text-secondary);
     text-decoration: none;
   }
-  .workspace-menu,
-  .sidebar-close,
-  .mobile-brand,
-  .nav-backdrop {
-    display: none;
+  .app-footer a:hover {
+    text-decoration: underline;
   }
+
+  @media (max-width: 1050px) {
+    .app-sidebar {
+      width: 220px;
+      padding-inline: 10px;
+    }
+    .app-body {
+      margin-left: 220px;
+    }
+    .app-topbar {
+      padding-inline: 20px;
+    }
+    .workspace {
+      padding-inline: 20px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .app-sidebar {
+      width: 260px;
+      transform: translateX(-100%);
+      visibility: hidden;
+      transition:
+        transform 180ms ease,
+        visibility 180ms;
+    }
+    .app-sidebar.open {
+      transform: translateX(0);
+      visibility: visible;
+    }
+    .sidebar-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      background: transparent;
+      color: #64748b;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .sidebar-close:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .app-body {
+      margin-left: 0;
+    }
+    .nav-backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      border: 0;
+      background: rgb(20 36 54 / 25%);
+      z-index: 35;
+    }
+    .workspace-menu {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      min-height: 48px;
+      border: 1px solid var(--eq-border);
+      background: var(--eq-surface);
+      border-radius: 8px;
+    }
+    .mobile-brand {
+      display: block;
+      font-size: 25px;
+      font-weight: 750;
+      letter-spacing: -1px;
+      text-decoration: none;
+    }
+    .breadcrumbs {
+      display: none;
+    }
+    .app-topbar {
+      min-height: 68px;
+      padding: 10px 20px;
+    }
+    .workspace {
+      padding: 24px 20px 0;
+    }
+    .workspace-skip {
+      left: 12px;
+    }
+  }
+
   .app-frame :global(.work-panel) {
     background: var(--eq-surface);
     border-radius: 12px;
@@ -473,80 +781,6 @@
   }
   .app-frame :global(.eq-button:disabled) {
     opacity: 0.55;
-  }
-  @media (max-width: 1050px) {
-    .app-sidebar {
-      width: 210px;
-      padding-inline: 12px;
-    }
-    .app-body {
-      margin-left: 210px;
-    }
-    .app-topbar {
-      padding-inline: 24px;
-    }
-    .workspace {
-      padding-inline: 24px;
-    }
-  }
-  @media (max-width: 900px) {
-    .app-sidebar {
-      width: 250px;
-      transform: translateX(-100%);
-      visibility: hidden;
-      transition:
-        transform 180ms ease,
-        visibility 180ms;
-    }
-    .app-sidebar.open {
-      transform: translateX(0);
-      visibility: visible;
-    }
-    .app-body {
-      margin-left: 0;
-    }
-    .nav-backdrop {
-      display: block;
-      position: fixed;
-      inset: 0;
-      border: 0;
-      background: rgb(20 36 54 / 25%);
-      z-index: 35;
-    }
-    .workspace-menu,
-    .sidebar-close {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 48px;
-      min-height: 48px;
-      border: 1px solid var(--eq-border);
-      background: var(--eq-surface);
-      border-radius: 8px;
-    }
-    .sidebar-close {
-      border: 0;
-    }
-    .mobile-brand {
-      display: block;
-      font-size: 25px;
-      font-weight: 750;
-      letter-spacing: -1px;
-      text-decoration: none;
-    }
-    .breadcrumbs {
-      display: none;
-    }
-    .app-topbar {
-      min-height: 68px;
-      padding: 10px 20px;
-    }
-    .workspace {
-      padding: 24px 20px 0;
-    }
-    .workspace-skip {
-      left: 12px;
-    }
   }
   @media (max-width: 550px) {
     .app-topbar {
