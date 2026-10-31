@@ -26,27 +26,6 @@
         <a class="landing-button primary" href="/daerah">Pendidikan di Daerah Saya</a>
         <a class="text-link" href="/explore">Telusuri data pendidikan</a>
       </div>
-      <div class="hero-metrics-ribbon" data-motion="fade" data-motion-delay="180" aria-label="Statistik platform">
-        <div class="metric-pill">
-          <span class="metric-value">38</span>
-          <span class="metric-label">Provinsi Terpetakan</span>
-        </div>
-        <div class="metric-divider" aria-hidden="true"></div>
-        <div class="metric-pill">
-          <span class="metric-value">10</span>
-          <span class="metric-label">Indikator Resmi</span>
-        </div>
-        <div class="metric-divider" aria-hidden="true"></div>
-        <div class="metric-pill">
-          <span class="metric-value">6</span>
-          <span class="metric-label">Jenjang Sekolah</span>
-        </div>
-        <div class="metric-divider" aria-hidden="true"></div>
-        <div class="metric-pill">
-          <span class="metric-value">CP-SAT</span>
-          <span class="metric-label">Solver Optimasi</span>
-        </div>
-      </div>
     </div>
 
     <div id="pratinjau" class="product-preview" data-motion="unfold" data-motion-delay="210">
@@ -145,59 +124,9 @@
 </PublicShell>
 
 <style>
-  .landing-hero { padding-top: 58px; position: relative; }
-  .landing-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(1000px, 90vw);
-    height: 440px;
-    background: radial-gradient(circle at 50% 25%, rgba(18, 100, 216, 0.08) 0%, rgba(243, 245, 248, 0) 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+  .landing-hero { padding-top: 58px; }
   .landing-progress { position: fixed; inset: 0 0 auto; z-index: 50; height: 3px; background: var(--eq-primary); transform-origin: left; scale: var(--landing-progress, 0) 1; pointer-events: none; }
-  .hero-copy { text-align: center; margin-inline: auto; max-width: 850px; position: relative; z-index: 1; }
-
-  .hero-metrics-ribbon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px 20px;
-    margin-top: 34px;
-    padding: 12px 24px;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid var(--eq-border);
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(31, 45, 61, 0.04);
-    backdrop-filter: blur(10px);
-  }
-  .metric-pill {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-  }
-  .metric-value {
-    font-size: 18px;
-    font-weight: 750;
-    color: var(--eq-primary);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-  .metric-label {
-    font-size: 12px;
-    font-weight: 550;
-    color: var(--eq-text-secondary);
-  }
-  .metric-divider {
-    width: 1px;
-    height: 24px;
-    background: var(--eq-border);
-  }
+  .hero-copy { text-align: center; margin-inline: auto; max-width: 850px; }
   h1 { font-size: clamp(3.25rem, 6.4vw, 5.4rem); line-height: 1.03; font-weight: 620; letter-spacing: -0.04em; color: var(--eq-primary); }
   h1 > span { color: #637489; }
   .hero-copy > p { max-width: 570px; margin: 26px auto 0; color: var(--eq-text-secondary); font-size: 17px; line-height: 1.7; }
