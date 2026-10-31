@@ -1,5 +1,15 @@
 # Kesesuaian Equora dengan WIA MIA 2026
 
+**Pembaruan 27 Oktober 2026:** PDF Technical Meeting asli ditinjau secara visual.
+Nama tim yang dikonfirmasi adalah **Lock In**. Implementasi lokal sekarang
+memiliki alur publik tanpa akun; 60 tes browser dan 11 unit test frontend lulus
+setelah login dihapus. Baca [matriks kesiapan terkini](competition-readiness-2026-10-27.md)
+untuk persyaratan per tahap, bobot rubrik, bukti dan prioritas submission.
+Subtema terdaftar, izin publikasi data dan kelengkapan pengumpulan belum
+dibuktikan. Bagian berikut adalah audit awal, bukan inventaris fitur terbaru.
+
+## Audit awal (historis)
+
 **Kesimpulan: konsep sesuai; implementasi dan kelengkapan submission belum siap.** Penilaian ini membandingkan rencana di BRD/PRD dengan materi Technical Meeting pengguna, bukan penetapan kelulusan oleh panitia.
 
 ## Tema dan subtema

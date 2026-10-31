@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     admin_token: SecretStr | None = None
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
     data_dir: Path = Field(default=BACKEND_DIR.parent / "data")
+    write_requests_per_minute: int = Field(default=60, ge=1, le=10000)
+    max_saved_scenarios: int = Field(default=10000, ge=1, le=1000000)
+    require_published_data: bool = False
 
 
 @lru_cache

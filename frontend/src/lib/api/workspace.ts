@@ -19,35 +19,59 @@ export const labels: Record<string, string> = {
   water_percent: 'Ketersediaan air',
   sanitation_percent: 'Sanitasi dasar',
 };
-export type NavigationItem = {
+
+export type PublicNavLink = {
   label: string;
   href: string;
-  description: string;
-  icon: 'map' | 'database' | 'sliders' | 'compare' | 'book';
 };
-export type NavigationEntry =
-  | { label: string; items: NavigationItem[]; href?: never }
-  | { label: string; href: string; items?: never };
 
-export const navigation: NavigationEntry[] = [
-  {
-    label: 'Eksplorasi',
-    items: [
-      { label: 'Pendidikan di Daerah Saya', href: '/daerah', icon: 'map', description: 'Pahami kondisi fasilitas dan bandingkan provinsi Anda.' },
-      { label: 'Peta & Data Pendidikan', href: '/explore', icon: 'map', description: 'Lihat akses fasilitas pendidikan antarprovinsi.' },
-      { label: 'Katalog Dataset', href: '/datasets', icon: 'database', description: 'Periksa sumber dan cakupan data.' },
-    ],
-  },
-  {
-    label: 'Simulasi',
-    items: [
-      { label: 'Studio Simulasi', href: '/studio', icon: 'sliders', description: 'Atur sumber daya, bobot, dan batas alokasi.' },
-      { label: 'Bandingkan Skenario', href: '/compare', icon: 'compare', description: 'Tinjau perbedaan hasil dua skenario.' },
-      { label: 'Metodologi', href: '/methodology', icon: 'book', description: 'Pahami perhitungan dan asumsi simulasi.' },
-    ],
-  },
+export const publicNavLinks: PublicNavLink[] = [
+  { label: 'Cara Kerja', href: '/methodology' },
   { label: 'Tentang', href: '/about' },
 ];
+
+export type WorkspaceNavItem = {
+  label: string;
+  href: string;
+  icon: 'compass' | 'map' | 'sliders' | 'chart' | 'compare' | 'book' | 'database' | 'shield';
+  badge?: string;
+  sub?: boolean;
+};
+
+export type WorkspaceNavGroup = {
+  title: string;
+  items: WorkspaceNavItem[];
+};
+
+export const workspaceNavGroups: WorkspaceNavGroup[] = [
+  {
+    title: 'Eksplorasi',
+    items: [
+      { label: 'Explorer', href: '/explore', icon: 'compass', badge: '38 Prov' },
+      { label: 'Profil Wilayah', href: '/daerah', icon: 'map' },
+    ],
+  },
+  {
+    title: 'Simulasi',
+    items: [
+      { label: 'Studio simulasi', href: '/studio', icon: 'sliders' },
+      { label: 'Skenario tersimpan', href: '/studio#skenario-tersimpan', icon: 'chart', sub: true },
+      { label: 'Bandingkan', href: '/compare', icon: 'compare', sub: true },
+    ],
+  },
+  {
+    title: 'Referensi',
+    items: [
+      { label: 'Metodologi', href: '/methodology', icon: 'book' },
+      { label: 'Katalog dataset', href: '/datasets', icon: 'database' },
+    ],
+  },
+];
+
+export type NavigationItem = WorkspaceNavItem;
+export type NavigationEntry = PublicNavLink;
+export const navigation = publicNavLinks;
+
 export const number = (value: string | number | null | undefined, digits = 2) =>
   value == null
     ? 'Tidak tersedia'

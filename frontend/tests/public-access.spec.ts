@@ -18,12 +18,13 @@ test('public and workspace pages work without an account or authentication reque
   expect(authRequests).toEqual([]);
 });
 
-test('optional account routes remain separate from public browsing', async ({ request }) => {
-  for (const path of ['/sign-in', '/sign-up']) {
-    const response = await request.get(path, { maxRedirects: 0 });
-    expect(response.status()).toBe(200);
+test('retired account routes are unavailable even with an old session cookie', async ({ request }) => {
+  const headerCases: Record<string, string>[] = [{}, { Cookie: '__session=obsolete-session' }];
+  for (const path of ['/sign-in', '/sign-up', '/account']) {
+    for (const headers of headerCases) {
+      const response = await request.get(path, { maxRedirects: 0, headers });
+      expect(response.status()).toBe(404);
+      expect(response.headers().location).toBeUndefined();
+    }
   }
-  const account = await request.get('/account', { maxRedirects: 0 });
-  expect(account.status()).toBe(303);
-  expect(account.headers().location).toBe('/sign-in');
 });

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import PublicShell from './PublicShell.svelte';
+  import WorkspaceShell from './WorkspaceShell.svelte';
   import ProvincePicker from './ProvincePicker.svelte';
   import Icon from './Icon.svelte';
   import { api, labels, number, type Workspace } from '$lib/api/workspace';
@@ -94,12 +94,11 @@
   <meta name="description" content="Pahami fasilitas pendidikan provinsi Anda, bandingkan dengan provinsi lain dan telusuri sumber datanya." />
 </svelte:head>
 
-<PublicShell calm>
-<div class="region-page eq-container">
-  <header class="region-heading">
-    <h1>Pendidikan di Daerah Saya</h1>
-    <p>Bagaimana fasilitas sekolah di provinsi Anda? Pilih daerah, baca kondisinya, lalu bandingkan jika perlu.</p>
-  </header>
+<WorkspaceShell
+  title={profile ? 'Pendidikan di ' + profile.name : 'Pendidikan di Daerah Saya'}
+  subtitle="Bagaimana fasilitas sekolah di provinsi Anda? Pilih daerah, baca kondisinya, lalu bandingkan jika perlu."
+>
+<div class="region-page">
   <section class="journey-intro" aria-label="Pilih daerah dan jenjang sekolah">
     <h2>Daerah mana yang ingin Anda lihat?</h2>
     <p>Pilih provinsi dan jenjang sekolah. Anda tidak perlu masuk akun.</p>
@@ -213,15 +212,12 @@
     {/if}
   {/if}
 </div>
-</PublicShell>
+</WorkspaceShell>
 
 <style>
-  .region-page { max-width: 1056px; padding-block: 48px 64px; }
-  .region-heading { max-width: 740px; margin-bottom: 32px; }
-  h1 { font-size: clamp(2rem, 4.5vw, 3.5rem); letter-spacing: -.035em; line-height: 1.12; }
+  .region-page { max-width: 1056px; padding-block: 8px 64px; }
   h2 { font-size: clamp(1.35rem, 2.5vw, 1.8rem); letter-spacing: -.025em; line-height: 1.25; }
   p { line-height: 1.7; max-width: 72ch; }
-  .region-heading p { color: var(--eq-text-secondary); margin-top: 18px; font-size: 18px; }
   .journey-intro { padding: 28px; background: var(--eq-surface-subtle); border-radius: 16px; }
   .journey-intro > p { margin-top: 8px; color: var(--eq-text-secondary); }
   .journey-controls { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-top: 24px; }
@@ -285,8 +281,7 @@
   .loading-message, .journey-message { padding-block: 32px; }
   .journey-message p { margin-top: 12px; }
   @media (max-width: 700px) {
-    .region-page { padding-block: 28px 40px; }
-    .region-heading p { font-size: 16px; }
+    .region-page { padding-block: 8px 40px; }
     .journey-intro, .next-step { padding: 20px; }
     .journey-controls, .facility-row, .comparison-content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     .profile-overview { flex-direction: column; padding-top: 28px; gap: 20px; }

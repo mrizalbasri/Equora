@@ -223,6 +223,30 @@ def test_public_profiles_preserve_requested_release(payload, monkeypatch):
 
 
 @pytest.mark.skipif(not os.getenv("TEST_DATABASE_URL"), reason="TEST_DATABASE_URL is not set")
+def test_snapshot_capacity_and_publication_gate(payload, session):
+    session.add(LocalRelease(id=payload["id"], payload=payload))
+    session.flush()
+    app = create_app(Settings(_env_file=None, max_saved_scenarios=1))
+    app.dependency_overrides[session_for] = lambda: session
+    with TestClient(app) as client:
+        first = client.post("/api/v1/scenarios", json=params(payload).model_dump(mode="json"))
+        assert first.status_code == 201
+        assert (
+            client.post(
+                "/api/v1/scenarios", json=params(payload).model_dump(mode="json")
+            ).status_code
+            == 409
+        )
+        session.info["require_published_data"] = True
+        try:
+            assert client.get("/api/v1/workspace").status_code == 503
+            assert client.get("/api/v1/scenarios").json() == []
+            assert client.get("/api/v1/scenarios/" + first.json()["id"]).status_code == 503
+        finally:
+            session.info.pop("require_published_data", None)
+
+
+@pytest.mark.skipif(not os.getenv("TEST_DATABASE_URL"), reason="TEST_DATABASE_URL is not set")
 def test_postgres_snapshot_routes(payload, session):
     session.add(LocalRelease(id=payload["id"], payload=payload))
     session.flush()
