@@ -49,6 +49,8 @@
   const names = $derived(
     Object.fromEntries(regions.map((row) => [row.code, row.name])),
   );
+  const provinceParam = $derived(page.url.searchParams.get('province'));
+  const provinceName = $derived(provinceParam ? names[provinceParam] : undefined);
   const total = $derived(
     Object.values(weights).reduce((a, b) => a + (Number(b) || 0), 0),
   );
@@ -103,8 +105,9 @@
     attempt;
     const release = page.url.searchParams.get('release');
     const requestedLevel = page.url.searchParams.get('level') ?? 'SD';
+    const requestedProvince = page.url.searchParams.get('province');
     const id = ++contextRequest;
-    void loadContext(release, requestedLevel, id);
+    void loadContext(release, requestedLevel, requestedProvince, id);
     void loadSaved();
     return () => { contextRequest++; regionRequest++; };
   });
@@ -123,7 +126,7 @@
     }
   }
 
-  async function loadContext(release: string | null, requestedLevel: string, id: number) {
+  async function loadContext(release: string | null, requestedLevel: string, requestedProvince: string | null, id: number) {
     workspace = undefined;
     regions = [];
     selected = [];
@@ -139,7 +142,10 @@
       level = requestedLevel;
       workspace = current;
       regions = list;
-      selected = regions.map((row) => row.code);
+      selected =
+        requestedProvince && list.some((row) => row.code === requestedProvince)
+          ? [requestedProvince]
+          : regions.map((row) => row.code);
     } catch (e) {
       if (id === contextRequest) error = (e as Error).message;
     } finally {
@@ -230,8 +236,8 @@
 >
   {#if page.url.searchParams.has('release')}
     <aside class="work-panel" aria-label="Konteks dari profil wilayah">
-      <strong>Melanjutkan dari profil wilayah</strong>
-      <p>Rilis {page.url.searchParams.get('release')} · Jenjang {level}. Cakupan awal adalah seluruh provinsi yang tersedia pada jenjang ini. Periksa cakupan dan asumsi sebelum menghitung.</p>
+      <strong>Melanjutkan dari profil wilayah{provinceName ? ` · ${provinceName}` : ''}</strong>
+      <p>Rilis {page.url.searchParams.get('release')} · Jenjang {level}. {provinceName ? `Cakupan awal adalah ${provinceName}; tambahkan provinsi lain bila perlu.` : 'Cakupan awal adalah seluruh provinsi yang tersedia pada jenjang ini.'} Periksa cakupan dan asumsi sebelum menghitung.</p>
       {#if error && !workspace}<a class="eq-button" href="/studio">Buka Studio dengan rilis aktif</a>{/if}
     </aside>
   {/if}

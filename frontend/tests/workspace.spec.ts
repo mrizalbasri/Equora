@@ -296,7 +296,7 @@ for (const width of [375, 768, 1024, 1440]) {
       ).toBeFocused();
       await page.keyboard.press('Tab');
       await expect(
-        navigation.getByRole('link', { name: 'Profil Wilayah', exact: true }),
+        navigation.getByRole('link', { name: 'Pendidikan di Daerah Saya', exact: true }),
       ).toBeFocused();
       await page.keyboard.press('Escape');
       await expect(menu).toBeFocused();
