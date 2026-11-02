@@ -31,3 +31,8 @@ Thumbs.db
 .idea/
 .vscode/
 .codegraph/
+
+# Documentation and private notes (maintained locally)
+docs/
+design-qa.md
+.superpowers/

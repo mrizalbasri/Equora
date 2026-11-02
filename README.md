@@ -75,7 +75,7 @@ Bahasa utama proyek adalah **TypeScript** pada frontend dan **Python** pada back
 | Pengujian | pytest, Vitest, Playwright | Pengujian backend, unit frontend, dan alur browser. |
 | Tooling | uv, pnpm, Ruff, Docker, GitHub Actions | Dependensi, pemeriksaan kode, container API, dan CI. |
 
-Alasan pemilihan stack ada di [panduan teknis](docs/technical-stack.md). Dependensi dikunci dalam `backend/uv.lock` dan `frontend/pnpm-lock.yaml`.
+Dependensi dikunci dalam `backend/uv.lock` dan `frontend/pnpm-lock.yaml`.
 
 ## Menjalankan proyek
 
@@ -92,7 +92,7 @@ Salin `backend/.env.example` menjadi `backend/.env` dan `frontend/.env.example` 
 
 - Isi `DATABASE_URL` backend untuk database Equora milikmu. Migrasi tidak berjalan otomatis saat aplikasi dimulai.
 - Sesuaikan `API_BASE_URL` frontend dengan alamat API, secara default `http://127.0.0.1:8000`.
-- Tidak diperlukan konfigurasi akun atau penyedia login. Lihat [akses publik dan batas workspace bersama](docs/public-access.md).
+- Tidak diperlukan konfigurasi akun atau penyedia login. Seluruh fitur publik dapat diakses langsung.
 
 Compose backend memakai instance dan network PostgreSQL yang sudah ada; Compose tidak membuat server database baru. Lihat [setup backend](backend/README.md) untuk koneksi, target pengujian, dan alternatif Docker.
 
@@ -106,7 +106,7 @@ uv sync --locked --extra dev
 uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Setelah database khusus Equora dan koneksinya siap, jalankan `uv run alembic upgrade head` dari folder `backend/`. Untuk menyiapkan rilis data lokal beserta workbook sumbernya, ikuti [panduan workspace lokal](docs/local-workspace.md).
+Setelah database khusus Equora dan koneksinya siap, jalankan `uv run alembic upgrade head` dari folder `backend/`.
 
 ### 3. Jalankan frontend
 
@@ -136,18 +136,11 @@ Equora/
 ├── frontend/       Aplikasi SvelteKit, komponen, peta, dan aset merek
 ├── backend/        API FastAPI, ETL, analisis, solver, dan migrasi
 ├── data/           Metadata sumber, fixture sintetis, dan panduan data
-├── docs/           Requirements, desain, metode, audit, dan panduan tim
-├── scripts/        Pemeriksaan dokumentasi dan alat pengembangan
+├── scripts/        Skrip pengujian dan alat pengembangan
 └── .github/        Workflow CI serta template issue dan pull request
 ```
 
 ## Pemeriksaan pengembangan
-
-Dari root repository:
-
-```sh
-python scripts/check_docs.py
-```
 
 Backend, dari folder `backend/`:
 
@@ -165,21 +158,11 @@ pnpm check:api
 pnpm build
 ```
 
-Untuk tes browser, jalankan `pnpm exec playwright install chromium` sekali, lalu `pnpm test:e2e` setelah build. Tes database memerlukan `TEST_DATABASE_URL` yang menunjuk ke target pengujian khusus. Lihat [perintah repository](scripts/README.md) dan [panduan coverage](docs/coverage.md) untuk pemeriksaan gabungan serta laporan pengujian.
+Untuk tes browser, jalankan `pnpm exec playwright install chromium` sekali, lalu `pnpm test:e2e` setelah build. Tes database memerlukan `TEST_DATABASE_URL` yang menunjuk ke target pengujian khusus. Lihat [perintah repository](scripts/README.md) untuk pemeriksaan gabungan serta laporan pengujian.
 
-## Dokumentasi
+## Panduan kontribusi
 
-| Kebutuhan | Panduan |
-| --- | --- |
-| Mulai membaca proyek | [Indeks dokumentasi](docs/README.md) |
-| Menjalankan fitur dan data lokal | [Workspace lokal](docs/local-workspace.md) |
-| Memahami kebutuhan produk | [BRD](docs/BRD_Equora.md) · [PRD](docs/PRD_Equora.md) |
-| Memahami tampilan dan arsitektur | [Desain produk](docs/DESIGN_Equora.md) · [System Design](docs/system-design/README.md) |
-| Memahami alur profil provinsi | [Pendidikan di Daerah Saya](docs/public-region.md) |
-| Menyiapkan dan memeriksa sumber | [Panduan data](data/README.md) · [Staging dataset](docs/dataset-staging.md) |
-| Memulai kontribusi | [CONTRIBUTING.md](CONTRIBUTING.md) · [Panduan tim](docs/pembagian-kerja/README.md) |
-
-Dokumen audit bertanggal mencatat kondisi pada waktu pemeriksaan, bukan jaminan kesiapan versi terbaru.
+Untuk petunjuk pengujian, alur pull request, dan standar kode, lihat [CONTRIBUTING.md](CONTRIBUTING.md) serta [Panduan data](data/README.md).
 
 ## Data dan batas penggunaan
 
