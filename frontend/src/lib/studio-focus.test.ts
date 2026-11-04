@@ -11,6 +11,13 @@ describe('focusedWeights', () => {
   it('distributes integer remainders in indicator order', () => {
     expect(focusedWeights(['a', 'b', 'c'], 'a')).toEqual({ a: 70, b: 15, c: 15 });
     expect(focusedWeights(['a', 'b'], 'b')).toEqual({ a: 30, b: 70 });
+    expect(focusedWeights(['a', 'b', 'c', 'd', 'e'], 'a')).toEqual({
+      a: 70,
+      b: 8,
+      c: 8,
+      d: 7,
+      e: 7,
+    });
   });
 
   it('handles one indicator and rejects an unknown focus', () => {
