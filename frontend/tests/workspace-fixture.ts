@@ -171,6 +171,8 @@ export async function mockWorkspace(page: Page) {
         objective_comparable: false,
         warnings: ['Bobot berbeda; objective tidak setara.'],
         budget_delta_idr: 10,
+        left: snapshot,
+        right: snapshot,
         coverage: {
           left: {
             eligible_regions: 1,
