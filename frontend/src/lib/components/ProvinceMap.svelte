@@ -9,18 +9,16 @@
   } from '$lib/maps/basemap';
   import type { Map as LibreMap, GeoJSONSource, Popup } from 'maplibre-gl';
   import type { FeatureCollection } from 'geojson';
-  import type { Observation } from '$lib/api/workspace';
+  import type { PriorityMapPresentation } from '$lib/maps/priority-map';
   import 'maplibre-gl/dist/maplibre-gl.css';
   import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
   let {
-    rows,
-    percent,
+    presentation,
     selected,
     onselect,
     onretry,
   }: {
-    rows: Observation[];
-    percent: boolean;
+    presentation: PriorityMapPresentation;
     selected: string;
     onselect: (code: string) => void;
     onretry: () => void;
@@ -33,26 +31,21 @@
   let rendered = $state(false);
   let failure = $state('');
   let basemapStatus = $state<'loading' | 'ready' | 'failed'>('loading');
-  const colors = ['#e8f1fa', '#b4d1e8', '#74a9cf', '#367fb5', '#14507c'];
   function paint() {
     if (!map || !ready || !geo) return;
-    const lookup = new Map(rows.map((row) => [row.code, row]));
-    const max = percent
-      ? 100
-      : Math.max(1, ...rows.map((row) => Number(row.value ?? 0)));
+    const lookup = new Map(presentation.rows.map((row) => [row.code, row]));
     const features = geo.features.map((feature) => {
       const code = String(feature.properties?.code);
-      const value = lookup.get(code)?.value;
+      const row = lookup.get(code);
       return {
         ...feature,
         properties: {
           ...feature.properties,
-          fill:
-            value == null
-              ? '#d8dce0'
-              : colors[Math.min(4, Math.floor((Number(value) / max) * 5))],
+          fill: row?.fill ?? '#d8dce0',
           selected: code === selected,
-          tooltip: `${feature.properties?.name ?? code} · ${value == null ? 'Data tidak tersedia / di luar filter' : new Intl.NumberFormat('id-ID', { maximumFractionDigits: 2 }).format(Number(value)) + (percent ? '%' : ' sekolah')}`,
+          tooltip:
+            row?.tooltip ??
+            `${feature.properties?.name ?? code} · Data tidak tersedia / di luar filter`,
         },
       };
     });
@@ -62,8 +55,7 @@
     });
   }
   $effect(() => {
-    rows;
-    percent;
+    presentation;
     selected;
     ready;
     geo;
@@ -223,21 +215,13 @@
     <button class="eq-button" onclick={onretry}>Coba lagi basemap</button>
   {/if}
 {/if}
-<div class="legend">
-  <span>Rendah</span>{#each colors as color}<span
-      style:background={color}
-      class="swatch"
-    ></span>{/each}<span>Tinggi</span><span
-    class="swatch"
-    style:background="#d8dce0"
-  ></span><span>Tanpa data / di luar filter</span>
+<div class="legend" aria-label="Legenda peta">
+  {#each presentation.legend.items as item}<span
+      class="legend-item"
+      ><span style:background={item.color} class="swatch"></span>{item.label}</span
+    >{/each}
 </div>
-<p class="map-scale">
-  {percent
-    ? 'Persentase akses: 0–20, 20–40, 40–60, 60–80, 80–100%.'
-    : 'Jumlah sekolah: lima interval sama terhadap maksimum hasil filter.'} Batas
-  komunitas yang disederhanakan; basemap bukan sumber indikator pendidikan.
-</p>
+<p class="map-scale">{presentation.legend.description} Batas komunitas yang disederhanakan; basemap bukan sumber indikator pendidikan.</p>
 {#if geo}<details class="attribution">
     <summary>Batas komunitas: Deny Herianto · CC BY 4.0</summary>
     <p>
@@ -262,6 +246,11 @@
     align-items: center;
     font-size: 12px;
     margin-block: 12px;
+  }
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
   }
   .swatch {
     width: 22px;

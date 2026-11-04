@@ -64,6 +64,51 @@ export const insights = {
   })),
   limitations: ['Synthetic tests only'],
 };
+export const mapInsights = {
+  release_id: 'synthetic-release',
+  status: 'local_review',
+  academic_year: '2025/2026',
+  education_level: 'SD',
+  ownership: 'Total',
+  indicator: {
+    source_id: 'sanitation_percent',
+    title: 'Synthetic sanitation source',
+    unit: 'percent',
+    definition: 'Synthetic definition for tests only',
+  },
+  median: '40',
+  available_regions: 1,
+  total_regions: 2,
+  rows: [
+    {
+      code: '11',
+      name: rows[0].name,
+      value: '20',
+      comparison: 'below',
+      delta_from_median: '-20',
+      rank: 1,
+      available_indicators: 4,
+      total_indicators: 4,
+      completeness_ratio: '1',
+      attention_source_id: 'sanitation_percent',
+      unavailable_reason: null,
+    },
+    {
+      code: '12',
+      name: rows[1].name,
+      value: null,
+      comparison: 'unavailable',
+      delta_from_median: null,
+      rank: null,
+      available_indicators: 2,
+      total_indicators: 4,
+      completeness_ratio: '0.5',
+      attention_source_id: null,
+      unavailable_reason: 'missing',
+    },
+  ],
+  limitations: ['Synthetic tests only'],
+};
 export const allocation = {
   status: 'optimal',
   allocations: { '11': 2 },
@@ -163,6 +208,16 @@ export async function mockWorkspace(page: Page) {
           json: { detail: 'Dataset tidak ditemukan' },
         });
       json = found;
+    } else if (path === 'regions/insights-map') {
+      const indicator =
+        sources.find(
+          (item) => item.source_id === url.searchParams.get('indicator'),
+        ) ?? source;
+      json = {
+        ...mapInsights,
+        education_level: url.searchParams.get('education_level') ?? 'SD',
+        indicator,
+      };
     } else if (/^regions\/[^/]+\/insights$/.test(path)) {
       const code = path.split('/')[1];
       json = {

@@ -1,5 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ProvinceMap from '$lib/components/ProvinceMap.svelte';
   import Icon from '$lib/components/Icon.svelte';
@@ -9,14 +11,23 @@
     number,
     type Workspace,
     type Observations,
+    type RegionMapInsights,
   } from '$lib/api/workspace';
+  import {
+    buildPriorityMapView,
+    type PriorityMapMode,
+  } from '$lib/maps/priority-map';
   let workspace = $state<Workspace>();
   let data = $state<Observations>();
+  let mapInsights = $state<RegionMapInsights>();
   let indicator = $state('sanitation_percent');
   let level = $state('SD');
+  let view = $state<PriorityMapMode>('value');
   let query = $state('');
   let selected = $state('');
   let error = $state('');
+  let insightError = $state('');
+  let insightLoading = $state(false);
   let loading = $state(true);
   let descending = $state(false);
   let requestId = 0;
@@ -39,6 +50,9 @@
       ),
   );
   const detail = $derived(data?.rows.find((row) => row.code === selected));
+  const detailInsight = $derived(
+    mapInsights?.rows.find((row) => row.code === selected),
+  );
   const isPercent = $derived(data?.source.unit === 'percent');
   const available = $derived(filtered.filter((row) => row.value !== null));
   const values = $derived(available.map((row) => Number(row.value)));
@@ -52,30 +66,145 @@
       .slice(0, 5),
   );
   const max = $derived(isPercent ? 100 : Math.max(1, ...values));
+  const mapPresentation = $derived(
+    buildPriorityMapView(filtered, isPercent, view, mapInsights),
+  );
+  const studioUrl = $derived(
+    detail && data && workspace?.core_indicators.includes(indicator)
+      ? '/studio?' +
+          new URLSearchParams({
+            level,
+            release: data.release_id,
+            province: detail.code,
+            focus: indicator,
+          })
+      : '',
+  );
   const exportUrl = $derived(
     '/api/v1/observations/export?' +
-      new URLSearchParams({ indicator, education_level: level, q: query }),
+      new URLSearchParams({
+        indicator,
+        education_level: level,
+        q: query,
+        ...(data?.release_id ? { release_id: data.release_id } : {}),
+      }),
   );
   const shortName = (name: string) => name.replace(/^Provinsi /, '');
+  const parseView = (value: string | null): PriorityMapMode =>
+    value === 'median' || value === 'completeness' ? value : 'value';
+  function syncView(next: PriorityMapMode) {
+    const url = new URL(page.url);
+    url.searchParams.set('view', next);
+    void goto(url.pathname + url.search + url.hash, {
+      replaceState: true,
+      keepFocus: true,
+      noScroll: true,
+    });
+  }
+  function changeView(next: PriorityMapMode) {
+    if (
+      (next === 'median' && (!mapInsights || !isPercent)) ||
+      (next === 'completeness' && !mapInsights)
+    )
+      return;
+    view = next;
+    syncView(next);
+  }
+  function relativeSummary() {
+    const delta = detailInsight?.delta_from_median;
+    if (delta == null) return 'Belum dapat dibandingkan dengan median.';
+    const value = Number(delta);
+    if (value === 0) return 'Setara dengan median provinsi.';
+    return `${number(Math.abs(value))} poin persentase ${value < 0 ? 'di bawah' : 'di atas'} median`;
+  }
   async function load() {
     const id = ++requestId;
+    const params = { indicator, level };
     loading = true;
     error = '';
+    insightError = '';
+    insightLoading = true;
     data = undefined;
+    mapInsights = undefined;
     try {
-      if (!workspace) workspace = await api<Workspace>('workspace');
+      const current = workspace ?? (await api<Workspace>('workspace'));
+      workspace = current;
       const result = await api<Observations>(
         'observations?' +
-          new URLSearchParams({ indicator, education_level: level }),
+          new URLSearchParams({
+            indicator: params.indicator,
+            education_level: params.level,
+            release_id: current.id,
+          }),
       );
-      if (id === requestId) data = result;
+      if (
+        result.release_id !== current.id ||
+        result.education_level !== params.level ||
+        result.source.source_id !== params.indicator
+      )
+        throw new Error('Konteks observasi tidak sesuai dengan filter aktif.');
+      if (id === requestId) {
+        data = result;
+        void loadMapInsights(id, current, params);
+      }
     } catch (e) {
-      if (id === requestId) error = (e as Error).message;
+      if (id === requestId) {
+        error = (e as Error).message;
+        insightLoading = false;
+      }
     } finally {
       if (id === requestId) loading = false;
     }
   }
-  onMount(load);
+  async function loadMapInsights(
+    id: number,
+    current: Workspace,
+    params: { indicator: string; level: string },
+  ) {
+    insightLoading = true;
+    insightError = '';
+    try {
+      const result = await api<RegionMapInsights>(
+        'regions/insights-map?' +
+          new URLSearchParams({
+            indicator: params.indicator,
+            education_level: params.level,
+            release_id: current.id,
+          }),
+      );
+      if (id !== requestId) return;
+      if (
+        result.release_id !== current.id ||
+        result.education_level !== params.level ||
+        result.indicator.source_id !== params.indicator
+      )
+        throw new Error('Konteks insight peta tidak sesuai dengan filter aktif.');
+      mapInsights = result;
+      if (view === 'median' && result.indicator.unit !== 'percent') {
+        view = 'value';
+        syncView('value');
+      }
+    } catch (e) {
+      if (id === requestId) {
+        insightError = (e as Error).message;
+        mapInsights = undefined;
+        if (view !== 'value') {
+          view = 'value';
+          syncView('value');
+        }
+      }
+    } finally {
+      if (id === requestId) insightLoading = false;
+    }
+  }
+  function retryInsights() {
+    if (!workspace) return;
+    void loadMapInsights(requestId, workspace, { indicator, level });
+  }
+  onMount(() => {
+    view = parseView(page.url.searchParams.get('view'));
+    void load();
+  });
 </script>
 
 <svelte:head><title>Explorer pendidikan · Equora</title></svelte:head>
@@ -169,11 +298,33 @@
           </div>
           <span class="scope-badge">{level} · Total</span>
         </header>
+        <div class="map-view-control" role="group" aria-label="Tampilan peta">
+          <button
+            type="button"
+            aria-pressed={view === 'value'}
+            onclick={() => changeView('value')}>Nilai indikator</button
+          ><button
+            type="button"
+            aria-pressed={view === 'median'}
+            disabled={insightLoading || !mapInsights || !isPercent}
+            title={!isPercent ? 'Hanya tersedia untuk indikator akses persentase' : undefined}
+            onclick={() => changeView('median')}>Terhadap median</button
+          ><button
+            type="button"
+            aria-pressed={view === 'completeness'}
+            disabled={insightLoading || !mapInsights}
+            onclick={() => changeView('completeness')}>Kelengkapan data</button
+          >
+        </div>
+        {#if insightLoading}<p class="insight-status" role="status">Memuat benchmark provinsi…</p>{/if}
+        {#if insightError}<div class="map-insight-error" role="alert">
+            <span>{insightError} Mode nilai indikator dan tabel tetap tersedia.</span>
+            <button type="button" onclick={retryInsights}>Coba lagi insight</button>
+          </div>{/if}
         <p class="indicator-definition">{data.source.definition}</p>
         {#key mapAttempt}<ProvinceMap
             onretry={() => mapAttempt++}
-            rows={filtered}
-            percent={isPercent}
+            presentation={mapPresentation}
             {selected}
             onselect={(code) => (selected = code)}
           />{/key}
@@ -187,7 +338,7 @@
               ><Icon name="close" size={17} /></button>{/if}
         </div>
         {#if detail}
-          <section class="selected-region" aria-live="polite">
+          <section class="selected-region" aria-live="polite" aria-label="Ringkasan wilayah terpilih">
             <span class="region-code">WILAYAH {detail.code}</span>
             <h2>{detail.name}</h2>
             <p class="selected-value">
@@ -196,6 +347,12 @@
                 {/if}
             </p>
             <p class="selected-label">{labels[indicator]} · {level}</p>
+            {#if detailInsight && isPercent}
+              <div class="relative-evidence">
+                <span>TERHADAP MEDIAN</span>
+                <strong>{relativeSummary()}</strong>
+              </div>
+            {/if}
             <dl>
               <dt>Status</dt>
               <dd>
@@ -211,11 +368,27 @@
               <dd>{detail.source_cell}</dd>
               <dt>Tahun ajaran</dt>
               <dd>{data.academic_year}</dd>
+              {#if detailInsight && isPercent}
+                <dt>Median provinsi</dt>
+                <dd>{number(mapInsights?.median)}%</dd>
+                <dt>Peringkat</dt>
+                <dd>{detailInsight.rank ? `${detailInsight.rank} dari ${mapInsights?.available_regions}` : 'Tidak tersedia'}</dd>
+              {/if}
+              {#if detailInsight}
+                <dt>Kelengkapan</dt>
+                <dd>{detailInsight.available_indicators} dari {detailInsight.total_indicators} indikator</dd>
+              {/if}
+              <dt>Status rilis</dt>
+              <dd>{mapInsights?.status ?? data.status}</dd>
             </dl>
-            <a
-              class="eq-button region-detail-link"
-              href={'/daerah?' + new URLSearchParams({ province: detail.code, level, release: data.release_id })}
-              >Pahami kondisi wilayah</a>
+            <div class="region-actions">
+              <a
+                class="eq-button region-detail-link"
+                href={'/daerah?' + new URLSearchParams({ province: detail.code, level, release: data.release_id })}
+                >Pahami kondisi wilayah</a>
+              {#if studioUrl}<a class="eq-button eq-button-primary region-detail-link" href={studioUrl}
+                  >Coba fokus ini di Studio</a>{/if}
+            </div>
           </section>
         {:else}
           <div class="region-intro">
@@ -250,8 +423,12 @@
         <div class="interpretation">
           <Icon name="info" size={17} />
           <p>
-            {isPercent
-              ? 'Akses lebih rendah menunjukkan kebutuhan lebih besar. Ini belum skor prioritas berbobot.'
+            {view === 'median'
+              ? 'Posisi terhadap median bersifat deskriptif dan bukan tingkat urgensi atau rekomendasi kebijakan.'
+              : view === 'completeness'
+                ? 'Kelengkapan menunjukkan data yang dapat dibandingkan, bukan kondisi fasilitas suatu wilayah.'
+              : isPercent
+              ? 'Akses relatif lebih rendah dapat menjadi titik awal pemeriksaan. Ini belum skor prioritas berbobot.'
               : 'Jumlah sekolah adalah konteks. Nilai ini tidak digunakan langsung sebagai skor kebutuhan.'}
           </p>
         </div>
@@ -511,6 +688,61 @@
     margin: 12px 0 16px;
     line-height: 1.6;
   }
+  .map-view-control {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 16px;
+    padding: 3px;
+    border: 1px solid var(--eq-border);
+    border-radius: 8px;
+    background: var(--eq-sidebar);
+  }
+  .map-view-control button {
+    min-height: 42px;
+    padding: 7px 10px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--eq-text-secondary);
+    font-size: 12px;
+    font-weight: 550;
+  }
+  .map-view-control button[aria-pressed='true'] {
+    background: var(--eq-surface);
+    color: var(--eq-primary-hover);
+    box-shadow: 0 1px 3px rgb(30 52 73 / 12%);
+  }
+  .map-view-control button:disabled {
+    cursor: not-allowed;
+    opacity: 0.48;
+  }
+  .insight-status {
+    margin-top: 8px;
+    color: var(--eq-text-secondary);
+    font-size: 11px;
+  }
+  .map-insight-error {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--eq-warning);
+    border-radius: 7px;
+    color: var(--eq-text-secondary);
+    font-size: 11px;
+  }
+  .map-insight-error button {
+    min-height: 40px;
+    flex-shrink: 0;
+    border: 1px solid var(--eq-control-border);
+    border-radius: 6px;
+    background: var(--eq-surface);
+    color: var(--eq-text);
+    padding-inline: 10px;
+    font-size: 11px;
+  }
   .region-panel {
     display: flex;
     flex-direction: column;
@@ -641,6 +873,24 @@
     color: var(--eq-text-secondary);
     margin-top: 5px;
   }
+  .relative-evidence {
+    display: grid;
+    gap: 5px;
+    margin-top: 18px;
+    padding: 12px;
+    border-left: 3px solid var(--eq-primary);
+    background: var(--eq-primary-tint);
+  }
+  .relative-evidence span {
+    color: var(--eq-text-secondary);
+    font-size: 9px;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+  }
+  .relative-evidence strong {
+    font-size: 12px;
+    line-height: 1.5;
+  }
   .selected-region dl {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -658,11 +908,15 @@
     text-align: right;
   }
   .region-detail-link {
-    margin-top: 24px;
     width: 100%;
     font-size: 12px;
     padding-inline: 10px;
     gap: 8px;
+  }
+  .region-actions {
+    display: grid;
+    gap: 8px;
+    margin-top: 24px;
   }
   .observation-heading {
     display: flex;
