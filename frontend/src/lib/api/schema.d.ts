@@ -1450,6 +1450,7 @@ export interface operations {
                 education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
                 q?: string;
                 region_code?: string | null;
+                release_id?: string | null;
             };
             header?: never;
             path?: never;
@@ -1484,6 +1485,7 @@ export interface operations {
                 education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
                 q?: string;
                 region_code?: string | null;
+                release_id?: string | null;
             };
             header?: never;
             path?: never;

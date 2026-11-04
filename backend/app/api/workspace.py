@@ -272,8 +272,9 @@ def observations(
     education_level: EducationLevel = "SD",
     q: str = Query(default="", max_length=100),
     region_code: str | None = None,
+    release_id: str | None = None,
 ):
-    payload = local_release(session)
+    payload = local_release(session, release_id)
     source = next(
         (source for source in payload["sources"] if source["source_id"] == indicator), None
     )
@@ -346,8 +347,9 @@ def export_observations(
     education_level: EducationLevel = "SD",
     q: str = Query(default="", max_length=100),
     region_code: str | None = None,
+    release_id: str | None = None,
 ):
-    result = observations(session, indicator, education_level, q, region_code)
+    result = observations(session, indicator, education_level, q, region_code, release_id)
     rows = [
         [
             "release_id",
