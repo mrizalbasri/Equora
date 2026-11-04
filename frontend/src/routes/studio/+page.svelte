@@ -3,6 +3,7 @@
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ScenarioResult from '$lib/components/ScenarioResult.svelte';
   import Icon from '$lib/components/Icon.svelte';
+  import { focusedWeights } from '$lib/studio-focus';
   import {
     api,
     labels,
@@ -25,6 +26,7 @@
   let capacity = $state<number | undefined>(10);
   let minimum = $state<number | undefined>(0);
   let activePreset = $state<'sanitation' | 'digital' | 'affirmation' | 'equal' | null>('equal');
+  let focusIndicator = $state<string>();
   let weights = $state<Record<string, number>>({
     sanitation_percent: 25,
     water_percent: 25,
@@ -61,6 +63,7 @@
   );
 
   function applyPreset(preset: 'sanitation' | 'digital' | 'affirmation' | 'equal') {
+    focusIndicator = undefined;
     activePreset = preset;
     if (preset === 'sanitation') {
       name = 'Prioritas sanitasi dan air';
@@ -106,8 +109,9 @@
     const release = page.url.searchParams.get('release');
     const requestedLevel = page.url.searchParams.get('level') ?? 'SD';
     const requestedProvince = page.url.searchParams.get('province');
+    const requestedFocus = page.url.searchParams.get('focus');
     const id = ++contextRequest;
-    void loadContext(release, requestedLevel, requestedProvince, id);
+    void loadContext(release, requestedLevel, requestedProvince, requestedFocus, id);
     void loadSaved();
     return () => { contextRequest++; regionRequest++; };
   });
@@ -126,7 +130,7 @@
     }
   }
 
-  async function loadContext(release: string | null, requestedLevel: string, requestedProvince: string | null, id: number) {
+  async function loadContext(release: string | null, requestedLevel: string, requestedProvince: string | null, requestedFocus: string | null, id: number) {
     workspace = undefined;
     regions = [];
     selected = [];
@@ -142,6 +146,15 @@
       level = requestedLevel;
       workspace = current;
       regions = list;
+      const focused = focusedWeights(current.core_indicators, requestedFocus);
+      if (focused && requestedFocus) {
+        weights = focused;
+        activePreset = null;
+        focusIndicator = requestedFocus;
+        name = `Fokus awal ${labels[requestedFocus] ?? requestedFocus}`;
+      } else {
+        applyPreset('equal');
+      }
       selected =
         requestedProvince && list.some((row) => row.code === requestedProvince)
           ? [requestedProvince]
@@ -238,6 +251,7 @@
     <aside class="work-panel" aria-label="Konteks dari profil wilayah">
       <strong>Melanjutkan dari profil wilayah{provinceName ? ` · ${provinceName}` : ''}</strong>
       <p>Rilis {page.url.searchParams.get('release')} · Jenjang {level}. {provinceName ? `Cakupan awal adalah ${provinceName}; tambahkan provinsi lain bila perlu.` : 'Cakupan awal adalah seluruh provinsi yang tersedia pada jenjang ini.'} Periksa cakupan dan asumsi sebelum menghitung.</p>
+      {#if focusIndicator}<p><strong>Titik awal fokus: {labels[focusIndicator] ?? focusIndicator}.</strong> Bobot 70% hanya diisi sebagai titik awal dari profil wilayah dan dapat diubah; ini bukan rekomendasi kebijakan.</p>{/if}
       {#if error && !workspace}<a class="eq-button" href="/studio">Buka Studio dengan rilis aktif</a>{/if}
     </aside>
   {/if}
@@ -418,7 +432,7 @@
             <input
               type="number"
               bind:value={weights[key]}
-              oninput={() => activePreset = null}
+              oninput={() => { activePreset = null; focusIndicator = undefined; }}
               required
               min="0"
               max="100"

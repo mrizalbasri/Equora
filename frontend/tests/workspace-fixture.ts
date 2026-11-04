@@ -41,6 +41,29 @@ export const rows = [
     status: 'missing',
   },
 ];
+export const insights = {
+  release_id: 'synthetic-release',
+  status: 'local_review',
+  academic_year: '2025/2026',
+  education_level: 'SD',
+  ownership: 'Total',
+  region: { code: '11', name: 'Provinsi Synthetic Alpha' },
+  available_indicators: 4,
+  total_indicators: 4,
+  attention_source_id: core[0],
+  strength_source_id: null,
+  benchmarks: core.map((source_id) => ({
+    source_id,
+    value: '20',
+    median: '40',
+    delta_from_median: '-20',
+    rank: 2,
+    available_regions: 2,
+    comparison: 'below',
+    unavailable_reason: null,
+  })),
+  limitations: ['Synthetic tests only'],
+};
 export const allocation = {
   status: 'optimal',
   allocations: { '11': 2 },
@@ -140,6 +163,16 @@ export async function mockWorkspace(page: Page) {
           json: { detail: 'Dataset tidak ditemukan' },
         });
       json = found;
+    } else if (/^regions\/[^/]+\/insights$/.test(path)) {
+      const code = path.split('/')[1];
+      json = {
+        ...insights,
+        education_level: url.searchParams.get('education_level') ?? 'SD',
+        region: {
+          code,
+          name: rows.find((row) => row.code === code)?.name ?? `Synthetic ${code}`,
+        },
+      };
     } else if (path === 'regions')
       json = rows.map(({ code, name }) => ({ code, name }));
     else if (path === 'observations')

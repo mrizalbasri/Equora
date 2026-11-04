@@ -4,13 +4,17 @@
   import WorkspaceShell from './WorkspaceShell.svelte';
   import ProvincePicker from './ProvincePicker.svelte';
   import Icon from './Icon.svelte';
-  import { api, labels, number, type Workspace } from '$lib/api/workspace';
+  import RegionPrioritySummary from './RegionPrioritySummary.svelte';
+  import { api, labels, number, type RegionInsights, type Workspace } from '$lib/api/workspace';
   import { facilityValue, comparisonDifference, profilePath, profileSummary, type RegionProfile } from '$lib/region-profile';
 
   let workspace = $state<Workspace>();
   let regions = $state<{ code: string; name: string }[]>([]);
   let profile = $state<RegionProfile>();
   let comparison = $state<RegionProfile>();
+  let insights = $state<RegionInsights>();
+  let insightLoading = $state(false);
+  let insightError = $state('');
   let loading = $state(true);
   let error = $state('');
   let attempt = $state(0);
@@ -38,6 +42,9 @@
     error = '';
     profile = undefined;
     comparison = undefined;
+    insights = undefined;
+    insightLoading = !!params.province;
+    insightError = '';
     shareText = '';
     shareStatus = '';
     try {
@@ -60,6 +67,8 @@
       regions = list;
       profile = left;
       comparison = right;
+      if (left) void loadInsights(id, left.code, query, current.id, params.level);
+      else insightLoading = false;
       if (!params.release) {
         void goto(profilePath(params.province, params.level, current.id, params.compare), { replaceState: true, keepFocus: true, noScroll: true });
       }
@@ -68,6 +77,29 @@
     } finally {
       if (id === requestId) loading = false;
     }
+  }
+
+  async function loadInsights(id: number, code: string, query: URLSearchParams, releaseId: string, educationLevel: string) {
+    insightLoading = true;
+    insightError = '';
+    try {
+      const result = await api<RegionInsights>('regions/' + encodeURIComponent(code) + '/insights?' + query);
+      if (id !== requestId) return;
+      if (result.release_id !== releaseId || result.education_level !== educationLevel || result.region.code !== code) {
+        throw new Error('Konteks ringkasan tidak sesuai dengan profil wilayah.');
+      }
+      insights = result;
+    } catch (e) {
+      if (id === requestId) insightError = e instanceof Error ? e.message : 'Ringkasan relatif belum dapat dimuat.';
+    } finally {
+      if (id === requestId) insightLoading = false;
+    }
+  }
+
+  function retryInsights() {
+    if (!profile || !workspace) return;
+    const query = new URLSearchParams({ education_level: level, release_id: workspace.id });
+    void loadInsights(requestId, profile.code, query, workspace.id, level);
   }
 
   function navigate(code = province, nextLevel = level, nextCompare = compare) {
@@ -137,6 +169,16 @@
           <label class="share-label">Ringkasan dan tautan temuan<textarea readonly rows="8" value={shareText}></textarea></label>
         </section>
       {/if}
+      {#if insightLoading}
+        <section class="insight-message" role="status">Menghitung benchmark provinsi pada rilis dan jenjang yang sama…</section>
+      {:else if insightError}
+        <section class="insight-message insight-error" role="alert">
+          <div><strong>Ringkasan kondisi relatif belum dapat dimuat.</strong><p>{insightError}</p></div>
+          <button class="eq-button" onclick={retryInsights}><Icon name="retry" size={18} />Coba lagi</button>
+        </section>
+      {:else if insights}
+        <RegionPrioritySummary {insights} sources={profile.sources} />
+      {/if}
       <details class="comparison-picker" open={!!compare}>
         <summary><Icon name="compare" /><span class="summary-label">Bandingkan dengan provinsi lain</span><span class="optional-label">Opsional</span></summary>
         <div class="comparison-content">
@@ -154,7 +196,7 @@
           {@const value = facilityValue(profile, source)}
           {@const difference = comparison ? comparisonDifference(profile, comparison, source) : null}
           {@const other = comparison && difference?.compatible ? facilityValue(comparison, source) : null}
-          <article class="facility-row" aria-label={labels[source.source_id] ?? source.title}>
+          <article id={'indicator-' + source.source_id} class="facility-row" aria-label={labels[source.source_id] ?? source.title}>
             <div class="facility-explanation">
               <h3>{labels[source.source_id] ?? source.title}</h3>
               <p>{source.definition}</p>
@@ -290,6 +332,9 @@
   .next-step p + p { color: var(--eq-text-secondary); font-size: 14px; }
   .journey-actions { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 20px; }
   .share-result { background: var(--eq-primary-tint); padding: 24px; border-radius: 12px; margin-bottom: 24px; }
+  .insight-message { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 28px; padding: 18px 20px; border-radius: 10px; background: var(--eq-surface-subtle); line-height: 1.6; }
+  .insight-message p { margin-top: 4px; color: var(--eq-text-secondary); }
+  .insight-error { border-left: 4px solid var(--eq-warning); }
   .share-label { margin-top: 16px; }
   textarea { font-size: 16px; line-height: 1.7; font-weight: 400; resize: vertical; }
   .data-context { border-bottom: 1px solid var(--eq-border); overflow-wrap: anywhere; }
@@ -307,5 +352,7 @@
     .profile-overview > button { width: 100%; }
     .journey-actions > * { width: 100%; text-align: center; justify-content: center; }
     .share-result { padding: 20px; }
+    .insight-message { align-items: stretch; flex-direction: column; }
+    .insight-message button { width: 100%; justify-content: center; }
   }
 </style>

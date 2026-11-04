@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { mockWorkspace, sources, core } from './workspace-fixture';
+import { mockWorkspace, sources, core, insights } from './workspace-fixture';
 
 async function mockProfiles(page: Page) {
   await mockWorkspace(page);
@@ -14,6 +14,15 @@ async function mockProfiles(page: Page) {
       ownership: 'Total', education_level: level,
       values: { ...Object.fromEntries(core.map((key) => [key, code === '11' ? '20' : '60'])), institutions_count: '10' },
       cells: Object.fromEntries(core.map((key) => [key, 'I5'])), sources, limitations: ['Synthetic tests only'],
+    } });
+  });
+  await page.route(/\/api\/v1\/regions\/[^/]+\/insights(?:\?.*)?$/, async (route) => {
+    const url = new URL(route.request().url());
+    const code = url.pathname.split('/').at(-2) ?? '11';
+    return route.fulfill({ json: {
+      ...insights,
+      education_level: url.searchParams.get('education_level') ?? 'SD',
+      region: { code, name: `Provinsi Synthetic ${code === '11' ? 'Alpha' : 'Beta'}` },
     } });
   });
 }
@@ -182,4 +191,46 @@ test('Studio reloads the province scope for a new level using the same release',
   expect((await calculation).postDataJSON()).toMatchObject({
     release_id: 'synthetic-release', education_level: 'SMP', region_codes: ['12'],
   });
+});
+
+test('relative summary carries an evidence-linked focus into Studio', async ({ page }) => {
+  await mockProfiles(page);
+  await page.goto('/daerah?province=11&level=SD&release=synthetic-release');
+  await expect(page.getByRole('heading', { name: 'Ringkasan kondisi relatif' })).toBeVisible();
+  const attention = page.getByRole('article').filter({ hasText: 'Perlu diperhatikan' });
+  await expect(attention).toContainText('Sanitasi dasar');
+  await expect(attention).toContainText('20 poin persentase');
+  await page.getByText('Lihat semua benchmark dan sumber').click();
+  await expect(page.getByRole('region', { name: 'Tabel benchmark indikator' })).toContainText('2 dari 2');
+
+  await attention.getByRole('link', { name: 'Coba fokus ini di Studio' }).click();
+  await expect(page).toHaveURL(/focus=sanitation_percent/);
+  await expect(page.getByLabel('Konteks dari profil wilayah')).toContainText('Titik awal fokus: Sanitasi dasar');
+  await expect(page.getByLabel('Sanitasi dasar (%)')).toHaveValue('70');
+  await expect(page.getByLabel('Ketersediaan air (%)')).toHaveValue('10');
+  await expect(page.getByLabel('Akses internet (%)')).toHaveValue('10');
+  await expect(page.getByLabel('Ketersediaan komputer (%)')).toHaveValue('10');
+});
+
+test('insight failure stays isolated from the region profile and can retry', async ({ page }) => {
+  await mockProfiles(page);
+  let unavailable = true;
+  await page.route(/\/api\/v1\/regions\/11\/insights(?:\?.*)?$/, async (route) => {
+    if (unavailable) return route.fulfill({ status: 503, json: { detail: 'Benchmark belum tersedia' } });
+    return route.fulfill({ json: insights });
+  });
+  await page.goto('/daerah?province=11&release=synthetic-release');
+  await expect(page.getByRole('heading', { name: 'Kondisi fasilitas di Provinsi Synthetic Alpha' })).toBeVisible();
+  await expect(page.getByRole('alert')).toContainText('Benchmark belum tersedia');
+  unavailable = false;
+  await page.getByRole('button', { name: 'Coba lagi' }).click();
+  await expect(page.getByRole('heading', { name: 'Ringkasan kondisi relatif' })).toBeVisible();
+});
+
+test('unknown Studio focus safely falls back to equal weights', async ({ page }) => {
+  await mockProfiles(page);
+  await page.goto('/studio?level=SD&release=synthetic-release&province=11&focus=unknown');
+  await expect(page.getByLabel('Sanitasi dasar (%)')).toHaveValue('25');
+  await expect(page.getByLabel('Ketersediaan air (%)')).toHaveValue('25');
+  await expect(page.getByLabel('Konteks dari profil wilayah')).not.toContainText('Titik awal fokus');
 });
