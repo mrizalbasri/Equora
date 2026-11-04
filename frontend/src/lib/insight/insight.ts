@@ -53,20 +53,21 @@ export type EquityConcentration = {
  */
 export function equityConcentration(
   ranked: { region_code: string; rank: number | string }[],
-  allocations: Record<string, number> | null | undefined,
+  allocations: Record<string, number | null | undefined> | null | undefined,
   topCount = 5,
 ): EquityConcentration | null {
-  const total = Object.values(allocations ?? {}).reduce(
+  if (!allocations || ranked.length === 0) return null;
+  const total = Object.values(allocations).reduce<number>(
     (sum, count) => sum + (count ?? 0),
     0,
   );
-  if (total <= 0 || ranked.length === 0) return null;
+  if (total <= 0) return null;
   const regions = [...ranked]
     .sort((a, b) => Number(a.rank) - Number(b.rank))
     .slice(0, topCount)
     .map((row) => row.region_code);
   const top = new Set(regions);
-  const packages = Object.entries(allocations ?? {})
+  const packages = Object.entries(allocations)
     .filter(([code]) => top.has(code))
     .reduce((sum, [, count]) => sum + (count ?? 0), 0);
   return { regions, packages, total, percent: (packages / total) * 100 };
@@ -105,7 +106,7 @@ export type SchoolImpact = {
 export function schoolImpact(
   inputRows: InputRow[],
   weights: WeightMap,
-  allocations: Record<string, number> | null | undefined,
+  allocations: Record<string, number | null | undefined> | null | undefined,
 ): SchoolImpact | null {
   const focus = focusIndicator(weights);
   if (!focus) return null;
@@ -158,9 +159,12 @@ export function schoolImpact(
 }
 
 export type CompareSummaryInput = {
-  coverage: Record<string, { total_packages: number } | undefined>;
-  rows: { region_code: string; delta: number }[];
-  budget_delta_idr: number;
+  coverage: {
+    left?: { total_packages: number | null } | undefined;
+    right?: { total_packages: number | null } | undefined;
+  };
+  rows: { region_code: string; delta: number | null | undefined }[];
+  budget_delta_idr?: number | null;
   objective_comparable: boolean;
 };
 
@@ -192,8 +196,11 @@ export function compareSummary(
     );
   }
   const movers = input.rows
-    .filter((row) => (row.delta ?? 0) !== 0)
-    .sort((a, b) => Math.abs(b.delta ?? 0) - Math.abs(a.delta ?? 0))
+    .filter(
+      (row): row is { region_code: string; delta: number } =>
+        typeof row.delta === 'number' && row.delta !== 0,
+    )
+    .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
     .slice(0, 2);
   if (movers.length === 0) {
     sentences.push('Tidak ada pergeseran paket antarwilayah pada kedua skenario ini.');
@@ -203,7 +210,7 @@ export function compareSummary(
         (row) =>
           `${names[row.region_code] ?? row.region_code} (${
             row.delta > 0 ? '+' : ''
-          }${formatInt(row.delta ?? 0)} paket)`,
+          }${formatInt(row.delta)} paket)`,
       )
       .join(' dan ');
     sentences.push(`Perubahan paling terkonsentrasi di ${detail}.`);

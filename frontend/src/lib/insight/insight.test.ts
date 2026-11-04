@@ -93,6 +93,14 @@ describe('equityConcentration', () => {
     expect(equityConcentration(ranked, undefined, 5)).toBeNull();
     expect(equityConcentration([], { A: 5 }, 5)).toBeNull();
   });
+  it('ignores null and undefined package counts in the share', () => {
+    const result = equityConcentration(
+      ranked,
+      { A: null, B: undefined, C: 10, D: 20, E: 20 },
+      5,
+    );
+    expect(result).toEqual({ regions: ['A', 'B', 'C', 'D', 'E'], packages: 50, total: 50, percent: 100 });
+  });
 });
 
 describe('schoolImpact', () => {
@@ -129,6 +137,20 @@ describe('schoolImpact', () => {
   });
   it('returns null without a determinable focus indicator', () => {
     expect(schoolImpact(rows, {}, { A: 10 })).toBeNull();
+  });
+  it('skips zero, negative, and missing package counts', () => {
+    const impact = schoolImpact(rows, sanitationWeights, { A: 0, C: null, D: -5, B: 3 });
+    expect(impact?.totalPackages).toBe(3);
+    expect(impact?.schoolsInNeed).toBe(100);
+    expect(impact?.regions).toEqual([
+      { code: 'B', packages: 3, schoolsInNeed: 100, coveragePercent: 3 },
+    ]);
+  });
+  it('tolerates null allocations', () => {
+    const impact = schoolImpact(rows, sanitationWeights, null);
+    expect(impact?.totalPackages).toBe(0);
+    expect(impact?.schoolsInNeed).toBe(0);
+    expect(impact?.percent).toBeNull();
   });
 });
 
@@ -183,6 +205,34 @@ describe('compareSummary', () => {
   it('adds the comparability caveat when objective_comparable is false', () => {
     const sentences = compareSummary({ ...base, objective_comparable: false }, names);
     expect(sentences[3]).toContain('tidak diperbandingkan');
+  });
+  it('tolerates missing sides, malformed rows, and absent budgets', () => {
+    const more = compareSummary(
+      {
+        coverage: { left: { total_packages: null }, right: { total_packages: 100 } },
+        rows: [],
+        budget_delta_idr: undefined,
+        objective_comparable: false,
+      },
+      names,
+    );
+    expect(more[0]).toContain('mengalokasikan 100 paket');
+    expect(more[0]).toContain('lebih banyak');
+    expect(more[2]).toBe('Anggaran terpakai tidak berubah antara kedua skenario.');
+    expect(more[3]).toContain('tidak diperbandingkan');
+
+    const fewer = compareSummary(
+      {
+        coverage: { left: { total_packages: 100 }, right: undefined },
+        rows: [{ region_code: 'A', delta: null }],
+        budget_delta_idr: undefined,
+        objective_comparable: false,
+      },
+      names,
+    );
+    expect(fewer[0]).toContain('mengalokasikan 0 paket');
+    expect(fewer[0]).toContain('lebih sedikit');
+    expect(fewer[1]).toBe('Tidak ada pergeseran paket antarwilayah pada kedua skenario ini.');
   });
   it('falls back to region codes when names are missing', () => {
     const sentences = compareSummary(base);
