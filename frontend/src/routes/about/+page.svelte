@@ -23,7 +23,7 @@
         <h1>Kenali daerahnya.<br />Periksa datanya.<br /><span>Pahami pilihannya.</span></h1>
         <p class="lead">Equora membantu Anda memahami perbedaan akses fasilitas pendidikan antardaerah, menelusuri sumbernya, dan mencoba pilihan alokasi sumber daya.</p>
         <a class="eq-button eq-button-primary" href="/daerah">Lihat kondisi provinsi <Icon name="arrow" size={18} /></a>
-        <a class="intro-link" href="#cara-kerja">Kenali cara kerjanya</a>
+        <a class="intro-link" href="/#pratinjau">Kenali alur analisis</a>
       </div>
       <figure class="artwork">
         <img src="/images/editorial/education-discussion.webp" alt="Ilustrasi tiga pendidik mendiskusikan kebutuhan fasilitas pendidikan di perpustakaan." width="1536" height="1024" decoding="async" />
