@@ -199,11 +199,23 @@ export async function mockWorkspace(page: Page) {
         ],
       };
     else if (path.startsWith('scenarios/')) json = snapshot;
-    else if (path === 'admin/import')
+    else if (path === 'admin/import') {
+      const auth = route.request().headers()['authorization'];
+      if (auth === 'Bearer valid-secret') {
+        return route.fulfill({
+          json: {
+            release_id: 'synthetic-release',
+            status: 'local_review',
+            sources: 10,
+            imports: 4,
+          },
+        });
+      }
       return route.fulfill({
         status: 401,
         json: { detail: 'Token admin lokal diperlukan' },
       });
+    }
     else
       return route.fulfill({
         status: 404,

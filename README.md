@@ -187,4 +187,4 @@ Mulai pekerjaan pada branch terpisah, gunakan Conventional Commits, dan ajukan p
 
 ## Lisensi
 
-Lisensi kode belum ditetapkan. Repository yang dapat diakses publik tidak otomatis memberi izin penggunaan ulang. Ketentuan penggunaan dataset mengikuti sumber masing-masing.
+Kode sumber Equora dilisensikan di bawah [Lisensi MIT](LICENSE). Ketentuan penggunaan dataset tetap mengikuti lisensi dan kebijakan instansi sumber masing-masing.

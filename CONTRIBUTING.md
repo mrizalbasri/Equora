@@ -1,6 +1,6 @@
 # Kontribusi
 
-Gunakan issue untuk pekerjaan dengan acceptance criteria dan bukti selesai. Periksa [PRD](docs/PRD_Equora.md), [desain](docs/DESIGN_Equora.md), dan [keputusan terbuka](docs/decisions.md) sebelum mengubah scope.
+Gunakan issue untuk pekerjaan dengan acceptance criteria dan bukti selesai. Diskusikan dan sepakati kebutuhan sebelum mengubah scope.
 
 Setiap kontributor bekerja di branch sendiri dan mengajukan PR ke branch utama untuk direview sebelum merge. Jangan push langsung ke branch utama.
 
