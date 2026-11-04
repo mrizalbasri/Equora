@@ -22,7 +22,7 @@ test('reveals content on scroll and animates navigation without blocking control
   await menu.click();
   await nav.getByRole('link', { name: 'Tentang', exact: true }).click();
   await expect(page).toHaveURL(/\/about$/);
-  await expect(page.locator('.about > h1')).not.toHaveAttribute('data-motion-state');
+  await expect(page.locator('.about h1')).not.toHaveAttribute('data-motion-state');
   expect(errors).toEqual([]);
 });
 
