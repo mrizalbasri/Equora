@@ -220,13 +220,53 @@ def test_public_profiles_preserve_requested_release(payload, monkeypatch):
         assert insights["benchmarks"][0]["value"] == "12"
         assert insights["benchmarks"][0]["median"] == "36"
         assert insights["attention_source_id"] == CORE[0]
-        for path in ("workspace", "regions", "regions/11", "regions/11/insights"):
+        map_insights = client.get(
+            "/api/v1/regions/insights-map", params=query | {"indicator": CORE[0]}
+        ).json()
+        assert map_insights["release_id"] == older["id"]
+        assert map_insights["indicator"]["source_id"] == CORE[0]
+        assert map_insights["median"] == "36"
+        assert map_insights["rows"][0]["code"] == "11"
+        assert map_insights["rows"][0]["delta_from_median"] == "-24"
+        assert map_insights["rows"][0]["attention_source_id"] == CORE[0]
+        assert map_insights["rows"][2]["unavailable_reason"] == "no_schools"
+        for path in (
+            "workspace",
+            "regions",
+            "regions/11",
+            "regions/11/insights",
+        ):
             assert client.get("/api/v1/" + path, params={"release_id": "absent"}).status_code == 404
+        assert (
+            client.get(
+                "/api/v1/regions/insights-map",
+                params={"indicator": CORE[0], "release_id": "absent"},
+            ).status_code
+            == 404
+        )
         assert client.get("/api/v1/regions/99", params=query).status_code == 404
         assert client.get("/api/v1/regions/99/insights", params=query).status_code == 404
-        for path in ("regions", "regions/11", "regions/11/insights"):
+        assert (
+            client.get(
+                "/api/v1/regions/insights-map",
+                params=query | {"indicator": "absent"},
+            ).status_code
+            == 422
+        )
+        for path in (
+            "regions",
+            "regions/11",
+            "regions/11/insights",
+        ):
             response = client.get("/api/v1/" + path, params={"education_level": "SMP"})
             assert response.status_code == 422
+        assert (
+            client.get(
+                "/api/v1/regions/insights-map",
+                params={"indicator": CORE[0], "education_level": "SMP"},
+            ).status_code
+            == 422
+        )
 
 
 @pytest.mark.skipif(not os.getenv("TEST_DATABASE_URL"), reason="TEST_DATABASE_URL is not set")

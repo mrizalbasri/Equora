@@ -140,6 +140,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/regions/insights-map": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Region Map Insights */
+        get: operations["region_map_insights_api_v1_regions_insights_map_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/regions/{code}": {
         parameters: {
             query?: never;
@@ -691,6 +708,72 @@ export interface components {
             benchmarks: components["schemas"]["RegionBenchmarkView"][];
             /** Limitations */
             limitations: string[];
+        };
+        /** RegionMapIndicatorView */
+        RegionMapIndicatorView: {
+            /** Source Id */
+            source_id: string;
+            /** Title */
+            title: string;
+            /**
+             * Unit
+             * @enum {string}
+             */
+            unit: "percent" | "school_count";
+            /** Definition */
+            definition: string;
+        };
+        /** RegionMapInsightsView */
+        RegionMapInsightsView: {
+            /** Release Id */
+            release_id: string;
+            /** Status */
+            status: string;
+            /** Academic Year */
+            academic_year: string;
+            /** Education Level */
+            education_level: string;
+            /** Ownership */
+            ownership: string;
+            indicator: components["schemas"]["RegionMapIndicatorView"];
+            /** Median */
+            median: string | null;
+            /** Available Regions */
+            available_regions: number;
+            /** Total Regions */
+            total_regions: number;
+            /** Rows */
+            rows: components["schemas"]["RegionMapRowView"][];
+            /** Limitations */
+            limitations: string[];
+        };
+        /** RegionMapRowView */
+        RegionMapRowView: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Value */
+            value: string | null;
+            /**
+             * Comparison
+             * @enum {string}
+             */
+            comparison: "below" | "equal" | "above" | "unavailable";
+            /** Delta From Median */
+            delta_from_median: string | null;
+            /** Rank */
+            rank: number | null;
+            /** Available Indicators */
+            available_indicators: number;
+            /** Total Indicators */
+            total_indicators: number;
+            /** Completeness Ratio */
+            completeness_ratio: string | null;
+            /** Attention Source Id */
+            attention_source_id: string | null;
+            /** Unavailable Reason */
+            unavailable_reason: string | null;
         };
         /** RegionOption */
         RegionOption: {
@@ -1246,6 +1329,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    region_map_insights_api_v1_regions_insights_map_get: {
+        parameters: {
+            query: {
+                indicator: string;
+                education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+                release_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegionMapInsightsView"];
                 };
             };
             /** @description Validation Error */

@@ -115,6 +115,41 @@ class RegionInsightsView(BaseModel):
     limitations: list[str]
 
 
+class RegionMapIndicatorView(BaseModel):
+    source_id: str
+    title: str
+    unit: Literal["percent", "school_count"]
+    definition: str
+
+
+class RegionMapRowView(BaseModel):
+    code: str
+    name: str
+    value: str | None
+    comparison: Literal["below", "equal", "above", "unavailable"]
+    delta_from_median: str | None
+    rank: int | None
+    available_indicators: int
+    total_indicators: int
+    completeness_ratio: str | None
+    attention_source_id: str | None
+    unavailable_reason: str | None
+
+
+class RegionMapInsightsView(BaseModel):
+    release_id: str
+    status: str
+    academic_year: str
+    education_level: str
+    ownership: str
+    indicator: RegionMapIndicatorView
+    median: str | None
+    available_regions: int
+    total_regions: int
+    rows: list[RegionMapRowView]
+    limitations: list[str]
+
+
 class SavedScenarioView(BaseModel):
     id: str
     name: str
