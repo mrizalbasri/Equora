@@ -3,11 +3,16 @@
   import { page } from '$app/state';
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import Icon from '$lib/components/Icon.svelte';
+  import CompareSummary from '$lib/components/CompareSummary.svelte';
+  import { compareSummary, schoolImpact, type SchoolImpact } from '$lib/insight/insight';
   import {
     api,
     downloadComparison,
+    labels,
+    number,
     rupiah,
     type SavedScenario,
+    type Snapshot,
   } from '$lib/api/workspace';
   let saved = $state<SavedScenario[]>([]);
   let loading = $state(true);
@@ -37,6 +42,8 @@
       left_rank: number | null;
       right_rank: number | null;
     }[];
+    left: Snapshot;
+    right: Snapshot;
   }>();
 
   function formatDate(iso: string) {
@@ -91,6 +98,49 @@
       busy = false;
     }
   }
+
+  const scenarioLabel = (id: string) => saved.find((item) => item.id === id)?.name ?? 'Skenario';
+
+  const summary = $derived(
+    result
+      ? compareSummary(
+          {
+            coverage: result.coverage,
+            rows: result.rows,
+            budget_delta_idr: result.budget_delta_idr,
+            objective_comparable: result.objective_comparable,
+          },
+          names,
+          scenarioLabel(left),
+          scenarioLabel(right),
+        )
+      : [],
+  );
+
+  const impacts = $derived.by(() => {
+    if (!result) return {} as Record<string, SchoolImpact | null>;
+    return {
+      left: schoolImpact(
+        result.left.input_rows,
+        result.left.parameters.weights,
+        result.left.allocation.allocations,
+      ),
+      right: schoolImpact(
+        result.right.input_rows,
+        result.right.parameters.weights,
+        result.right.allocation.allocations,
+      ),
+    };
+  });
+
+  const impactsVisible = $derived(
+    (['left', 'right'] as const).some(
+      (side) =>
+        impacts[side] &&
+        impacts[side]!.totalPackages > 0 &&
+        impacts[side]!.schoolsInNeed > 0,
+    ),
+  );
 </script>
 
 <svelte:head><title>Perbandingan skenario · Equora</title></svelte:head>
@@ -180,6 +230,8 @@
         </button>
       </div>
 
+      <CompareSummary sentences={summary} />
+
       <div class="work-grid compare-coverage-grid">
         {#each Object.entries(result.coverage) as [key, value]}
           <div class="coverage-box">
@@ -198,9 +250,23 @@
                 Tidak ada wilayah yang dikeluarkan karena kelengkapan data.
               {/if}
             </p>
+            {#if impacts[key] && impacts[key]!.totalPackages > 0 && impacts[key]!.schoolsInNeed > 0}
+              <p class="impact-line">
+                ≈ <strong>{number(impacts[key]!.totalPackages)}</strong> sekolah difasilitasi
+                ({number(impacts[key]!.percent ?? 0, 1)}% dari kebutuhan terdata untuk
+                {labels[impacts[key]!.focus]?.toLowerCase()}).
+              </p>
+            {/if}
           </div>
         {/each}
       </div>
+      {#if impactsVisible}
+        <p class="work-muted impact-footnote">
+          Estimasi dengan asumsi 1 paket = rehabilitasi untuk 1 satuan pendidikan,
+          dihitung dari jumlah sekolah pada snapshot masing-masing skenario.
+          <a href="/methodology">Baca metodologi</a>.
+        </p>
+      {/if}
 
       <div class="delta-card">
         <div>
@@ -297,7 +363,17 @@
     margin: 0;
   }
   .compare-coverage-grid {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
+  }
+  .impact-line {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--eq-text);
+  }
+  .impact-footnote {
+    font-size: 12px;
+    margin: 0 0 12px;
   }
   .coverage-box {
     background: var(--eq-surface-subtle);

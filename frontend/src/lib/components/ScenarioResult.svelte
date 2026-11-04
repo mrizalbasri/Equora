@@ -1,5 +1,10 @@
 <script lang="ts">
   import { labels, number, rupiah, type Snapshot } from '$lib/api/workspace';
+  import {
+    equityConcentration,
+    focusIndicator,
+    schoolImpact,
+  } from '$lib/insight/insight';
   import DecisionReview from './DecisionReview.svelte';
   import ScenarioEvidence from './ScenarioEvidence.svelte';
 
@@ -26,6 +31,16 @@
       name: regionNames[code] ?? code,
       count,
     }))
+  );
+  const solverOk = $derived(
+    result.allocation.status === 'optimal' || result.allocation.status === 'feasible'
+  );
+  const focus = $derived(solverOk ? focusIndicator(result.parameters.weights) : null);
+  const concentration = $derived(
+    solverOk ? equityConcentration(result.priority.ranked, result.allocation.allocations) : null
+  );
+  const impact = $derived(
+    solverOk ? schoolImpact(result.input_rows, result.parameters.weights, result.allocation.allocations) : null
   );
 </script>
 
@@ -128,8 +143,86 @@
             </span>
           </div>
         </li>
+
+        {#if concentration}
+          <li>
+            <span class="takeaway-bullet bullet-target">4</span>
+            <div>
+              <strong>Konsentrasi pada kebutuhan tertinggi:</strong>
+              <span>
+                Sebanyak <strong>{number(concentration.percent, 1)}%</strong> paket
+                ({concentration.packages} dari {concentration.total}) mengalir ke
+                {concentration.regions.length} provinsi dengan skor kebutuhan tertinggi
+                ({#each concentration.regions as code, i}{regionNames[code] ?? code}{#if i < concentration.regions.length - 1}, {/if}{/each}).
+                Solver benar-benar mengalirkan anggaran ke wilayah yang paling membutuhkan sesuai bobot Anda.
+              </span>
+            </div>
+          </li>
+        {/if}
+
+        {#if focus}
+          <li>
+            <span class="takeaway-bullet bullet-fairness">{concentration ? '5' : '4'}</span>
+            <div>
+              <strong>Indikator fokus:</strong>
+              <span>
+                Skenario ini memprioritaskan <strong>{labels[focus]}</strong>
+                ({number(Number(result.parameters.weights[focus]) * 100)}% bobot)
+                sebagai indikator kebutuhan terbesar; peringkat wilayah dan alokasi paket mengikutinya.
+              </span>
+            </div>
+          </li>
+        {/if}
       </ul>
     </div>
+
+    {#if impact && impact.totalPackages > 0 && impact.schoolsInNeed > 0}
+      <div class="impact-card">
+        <p class="impact-headline">
+          ≈ <strong>{number(impact.totalPackages)}</strong> sekolah difasilitasi dari ±
+          <strong>{number(impact.schoolsInNeed)}</strong> sekolah yang belum memiliki
+          {labels[impact.focus]?.toLowerCase()} di provinsi penerima
+          ({number(impact.percent ?? 0, 1)}% dari kebutuhan terdata).
+        </p>
+        <p class="impact-assumption">
+          Asumsi: 1 paket = rehabilitasi untuk 1 satuan pendidikan, dihitung dari jumlah
+          sekolah pada snapshot. Estimasi kasar, bukan daftar sekolah penerima — paket
+          simulasi tidak spesifik satu indikator sehingga cakupan bisa melebihi 100%.
+          <a href="/methodology">Baca metodologi</a>.
+        </p>
+        {#if impact.regions.length > 0}
+          <details class="impact-details">
+            <summary>Cakupan estimasi per provinsi penerima</summary>
+            <table>
+              <thead>
+                <tr>
+                  <th>Provinsi</th>
+                  <th>Paket</th>
+                  <th>Sekolah kebutuhan terdata</th>
+                  <th>Cakupan</th>
+                </tr>
+              </thead>
+              <tbody>
+                {#each impact.regions as row}
+                  <tr>
+                    <td>{regionNames[row.code] ?? row.code}</td>
+                    <td>{number(row.packages)}</td>
+                    <td>{number(row.schoolsInNeed)}</td>
+                    <td>{number(row.coveragePercent, 1)}%</td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+            {#if impact.skippedRegions > 0}
+              <p class="impact-assumption">
+                {impact.skippedRegions} provinsi penerima dilewati dari hitungan kebutuhan
+                karena data tidak lengkap; paket mereka tetap dihitung.
+              </p>
+            {/if}
+          </details>
+        {/if}
+      </div>
+    {/if}
   {/if}
 
   <div class="work-actions result-actions">
@@ -548,5 +641,38 @@
   .action-pdf-highlight:hover {
     background: var(--eq-primary-hover);
     color: white;
+  }
+
+  /* Estimasi dampak: sekolah difasilitasi */
+  .impact-card {
+    background: var(--eq-surface);
+    border: 1px dashed var(--eq-border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .impact-headline {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--eq-text);
+  }
+  .impact-assumption {
+    margin: 8px 0 0;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--eq-text-secondary);
+  }
+  .impact-details {
+    margin-top: 12px;
+  }
+  .impact-details summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--eq-primary-hover);
+  }
+  .impact-details table {
+    margin-top: 10px;
   }
 </style>

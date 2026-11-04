@@ -258,7 +258,8 @@
       <h2>1. Cakupan dan asumsi biaya</h2>
       <p class="work-muted">
         Angka awal adalah asumsi demo yang dapat diubah. Satu paket adalah unit
-        intervensi simulasi; tidak diklaim setara satu sekolah terbantu.
+        intervensi simulasi; pada estimasi dampak, satu paket diasumsikan
+        rehabilitasi untuk satu satuan pendidikan.
       </p>
       <div class="work-grid">
         <label class="work-field">
@@ -285,18 +286,30 @@
           />
           <span class="rupiah-hint">{rupiah(budget ?? 0)}</span>
         </label>
-        <label class="work-field">
-          <span class="field-title">Biaya per Paket (Rp)</span>
-          <input
-            type="number"
-            bind:value={cost}
-            required
-            min="1"
-            max="1000000000000"
-            step="1"
-          />
-          <span class="rupiah-hint">{rupiah(cost ?? 0)}</span>
-        </label>
+        <div class="work-field">
+          <label>
+            <span class="field-title">Biaya per Paket (Rp)</span>
+            <input
+              type="number"
+              bind:value={cost}
+              required
+              min="1"
+              max="1000000000000"
+              step="1"
+            />
+            <span class="rupiah-hint">{rupiah(cost ?? 0)}</span>
+          </label>
+          <details class="cost-assumption">
+            <summary>Dari mana angka ini?</summary>
+            <p>
+              Biaya per paket adalah <strong>asumsi yang Anda tentukan sendiri</strong>,
+              bukan referensi anggaran resmi. Nilai awal Rp10 juta hanyalah contoh
+              ilustrasi untuk demo — ganti sesuai konteks daerah Anda dan hasil
+              simulasi akan menyesuaikan. Lihat <a href="/methodology">Metodologi</a>
+              untuk batas penggunaan.
+            </p>
+          </details>
+        </div>
         <label class="work-field">
           <span class="field-title">Maksimum paket per provinsi</span>
           <input
@@ -630,6 +643,19 @@
     color: var(--eq-primary-hover);
     font-weight: 550;
     font-variant-numeric: tabular-nums;
+  }
+  .cost-assumption {
+    font-size: 12px;
+  }
+  .cost-assumption summary {
+    cursor: pointer;
+    color: var(--eq-primary-hover);
+    font-weight: 550;
+  }
+  .cost-assumption p {
+    margin: 6px 0 0;
+    color: var(--eq-text-secondary);
+    line-height: 1.55;
   }
   .panel-header-action {
     display: flex;
