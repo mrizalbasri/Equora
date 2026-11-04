@@ -22,7 +22,7 @@
   <a href="#progress-saat-ini">Progress</a> ·
   <a href="#bahasa-dan-teknologi">Teknologi</a> ·
   <a href="#menjalankan-proyek">Instalasi</a> ·
-  <a href="#dokumentasi">Dokumentasi</a> ·
+  <a href="#struktur-repository">Struktur</a> ·
   <a href="#tim-dan-kontribusi">Tim</a>
 </p>
 
@@ -36,14 +36,17 @@ Proyek ini disiapkan untuk Web In Action (WIA), MIA 2026. Antarmuka menggunakan 
 
 ## Fitur
 
-| Bagian | Yang dapat dilakukan |
-| --- | --- |
-| Pendidikan di Daerah Saya | Membaca profil provinsi, membandingkan indikator fasilitas, menelusuri sumber, dan membagikan tautan temuan. |
-| Explorer | Menjelajahi peta dan tabel provinsi dengan filter indikator dan jenjang, lalu mengekspor data ke CSV. |
-| Studio | Mengatur bobot indikator, wilayah, anggaran, biaya paket, serta kapasitas untuk mencoba skenario prioritas dan alokasi. |
-| Snapshot dan Compare | Menyimpan parameter serta hasil skenario, membandingkan dua snapshot yang kompatibel, dan mengekspor perbandingan PDF. |
-| Katalog dan metodologi | Membaca metadata dataset, definisi indikator, metode perhitungan, dan batas penggunaannya. |
-| Impor admin | Menyiapkan data lokal melalui manifest yang diaudit, dengan token admin backend yang terpisah. |
+Alur aplikasi: **jelajahi kondisi daerah → coba skenario prioritas → baca temuan dan bandingkan skenario**.
+
+| Bagian | Route | Yang dapat dilakukan |
+| --- | --- | --- |
+| Pendidikan di Daerah Saya | `/daerah` | Profil fasilitas per provinsi, perbandingan indikator, penelusuran sumber, dan tautan temuan. |
+| Explorer | `/explore` | Peta tematik dan tabel provinsi dengan filter indikator dan jenjang, serta ekspor CSV. |
+| Studio simulasi | `/studio` | Mengatur bobot indikator, wilayah, anggaran, biaya, dan kapasitas untuk mencoba skenario alokasi. |
+| Ringkasan temuan | `/studio`, `/compare` | Hasil simulasi sebagai narasi: konsentrasi anggaran, indikator fokus, estimasi sekolah difasilitasi, dan asumsi biaya. |
+| Snapshot dan Compare | `/compare` | Menyimpan dan membandingkan dua skenario yang kompatibel, lengkap dengan ekspor PDF. |
+| Katalog dan metodologi | `/datasets`, `/methodology` | Metadata dataset, definisi indikator, metode perhitungan, dan batas penggunaannya. |
+| Impor admin | `/admin` | Menyiapkan data lokal melalui manifest yang diaudit, dengan token admin terpisah. |
 
 Seluruh fitur publik dapat digunakan tanpa login atau pendaftaran. Fitur yang memerlukan data membutuhkan backend, database, dan rilis lokal yang sudah disiapkan. Snapshot berada di workspace bersama dan dapat dibaca pengguna lain yang mengakses aplikasi; jangan menyimpan informasi pribadi di dalamnya.
 
@@ -51,13 +54,14 @@ Seluruh fitur publik dapat digunakan tanpa login atau pendaftaran. Fitur yang me
 
 Karya sementara yang telah diimplementasikan per tahap First Draft Submission:
 
-- [x] **Landing Page (`/`)**: Antarmuka responsif, narasi masalah, dan alur eksplorasi awal.
-- [x] **Pendidikan di Daerah Saya (`/daerah`)**: Profil fasilitas per provinsi, jenjang sekolah, dan komparasi antardaerah.
-- [x] **Explorer Peta & Data (`/explore`)**: Visualisasi peta tematik MapLibre GL, tabel indikator, filter wilayah, dan ekspor CSV.
-- [x] **Studio Simulasi (`/studio`)**: Penyesuaian bobot prioritas kebutuhan, batasan anggaran, dan kalkulasi alokasi dengan solver optimasi.
-- [x] **Komparasi Skenario (`/compare`)**: Analisis perbandingan antar skenario alokasi anggaran dan pemerataan fasilitas.
-- [x] **Katalog Dataset & Metodologi (`/datasets`, `/methodology`)**: Metadata indikator resmi Kemendikdasmen dan batas penggunaan data.
-- [ ] **Deployment Hosting Publik**: Direncanakan pada tahap akhir penyisihan (aplikasi saat ini siap dijalankan secara lokal dan container Docker).
+- [x] **Landing page (`/`)** — antarmuka responsif, narasi masalah, dan alur eksplorasi awal.
+- [x] **Pendidikan di Daerah Saya (`/daerah`)** — profil fasilitas per provinsi, jenjang sekolah, dan komparasi antardaerah.
+- [x] **Explorer peta & data (`/explore`)** — peta tematik MapLibre GL, tabel indikator, filter wilayah, dan ekspor CSV.
+- [x] **Studio simulasi (`/studio`)** — bobot prioritas kebutuhan, batasan anggaran, dan kalkulasi alokasi dengan solver optimasi.
+- [x] **Ringkasan temuan & estimasi dampak** — narasi hasil simulasi pada Studio dan Compare, serta penjelasan asumsi biaya per paket.
+- [x] **Komparasi skenario (`/compare`)** — perbandingan alokasi antar skenario dan pemerataan fasilitas.
+- [x] **Katalog dataset & metodologi (`/datasets`, `/methodology`)** — metadata indikator resmi Kemendikdasmen dan batas penggunaan data.
+- [ ] **Deployment hosting publik** — direncanakan pada tahap akhir penyisihan; aplikasi saat ini siap dijalankan secara lokal dan container Docker.
 
 ## Bahasa dan teknologi
 
