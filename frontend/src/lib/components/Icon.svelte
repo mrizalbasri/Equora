@@ -10,6 +10,8 @@
   import Download from 'carbon-icons-svelte/lib/Download.svelte';
   import Home from 'carbon-icons-svelte/lib/Home.svelte';
   import Information from 'carbon-icons-svelte/lib/Information.svelte';
+  import Location from 'carbon-icons-svelte/lib/Location.svelte';
+  import Compass from 'carbon-icons-svelte/lib/Compass.svelte';
   import Map from 'carbon-icons-svelte/lib/Map.svelte';
   import Menu from 'carbon-icons-svelte/lib/Menu.svelte';
   import Compare from 'carbon-icons-svelte/lib/Compare.svelte';
@@ -38,7 +40,7 @@
     internet: Wifi,
     computer: Laptop,
     sanitation: Clean,
-    compass: Map,
+    compass: Compass,
     chart: ChartBar,
     sliders: SettingsAdjust,
     database: DataBase,
@@ -53,7 +55,7 @@
     info: Information,
     chevron: ChevronRight,
     home: Home,
-    map: Map,
+    map: Location,
     check: Checkmark,
     alert: Warning,
   };

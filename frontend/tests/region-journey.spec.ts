@@ -27,6 +27,7 @@ for (const width of [360, 390, 768, 1440]) {
     await page.goto('/');
     await page.getByRole('link', { name: 'Pendidikan di Daerah Saya', exact: true }).first().click();
     await expect(page.getByRole('heading', { name: 'Mulai dari satu provinsi', exact: true })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: 'Provinsi Anda', exact: true })).toHaveAttribute('placeholder', 'Cari nama provinsi');
     await page.getByRole('combobox', { name: 'Provinsi Anda', exact: true }).fill('Alpha');
     await page.getByRole('option', { name: 'Provinsi Synthetic Alpha', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Kondisi fasilitas di Provinsi Synthetic Alpha' })).toBeVisible();

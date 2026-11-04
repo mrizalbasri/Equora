@@ -409,6 +409,7 @@
 <style>
   .result-summary-panel {
     border-top: 4px solid var(--eq-primary);
+    animation: eq-fade-slide-up 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .result-top-bar {
     display: flex;
@@ -435,6 +436,10 @@
     border: 1px solid var(--eq-border);
     border-radius: var(--eq-radius-sm);
     padding: 16px 20px;
+    animation: eq-scale-in 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .stat-card-grid .stat-box:nth-child(2) {
+    animation-delay: 60ms;
   }
   .stat-box .stat {
     margin-top: 6px;
@@ -608,7 +613,13 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
+    animation: eq-fade-slide-up 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
+  .takeaway-list li:nth-child(1) { animation-delay: 40ms; }
+  .takeaway-list li:nth-child(2) { animation-delay: 90ms; }
+  .takeaway-list li:nth-child(3) { animation-delay: 140ms; }
+  .takeaway-list li:nth-child(4) { animation-delay: 190ms; }
+  .takeaway-list li:nth-child(5) { animation-delay: 240ms; }
   .takeaway-bullet {
     width: 24px;
     height: 24px;
