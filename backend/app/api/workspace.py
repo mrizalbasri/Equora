@@ -23,6 +23,7 @@ from app.api.views import (
     DatasetView,
     ObservationsView,
     ProvinceView,
+    RegionInsightsView,
     RegionProfileView,
     SavedScenarioView,
     SourceView,
@@ -225,6 +226,24 @@ def region(
         "sources": payload["sources"],
         "limitations": payload["limitations"],
     }
+
+
+@router.get("/regions/{code}/insights", response_model=RegionInsightsView)
+def region_insights(
+    code: str,
+    session: DBSession,
+    education_level: EducationLevel = "SD",
+    release_id: str | None = None,
+):
+    from app.services.region_insights import build_region_insights
+
+    payload = local_release(session, release_id)
+    if education_level not in payload["scopes"]:
+        raise HTTPException(422, "Jenjang tidak tersedia pada rilis ini")
+    try:
+        return build_region_insights(payload, education_level, code)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
 
 
 @router.get("/observations", response_model=ObservationsView)

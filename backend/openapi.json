@@ -348,6 +348,79 @@
         }
       }
     },
+    "/api/v1/regions/{code}/insights": {
+      "get": {
+        "summary": "Region Insights",
+        "operationId": "region_insights_api_v1_regions__code__insights_get",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Code"
+            }
+          },
+          {
+            "name": "education_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "TK",
+                "SD",
+                "SMP",
+                "SMA",
+                "SMK",
+                "SLB"
+              ],
+              "type": "string",
+              "default": "SD",
+              "title": "Education Level"
+            }
+          },
+          {
+            "name": "release_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Release Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionInsightsView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/observations": {
       "get": {
         "summary": "Observations",
@@ -1663,6 +1736,95 @@
         ],
         "title": "RankedRegion"
       },
+      "RegionBenchmarkView": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "title": "Source Id"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "median": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Median"
+          },
+          "delta_from_median": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delta From Median"
+          },
+          "rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank"
+          },
+          "available_regions": {
+            "type": "integer",
+            "title": "Available Regions"
+          },
+          "comparison": {
+            "type": "string",
+            "enum": [
+              "below",
+              "equal",
+              "above",
+              "unavailable"
+            ],
+            "title": "Comparison"
+          },
+          "unavailable_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_id",
+          "value",
+          "median",
+          "delta_from_median",
+          "rank",
+          "available_regions",
+          "comparison",
+          "unavailable_reason"
+        ],
+        "title": "RegionBenchmarkView"
+      },
       "RegionChange": {
         "properties": {
           "region_code": {
@@ -1735,6 +1897,93 @@
           "after_rank"
         ],
         "title": "RegionChange"
+      },
+      "RegionInsightsView": {
+        "properties": {
+          "release_id": {
+            "type": "string",
+            "title": "Release Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "academic_year": {
+            "type": "string",
+            "title": "Academic Year"
+          },
+          "education_level": {
+            "type": "string",
+            "title": "Education Level"
+          },
+          "ownership": {
+            "type": "string",
+            "title": "Ownership"
+          },
+          "region": {
+            "$ref": "#/components/schemas/RegionReferenceView"
+          },
+          "available_indicators": {
+            "type": "integer",
+            "title": "Available Indicators"
+          },
+          "total_indicators": {
+            "type": "integer",
+            "title": "Total Indicators"
+          },
+          "attention_source_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attention Source Id"
+          },
+          "strength_source_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strength Source Id"
+          },
+          "benchmarks": {
+            "items": {
+              "$ref": "#/components/schemas/RegionBenchmarkView"
+            },
+            "type": "array",
+            "title": "Benchmarks"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "release_id",
+          "status",
+          "academic_year",
+          "education_level",
+          "ownership",
+          "region",
+          "available_indicators",
+          "total_indicators",
+          "attention_source_id",
+          "strength_source_id",
+          "benchmarks",
+          "limitations"
+        ],
+        "title": "RegionInsightsView"
       },
       "RegionOption": {
         "properties": {
@@ -1880,6 +2129,24 @@
           "limitations"
         ],
         "title": "RegionProfileView"
+      },
+      "RegionReferenceView": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name"
+        ],
+        "title": "RegionReferenceView"
       },
       "ReviewInput": {
         "properties": {
