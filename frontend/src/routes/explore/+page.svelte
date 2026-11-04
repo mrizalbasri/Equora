@@ -150,13 +150,14 @@
       </div>
       <div>
         <p>Rentang {isPercent ? 'akses antarprovinsi' : 'jumlah sekolah'}</p>
-        <strong class="range-value"
-          >{minimum === null ? '—' : number(minimum)}<span class="range-dash"
-            >—</span
-          >{maximum === null ? '—' : number(maximum)}<span
-            >{isPercent ? '%' : 'sekolah'}</span
-          ></strong
-        ><small>Nilai minimum–maksimum hasil filter</small>
+        {#if minimum === null || maximum === null}
+          <strong class="range-value">Tidak tersedia</strong>
+        {:else}
+          <strong class="range-value" aria-label={`Rentang ${number(minimum)} sampai ${number(maximum)} ${isPercent ? 'persen' : 'sekolah'}`}>
+            {number(minimum)}{' '}<span class="range-separator" aria-hidden="true">-</span>{' '}{number(maximum)}<span>{isPercent ? '%' : 'sekolah'}</span>
+          </strong>
+        {/if}
+        <small>Nilai minimum dan maksimum hasil filter</small>
       </div>
     </section>
     <div class="explorer-grid">
@@ -417,7 +418,10 @@
   .data-summary > div {
     padding: 0 24px;
     min-width: 0;
+    animation: eq-fade-slide-up 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
+  .data-summary > div:nth-child(2) { animation-delay: 50ms; }
+  .data-summary > div:nth-child(3) { animation-delay: 100ms; }
   .data-summary > div + div {
     border-left: 1px solid var(--eq-border);
   }
@@ -444,9 +448,10 @@
   .data-summary .range-value {
     font-size: clamp(21px, 2vw, 27px);
   }
-  .data-summary .range-dash {
-    margin-inline: 8px;
-    font-size: 20px;
+  .data-summary .range-separator {
+    font-size: 16px;
+    font-weight: 400;
+    margin-inline: 6px;
   }
   .data-summary small {
     display: block;
@@ -605,6 +610,7 @@
   }
   .selected-region {
     padding: 22px 20px;
+    animation: eq-fade-slide-up 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .region-code {
     font-size: 10px;

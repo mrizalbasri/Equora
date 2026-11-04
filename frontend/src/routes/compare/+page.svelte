@@ -381,6 +381,12 @@
     border-radius: var(--eq-radius-sm);
     padding: 16px 20px;
   }
+  .compare-coverage-grid > .coverage-box:first-child {
+    animation: eq-slide-from-left 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .compare-coverage-grid > .coverage-box:last-child {
+    animation: eq-slide-from-right 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
   .stat-coverage {
     margin: 10px 0 6px;
   }
@@ -400,6 +406,7 @@
     flex-wrap: wrap;
     gap: 16px;
     margin-block: 16px;
+    animation: eq-fade-slide-up 260ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
   }
   .delta-positive {
     color: var(--eq-primary-hover);

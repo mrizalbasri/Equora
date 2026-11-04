@@ -346,7 +346,7 @@
     align-items: center;
     gap: 10px;
     min-height: 40px;
-    padding: 8px 12px;
+    padding: 8px 24px 8px 12px;
     border-radius: 8px;
     color: #334155;
     font-size: 13.5px;
@@ -390,31 +390,25 @@
     border-radius: 50%;
     background: #0284c7;
   }
-  /* Tree line sub-item styling */
+  /* Compact hierarchy: indentation carries the relationship without diagram-like connectors. */
   .sidebar-link.sub-item {
-    margin-left: 18px;
+    margin-left: 24px;
     font-size: 12.5px;
+    font-weight: 500;
     min-height: 36px;
-    padding: 6px 10px;
+    padding: 6px 24px 6px 10px;
     color: #475569;
   }
-  .sidebar-link.sub-item::before {
-    content: '';
-    position: absolute;
-    left: -8px;
-    top: -6px;
-    bottom: 50%;
-    width: 1px;
-    border-left: 1px solid #cbd5e1;
+  .sidebar-link.sub-item .icon-wrap {
+    opacity: 0.72;
+    width: 18px;
   }
-  .sidebar-link.sub-item::after {
-    content: '';
-    position: absolute;
-    left: -8px;
-    top: 50%;
-    width: 7px;
-    height: 1px;
-    border-top: 1px solid #cbd5e1;
+  .sidebar-link.sub-item .icon-wrap :global(svg) {
+    height: 16px;
+    width: 16px;
+  }
+  .sidebar-link.sub-item[aria-current='page'] .icon-wrap {
+    opacity: 1;
   }
   .nav-badge {
     margin-left: auto;

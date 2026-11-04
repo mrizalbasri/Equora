@@ -248,7 +248,22 @@
   .reading-help { margin-top: 16px; color: var(--eq-text-secondary); }
   .reading-help summary { color: var(--eq-primary-hover); }
   .reading-help p { padding-bottom: 16px; }
-  .facility-row { display: grid; grid-template-columns: 1.5fr 1fr; gap: 12px 32px; border-top: 1px solid var(--eq-border); padding-block: 28px; }
+  .facility-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 12px 32px;
+    border-top: 1px solid var(--eq-border);
+    padding-block: 28px;
+    animation: eq-fade-slide-up 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .facility-row:nth-of-type(1) { animation-delay: 30ms; }
+  .facility-row:nth-of-type(2) { animation-delay: 70ms; }
+  .facility-row:nth-of-type(3) { animation-delay: 110ms; }
+  .facility-row:nth-of-type(4) { animation-delay: 150ms; }
+  .facility-row:nth-of-type(5) { animation-delay: 190ms; }
+  .facility-row:nth-of-type(6) { animation-delay: 230ms; }
+  .facility-row:nth-of-type(7) { animation-delay: 270ms; }
+  .facility-row:nth-of-type(8) { animation-delay: 310ms; }
   .facility-row:first-of-type { margin-top: 24px; }
   .facility-row h3 { font-size: 20px; margin-bottom: 12px; }
   .facility-row p { margin-block: 8px; }
@@ -256,7 +271,11 @@
   .facility-value { background: var(--eq-surface-subtle); padding: 20px; border-radius: 12px; align-self: start; }
   .facility-value strong { font-size: 32px; font-variant-numeric: tabular-nums; line-height: 1.2; }
   .facility-value p { font-size: 15px; color: var(--eq-text-secondary); }
-  .facility-value .difference { color: var(--eq-text); font-weight: 550; }
+  .facility-value .difference {
+    color: var(--eq-text);
+    font-weight: 550;
+    animation: eq-fade-slide-up 200ms ease both;
+  }
   .facility-source { grid-column: 1 / -1; overflow-wrap: anywhere; }
   .facility-source summary { color: var(--eq-primary-hover); }
   .facility-source > p { font-size: 15px; }

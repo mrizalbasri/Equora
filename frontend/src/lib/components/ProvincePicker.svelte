@@ -61,17 +61,17 @@
   <div class="picker-control" class:disabled>
     <span class="search-icon"><Icon name="search" size={20} /></span>
     <input bind:this={input} {id} role="combobox" {disabled} type="text" autocomplete="off"
-      placeholder="Ketik atau pilih provinsi" value={open ? query : selectedName}
-      aria-expanded={open} aria-controls={`${id}-options`} aria-autocomplete="list"
+      placeholder="Cari nama provinsi" value={open ? query : selectedName}
+      aria-expanded={open} aria-controls={`${id}-options`} aria-autocomplete="list" aria-haspopup="listbox"
       aria-describedby={`${id}-hint`} aria-activedescendant={open && active >= 0 && choices[active] ? `${id}-option-${active}` : undefined}
       onclick={() => { if (!open) show(); }} onfocus={(event) => event.currentTarget.select()} onkeydown={keydown}
       oninput={(event) => { query = event.currentTarget.value; open = true; active = 0; }} />
     <button type="button" tabindex="-1" {disabled} aria-label={open ? `Tutup pilihan ${label}` : `Buka pilihan ${label}`}
-      aria-expanded={open} aria-controls={`${id}-options`} onclick={() => { if (open) close(); else show(); input?.focus(); }}>
+      aria-expanded={open} aria-controls={`${id}-options`} aria-haspopup="listbox" onclick={() => { if (open) close(); else show(); input?.focus(); }}>
       <span class:expanded={open}><Icon name="chevron" size={20} /></span>
     </button>
   </div>
-  <p id={`${id}-hint`} class="picker-hint">{open ? 'Ketik nama daerah untuk mempersempit pilihan.' : 'Cari nama provinsi atau buka daftar pilihan.'}</p>
+  <p id={`${id}-hint`} class="picker-hint">{open ? 'Hasil diperbarui saat Anda mengetik.' : 'Ketik nama provinsi, atau buka daftar.'}</p>
   <div class="picker-panel" hidden={!open}>
     <div id={`${id}-options`} role="listbox" aria-label={label} class="picker-options" bind:this={list}>
       {#each choices as item, index (item.code)}
@@ -90,13 +90,13 @@
   label { display: flex; align-items: center; gap: 8px; font-weight: 600; margin-bottom: 10px; }
   label :global(svg) { color: var(--eq-primary-hover); flex-shrink: 0; }
   .picker-control { display: flex; align-items: center; background: white; border: 1px solid var(--eq-control-border); border-radius: 8px; min-height: 52px; }
-  .picker-control:focus-within { outline: 3px solid var(--eq-focus); outline-offset: 3px; }
+  .picker-control:focus-within { border-color: transparent; outline: 2px solid var(--eq-focus); outline-offset: 0; }
   .picker-control.disabled { background: var(--eq-surface-subtle); }
   .search-icon { display: inline-flex; padding-left: 12px; color: var(--eq-text-secondary); }
-  input { min-width: 0; width: 100%; min-height: 50px; padding: 12px 8px; border: 0; background: transparent; color: var(--eq-text); font: inherit; font-size: 16px; }
-  input:focus-visible { outline: none; }
-  input::placeholder { color: var(--eq-text-secondary); opacity: 1; }
-  .picker-control > button { display: grid; place-items: center; flex-shrink: 0; min-width: 48px; min-height: 50px; border: 0; border-radius: 0 8px 8px 0; background: transparent; color: var(--eq-text-secondary); }
+  .province-picker .picker-control input { min-width: 0; width: 100%; min-height: 50px; padding: 12px 8px; border: 0; border-radius: 0; background: transparent; color: var(--eq-text); font: inherit; font-size: 16px; }
+  .province-picker .picker-control input:focus-visible { outline: none; }
+  .province-picker .picker-control input::placeholder { color: var(--eq-text-secondary); opacity: 1; }
+  .picker-control > button { display: grid; place-items: center; flex-shrink: 0; min-width: 48px; min-height: 50px; border: 0; border-left: 1px solid var(--eq-border); border-radius: 0 8px 8px 0; background: transparent; color: var(--eq-text-secondary); }
   .picker-control > button:hover { background: var(--eq-primary-tint); }
   .picker-control > button span { display: flex; transform: rotate(90deg); }
   .picker-control > button span.expanded { transform: rotate(-90deg); }
