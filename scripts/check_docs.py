@@ -2,10 +2,22 @@
 
 from pathlib import Path
 import re
+import subprocess
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-files = sorted(ROOT.glob("*.md")) + sorted((ROOT / "docs").rglob("*.md"))
+
+try:
+    tracked_files = subprocess.check_output(
+        ["git", "ls-files", "*.md", "*/*.md", "*/*/*.md"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8"
+    ).splitlines()
+    files = [ROOT / f for f in tracked_files if (ROOT / f).exists()]
+except Exception:
+    files = [f for f in ROOT.rglob("*.md") if not any(part in {".git", "node_modules", ".venv", "venv", "docs"} for part in f.parts)]
+
 errors = []
 for source in files:
     body = source.read_text(encoding="utf-8")

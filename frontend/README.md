@@ -29,9 +29,9 @@ http://localhost:5173/ menampilkan landing page dan `/about` menjelaskan tujuan 
 
 Route `/datasets` dan `/datasets/[datasetId]` menampilkan fixture berlabel, pencarian dan metadata; `/methodology` menjelaskan rumus dan batas sandbox. Keduanya dapat dicapai dari footer Landing/About. Pratinjau hero hanya contoh antarmuka, belum hasil data atau solver. Internet/komputer masih memerlukan denominator untuk proporsi; bobot contoh pada hero bukan konfigurasi engine.
 
-Tema publik mengikuti [DESIGN v1.2 Clean Education Blue](../docs/DESIGN_Equora.md): latar abu-abu sangat muda, panel putih, tombol biru dan ilustrasi sekolah SVG lokal. Token, frame publik dan status ketersediaan dipakai bersama oleh Landing/About. Katalog/detail/metodologi masih memiliki CSS lama; penyatuan shell/token tercatat di [backlog](../docs/implementation-readiness.md). Tidak ada aset font/gambar eksternal yang harus diunduh agar halaman tampil.
+Tema publik mengikuti Clean Education Blue: latar abu-abu sangat muda, panel putih, tombol biru dan ilustrasi sekolah SVG lokal. Token, frame publik dan status ketersediaan dipakai bersama oleh Landing/About. Tidak ada aset font/gambar eksternal yang harus diunduh agar halaman tampil.
 
-Explorer memakai MapLibre dengan boundary GeoJSON lokal dan basemap Protomaps/PMTiles berbasis OpenStreetMap. Subset Indonesia zoom 0–7 serta sprite disertakan di `static/maps/`; font glyph dimuat dari GitHub pada commit yang dipin. Atribusi tersedia pada peta dan kegagalan basemap mempertahankan layer indikator/tabel. Lihat [workspace lokal](../docs/local-workspace.md) dan [provenance aset](static/maps/README.md).
+Explorer memakai MapLibre dengan boundary GeoJSON lokal dan basemap Protomaps/PMTiles berbasis OpenStreetMap. Subset Indonesia zoom 0–7 serta sprite disertakan di `static/maps/`; font glyph dimuat dari GitHub pada commit yang dipin. Atribusi tersedia pada peta dan kegagalan basemap mempertahankan layer indikator/tabel. Lihat [provenance aset](static/maps/README.md).
 
 Frontend dijalankan langsung melalui pnpm. Isi `API_BASE_URL` pada `.env` sesuai port backend, misalnya `http://localhost:18000` untuk konfigurasi lokal mesin ini.
 
@@ -43,9 +43,7 @@ Snapshot tersimpan di workspace bersama dan dapat dibaca pengguna aplikasi lain;
 jangan memasukkan informasi pribadi ke nama atau parameter skenario.
 
 Impor data melalui `/admin` tetap memerlukan token admin backend yang terpisah.
-Lihat [panduan akses publik](../docs/public-access.md). Tes `public-access.spec.ts`
-memastikan alur publik tidak memanggil penyedia login dan route akun lama
-mengembalikan 404.
+Tes `public-access.spec.ts` memastikan alur publik tidak memanggil penyedia login dan route akun lama mengembalikan 404.
 
 ## Pemeriksaan dan kontrak
 
