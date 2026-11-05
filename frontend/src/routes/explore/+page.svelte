@@ -4,6 +4,7 @@
   import { page } from '$app/state';
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ProvinceMap from '$lib/components/ProvinceMap.svelte';
+  import MapReadingGuide from '$lib/components/MapReadingGuide.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import {
     api,
@@ -322,6 +323,7 @@
             <button type="button" onclick={retryInsights}>Coba lagi insight</button>
           </div>{/if}
         <p class="indicator-definition">{data.source.definition}</p>
+        <MapReadingGuide mode={view} percent={isPercent} />
         {#key mapAttempt}<ProvinceMap
             onretry={() => mapAttempt++}
             presentation={mapPresentation}
