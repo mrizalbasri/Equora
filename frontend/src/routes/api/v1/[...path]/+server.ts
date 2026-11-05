@@ -35,7 +35,7 @@ const proxy: RequestHandler = async ({ params, request, url, fetch }) => {
       signal: AbortSignal.timeout(30000),
     });
     const headers = new Headers({ 'Cache-Control': 'no-store' });
-    for (const key of ['content-type', 'content-disposition']) {
+    for (const key of ['content-type', 'content-disposition', 'retry-after']) {
       const value = response.headers.get(key);
       if (value) headers.set(key, value);
     }
@@ -44,7 +44,7 @@ const proxy: RequestHandler = async ({ params, request, url, fetch }) => {
     return Response.json(
       {
         detail:
-          'API lokal belum tersedia. Jalankan backend dan migrasi database.',
+          'Layanan data belum tersedia. Coba lagi beberapa saat lagi.',
       },
       { status: 503 },
     );

@@ -1,16 +1,20 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import PublicShell from './PublicShell.svelte';
+  import WorkspaceShell from './WorkspaceShell.svelte';
   import ProvincePicker from './ProvincePicker.svelte';
   import Icon from './Icon.svelte';
-  import { api, labels, number, type Workspace } from '$lib/api/workspace';
+  import RegionPrioritySummary from './RegionPrioritySummary.svelte';
+  import { api, labels, number, type RegionInsights, type Workspace } from '$lib/api/workspace';
   import { facilityValue, comparisonDifference, profilePath, profileSummary, type RegionProfile } from '$lib/region-profile';
 
   let workspace = $state<Workspace>();
   let regions = $state<{ code: string; name: string }[]>([]);
   let profile = $state<RegionProfile>();
   let comparison = $state<RegionProfile>();
+  let insights = $state<RegionInsights>();
+  let insightLoading = $state(false);
+  let insightError = $state('');
   let loading = $state(true);
   let error = $state('');
   let attempt = $state(0);
@@ -38,6 +42,9 @@
     error = '';
     profile = undefined;
     comparison = undefined;
+    insights = undefined;
+    insightLoading = !!params.province;
+    insightError = '';
     shareText = '';
     shareStatus = '';
     try {
@@ -60,6 +67,8 @@
       regions = list;
       profile = left;
       comparison = right;
+      if (left) void loadInsights(id, left.code, query, current.id, params.level);
+      else insightLoading = false;
       if (!params.release) {
         void goto(profilePath(params.province, params.level, current.id, params.compare), { replaceState: true, keepFocus: true, noScroll: true });
       }
@@ -68,6 +77,29 @@
     } finally {
       if (id === requestId) loading = false;
     }
+  }
+
+  async function loadInsights(id: number, code: string, query: URLSearchParams, releaseId: string, educationLevel: string) {
+    insightLoading = true;
+    insightError = '';
+    try {
+      const result = await api<RegionInsights>('regions/' + encodeURIComponent(code) + '/insights?' + query);
+      if (id !== requestId) return;
+      if (result.release_id !== releaseId || result.education_level !== educationLevel || result.region.code !== code) {
+        throw new Error('Konteks ringkasan tidak sesuai dengan profil wilayah.');
+      }
+      insights = result;
+    } catch (e) {
+      if (id === requestId) insightError = e instanceof Error ? e.message : 'Ringkasan relatif belum dapat dimuat.';
+    } finally {
+      if (id === requestId) insightLoading = false;
+    }
+  }
+
+  function retryInsights() {
+    if (!profile || !workspace) return;
+    const query = new URLSearchParams({ education_level: level, release_id: workspace.id });
+    void loadInsights(requestId, profile.code, query, workspace.id, level);
   }
 
   function navigate(code = province, nextLevel = level, nextCompare = compare) {
@@ -94,12 +126,11 @@
   <meta name="description" content="Pahami fasilitas pendidikan provinsi Anda, bandingkan dengan provinsi lain dan telusuri sumber datanya." />
 </svelte:head>
 
-<PublicShell calm>
-<div class="region-page eq-container">
-  <header class="region-heading">
-    <h1>Pendidikan di Daerah Saya</h1>
-    <p>Bagaimana fasilitas sekolah di provinsi Anda? Pilih daerah, baca kondisinya, lalu bandingkan jika perlu.</p>
-  </header>
+<WorkspaceShell
+  title={profile ? 'Pendidikan di ' + profile.name : 'Pendidikan di Daerah Saya'}
+  subtitle="Bagaimana fasilitas sekolah di provinsi Anda? Pilih daerah, baca kondisinya, lalu bandingkan jika perlu."
+>
+<div class="region-page">
   <section class="journey-intro" aria-label="Pilih daerah dan jenjang sekolah">
     <h2>Daerah mana yang ingin Anda lihat?</h2>
     <p>Pilih provinsi dan jenjang sekolah. Anda tidak perlu masuk akun.</p>
@@ -138,6 +169,16 @@
           <label class="share-label">Ringkasan dan tautan temuan<textarea readonly rows="8" value={shareText}></textarea></label>
         </section>
       {/if}
+      {#if insightLoading}
+        <section class="insight-message" role="status">Menghitung benchmark provinsi pada rilis dan jenjang yang sama…</section>
+      {:else if insightError}
+        <section class="insight-message insight-error" role="alert">
+          <div><strong>Ringkasan kondisi relatif belum dapat dimuat.</strong><p>{insightError}</p></div>
+          <button class="eq-button" onclick={retryInsights}><Icon name="retry" size={18} />Coba lagi</button>
+        </section>
+      {:else if insights}
+        <RegionPrioritySummary {insights} sources={profile.sources} />
+      {/if}
       <details class="comparison-picker" open={!!compare}>
         <summary><Icon name="compare" /><span class="summary-label">Bandingkan dengan provinsi lain</span><span class="optional-label">Opsional</span></summary>
         <div class="comparison-content">
@@ -155,7 +196,7 @@
           {@const value = facilityValue(profile, source)}
           {@const difference = comparison ? comparisonDifference(profile, comparison, source) : null}
           {@const other = comparison && difference?.compatible ? facilityValue(comparison, source) : null}
-          <article class="facility-row" aria-label={labels[source.source_id] ?? source.title}>
+          <article id={'indicator-' + source.source_id} class="facility-row" aria-label={labels[source.source_id] ?? source.title}>
             <div class="facility-explanation">
               <h3>{labels[source.source_id] ?? source.title}</h3>
               <p>{source.definition}</p>
@@ -193,7 +234,7 @@
         <p>Di Studio, Anda dapat memilih fasilitas yang lebih diprioritaskan dan mencoba anggaran. Simulasi dimulai dari seluruh provinsi pada rilis dan jenjang yang sama; cakupannya dapat diubah sebelum dihitung.</p>
         <p>Biaya dan jumlah paket adalah asumsi simulasi. Hasilnya belum menyatakan berapa sekolah atau siswa yang terbantu.</p>
         <div class="journey-actions">
-          <a class="eq-button" href={'/studio?' + new URLSearchParams({ level, release: workspace.id })}><Icon name="sliders" />Coba prioritas fasilitas</a>
+          <a class="eq-button" href={'/studio?' + new URLSearchParams({ level, release: workspace.id, province: profile.code })}><Icon name="sliders" />Coba prioritas fasilitas</a>
           <a class="plain-link" href={'/regions/' + encodeURIComponent(profile.code) + '?' + new URLSearchParams({ level, release: workspace.id })}>Lihat data wilayah terperinci<Icon name="arrow" size={18} /></a>
         </div>
       </section>
@@ -213,15 +254,12 @@
     {/if}
   {/if}
 </div>
-</PublicShell>
+</WorkspaceShell>
 
 <style>
-  .region-page { max-width: 1056px; padding-block: 48px 64px; }
-  .region-heading { max-width: 740px; margin-bottom: 32px; }
-  h1 { font-size: clamp(2rem, 4.5vw, 3.5rem); letter-spacing: -.035em; line-height: 1.12; }
+  .region-page { max-width: 1056px; padding-block: 8px 64px; }
   h2 { font-size: clamp(1.35rem, 2.5vw, 1.8rem); letter-spacing: -.025em; line-height: 1.25; }
   p { line-height: 1.7; max-width: 72ch; }
-  .region-heading p { color: var(--eq-text-secondary); margin-top: 18px; font-size: 18px; }
   .journey-intro { padding: 28px; background: var(--eq-surface-subtle); border-radius: 16px; }
   .journey-intro > p { margin-top: 8px; color: var(--eq-text-secondary); }
   .journey-controls { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-top: 24px; }
@@ -252,7 +290,22 @@
   .reading-help { margin-top: 16px; color: var(--eq-text-secondary); }
   .reading-help summary { color: var(--eq-primary-hover); }
   .reading-help p { padding-bottom: 16px; }
-  .facility-row { display: grid; grid-template-columns: 1.5fr 1fr; gap: 12px 32px; border-top: 1px solid var(--eq-border); padding-block: 28px; }
+  .facility-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 12px 32px;
+    border-top: 1px solid var(--eq-border);
+    padding-block: 28px;
+    animation: eq-fade-slide-up 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .facility-row:nth-of-type(1) { animation-delay: 30ms; }
+  .facility-row:nth-of-type(2) { animation-delay: 70ms; }
+  .facility-row:nth-of-type(3) { animation-delay: 110ms; }
+  .facility-row:nth-of-type(4) { animation-delay: 150ms; }
+  .facility-row:nth-of-type(5) { animation-delay: 190ms; }
+  .facility-row:nth-of-type(6) { animation-delay: 230ms; }
+  .facility-row:nth-of-type(7) { animation-delay: 270ms; }
+  .facility-row:nth-of-type(8) { animation-delay: 310ms; }
   .facility-row:first-of-type { margin-top: 24px; }
   .facility-row h3 { font-size: 20px; margin-bottom: 12px; }
   .facility-row p { margin-block: 8px; }
@@ -260,7 +313,11 @@
   .facility-value { background: var(--eq-surface-subtle); padding: 20px; border-radius: 12px; align-self: start; }
   .facility-value strong { font-size: 32px; font-variant-numeric: tabular-nums; line-height: 1.2; }
   .facility-value p { font-size: 15px; color: var(--eq-text-secondary); }
-  .facility-value .difference { color: var(--eq-text); font-weight: 550; }
+  .facility-value .difference {
+    color: var(--eq-text);
+    font-weight: 550;
+    animation: eq-fade-slide-up 200ms ease both;
+  }
   .facility-source { grid-column: 1 / -1; overflow-wrap: anywhere; }
   .facility-source summary { color: var(--eq-primary-hover); }
   .facility-source > p { font-size: 15px; }
@@ -275,6 +332,9 @@
   .next-step p + p { color: var(--eq-text-secondary); font-size: 14px; }
   .journey-actions { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 20px; }
   .share-result { background: var(--eq-primary-tint); padding: 24px; border-radius: 12px; margin-bottom: 24px; }
+  .insight-message { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 28px; padding: 18px 20px; border-radius: 10px; background: var(--eq-surface-subtle); line-height: 1.6; }
+  .insight-message p { margin-top: 4px; color: var(--eq-text-secondary); }
+  .insight-error { border-left: 4px solid var(--eq-warning); }
   .share-label { margin-top: 16px; }
   textarea { font-size: 16px; line-height: 1.7; font-weight: 400; resize: vertical; }
   .data-context { border-bottom: 1px solid var(--eq-border); overflow-wrap: anywhere; }
@@ -285,13 +345,14 @@
   .loading-message, .journey-message { padding-block: 32px; }
   .journey-message p { margin-top: 12px; }
   @media (max-width: 700px) {
-    .region-page { padding-block: 28px 40px; }
-    .region-heading p { font-size: 16px; }
+    .region-page { padding-block: 8px 40px; }
     .journey-intro, .next-step { padding: 20px; }
     .journey-controls, .facility-row, .comparison-content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     .profile-overview { flex-direction: column; padding-top: 28px; gap: 20px; }
     .profile-overview > button { width: 100%; }
     .journey-actions > * { width: 100%; text-align: center; justify-content: center; }
     .share-result { padding: 20px; }
+    .insight-message { align-items: stretch; flex-direction: column; }
+    .insight-message button { width: 100%; justify-content: center; }
   }
 </style>

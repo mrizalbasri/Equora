@@ -31,7 +31,7 @@ test('public profile reveals comparison and source details only when requested',
   } }));
   await page.goto('/daerah?province=11&release=synthetic-release');
   await expect(page.getByRole('heading', { name: 'Kondisi fasilitas di Provinsi Synthetic Alpha' })).toBeVisible();
-  await expect(page.locator('.app-sidebar')).toHaveCount(0);
+  await expect(page.locator('.app-sidebar')).toBeHidden();
   const comparison = page.getByRole('combobox', { name: 'Bandingkan dengan', exact: true });
   await expect(comparison).toBeHidden();
   const toggle = page.locator('.comparison-picker > summary');

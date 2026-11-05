@@ -193,26 +193,44 @@
             </p>
           </div>
           <h3>Status hasil</h3>
-          <p>
-            Setelah menyimpan skenario di <a href="/studio">Studio simulasi</a>, buka Uji Keputusan
-            untuk mengubah asumsi hingga ±25%. Uji otomatis mengubah anggaran, biaya, dan tiap
-            bobot positif satu per satu sebesar ±10%; bobot dinormalisasi kembali ke total 100%.
-            Biaya seluruh wilayah, termasuk penyesuaian, dibulatkan HALF_UP ke rupiah dengan minimum Rp1.
-          </p>
+          <ul class="method-points">
+            <li>
+              <strong>Uji manual</strong>
+              <span>Setelah menyimpan skenario di <a href="/studio">Studio simulasi</a>, Uji Keputusan dapat mengubah asumsi hingga ±25%.</span>
+            </li>
+            <li>
+              <strong>Uji otomatis</strong>
+              <span>Anggaran, biaya, dan tiap bobot positif diubah satu per satu sebesar ±10%; bobot kemudian dinormalisasi kembali ke total 100%.</span>
+            </li>
+            <li>
+              <strong>Presisi biaya</strong>
+              <span>Biaya seluruh wilayah, termasuk penyesuaian, dibulatkan <code>HALF_UP</code> ke rupiah dengan minimum Rp1.</span>
+            </li>
+          </ul>
           <h3>Cek pemerataan dan bukti</h3>
           <p>
             Pilihan jangkauan memaksimalkan jumlah provinsi penerima terlebih dahulu. Jika maksimum
             terbukti, tahap kedua memaksimalkan skor kebutuhan dengan jangkauan tersebut. Kedua pilihan
-            memakai anggaran, biaya, kapasitas, dan minimum awal yang sama. Ukuran ini tidak membuktikan
-            pemerataan antarsekolah atau siswa. Telusur Bukti menghubungkan nilai akses, kebutuhan,
-            bobot, kontribusi skor, dan sel sumber pada input snapshot.
+            memakai anggaran, biaya, kapasitas, dan minimum awal yang sama.
           </p>
-          <p>
-            Tiap percobaan memiliki batas solver satu detik. Timeout tanpa solusi dikeluarkan dari
-            hitungan kestabilan; perubahan yang melewati batas input ditandai tidak valid.
-            Perbedaan alokasi dapat berasal dari solusi dengan skor setara. Unduhan bukti JSON
-            menyertakan snapshot, parameter, versi metode, dan hasil tiap percobaan untuk diperiksa ulang.
-          </p>
+          <ul class="method-points">
+            <li>
+              <strong>Batas pemerataan</strong>
+              <span>Ukuran ini tidak membuktikan pemerataan antarsekolah atau siswa.</span>
+            </li>
+            <li>
+              <strong>Telusur bukti</strong>
+              <span>Nilai akses, kebutuhan, bobot, kontribusi skor, dan sel sumber dihubungkan kembali ke input snapshot.</span>
+            </li>
+            <li>
+              <strong>Uji ketahanan</strong>
+              <span>Setiap percobaan dibatasi satu detik. Timeout tanpa solusi dikeluarkan dari hitungan kestabilan; input di luar batas ditandai tidak valid.</span>
+            </li>
+            <li>
+              <strong>Bukti portabel</strong>
+              <span>Unduhan JSON menyertakan snapshot, parameter, versi metode, dan hasil percobaan untuk diperiksa ulang. Perbedaan alokasi dapat berasal dari solusi dengan skor setara.</span>
+            </li>
+          </ul>
           <div class="status-table" role="table" aria-label="Arti status model">
             <div role="row"><span class="status-name" role="cell">optimal</span><span role="cell">Solusi terbaik dibuktikan untuk model dan batas waktu yang dinyatakan.</span></div>
             <div role="row"><span class="status-name" role="cell">feasible</span><span role="cell">Solusi memenuhi constraint, tetapi optimum belum terbukti.</span></div>
@@ -232,14 +250,39 @@
         </section>
 
         <section id="limits" aria-labelledby="limits-title" class="limits">
-          <p class="eyebrow">06 · Batas interpretasi</p>
-          <h2 id="limits-title">Optimal menurut model bukan bukti keadilan universal.</h2>
-          <ul>
-            <li>Workspace lokal memakai data pengguna yang diaudit; tes otomatis memakai fixture sintetis. Belum ada benchmark representatif atau klaim latensi produksi.</li>
-            <li>Biaya, kapasitas, dan fairness resmi belum ditetapkan di halaman ini.</li>
-            <li>Hasil perlu dibaca bersama provenance, coverage, missing data, asumsi, dan versi metode.</li>
-            <li>Verifikasi lapangan, pertimbangan kebijakan, dan proses penganggaran resmi tetap diperlukan.</li>
-          </ul>
+          <div class="limits-heading">
+            <span class="limits-number" aria-hidden="true">06</span>
+            <div>
+              <p class="limits-label">Batas interpretasi</p>
+              <h2 id="limits-title">Optimal di model belum tentu adil di dunia nyata.</h2>
+              <p class="limits-intro">
+                Equora membantu membandingkan skenario secara transparan. Ia tidak menggantikan
+                penilaian manusia, bukti lapangan, atau keputusan kebijakan.
+              </p>
+            </div>
+          </div>
+
+          <div class="limits-boundary">
+            <div class="limits-column">
+              <p class="limits-column-title"><span aria-hidden="true">01</span> Dapat digunakan untuk</p>
+              <ul>
+                <li>Membandingkan skenario berdasarkan data, bobot, dan asumsi yang terlihat.</li>
+                <li>Menelusuri sumber, coverage, missing data, dan versi metode di balik hasil.</li>
+              </ul>
+            </div>
+            <div class="limits-column limits-column-caution">
+              <p class="limits-column-title"><span aria-hidden="true">02</span> Belum dapat digunakan untuk</p>
+              <ul>
+                <li>Mengklaim biaya, kapasitas, fairness, atau dampak sebagai angka resmi.</li>
+                <li>Membuktikan performa produksi; benchmark saat ini belum representatif.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="limits-decision">
+            <p class="limits-decision-label">Keputusan tetap membutuhkan</p>
+            <p>Verifikasi lapangan <span aria-hidden="true">·</span> pertimbangan kebijakan <span aria-hidden="true">·</span> proses penganggaran resmi</p>
+          </div>
         </section>
       </div>
     </div>
@@ -372,6 +415,9 @@
   .content section + section {
     padding-top: 64px;
   }
+  .content section > h3 {
+    margin-top: 36px;
+  }
   code {
     background: var(--eq-primary-tint);
     border-radius: 4px;
@@ -481,6 +527,35 @@
     font-size: 0.875rem;
     line-height: 1.5;
   }
+  .method-points {
+    border-top: 1px solid var(--eq-border);
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+  }
+  .method-points li {
+    border-bottom: 1px solid var(--eq-border);
+    color: var(--eq-text-secondary);
+    display: grid;
+    font-size: 0.9375rem;
+    gap: 20px;
+    grid-template-columns: minmax(132px, 0.28fr) minmax(0, 1fr);
+    line-height: 1.6;
+    padding: 16px 0;
+  }
+  .method-points strong {
+    color: var(--eq-text);
+    font-size: 0.875rem;
+  }
+  .method-points span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .method-points a {
+    color: var(--eq-primary-hover);
+    font-weight: 650;
+    text-underline-offset: 3px;
+  }
   .status-table {
     background: var(--eq-surface);
     border: 1px solid var(--eq-border);
@@ -508,6 +583,8 @@
     color: var(--eq-text-secondary);
     font-size: 0.9375rem;
     line-height: 1.55;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
   .glossary {
     display: grid;
@@ -533,22 +610,118 @@
     line-height: 1.6;
     margin: 0;
   }
-  .limits {
-    background: var(--eq-surface-subtle);
-    border: 1px solid var(--eq-border);
+  .content .limits {
+    background: #101826;
     border-radius: var(--eq-radius-md);
+    color: #e2e8f0;
     margin-top: 64px;
-    padding: 28px;
+    overflow: hidden;
+    padding: clamp(28px, 5vw, 56px);
+  }
+  .limits-heading {
+    align-items: start;
+    display: grid;
+    gap: clamp(20px, 4vw, 44px);
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .limits-number {
+    color: #74a9cf;
+    font-size: clamp(2.75rem, 6vw, 5.5rem);
+    font-weight: 750;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+  }
+  .limits-label {
+    color: #74a9cf;
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+  }
+  .limits h2 {
+    color: #f8fafc;
+    font-size: clamp(2rem, 4.3vw, 3.75rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 18px;
+    max-width: 760px;
+    text-wrap: balance;
+  }
+  .limits-intro {
+    color: #b8c5d6;
+    font-size: clamp(1rem, 1.6vw, 1.125rem);
+    line-height: 1.65;
+    margin: 0;
+    max-width: 680px;
+  }
+  .limits-boundary {
+    border-bottom: 1px solid #2b3a4f;
+    border-top: 1px solid #2b3a4f;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: clamp(32px, 5vw, 52px);
+  }
+  .limits-column {
+    padding: 30px 32px 30px 0;
+  }
+  .limits-column + .limits-column {
+    border-left: 1px solid #2b3a4f;
+    padding-left: 32px;
+    padding-right: 0;
+  }
+  .limits-column-title {
+    align-items: center;
+    color: #f8fafc;
+    display: flex;
+    font-size: 0.875rem;
+    font-weight: 700;
+    gap: 10px;
+    margin: 0 0 18px;
+  }
+  .limits-column-title span {
+    color: #74a9cf;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
   }
   .limits ul {
-    color: var(--eq-text-secondary);
+    color: #b8c5d6;
+    display: grid;
     font-size: 0.9375rem;
-    line-height: 1.7;
+    gap: 14px;
+    line-height: 1.6;
     margin: 0;
-    padding-left: 20px;
+    padding-left: 18px;
   }
-  .limits li + li {
-    margin-top: 8px;
+  .limits li::marker {
+    color: #74a9cf;
+  }
+  .limits-decision {
+    align-items: baseline;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: minmax(140px, 0.55fr) minmax(0, 1.45fr);
+    padding-top: 28px;
+  }
+  .limits-decision p {
+    margin: 0;
+  }
+  .limits-decision-label {
+    color: #74a9cf;
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .limits-decision p:last-child {
+    color: #f8fafc;
+    font-size: clamp(1rem, 1.8vw, 1.25rem);
+    font-weight: 650;
+    line-height: 1.5;
+  }
+  .limits-decision p:last-child span {
+    color: #74a9cf;
+    padding-inline: 4px;
   }
 
   @media (max-width: 860px) {
@@ -581,8 +754,35 @@
     .state-grid {
       grid-template-columns: 1fr;
     }
-    .status-table div,
     .glossary div {
+      gap: 6px;
+      grid-template-columns: 1fr;
+    }
+    .limits-heading {
+      grid-template-columns: 1fr;
+    }
+    .limits-number {
+      font-size: 2.5rem;
+    }
+    .limits-boundary {
+      grid-template-columns: 1fr;
+    }
+    .limits-column {
+      padding: 24px 0;
+    }
+    .limits-column + .limits-column {
+      border-left: 0;
+      border-top: 1px solid #2b3a4f;
+      padding: 24px 0;
+    }
+    .limits-decision {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .status-table div,
+    .method-points li {
       gap: 6px;
       grid-template-columns: 1fr;
     }

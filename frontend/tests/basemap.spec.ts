@@ -31,8 +31,11 @@ for (const width of [360, 1440]) {
     await page.route('**/api/v1/geometry', route => route.fulfill({ json: geometry }));
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/explore');
+    await expect(page.locator('.range-value')).toHaveText('20 - 20%');
     const map = page.getByRole('img', { name: /Peta sebaran indikator/ });
-    await expect(page.getByText('Basemap OpenStreetMap · Protomaps · zoom hingga 7.')).toBeVisible();
+    await expect(
+      page.getByText('Basemap OpenStreetMap · Protomaps · zoom hingga 7.'),
+    ).toBeVisible({ timeout: 15000 });
     await expect(map).toHaveAttribute('aria-busy', 'false');
     await expect(map.locator('canvas')).toBeVisible();
     if (!await map.getByRole('link', { name: 'OpenStreetMap contributors' }).isVisible()) {

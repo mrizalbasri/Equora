@@ -24,9 +24,16 @@ data/raw/
 data/datamentah/
 data/processed/
 tmp/
+.qa-tmp/
 output/
 *.log
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+.codegraph/
+
+# Documentation and private notes (maintained locally)
+docs/
+design-qa.md
+.superpowers/

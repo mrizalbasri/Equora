@@ -12,7 +12,7 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request, Response
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict, Field, field_validator
-from sqlalchemy import select
+from sqlalchemy import func, select, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -23,6 +23,7 @@ from app.api.views import (
     DatasetView,
     ObservationsView,
     ProvinceView,
+    RegionInsightsView,
     RegionProfileView,
     SavedScenarioView,
     SourceView,
@@ -53,9 +54,12 @@ def session_for(request: Request):
         raise HTTPException(503, "Database Equora belum tersedia")
     try:
         with Session(engine) as session:
+            session.info["require_published_data"] = (
+                request.app.state.settings.require_published_data
+            )
             yield session
     except SQLAlchemyError as exc:
-        raise HTTPException(503, "Database belum siap; periksa koneksi dan migrasi lokal") from exc
+        raise HTTPException(503, "Data belum dapat dimuat. Coba lagi beberapa saat lagi.") from exc
 
 
 DBSession = Annotated[Session, Depends(session_for)]
@@ -72,6 +76,8 @@ def local_release(session: Session, release_id: str | None = None):
         raise HTTPException(
             503 if not release_id else 404, "Snapshot lokal belum tersedia; jalankan prepare_local"
         )
+    if session.info.get("require_published_data") and record.payload.get("status") != "published":
+        raise HTTPException(503, "Rilis data belum disetujui untuk publikasi.")
     return record.payload
 
 
@@ -79,6 +85,8 @@ def get_snapshot(session, snapshot_id):
     record = session.get(ScenarioSnapshot, snapshot_id)
     if record is None:
         raise HTTPException(404, "Skenario tidak ditemukan")
+    if session.info.get("require_published_data"):
+        local_release(session, record.release_id)
     return record.payload
 
 
@@ -218,6 +226,24 @@ def region(
         "sources": payload["sources"],
         "limitations": payload["limitations"],
     }
+
+
+@router.get("/regions/{code}/insights", response_model=RegionInsightsView)
+def region_insights(
+    code: str,
+    session: DBSession,
+    education_level: EducationLevel = "SD",
+    release_id: str | None = None,
+):
+    from app.services.region_insights import build_region_insights
+
+    payload = local_release(session, release_id)
+    if education_level not in payload["scopes"]:
+        raise HTTPException(422, "Jenjang tidak tersedia pada rilis ini")
+    try:
+        return build_region_insights(payload, education_level, code)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
 
 
 @router.get("/observations", response_model=ObservationsView)
@@ -366,9 +392,12 @@ def compute_priority(body: PriorityInput, session: DBSession):
 
 @router.get("/scenarios", response_model=list[SavedScenarioView])
 def list_scenarios(session: DBSession):
-    records = session.scalars(
-        select(ScenarioSnapshot).order_by(ScenarioSnapshot.created_at.desc()).limit(50)
-    ).all()
+    query = select(ScenarioSnapshot)
+    if session.info.get("require_published_data"):
+        query = query.join(LocalRelease).where(
+            LocalRelease.payload["status"].as_string() == "published"
+        )
+    records = session.scalars(query.order_by(ScenarioSnapshot.created_at.desc()).limit(50)).all()
     return [
         {
             "id": str(record.id),
@@ -382,7 +411,14 @@ def list_scenarios(session: DBSession):
 
 
 @router.post("/scenarios", status_code=201, response_model=ScenarioView)
-def create_scenario(body: ScenarioInput, session: DBSession):
+def create_scenario(body: ScenarioInput, session: DBSession, request: Request):
+    # Coordinate the capacity check across API processes until the insert commits.
+    session.execute(text("SELECT pg_advisory_xact_lock(61342, 1)"))
+    count = session.scalar(select(func.count()).select_from(ScenarioSnapshot))
+    if count >= request.app.state.settings.max_saved_scenarios:
+        raise HTTPException(
+            409, "Penyimpanan skenario penuh. Hubungi pengelola sebelum menyimpan skenario baru."
+        )
     try:
         payload = local_release(session, body.release_id)
         result = calculate_scenario(payload, body)

@@ -9,11 +9,14 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:5173"]}
       DATA_DIR: /data
       ADMIN_TOKEN: ${ADMIN_TOKEN:-}
+      WRITE_REQUESTS_PER_MINUTE: ${WRITE_REQUESTS_PER_MINUTE:-60}
+      MAX_SAVED_SCENARIOS: ${MAX_SAVED_SCENARIOS:-10000}
+      REQUIRE_PUBLISHED_DATA: ${REQUIRE_PUBLISHED_DATA:-false}
     volumes:
       - ../data:/data:ro
     networks: [default, postgres]
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health/live')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health/ready')"]
       interval: 10s
       timeout: 5s
       retries: 5

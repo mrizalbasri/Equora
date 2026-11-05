@@ -1,6 +1,52 @@
 import { expect, test } from '@playwright/test';
 import { mockWorkspace, snapshot } from './workspace-fixture';
 
+test('Studio retries context failure before allowing input', async ({ page }) => {
+  await mockWorkspace(page);
+  let unavailable = true;
+  await page.route('**/api/v1/workspace?*', route => unavailable
+    ? route.fulfill({ status: 503, json: { detail: 'Data sementara tidak tersedia' } })
+    : route.fallback());
+  await page.goto('/studio');
+  await expect(page.getByRole('alert')).toContainText('Data simulasi belum dapat dimuat');
+  await expect(page.getByLabel('Nama skenario', { exact: true })).toBeDisabled();
+  unavailable = false;
+  await page.getByRole('button', { name: 'Coba lagi memuat data', exact: true }).click();
+  await expect(page.getByLabel('Nama skenario', { exact: true })).toBeEnabled();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.getByText('Skenario disimpan di ruang bersama.', { exact: false })).toBeVisible();
+});
+
+test('Studio scenario-list failure does not block calculations or claim an empty list', async ({ page }) => {
+  await mockWorkspace(page);
+  let unavailable = true;
+  await page.route('**/api/v1/scenarios', route => unavailable
+    ? route.fulfill({ status: 503, json: { detail: 'Unavailable' } })
+    : route.fulfill({ json: [] }));
+  await page.goto('/studio');
+  await expect(page.getByRole('button', { name: 'Hitung Alokasi & Simpan Snapshot', exact: true })).toBeEnabled();
+  await expect(page.getByRole('alert')).toContainText('Daftar skenario belum dapat dimuat');
+  await expect(page.getByText('0 tersimpan', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Belum ada snapshot skenario' })).toHaveCount(0);
+  unavailable = false;
+  await page.getByRole('button', { name: 'Coba lagi memuat skenario', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Belum ada snapshot skenario' })).toBeVisible();
+  await expect(page.getByText('0 tersimpan', { exact: true })).toBeVisible();
+});
+
+test('/scenarios redirects to /studio#skenario-tersimpan', async ({ page }) => {
+  await mockWorkspace(page);
+  await page.goto('/scenarios');
+  await expect(page).toHaveURL(/\/studio#skenario-tersimpan$/);
+});
+
+test('Studio pre-selects province and shows context banner when province query param is present', async ({ page }) => {
+  await mockWorkspace(page);
+  await page.goto('/studio?release=synthetic-release&province=11');
+  await expect(page.getByLabel('Konteks dari profil wilayah')).toContainText('Provinsi Synthetic Alpha');
+  await expect(page.locator('summary').filter({ hasText: '1 dari 2 terpilih' })).toBeVisible();
+});
+
 for (const width of [390, 1440]) {
   test(`explorer filters, missing values, source and map fallback at ${width}px`, async ({
     page,
@@ -149,6 +195,23 @@ test('admin rejects an invalid token and clears the input', async ({
   ).toHaveValue('');
 });
 
+test('admin accepts valid token and displays imported snapshot status', async ({
+  page,
+}) => {
+  await mockWorkspace(page);
+  await page.goto('/admin');
+  await page.getByLabel('Token otentikasi admin', { exact: true }).fill('valid-secret');
+  await page.getByRole('button', { name: 'Periksa & impor snapshot' }).click();
+  await expect(page.getByRole('status')).toContainText(
+    'Impor lokal berhasil diselesaikan!',
+  );
+  await expect(page.getByRole('status')).toContainText('10');
+  await expect(page.getByRole('status')).toContainText('synthetic-release');
+  await expect(
+    page.getByRole('link', { name: 'Buka Katalog & Kualitas Dataset' }),
+  ).toBeVisible();
+});
+
 test('comparison load failure offers retry without claiming scenarios are empty', async ({ page }) => {
   await mockWorkspace(page);
   let calls = 0;
@@ -259,11 +322,11 @@ for (const width of [375, 768, 1024, 1440]) {
       ).toBeFocused();
       await page.keyboard.press('Tab');
       await expect(
-        navigation.getByRole('link', { name: 'Daerah Saya', exact: true }),
+        navigation.getByRole('link', { name: 'Explorer', exact: true }),
       ).toBeFocused();
       await page.keyboard.press('Tab');
       await expect(
-        navigation.getByRole('link', { name: 'Explorer', exact: true }),
+        navigation.getByRole('link', { name: 'Pendidikan di Daerah Saya', exact: true }),
       ).toBeFocused();
       await page.keyboard.press('Escape');
       await expect(menu).toBeFocused();

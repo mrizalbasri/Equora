@@ -214,12 +214,43 @@ def test_public_profiles_preserve_requested_release(payload, monkeypatch):
         assert result["status"] == "local_review"
         assert result["academic_year"] == "2025/2026"
         assert result["ownership"] == "Total"
-        for path in ("workspace", "regions", "regions/11"):
+        insights = client.get("/api/v1/regions/11/insights", params=query).json()
+        assert insights["release_id"] == older["id"]
+        assert insights["region"] == {"code": "11", "name": "Synthetic 11"}
+        assert insights["benchmarks"][0]["value"] == "12"
+        assert insights["benchmarks"][0]["median"] == "36"
+        assert insights["attention_source_id"] == CORE[0]
+        for path in ("workspace", "regions", "regions/11", "regions/11/insights"):
             assert client.get("/api/v1/" + path, params={"release_id": "absent"}).status_code == 404
         assert client.get("/api/v1/regions/99", params=query).status_code == 404
-        for path in ("regions", "regions/11"):
+        assert client.get("/api/v1/regions/99/insights", params=query).status_code == 404
+        for path in ("regions", "regions/11", "regions/11/insights"):
             response = client.get("/api/v1/" + path, params={"education_level": "SMP"})
             assert response.status_code == 422
+
+
+@pytest.mark.skipif(not os.getenv("TEST_DATABASE_URL"), reason="TEST_DATABASE_URL is not set")
+def test_snapshot_capacity_and_publication_gate(payload, session):
+    session.add(LocalRelease(id=payload["id"], payload=payload))
+    session.flush()
+    app = create_app(Settings(_env_file=None, max_saved_scenarios=1))
+    app.dependency_overrides[session_for] = lambda: session
+    with TestClient(app) as client:
+        first = client.post("/api/v1/scenarios", json=params(payload).model_dump(mode="json"))
+        assert first.status_code == 201
+        assert (
+            client.post(
+                "/api/v1/scenarios", json=params(payload).model_dump(mode="json")
+            ).status_code
+            == 409
+        )
+        session.info["require_published_data"] = True
+        try:
+            assert client.get("/api/v1/workspace").status_code == 503
+            assert client.get("/api/v1/scenarios").json() == []
+            assert client.get("/api/v1/scenarios/" + first.json()["id"]).status_code == 503
+        finally:
+            session.info.pop("require_published_data", None)
 
 
 @pytest.mark.skipif(not os.getenv("TEST_DATABASE_URL"), reason="TEST_DATABASE_URL is not set")

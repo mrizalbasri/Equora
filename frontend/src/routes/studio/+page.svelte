@@ -3,6 +3,7 @@
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ScenarioResult from '$lib/components/ScenarioResult.svelte';
   import Icon from '$lib/components/Icon.svelte';
+  import { focusedWeights } from '$lib/studio-focus';
   import {
     api,
     labels,
@@ -14,6 +15,10 @@
   let workspace = $state<Workspace>();
   let regions = $state<{ code: string; name: string }[]>([]);
   let saved = $state<SavedScenario[]>([]);
+  let savedError = $state('');
+  let loadingSaved = $state(true);
+  let savedRequest = 0;
+  let attempt = $state(0);
   let name = $state('Simulasi alokasi fasilitas sekolah');
   let level = $state('SD');
   let budget = $state<number | undefined>(1000000000);
@@ -21,6 +26,7 @@
   let capacity = $state<number | undefined>(10);
   let minimum = $state<number | undefined>(0);
   let activePreset = $state<'sanitation' | 'digital' | 'affirmation' | 'equal' | null>('equal');
+  let focusIndicator = $state<string>();
   let weights = $state<Record<string, number>>({
     sanitation_percent: 25,
     water_percent: 25,
@@ -45,6 +51,8 @@
   const names = $derived(
     Object.fromEntries(regions.map((row) => [row.code, row.name])),
   );
+  const provinceParam = $derived(page.url.searchParams.get('province'));
+  const provinceName = $derived(provinceParam ? names[provinceParam] : undefined);
   const total = $derived(
     Object.values(weights).reduce((a, b) => a + (Number(b) || 0), 0),
   );
@@ -55,6 +63,7 @@
   );
 
   function applyPreset(preset: 'sanitation' | 'digital' | 'affirmation' | 'equal') {
+    focusIndicator = undefined;
     activePreset = preset;
     if (preset === 'sanitation') {
       name = 'Prioritas sanitasi dan air';
@@ -96,14 +105,32 @@
   }
 
   $effect(() => {
+    attempt;
     const release = page.url.searchParams.get('release');
     const requestedLevel = page.url.searchParams.get('level') ?? 'SD';
+    const requestedProvince = page.url.searchParams.get('province');
+    const requestedFocus = page.url.searchParams.get('focus');
     const id = ++contextRequest;
-    void loadContext(release, requestedLevel, id);
+    void loadContext(release, requestedLevel, requestedProvince, requestedFocus, id);
+    void loadSaved();
     return () => { contextRequest++; regionRequest++; };
   });
 
-  async function loadContext(release: string | null, requestedLevel: string, id: number) {
+  async function loadSaved() {
+    const id = ++savedRequest;
+    loadingSaved = true;
+    savedError = '';
+    try {
+      const snapshots = await api<SavedScenario[]>('scenarios');
+      if (id === savedRequest) saved = snapshots;
+    } catch {
+      if (id === savedRequest) savedError = 'Daftar skenario belum dapat dimuat. Coba lagi.';
+    } finally {
+      if (id === savedRequest) loadingSaved = false;
+    }
+  }
+
+  async function loadContext(release: string | null, requestedLevel: string, requestedProvince: string | null, requestedFocus: string | null, id: number) {
     workspace = undefined;
     regions = [];
     selected = [];
@@ -114,16 +141,24 @@
       const current = await api<Workspace>('workspace?' + new URLSearchParams(release ? { release_id: release } : {}));
       if (release && current.id !== release) throw new Error('Rilis yang diminta tidak tersedia.');
       if (!current.education_levels.includes(requestedLevel)) throw new Error('Jenjang tidak tersedia pada rilis ini.');
-      const [list, snapshots] = await Promise.all([
-        api<{ code: string; name: string }[]>('regions?' + new URLSearchParams({ release_id: current.id, education_level: requestedLevel })),
-        api<SavedScenario[]>('scenarios'),
-      ]);
+      const list = await api<{ code: string; name: string }[]>('regions?' + new URLSearchParams({ release_id: current.id, education_level: requestedLevel }));
       if (id !== contextRequest) return;
       level = requestedLevel;
       workspace = current;
       regions = list;
-      saved = snapshots;
-      selected = regions.map((row) => row.code);
+      const focused = focusedWeights(current.core_indicators, requestedFocus);
+      if (focused && requestedFocus) {
+        weights = focused;
+        activePreset = null;
+        focusIndicator = requestedFocus;
+        name = `Fokus awal ${labels[requestedFocus] ?? requestedFocus}`;
+      } else {
+        applyPreset('equal');
+      }
+      selected =
+        requestedProvince && list.some((row) => row.code === requestedProvince)
+          ? [requestedProvince]
+          : regions.map((row) => row.code);
     } catch (e) {
       if (id === contextRequest) error = (e as Error).message;
     } finally {
@@ -181,7 +216,7 @@
           Object.entries(overrides).filter(([code]) => selected.includes(code)),
         ),
       });
-      saved = await api<SavedScenario[]>('scenarios');
+      await loadSaved();
     } catch (e) {
       error = (e as Error).message;
     } finally {
@@ -214,21 +249,31 @@
 >
   {#if page.url.searchParams.has('release')}
     <aside class="work-panel" aria-label="Konteks dari profil wilayah">
-      <strong>Melanjutkan dari profil wilayah</strong>
-      <p>Rilis {page.url.searchParams.get('release')} · Jenjang {level}. Cakupan awal adalah seluruh provinsi yang tersedia pada jenjang ini. Periksa cakupan dan asumsi sebelum menghitung.</p>
+      <strong>Melanjutkan dari profil wilayah{provinceName ? ` · ${provinceName}` : ''}</strong>
+      <p>Rilis {page.url.searchParams.get('release')} · Jenjang {level}. {provinceName ? `Cakupan awal adalah ${provinceName}; tambahkan provinsi lain bila perlu.` : 'Cakupan awal adalah seluruh provinsi yang tersedia pada jenjang ini.'} Periksa cakupan dan asumsi sebelum menghitung.</p>
+      {#if focusIndicator}<p><strong>Titik awal fokus: {labels[focusIndicator] ?? focusIndicator}.</strong> Bobot 70% hanya diisi sebagai titik awal dari profil wilayah dan dapat diubah; ini bukan rekomendasi kebijakan.</p>{/if}
       {#if error && !workspace}<a class="eq-button" href="/studio">Buka Studio dengan rilis aktif</a>{/if}
     </aside>
   {/if}
   {#if loadingRegions}<p role="status">Memuat cakupan provinsi pada rilis dan jenjang yang dipilih…</p>{/if}
+  {#if error}
+    <div class="work-error" role="alert">
+      <Icon name="alert" size={18} />
+      <div><strong>{!workspace ? 'Data simulasi belum dapat dimuat.' : 'Simulasi belum dapat dilanjutkan.'}</strong><p>{error}</p></div>
+    </div>
+    {#if !workspace && !loadingRegions}<button class="eq-button" onclick={() => attempt++}>Coba lagi memuat data</button>{/if}
+  {/if}
   {#if error && workspace && !regions.length && !loadingRegions}
     <button class="eq-button" onclick={() => changeLevel(level)}>Coba lagi memuat provinsi</button>
   {/if}
   <form class="studio-form" onsubmit={calculate}>
+    <fieldset aria-label="Parameter simulasi" disabled={!workspace || loadingRegions || busy}>
     <section class="work-panel">
       <h2>1. Cakupan dan asumsi biaya</h2>
       <p class="work-muted">
         Angka awal adalah asumsi demo yang dapat diubah. Satu paket adalah unit
-        intervensi simulasi; tidak diklaim setara satu sekolah terbantu.
+        intervensi simulasi; pada estimasi dampak, satu paket diasumsikan
+        rehabilitasi untuk satu satuan pendidikan.
       </p>
       <div class="work-grid">
         <label class="work-field">
@@ -255,18 +300,30 @@
           />
           <span class="rupiah-hint">{rupiah(budget ?? 0)}</span>
         </label>
-        <label class="work-field">
-          <span class="field-title">Biaya per Paket (Rp)</span>
-          <input
-            type="number"
-            bind:value={cost}
-            required
-            min="1"
-            max="1000000000000"
-            step="1"
-          />
-          <span class="rupiah-hint">{rupiah(cost ?? 0)}</span>
-        </label>
+        <div class="work-field">
+          <label>
+            <span class="field-title">Biaya per Paket (Rp)</span>
+            <input
+              type="number"
+              bind:value={cost}
+              required
+              min="1"
+              max="1000000000000"
+              step="1"
+            />
+            <span class="rupiah-hint">{rupiah(cost ?? 0)}</span>
+          </label>
+          <details class="cost-assumption">
+            <summary>Dari mana angka ini?</summary>
+            <p>
+              Biaya per paket adalah <strong>asumsi yang Anda tentukan sendiri</strong>,
+              bukan referensi anggaran resmi. Nilai awal Rp10 juta hanyalah contoh
+              ilustrasi untuk demo — ganti sesuai konteks daerah Anda dan hasil
+              simulasi akan menyesuaikan. Lihat <a href="/methodology">Metodologi</a>
+              untuk batas penggunaan.
+            </p>
+          </details>
+        </div>
         <label class="work-field">
           <span class="field-title">Maksimum paket per provinsi</span>
           <input
@@ -375,7 +432,7 @@
             <input
               type="number"
               bind:value={weights[key]}
-              oninput={() => activePreset = null}
+              oninput={() => { activePreset = null; focusIndicator = undefined; }}
               required
               min="0"
               max="100"
@@ -496,7 +553,8 @@
       </div>
     </details>
 
-    <div class="work-actions">
+    <p class="work-muted" id="public-scenario-notice">Skenario disimpan di ruang bersama. Nama, parameter, dan hasil dapat dibaca pengguna lain. Jangan masukkan data pribadi atau informasi rahasia.</p>
+    <div class="work-actions" aria-describedby="public-scenario-notice">
       <button
         class="eq-button eq-button-primary"
         disabled={busy || loadingRegions || !workspace || total !== 100 || !selected.length}
@@ -509,14 +567,8 @@
         <span>Bandingkan Snapshot</span>
       </a>
     </div>
+    </fieldset>
   </form>
-
-  {#if error}
-    <div class="work-error" role="alert">
-      <Icon name="alert" size={18} />
-      <span>{error}</span>
-    </div>
-  {/if}
 
   {#if result}
     <ScenarioResult {result} {names} />
@@ -528,10 +580,15 @@
         <h2>Skenario tersimpan</h2>
         <p class="work-muted">Snapshot hasil perhitungan yang siap diuji dan dibandingkan.</p>
       </div>
-      <span class="eq-badge eq-badge-neutral">{saved.length} tersimpan</span>
+      {#if !loadingSaved && !savedError}<span class="eq-badge eq-badge-neutral">{saved.length} tersimpan</span>{/if}
     </div>
 
-    {#if !saved.length}
+    {#if loadingSaved}
+      <p role="status">Memuat skenario tersimpan…</p>
+    {:else if savedError}
+      <p role="alert">{savedError}</p>
+      <button class="eq-button" type="button" onclick={loadSaved}>Coba lagi memuat skenario</button>
+    {:else if !saved.length}
       <div class="empty-state">
         <div class="empty-state-icon">
           <Icon name="chart" size={24} />
@@ -549,7 +606,7 @@
             <div class="saved-card-top">
               <a href={'/scenarios/' + item.id} class="saved-title">{item.name}</a>
               <span
-                class="eq-badge {item.status === 'OPTIMAL' || item.status === 'FEASIBLE'
+                class="eq-badge {item.status?.toLowerCase() === 'optimal' || item.status?.toLowerCase() === 'feasible'
                   ? 'eq-badge-success'
                   : 'eq-badge-warning'}"
               >
@@ -577,6 +634,7 @@
 </WorkspaceShell>
 
 <style>
+  fieldset { display: contents; border: 0; padding: 0; margin: 0; min-width: 0; }
   .studio-form {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
@@ -600,6 +658,19 @@
     font-weight: 550;
     font-variant-numeric: tabular-nums;
   }
+  .cost-assumption {
+    font-size: 12px;
+  }
+  .cost-assumption summary {
+    cursor: pointer;
+    color: var(--eq-primary-hover);
+    font-weight: 550;
+  }
+  .cost-assumption p {
+    margin: 6px 0 0;
+    color: var(--eq-text-secondary);
+    line-height: 1.55;
+  }
   .panel-header-action {
     display: flex;
     justify-content: space-between;
@@ -608,11 +679,12 @@
     flex-wrap: wrap;
     margin-bottom: 16px;
   }
-  .studio-form > details,
-  .studio-form > .work-actions {
+  .studio-form fieldset > details,
+  .studio-form fieldset > .work-actions,
+  #public-scenario-notice {
     grid-column: 1/-1;
   }
-  .studio-form > details {
+  .studio-form fieldset > details {
     background: var(--eq-surface);
     border: 1px solid var(--eq-border);
     border-radius: 12px;
@@ -670,7 +742,7 @@
     border-radius: 8px;
     border: 1px solid var(--eq-border);
   }
-  .studio-form > .work-actions {
+  .studio-form fieldset > .work-actions {
     margin: 0;
     padding-block: 4px 12px;
   }
