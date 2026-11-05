@@ -46,8 +46,7 @@ def _benchmark_scope(payload: dict, education_level: str) -> tuple[list[dict], d
             "reasons": reasons,
             "median": median(ordered) if ordered else None,
             "ranks": {
-                code: 1 + sum(other > value for other in ordered)
-                for code, value in values.items()
+                code: 1 + sum(other > value for other in ordered) for code, value in values.items()
             },
         }
     return percent_sources, scope
@@ -154,9 +153,7 @@ def _non_percent_value(row: dict, source_id: str) -> tuple[Decimal | None, str |
 def build_region_map_insights(payload: dict, education_level: str, indicator: str) -> dict:
     """Build one batch of map-ready evidence without per-region API calls."""
 
-    source = next(
-        (item for item in payload["sources"] if item["source_id"] == indicator), None
-    )
+    source = next((item for item in payload["sources"] if item["source_id"] == indicator), None)
     if source is None:
         raise ValueError("Indikator tidak tersedia")
 
@@ -170,9 +167,7 @@ def build_region_map_insights(payload: dict, education_level: str, indicator: st
         available_indicators = sum(item["value"] is not None for item in benchmarks)
         total_indicators = len(benchmarks)
         completeness = (
-            Decimal(available_indicators) / Decimal(total_indicators)
-            if total_indicators
-            else None
+            Decimal(available_indicators) / Decimal(total_indicators) if total_indicators else None
         )
         if selected_stats is not None:
             selected = next(item for item in benchmarks if item["source_id"] == indicator)

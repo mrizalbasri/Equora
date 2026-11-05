@@ -214,9 +214,7 @@ def test_public_profiles_preserve_requested_release(payload, monkeypatch):
         assert result["status"] == "local_review"
         assert result["academic_year"] == "2025/2026"
         assert result["ownership"] == "Total"
-        observed = client.get(
-            "/api/v1/observations", params=query | {"indicator": CORE[0]}
-        ).json()
+        observed = client.get("/api/v1/observations", params=query | {"indicator": CORE[0]}).json()
         assert observed["release_id"] == older["id"]
         assert observed["rows"][0]["value"] == "12"
         insights = client.get("/api/v1/regions/11/insights", params=query).json()
