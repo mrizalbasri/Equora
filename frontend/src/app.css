@@ -52,8 +52,8 @@ p { text-wrap: pretty; }
 h1 { font-size: clamp(2.4rem, 4.2vw, 4rem); letter-spacing: -0.045em; }
 h2 { font-size: clamp(1.7rem, 3vw, 2.5rem); letter-spacing: -0.04em; }
 h3 { font-size: 1.2rem; letter-spacing: -0.02em; }
-/* Display face is limited to public editorial headings; workspace UI stays Inter. */
-.public-frame :is(h1, h2) { font-family: var(--eq-font-display); }
+/* Public pages use the display face throughout; workspace UI stays Inter. */
+.public-frame { font-family: var(--eq-font-display); }
 a { color: inherit; text-underline-offset: 4px; }
 button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
