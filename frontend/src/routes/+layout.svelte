@@ -1,4 +1,5 @@
 <script lang="ts">
+  import '@fontsource-variable/inter/wght.css';
   import '../app.css';
   import { onMount, tick } from 'svelte';
   import { afterNavigate, onNavigate } from '$app/navigation';

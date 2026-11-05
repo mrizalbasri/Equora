@@ -118,31 +118,61 @@
 
   <main id="main-content" tabindex="-1">{@render children()}</main>
 
-  <footer class="eq-container footer">
-    <div>
-      <a class="wordmark" href="/" aria-label="Equora, beranda">
-        <BrandMark compact />
-      </a>
-      <p>Pahami fasilitas pendidikan di daerah Anda.</p>
+  <footer class="footer">
+    <div class="eq-container footer-content">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a class="wordmark" href="/" aria-label="Equora, beranda">
+            <BrandMark compact />
+          </a>
+          <p>Pahami fasilitas pendidikan di daerah Anda.</p>
+        </div>
+
+        <nav class="footer-navigation" aria-label="Navigasi footer">
+          <span class="footer-heading">Jelajahi</span>
+          <a class="footer-link" href="/datasets">Katalog dataset</a>
+          <a class="footer-link" href="/methodology">Metodologi</a>
+          <a class="footer-link" href="https://github.com/mrizalbasri/Equora"
+            >Repositori proyek</a
+          >
+        </nav>
+      </div>
+
+      <div class="footer-meta">
+        <p>Equora · Data fasilitas pendidikan Indonesia</p>
+        <p class="disclaimer">
+          Simulasi berbasis data dan asumsi.<br />Bukan keputusan anggaran resmi.
+        </p>
+      </div>
     </div>
-    <a href="https://github.com/mrizalbasri/Equora">Repositori proyek</a>
-    <a href="/datasets">Katalog dataset</a>
-    <a href="/methodology">Metodologi</a>
-    <p class="disclaimer">
-      Simulasi berbasis data dan asumsi.<br />Bukan keputusan anggaran resmi.
-    </p>
+
+    <div class="footer-landscape" aria-hidden="true">
+      <img
+        src="/images/footer/equora-school-landscape.png"
+        alt=""
+        width="2172"
+        height="724"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
   </footer>
 </div>
 
 <style>
   .public-frame.calm {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: 0;
     box-shadow: none;
   }
   .calm .header-bar {
-    position: relative;
-    background: white;
-    backdrop-filter: none;
-    border-bottom: 0;
+    position: sticky;
+    background: rgb(255 255 255 / 94%);
+    backdrop-filter: blur(12px);
+    border-radius: 0;
+    border-bottom: 1px solid rgb(31 45 61 / 7%);
     box-shadow: none;
   }
   .calm .header {
@@ -153,7 +183,7 @@
   }
   .calm .footer {
     margin-top: 32px;
-    padding-block: 36px;
+    border-radius: 0;
   }
   .public-frame {
     width: calc(100% - 48px);
@@ -207,7 +237,7 @@
     gap: 6px;
   }
   .nav-link,
-  .footer > a {
+  .footer-link {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
@@ -270,9 +300,10 @@
   .primary-cta:hover :global(svg) {
     transform: translateX(3px);
   }
-  .footer > a:hover {
-    color: var(--eq-primary-hover);
-    text-decoration: underline;
+  .footer-link:hover {
+    color: white;
+    text-decoration-color: rgb(255 255 255 / 72%);
+    text-underline-offset: 5px;
   }
   .menu {
     display: none;
@@ -306,17 +337,104 @@
     top: 12px;
   }
   .footer {
-    padding-block: 40px;
-    border-top: 1px solid var(--eq-border);
+    position: relative;
+    isolation: isolate;
+    min-height: 600px;
+    overflow: hidden;
+    color: white;
+    background: #0b49bd;
+    border-radius: 0 0 28px 28px;
+  }
+  .footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0.1;
+    background-image: radial-gradient(rgb(255 255 255 / 55%) 0.6px, transparent 0.6px);
+    background-size: 5px 5px;
+    mask-image: linear-gradient(to bottom, black, transparent 58%);
+    pointer-events: none;
+  }
+  .footer-content {
+    position: relative;
+    z-index: 2;
+    padding-block: 52px 32px;
+  }
+  .footer-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.35fr);
+    gap: clamp(48px, 10vw, 148px);
+    align-items: start;
+  }
+  .footer-brand {
+    max-width: 420px;
+  }
+  .footer-brand .wordmark,
+  .footer-brand :global(.brand-mark) {
+    color: white;
+  }
+  .footer-brand > p {
+    max-width: 360px;
+    margin-top: 14px;
+    font-size: clamp(17px, 1.6vw, 22px);
+    line-height: 1.45;
+  }
+  .footer-navigation {
+    display: grid;
+    align-items: start;
+    gap: 4px;
+  }
+  .footer-heading {
+    margin-bottom: 8px;
+    color: rgb(255 255 255 / 58%);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .footer-link {
+    width: fit-content;
+    color: rgb(255 255 255 / 78%);
+    text-decoration-color: transparent;
+    transition: color 160ms ease, text-decoration-color 160ms ease;
+  }
+  .footer-meta {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 24px;
+    gap: 32px;
+    margin-top: 38px;
+    padding-top: 22px;
+    border-top: 1px solid rgb(255 255 255 / 22%);
   }
   .footer p {
     font-size: 13px;
-    color: var(--eq-text-secondary);
+    color: rgb(255 255 255 / 68%);
+  }
+  .footer-landscape {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+  }
+  .footer-landscape::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgb(2 42 127 / 22%) 0%,
+      rgb(6 55 150 / 8%) 48%,
+      transparent 72%
+    );
+  }
+  .footer-landscape img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
   }
   .disclaimer {
     text-align: right;
@@ -382,11 +500,65 @@
       justify-content: center;
     }
     .footer {
-      align-items: flex-start;
-      flex-direction: column;
+      min-height: 620px;
+      border-radius: 0;
+    }
+    .footer-content {
+      padding-block: 42px 28px;
+    }
+    .footer-main {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    .footer-navigation {
+      grid-template-columns: repeat(3, max-content);
+      gap: 4px 22px;
+    }
+    .footer-heading {
+      grid-column: 1 / -1;
+    }
+    .footer-meta {
+      margin-top: 26px;
     }
     .disclaimer {
       text-align: left;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .footer {
+      min-height: 700px;
+    }
+    .footer-navigation {
+      grid-template-columns: 1fr;
+    }
+    .footer-meta {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-landscape img {
+      object-position: 50% bottom;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .calm .footer-landscape {
+      transform: translateY(var(--footer-drift, 0px)) scale(1.08);
+      transform-origin: center bottom;
+    }
+    .footer-landscape img {
+      animation: footer-landscape-arrive 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+  }
+
+  @keyframes footer-landscape-arrive {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
