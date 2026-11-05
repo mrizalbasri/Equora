@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
@@ -32,6 +32,18 @@
   let descending = $state(false);
   let requestId = 0;
   let mapAttempt = $state(0);
+  let evidencePanel = $state<HTMLElement>();
+  async function selectProvince(code: string) {
+    selected = code;
+    await tick();
+    evidencePanel?.focus({ preventScroll: true });
+    if (window.matchMedia('(max-width: 1050px)').matches) {
+      evidencePanel?.scrollIntoView({
+        block: 'start',
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      });
+    }
+  }
   const filtered = $derived(
     (data?.rows ?? [])
       .filter((row) =>
@@ -111,6 +123,8 @@
     syncView(next);
   }
   function relativeSummary() {
+    if (mapInsights?.available_regions === 1)
+      return 'Hanya satu provinsi memiliki nilai. Belum ada pembanding antarprovinsi.';
     const delta = detailInsight?.delta_from_median;
     if (delta == null) return 'Belum dapat dibandingkan dengan median.';
     const value = Number(delta);
@@ -326,7 +340,7 @@
             onretry={() => mapAttempt++}
             presentation={mapPresentation}
             {selected}
-            onselect={(code) => (selected = code)}
+            onselect={selectProvince}
           />{/key}
       </section>
       <aside class="region-panel" aria-label="Tinjauan wilayah">
@@ -338,7 +352,7 @@
               ><Icon name="close" size={17} /></button>{/if}
         </div>
         {#if detail}
-          <section class="selected-region" aria-live="polite" aria-label="Ringkasan wilayah terpilih">
+          <section bind:this={evidencePanel} tabindex="-1" class="selected-region" aria-live="polite" aria-label="Ringkasan wilayah terpilih" style="scroll-margin-top: 100px;">
             <span class="region-code">WILAYAH {detail.code}</span>
             <h2>{detail.name}</h2>
             <p class="selected-value">
