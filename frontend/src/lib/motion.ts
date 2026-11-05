@@ -65,7 +65,7 @@ export function createLandingMotion() {
   }
 
   function onFocus(event: FocusEvent) {
-    if (!(event.target instanceof Node)) return;
+    if (!(event.target instanceof Element) || !event.target.matches(':focus-visible')) return;
     for (const animation of animations) {
       const effect = animation.effect;
       if (effect instanceof KeyframeEffect && effect.target instanceof Element && effect.target.contains(event.target)) {
