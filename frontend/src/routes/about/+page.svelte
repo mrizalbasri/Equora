@@ -87,7 +87,7 @@
 <style>
   .about { padding-block: 64px 80px; }
   .intro { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 48px; }
-  h1 { margin: 0 0 24px; font-size: clamp(2.5rem, 4.5vw, 4.25rem); line-height: 1.08; letter-spacing: -.035em; }
+  h1 { margin: 0 0 24px; font-size: clamp(2.5rem, 4.5vw, 4.25rem); line-height: 1.08; letter-spacing: -.03em; }
   h1 span { color: var(--eq-primary); }
   .lead { max-width: 54ch; color: var(--eq-text-secondary); font-size: 18px; line-height: 1.75; margin-bottom: 28px; }
   .intro-link { display: inline-flex; align-items: center; min-height: 48px; margin: 12px 0 0 20px; text-underline-offset: 5px; }

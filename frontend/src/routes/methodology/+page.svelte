@@ -312,7 +312,7 @@
   }
   h1 {
     font-size: clamp(2.4rem, 4.5vw, 4rem);
-    letter-spacing: -0.045em;
+    letter-spacing: -0.03em;
     line-height: 1.12;
     margin-bottom: 20px;
     max-width: 880px;
@@ -320,7 +320,7 @@
   }
   h2 {
     font-size: clamp(1.75rem, 3vw, 2.4rem);
-    letter-spacing: -0.035em;
+    letter-spacing: -0.025em;
     line-height: 1.2;
     margin-bottom: 16px;
     color: var(--eq-text);
@@ -642,7 +642,7 @@
   .limits h2 {
     color: #f8fafc;
     font-size: clamp(2rem, 4.3vw, 3.75rem);
-    letter-spacing: -0.04em;
+    letter-spacing: -0.03em;
     line-height: 1.05;
     margin-bottom: 18px;
     max-width: 760px;

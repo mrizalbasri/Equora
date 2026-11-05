@@ -127,7 +127,7 @@
   .landing-hero { padding-top: 58px; }
   .landing-progress { position: fixed; inset: 0 0 auto; z-index: 50; height: 3px; background: var(--eq-primary); transform-origin: left; scale: var(--landing-progress, 0) 1; pointer-events: none; }
   .hero-copy { text-align: center; margin-inline: auto; max-width: 850px; }
-  h1 { font-size: clamp(3.25rem, 6.4vw, 5.4rem); line-height: 1.03; font-weight: 620; letter-spacing: -0.04em; color: var(--eq-primary); }
+  h1 { font-size: clamp(3.25rem, 6.4vw, 5.4rem); line-height: 1.03; font-weight: 620; letter-spacing: -0.03em; color: var(--eq-primary); }
   h1 > span { color: #637489; }
   .hero-copy > p { max-width: 570px; margin: 26px auto 0; color: var(--eq-text-secondary); font-size: 17px; line-height: 1.7; }
   .hero-actions { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 18px 28px; margin-top: 30px; }
@@ -143,7 +143,7 @@
   .school-illustration { display: block; width: 100%; height: auto; }
   .workflow, .sources, .method { display: grid; grid-template-columns: 1fr 1.15fr; gap: 80px; padding-block: 112px; }
   .section-intro { align-self: start; max-width: 425px; }
-  h2 { font-size: clamp(2rem, 3.5vw, 3.2rem); line-height: 1.08; font-weight: 590; letter-spacing: -0.035em; }
+  h2 { font-size: clamp(2rem, 3.5vw, 3.2rem); line-height: 1.08; font-weight: 590; letter-spacing: -0.025em; }
   h2 span { color: #747b82; }
   .section-intro > p { margin-top: 22px; max-width: 360px; color: var(--eq-text-secondary); font-size: 15px; line-height: 1.7; }
   .section-intro > a { margin-top: 18px; }
