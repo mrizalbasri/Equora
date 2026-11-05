@@ -40,7 +40,7 @@ Alur aplikasi: **jelajahi kondisi daerah → coba skenario prioritas → baca te
 
 | Bagian | Route | Yang dapat dilakukan |
 | --- | --- | --- |
-| Pendidikan di Daerah Saya | `/daerah` | Profil fasilitas per provinsi, perbandingan indikator, penelusuran sumber, dan tautan temuan. |
+| Pendidikan di Daerah Saya | `/daerah` | Profil fasilitas per provinsi, benchmark relatif terhadap median provinsi, perbandingan indikator, penelusuran sumber, dan tautan temuan. |
 | Explorer | `/explore` | Peta tematik dan tabel provinsi dengan filter indikator dan jenjang, serta ekspor CSV. |
 | Studio simulasi | `/studio` | Mengatur bobot indikator, wilayah, anggaran, biaya, dan kapasitas untuk mencoba skenario alokasi. |
 | Ringkasan temuan | `/studio`, `/compare` | Hasil simulasi sebagai narasi: konsentrasi anggaran, indikator fokus, estimasi sekolah difasilitasi, dan asumsi biaya. |
@@ -55,7 +55,7 @@ Seluruh fitur publik dapat digunakan tanpa login atau pendaftaran. Fitur yang me
 Karya sementara yang telah diimplementasikan per tahap First Draft Submission:
 
 - [x] **Landing page (`/`)** — antarmuka responsif, narasi masalah, dan alur eksplorasi awal.
-- [x] **Pendidikan di Daerah Saya (`/daerah`)** — profil fasilitas per provinsi, jenjang sekolah, dan komparasi antardaerah.
+- [x] **Pendidikan di Daerah Saya (`/daerah`)** — profil fasilitas per provinsi, benchmark median pada cakupan sepadan, jenjang sekolah, dan komparasi antardaerah.
 - [x] **Explorer peta & data (`/explore`)** — peta tematik MapLibre GL, tabel indikator, filter wilayah, dan ekspor CSV.
 - [x] **Studio simulasi (`/studio`)** — bobot prioritas kebutuhan, batasan anggaran, dan kalkulasi alokasi dengan solver optimasi.
 - [x] **Ringkasan temuan & estimasi dampak** — narasi hasil simulasi pada Studio dan Compare, serta penjelasan asumsi biaya per paket.
@@ -171,6 +171,7 @@ Untuk petunjuk pengujian, alur pull request, dan standar kode, lihat [CONTRIBUTI
 ## Data dan batas penggunaan
 
 - Indikator berasal dari agregat provinsi. Angka tersebut tidak menggambarkan kondisi setiap sekolah atau membuktikan penyebab kesenjangan.
+- Median provinsi merupakan pembanding deskriptif, bukan ambang kelayakan atau rekomendasi kebijakan.
 - Data tahunan disertai periode dan sumber. Data ini bukan data real-time.
 - Biaya dan paket intervensi pada simulasi merupakan asumsi demo. Hasil alokasi bukan keputusan anggaran resmi atau bukti dampak pendidikan.
 - Workbook sumber dan hasil olahan lokal tidak disertakan di Git. Repository menyimpan metadata, checksum, dan fixture sintetis; izin redistribusi sumber masih perlu diverifikasi.

@@ -157,6 +157,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/regions/{code}/insights": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Region Insights */
+        get: operations["region_insights_api_v1_regions__code__insights_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/observations": {
         parameters: {
             query?: never;
@@ -612,6 +629,28 @@ export interface components {
                 [key: string]: string;
             };
         };
+        /** RegionBenchmarkView */
+        RegionBenchmarkView: {
+            /** Source Id */
+            source_id: string;
+            /** Value */
+            value: string | null;
+            /** Median */
+            median: string | null;
+            /** Delta From Median */
+            delta_from_median: string | null;
+            /** Rank */
+            rank: number | null;
+            /** Available Regions */
+            available_regions: number;
+            /**
+             * Comparison
+             * @enum {string}
+             */
+            comparison: "below" | "equal" | "above" | "unavailable";
+            /** Unavailable Reason */
+            unavailable_reason: string | null;
+        };
         /** RegionChange */
         RegionChange: {
             /** Region Code */
@@ -626,6 +665,32 @@ export interface components {
             before_rank: number | null;
             /** After Rank */
             after_rank: number | null;
+        };
+        /** RegionInsightsView */
+        RegionInsightsView: {
+            /** Release Id */
+            release_id: string;
+            /** Status */
+            status: string;
+            /** Academic Year */
+            academic_year: string;
+            /** Education Level */
+            education_level: string;
+            /** Ownership */
+            ownership: string;
+            region: components["schemas"]["RegionReferenceView"];
+            /** Available Indicators */
+            available_indicators: number;
+            /** Total Indicators */
+            total_indicators: number;
+            /** Attention Source Id */
+            attention_source_id: string | null;
+            /** Strength Source Id */
+            strength_source_id: string | null;
+            /** Benchmarks */
+            benchmarks: components["schemas"]["RegionBenchmarkView"][];
+            /** Limitations */
+            limitations: string[];
         };
         /** RegionOption */
         RegionOption: {
@@ -683,6 +748,13 @@ export interface components {
             sources: components["schemas"]["SourceView"][];
             /** Limitations */
             limitations: string[];
+        };
+        /** RegionReferenceView */
+        RegionReferenceView: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
         };
         /** ReviewInput */
         ReviewInput: {
@@ -1208,6 +1280,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RegionProfileView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    region_insights_api_v1_regions__code__insights_get: {
+        parameters: {
+            query?: {
+                education_level?: "TK" | "SD" | "SMP" | "SMA" | "SMK" | "SLB";
+                release_id?: string | null;
+            };
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegionInsightsView"];
                 };
             };
             /** @description Validation Error */

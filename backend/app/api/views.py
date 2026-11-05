@@ -1,5 +1,7 @@
 """Public JSON contracts for the locally reviewed education workspace."""
 
+from typing import Literal
+
 from pydantic import BaseModel
 
 from app.etl.education import SourceMetadata
@@ -79,6 +81,37 @@ class RegionProfileView(ProvinceView):
     ownership: str
     education_level: str
     sources: list[SourceView]
+    limitations: list[str]
+
+
+class RegionReferenceView(BaseModel):
+    code: str
+    name: str
+
+
+class RegionBenchmarkView(BaseModel):
+    source_id: str
+    value: str | None
+    median: str | None
+    delta_from_median: str | None
+    rank: int | None
+    available_regions: int
+    comparison: Literal["below", "equal", "above", "unavailable"]
+    unavailable_reason: str | None
+
+
+class RegionInsightsView(BaseModel):
+    release_id: str
+    status: str
+    academic_year: str
+    education_level: str
+    ownership: str
+    region: RegionReferenceView
+    available_indicators: int
+    total_indicators: int
+    attention_source_id: str | None
+    strength_source_id: str | None
+    benchmarks: list[RegionBenchmarkView]
     limitations: list[str]
 
 

@@ -3,6 +3,7 @@ export type Source = components['schemas']['SourceView'];
 export type Workspace = components['schemas']['WorkspaceView'];
 export type Observation = components['schemas']['ObservationView'];
 export type Observations = components['schemas']['ObservationsView'];
+export type RegionInsights = components['schemas']['RegionInsightsView'];
 export type Snapshot = components['schemas']['ScenarioView'];
 export type SavedScenario = components['schemas']['SavedScenarioView'];
 export type Review = components['schemas']['DecisionReview'];
