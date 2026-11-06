@@ -33,7 +33,7 @@ export function createLandingMotion() {
   function refresh() {
     observer.disconnect();
     cancelAnimations();
-    if (preference.matches || !document.querySelector('.landing-hero')) return;
+    if (preference.matches || !document.querySelector('.calm')) return;
     for (const element of document.querySelectorAll(targets)) {
       if (revealed.has(element)) continue;
       const delay = Number(element.getAttribute('data-motion-delay') ?? 0);

@@ -1059,6 +1059,7 @@
     height: 100%;
     border-radius: inherit;
     background: var(--eq-chart-blue);
+    transition: width 240ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .quality-available {
     display: inline-flex;

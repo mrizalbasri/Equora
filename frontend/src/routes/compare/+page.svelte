@@ -211,7 +211,7 @@
   {/if}
 
   {#if loading}
-    <p class="work-panel" role="status">Memuat skenario tersimpan…</p>
+    <p class="work-panel eq-loading-status" role="status"><span class="eq-loading-line" aria-hidden="true"></span><span>Memuat skenario tersimpan…</span></p>
   {:else if error && saved.length < 2}
     <p class="work-muted">Coba lagi atau buka <a href="/studio">Studio simulasi</a>.
       {#if page.url.searchParams.has('left') || page.url.searchParams.has('right')}

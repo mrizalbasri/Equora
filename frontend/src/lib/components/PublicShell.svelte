@@ -8,7 +8,7 @@
   let {
     children,
     links = publicNavLinks,
-    calm = false,
+    calm = true,
   }: {
     children: Snippet;
     links?: PublicNavLink[];
