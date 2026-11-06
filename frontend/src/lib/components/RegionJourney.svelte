@@ -145,7 +145,7 @@
     </div>
   </section>
 
-  {#if loading}<p role="status" class="loading-message">Memuat kondisi fasilitas pendidikan…</p>
+  {#if loading}<p role="status" class="loading-message eq-loading-status"><span class="eq-loading-line" aria-hidden="true"></span><span>Memuat kondisi fasilitas pendidikan…</span></p>
   {:else if error}
     <section class="journey-message" role="alert">
       <h2>Profil belum dapat dibuka</h2><p>{error}</p>
@@ -170,7 +170,7 @@
         </section>
       {/if}
       {#if insightLoading}
-        <section class="insight-message" role="status">Menghitung benchmark provinsi pada rilis dan jenjang yang sama…</section>
+        <section class="insight-message eq-loading-status" role="status"><span class="eq-loading-line" aria-hidden="true"></span><span>Menghitung benchmark provinsi pada rilis dan jenjang yang sama…</span></section>
       {:else if insightError}
         <section class="insight-message insight-error" role="alert">
           <div><strong>Ringkasan kondisi relatif belum dapat dimuat.</strong><p>{insightError}</p></div>
@@ -204,9 +204,11 @@
             </div>
             <div class="facility-value">
               <strong>{value === null ? 'Tidak tersedia' : number(value) + '%'}</strong>
+              {#if value !== null}<span class="facility-bar" aria-hidden="true"><span class="facility-bar-fill" style:width={Math.min(100, Math.max(0, value)) + '%'}></span></span>{/if}
               <p>{value === null ? (profile.values.institutions_count?.trim() && Number(profile.values.institutions_count) === 0 ? 'Tidak ada sekolah pada cakupan ini.' : 'Data belum lengkap; bukan berarti aksesnya 0%.') : 'sekolah pada cakupan data'}</p>
               {#if comparison}
                 <p>Pembanding: {other === null ? 'Tidak tersedia' : number(other) + '%'}</p>
+                {#if other !== null}<span class="facility-bar facility-bar-compare" aria-hidden="true"><span class="facility-bar-fill" style:width={Math.min(100, Math.max(0, other)) + '%'}></span></span>{/if}
                 <p class="difference">{difference?.value == null ? difference?.reason : difference.value === 0 ? 'Sama dengan pembanding.' : `${number(Math.abs(difference.value))} poin persentase ${difference.value > 0 ? 'lebih tinggi' : 'lebih rendah'} dari pembanding.`}</p>
               {/if}
             </div>
@@ -312,6 +314,9 @@
   .facility-explanation small { color: var(--eq-text-secondary); display: block; margin-top: 12px; font-size: 14px; }
   .facility-value { background: var(--eq-surface-subtle); padding: 20px; border-radius: 12px; align-self: start; }
   .facility-value strong { font-size: 32px; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .facility-bar { display: block; height: 6px; width: 100%; background: var(--eq-border); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+  .facility-bar-fill { display: block; height: 100%; background: var(--eq-primary); border-radius: inherit; transition: width 260ms cubic-bezier(0.16, 1, 0.3, 1); }
+  .facility-bar-compare .facility-bar-fill { background: var(--eq-chart-blue-light); }
   .facility-value p { font-size: 15px; color: var(--eq-text-secondary); }
   .facility-value .difference {
     color: var(--eq-text);

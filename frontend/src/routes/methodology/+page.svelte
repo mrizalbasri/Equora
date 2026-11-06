@@ -3,6 +3,7 @@
   import { navigation } from '$lib/api/workspace';
   import PublicShell from '$lib/components/PublicShell.svelte';
   import Icon from '$lib/components/Icon.svelte';
+  import { landingScroll } from '$lib/motion';
 
   const sections = [
     { id: 'sources', label: 'Sumber dan kesiapan data', icon: 'database' },
@@ -64,15 +65,16 @@
 <PublicShell
   links={navigation}
 >
-  <article class="eq-container methodology">
+  <article class="eq-container methodology" use:landingScroll>
+    <div class="landing-progress" aria-hidden="true"></div>
     <header class="hero">
       <p class="eyebrow">Panduan membaca data dan simulasi</p>
-      <h1>Bagaimana Equora menjelaskan prioritas dan skenario.</h1>
-      <p class="intro">
+      <h1 data-motion="focus">Bagaimana Equora menjelaskan prioritas dan skenario.</h1>
+      <p class="intro" data-motion="fade" data-motion-delay="60">
         Halaman ini menjelaskan perhitungan pada snapshot review lokal. Skor dan status model membantu
         membandingkan asumsi; hasilnya belum membuktikan dampak nyata atau kelayakan kebijakan.
       </p>
-      <div class="version-note">
+      <div class="version-note" data-motion="fade" data-motion-delay="120">
         <strong>Status metode</strong>
         <span>Weighted normalized needs v1 · allocation sandbox single-intervention-demo-v1</span>
       </div>
@@ -96,11 +98,11 @@
             dengan nilai lebih tinggi berarti kebutuhan lebih besar. Tahun, jenjang, unit, wilayah,
             dan versi data harus kompatibel sebelum perhitungan dijalankan.
           </p>
-          <figure class="facilities-artwork">
+          <figure class="facilities-artwork" data-motion="unfold">
             <img src="/images/editorial/school-facilities.webp" alt="Ilustrasi fasilitas cuci tangan, tangki air, dan ruang komputer di sekolah." width="1983" height="793" loading="lazy" decoding="async" />
             <figcaption>Sanitasi, air, internet, dan komputer menjadi konteks indikator yang dibaca bersama. Ilustrasi fasilitas, bukan dokumentasi sekolah tertentu.</figcaption>
           </figure>
-          <div class="callout">
+          <div class="callout" data-motion="fade">
             <strong>Snapshot review lokal · 2025/2026</strong>
             <p>
               Sepuluh workbook pengguna, 38 provinsi, enam jenjang dan kolom Total telah diproses.
@@ -137,10 +139,10 @@
             Untuk setiap wilayah <code>i</code>, bobot indikator harus nonnegatif dan totalnya tepat
             <code>1</code>. Nilai kebutuhan setiap indikator sudah berada pada rentang yang sama.
           </p>
-          <div class="formula" aria-label="Rumus skor prioritas">
+          <div class="formula" aria-label="Rumus skor prioritas" data-motion="unfold">
             <code>score_i = Σ (weight_j × need_ij)</code>
           </div>
-          <div class="example">
+          <div class="example" data-motion="focus">
             <div>
               <span class="example-label">Contoh sintetis · bukan data provinsi</span>
               <h3>SYN-A mendapat skor 0,55</h3>
@@ -165,7 +167,7 @@
             indikator dengan bobot positif dikeluarkan dari ranking dan dicatat bersama indikator yang
             hilang. Nilai nol tetap merupakan nilai valid dan berbeda dari missing.
           </p>
-          <div class="state-grid">
+          <div class="state-grid" data-motion="fade">
             <div><strong>Nilai nol</strong><span>Masuk perhitungan sebagai kebutuhan 0.</span></div>
             <div><strong>Missing</strong><span>Dicatat dan dikeluarkan jika indikatornya berbobot positif.</span></div>
             <div><strong>Coverage</strong><span>Dilaporkan dari jumlah input, bukan ditebak sebagai kualitas.</span></div>
@@ -179,12 +181,12 @@
             Kandidat CP-SAT sandbox memakai satu jenis intervensi dan biaya yang wajib diberi label
             <code>demo_assumption</code>. Jumlah paket <code>x_i</code> adalah integer per wilayah.
           </p>
-          <div class="formula" aria-label="Rumus alokasi sandbox">
+          <div class="formula" aria-label="Rumus alokasi sandbox" data-motion="unfold">
             <code>maximize Σ(priority_units_i × x_i)</code>
             <code>subject to Σ(cost_i × x_i) ≤ budget</code>
             <code>minimum_i ≤ x_i ≤ capacity_i</code>
           </div>
-          <div class="callout warning">
+          <div class="callout warning" data-motion="fade">
             <strong>Interpretasi harus dibatasi</strong>
             <p>
               Objective adalah proxy kebutuhan berbobot. Ia bukan jumlah sekolah yang pasti terbantu,
@@ -231,7 +233,7 @@
               <span>Unduhan JSON menyertakan snapshot, parameter, versi metode, dan hasil percobaan untuk diperiksa ulang. Perbedaan alokasi dapat berasal dari solusi dengan skor setara.</span>
             </li>
           </ul>
-          <div class="status-table" role="table" aria-label="Arti status model">
+          <div class="status-table" role="table" aria-label="Arti status model" data-motion="unfold">
             <div role="row"><span class="status-name" role="cell">optimal</span><span role="cell">Solusi terbaik dibuktikan untuk model dan batas waktu yang dinyatakan.</span></div>
             <div role="row"><span class="status-name" role="cell">feasible</span><span role="cell">Solusi memenuhi constraint, tetapi optimum belum terbukti.</span></div>
             <div role="row"><span class="status-name" role="cell">infeasible</span><span role="cell">Solver membuktikan tidak ada solusi yang memenuhi constraint.</span></div>
@@ -250,7 +252,7 @@
         </section>
 
         <section id="limits" aria-labelledby="limits-title" class="limits">
-          <div class="limits-heading">
+          <div class="limits-heading" data-motion="focus">
             <span class="limits-number" aria-hidden="true">06</span>
             <div>
               <p class="limits-label">Batas interpretasi</p>
@@ -262,7 +264,7 @@
             </div>
           </div>
 
-          <div class="limits-boundary">
+          <div class="limits-boundary" data-motion="fade" data-motion-delay="80">
             <div class="limits-column">
               <p class="limits-column-title"><span aria-hidden="true">01</span> Dapat digunakan untuk</p>
               <ul>
@@ -286,12 +288,24 @@
         </section>
       </div>
     </div>
-    <a class="eq-button" href="/">Kembali ke beranda</a>
+    <div class="methodology-footer"><a class="eq-button" href="/">Kembali ke beranda</a></div>
   </article>
 </PublicShell>
 
 <style>
   :global(html:has(.methodology)) { scroll-behavior: smooth; }
+  .landing-progress { position: fixed; inset: 0 0 auto; z-index: 50; height: 3px; background: var(--eq-primary); transform-origin: left; scale: var(--landing-progress, 0) 1; pointer-events: none; }
+  .methodology-footer { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--eq-border); }
+  @media (prefers-reduced-motion: no-preference) {
+    .landing-progress { transition: scale 120ms linear; }
+    .toc a { transition: color 140ms ease, border-color 140ms ease, background-color 140ms ease, translate 160ms ease; }
+    .toc a:hover { translate: 2px 0; }
+    .state-grid div { transition: border-color 180ms ease, box-shadow 180ms ease, translate 180ms ease; }
+    .state-grid div:hover { border-color: var(--eq-primary); box-shadow: 0 8px 20px rgb(15 23 42 / 5%); translate: 0 -2px; }
+    .glossary div { transition: border-color 180ms ease, translate 180ms ease; }
+    .glossary div:hover { border-color: var(--eq-primary); translate: 4px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .landing-progress { display: none; } }
   .methodology {
     padding-block: 48px 80px;
   }
@@ -403,7 +417,7 @@
   .toc a[aria-current='location'] { font-weight: 650; }
   .toc a :global(svg) { flex: 0 0 auto; }
   .facilities-artwork { max-width: 760px; margin: 28px 0; }
-  .facilities-artwork img { display: block; width: 100%; height: auto; }
+  .facilities-artwork img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--eq-border); box-shadow: 0 16px 40px rgb(15 23 42 / 6%); }
   .facilities-artwork figcaption { margin-top: 12px; color: var(--eq-text-secondary); font-size: 13px; line-height: 1.6; }
   .content {
     min-width: 0;

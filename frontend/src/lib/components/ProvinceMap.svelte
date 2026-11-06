@@ -113,7 +113,14 @@
             id: 'province-fill',
             type: 'fill',
             source: 'provinces',
-            paint: { 'fill-color': ['get', 'fill'], 'fill-opacity': 0.72 },
+            paint: {
+              'fill-color': ['get', 'fill'],
+              'fill-opacity': 0.72,
+              'fill-color-transition': {
+                duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 240,
+                delay: 0,
+              },
+            },
           });
           map!.addLayer({
             id: 'province-line',

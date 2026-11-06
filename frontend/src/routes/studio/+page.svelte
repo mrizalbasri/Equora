@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tick } from 'svelte';
   import { page } from '$app/state';
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ScenarioResult from '$lib/components/ScenarioResult.svelte';
@@ -42,6 +43,7 @@
     >
   >({});
   let result = $state<Snapshot>();
+  let resultContainer = $state<HTMLDivElement>();
   let busy = $state(false);
   let error = $state('');
   let loadingRegions = $state(true);
@@ -217,6 +219,11 @@
         ),
       });
       await loadSaved();
+      await tick();
+      resultContainer?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      });
     } catch (e) {
       error = (e as Error).message;
     } finally {
@@ -255,7 +262,7 @@
       {#if error && !workspace}<a class="eq-button" href="/studio">Buka Studio dengan rilis aktif</a>{/if}
     </aside>
   {/if}
-  {#if loadingRegions}<p role="status">Memuat cakupan provinsi pada rilis dan jenjang yang dipilih…</p>{/if}
+  {#if loadingRegions}<p role="status" class="eq-loading-status"><span class="eq-loading-line" aria-hidden="true"></span><span>Memuat cakupan provinsi pada rilis dan jenjang yang dipilih…</span></p>{/if}
   {#if error}
     <div class="work-error" role="alert">
       <Icon name="alert" size={18} />
@@ -571,7 +578,9 @@
   </form>
 
   {#if result}
-    <ScenarioResult {result} {names} />
+    <div bind:this={resultContainer} style="scroll-margin-top: 88px;">
+      <ScenarioResult {result} {names} />
+    </div>
   {/if}
 
   <section class="work-panel saved-panel" id="skenario-tersimpan">
@@ -584,7 +593,7 @@
     </div>
 
     {#if loadingSaved}
-      <p role="status">Memuat skenario tersimpan…</p>
+      <p role="status" class="eq-loading-status"><span class="eq-loading-line" aria-hidden="true"></span><span>Memuat skenario tersimpan…</span></p>
     {:else if savedError}
       <p role="alert">{savedError}</p>
       <button class="eq-button" type="button" onclick={loadSaved}>Coba lagi memuat skenario</button>
@@ -746,6 +755,9 @@
     margin: 0;
     padding-block: 4px 12px;
   }
+  .weight-composition > span {
+    transition: width 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
   .weight-composition {
     height: 8px;
     border-radius: 5px;
@@ -829,7 +841,7 @@
     padding: 10px 12px;
     text-align: left;
     cursor: pointer;
-    transition: background-color 160ms ease, border-color 160ms ease;
+    transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
     display: flex;
     flex-direction: column;
     gap: 4px;
