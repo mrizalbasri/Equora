@@ -1,6 +1,20 @@
 import { expect, test } from '@playwright/test';
 import { mockWorkspace } from './workspace-fixture';
 
+test('successive navigation can interrupt a page transition without an unhandled error', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  await expect(page.locator('#hero-title')).toHaveAttribute('data-motion-state', 'visible');
+  await page.getByRole('navigation', { name: 'Navigasi utama', exact: true }).getByRole('link', { name: 'Tentang', exact: true }).click();
+  await expect(page).toHaveURL(/\/about$/);
+  await page.locator('.header-brand').click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('#hero-title')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test('reveals content on scroll and animates navigation without blocking controls', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   const errors: string[] = [];
