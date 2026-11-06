@@ -93,17 +93,37 @@
     error = '';
     try {
       const items = await api<SavedScenario[]>('scenarios');
-      saved = items;
       const requestedLeft = page.url.searchParams.get('left');
+      const requestedRight = page.url.searchParams.get('right');
+      const missing = [...new Set([requestedLeft, requestedRight])].filter(
+        (id): id is string => Boolean(id) && !items.some((item) => item.id === id),
+      );
+      const linked = await Promise.all(missing.map(async (id): Promise<SavedScenario> => {
+        if (!/^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/i.test(id)) {
+          throw new Error('ID skenario pada tautan tidak valid.');
+        }
+        const snapshot = await api<Snapshot>(`scenarios/${id}`);
+        return {
+          id: snapshot.id, name: snapshot.parameters.name, created_at: snapshot.created_at,
+          status: snapshot.allocation.status, release_id: snapshot.release_id,
+          education_level: snapshot.parameters.education_level,
+        };
+      }));
+      items.push(...linked);
       const validRequested = items.find(
         (item) => item.id === requestedLeft && isSolvable(item),
       );
       const paired = items.find((base) => isSolvable(base) &&
         items.some((item) => item.id !== base.id && isCompatible(item, base)));
+      if (requestedLeft && !validRequested) throw new Error('Skenario awal pada tautan belum menghasilkan alokasi.');
       left = validRequested?.id ?? paired?.id ?? items.find(isSolvable)?.id ?? '';
       const base = items.find((item) => item.id === left);
       const matches = items.filter((item) => item.id !== left && isCompatible(item, base));
-      right = matches.find((item) => item.id === page.url.searchParams.get('right'))?.id ?? matches[0]?.id ?? '';
+      if (requestedRight && !matches.some((item) => item.id === requestedRight)) {
+        throw new Error('Skenario pembanding pada tautan tidak cocok dengan skenario awal.');
+      }
+      right = requestedRight ?? matches[0]?.id ?? '';
+      saved = items;
     } catch (e) {
       error = (e as Error).message;
     } finally {
@@ -193,7 +213,11 @@
   {#if loading}
     <p class="work-panel" role="status">Memuat skenario tersimpan…</p>
   {:else if error && saved.length < 2}
-    <p class="work-muted">Daftar skenario belum dapat dimuat. Coba lagi atau buka <a href="/studio">Studio simulasi</a>.</p>
+    <p class="work-muted">Coba lagi atau buka <a href="/studio">Studio simulasi</a>.
+      {#if page.url.searchParams.has('left') || page.url.searchParams.has('right')}
+        <a href="/compare" data-sveltekit-reload>Pilih ulang skenario</a>
+      {/if}
+    </p>
   {:else if saved.length < 2 || !selectedLeft}
     <section class="work-panel comparison-start">
       <h2>{selectedLeft ? 'Tambahkan skenario pembanding' : 'Siapkan perbandingan pertama'}</h2>
@@ -231,7 +255,7 @@
             <option value="" disabled>Pilih skenario</option>
             {#each saved as item}
               <option value={item.id} disabled={!isSolvable(item)}>
-                {item.name} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : ''}
+                {item.name} · {item.education_level ?? 'SD'} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : ''}
               </option>
             {/each}
           </select>
@@ -247,7 +271,7 @@
             <option value="">Pilih snapshot</option>
             {#each saved as item}
               <option value={item.id} disabled={item.id === left || !isCompatible(item)}>
-                {item.name} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : !isCompatible(item) ? ' · rilis/jenjang berbeda' : ''}
+                {item.name} · {item.education_level ?? 'SD'} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : !isCompatible(item) ? ' · rilis/jenjang berbeda' : ''}
               </option>
             {/each}
           </select>

@@ -293,11 +293,15 @@ test('comparison keeps both scenarios selected after creating a counterpart on m
   let saved = [base];
   await page.route('**/api/v1/scenarios', route => {
     if (route.request().method() === 'POST') {
-      saved = [counterpart, base];
+      // Saving a counterpart can push the original out of the latest 50 summaries.
+      saved = [counterpart];
       return route.fulfill({ json: { ...snapshot, id: counterpart.id, parameters: route.request().postDataJSON() } });
     }
     return route.fulfill({ json: saved });
   });
+  await page.route('**/api/v1/scenarios/' + base.id, route => route.fulfill({
+    json: { ...snapshot, parameters: { ...snapshot.parameters, education_level: 'SMP', name: base.name } },
+  }));
   await page.goto('/compare');
   await expect(page.getByRole('heading', { name: 'Tambahkan skenario pembanding' })).toBeVisible();
   await expect(page.locator('.scenario-slots')).toContainText(base.name);
@@ -305,9 +309,25 @@ test('comparison keeps both scenarios selected after creating a counterpart on m
   await page.getByRole('link', { name: 'Buat skenario pembanding' }).click();
   await expect(page.getByLabel('Konteks perbandingan')).toContainText('Jenjang SMP');
   await page.getByRole('button', { name: 'Hitung Alokasi & Simpan Snapshot' }).click();
+  await expect(page.getByRole('link', { name: 'Bandingkan Snapshot', exact: true })).toHaveAttribute(
+    'href', `/compare?left=${base.id}&right=${counterpart.id}`,
+  );
   await page.getByRole('link', { name: 'Bandingkan dengan skenario awal' }).click();
   await expect(page.getByRole('combobox', { name: 'Skenario awal' })).toHaveValue(base.id);
   await expect(page.getByRole('combobox', { name: 'Skenario pembanding' })).toHaveValue(counterpart.id);
+});
+
+test('comparison explains an unsolvable linked scenario instead of substituting another pair', async ({ page }) => {
+  await mockWorkspace(page);
+  const item = { name: 'Alokasi', created_at: snapshot.created_at, release_id: snapshot.release_id, status: 'optimal' };
+  await page.route('**/api/v1/scenarios', (route) => route.fulfill({ json: [
+    { ...item, id: snapshot.id, status: 'infeasible' }, { ...item, id: 'second' }, { ...item, id: 'third' },
+  ] }));
+  await page.goto('/compare?left=' + snapshot.id);
+  await expect(page.getByRole('alert')).toContainText('belum menghasilkan alokasi');
+  await expect(page.getByRole('button', { name: 'Bandingkan', exact: true })).toHaveCount(0);
+  await page.getByRole('link', { name: 'Pilih ulang skenario' }).click();
+  await expect(page.getByRole('button', { name: 'Bandingkan', exact: true })).toBeEnabled();
 });
 
 test('comparison reports coverage and clears stale results when selection changes', async ({

@@ -568,7 +568,7 @@
 
         <span>{busy ? 'Menghitung dan memvalidasi…' : 'Hitung Alokasi & Simpan Snapshot'}</span>
       </button>
-      <a class="eq-button" href="/compare">
+      <a class="eq-button" href={compareResultHref ?? (baseId ? '/compare?' + new URLSearchParams({ left: baseId }) : '/compare')}>
 
         <span>Bandingkan Snapshot</span>
       </a>
@@ -577,10 +577,7 @@
   </form>
 
   {#if result}
-    {#if compareResultHref}
-      <div class="work-panel"><a class="eq-button eq-button-primary" href={compareResultHref}>Bandingkan dengan skenario awal</a></div>
-    {/if}
-    <ScenarioResult {result} {names} />
+    <ScenarioResult {result} {names} compareHref={compareResultHref} />
   {/if}
 
   <section class="work-panel saved-panel" id="skenario-tersimpan">

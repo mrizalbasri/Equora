@@ -11,7 +11,8 @@
   let {
     result,
     names = {},
-  }: { result: Snapshot; names?: Record<string, string> } = $props();
+    compareHref,
+  }: { result: Snapshot; names?: Record<string, string>; compareHref?: string } = $props();
   const regionNames = $derived(result.region_names ?? names);
 
   const allocations = $derived(result.allocation.allocations ?? {});
@@ -230,8 +231,8 @@
     <a class="eq-button" href={'/api/v1/scenarios/' + result.id + '/export'}>
       <span>Unduh Tabel Alokasi (CSV)</span>
     </a>
-    <a class="eq-button" href={'/compare?left=' + result.id}>
-      <span>Bandingkan Skenario</span>
+    <a class="eq-button" href={compareHref ?? '/compare?left=' + result.id}>
+      <span>{compareHref ? 'Bandingkan dengan skenario awal' : 'Bandingkan Skenario'}</span>
     </a>
     <a class="eq-button" href={'/scenarios/' + result.id}>
       <span>Buka Tautan Snapshot</span>
