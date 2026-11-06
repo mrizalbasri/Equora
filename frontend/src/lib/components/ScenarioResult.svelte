@@ -11,7 +11,8 @@
   let {
     result,
     names = {},
-  }: { result: Snapshot; names?: Record<string, string> } = $props();
+    compareHref,
+  }: { result: Snapshot; names?: Record<string, string>; compareHref?: string } = $props();
   const regionNames = $derived(result.region_names ?? names);
 
   const allocations = $derived(result.allocation.allocations ?? {});
@@ -154,7 +155,6 @@
                 ({concentration.packages} dari {concentration.total}) mengalir ke
                 {concentration.regions.length} provinsi dengan skor kebutuhan tertinggi
                 ({#each concentration.regions as code, i}{regionNames[code] ?? code}{#if i < concentration.regions.length - 1}, {/if}{/each}).
-                Solver benar-benar mengalirkan anggaran ke wilayah yang paling membutuhkan sesuai bobot Anda.
               </span>
             </div>
           </li>
@@ -179,15 +179,14 @@
     {#if impact && impact.totalPackages > 0 && impact.schoolsInNeed > 0}
       <div class="impact-card">
         <p class="impact-headline">
-          ≈ <strong>{number(impact.totalPackages)}</strong> sekolah difasilitasi dari ±
-          <strong>{number(impact.schoolsInNeed)}</strong> sekolah yang belum memiliki
-          {labels[impact.focus]?.toLowerCase()} di provinsi penerima
-          ({number(impact.percent ?? 0, 1)}% dari kebutuhan terdata).
+          <strong>{number(impact.totalPackages)} paket</strong> dialokasikan dalam simulasi.
         </p>
         <p class="impact-assumption">
-          Asumsi: 1 paket = rehabilitasi untuk 1 satuan pendidikan, dihitung dari jumlah
-          sekolah pada snapshot. Estimasi kasar, bukan daftar sekolah penerima — paket
-          simulasi tidak spesifik satu indikator sehingga cakupan bisa melebihi 100%.
+          Di provinsi penerima, sekitar <strong>{number(impact.schoolsInNeed)} sekolah</strong>
+          diperkirakan masih membutuhkan {labels[impact.focus]?.toLowerCase()}.
+          Dengan asumsi satu paket per sekolah, jumlah paket setara dengan
+          {number(impact.percent ?? 0, 1)}% dari kebutuhan tersebut. Rasio dapat melebihi
+          100% karena paket dapat mencakup beberapa jenis fasilitas.
           <a href="/methodology">Baca metodologi</a>.
         </p>
         {#if impact.regions.length > 0}
@@ -216,7 +215,7 @@
             {#if impact.skippedRegions > 0}
               <p class="impact-assumption">
                 {impact.skippedRegions} provinsi penerima dilewati dari hitungan kebutuhan
-                karena data tidak lengkap; paket mereka tetap dihitung.
+                karena estimasi kebutuhannya nol atau datanya belum lengkap. Paket mereka tetap dihitung.
               </p>
             {/if}
           </details>
@@ -232,8 +231,8 @@
     <a class="eq-button" href={'/api/v1/scenarios/' + result.id + '/export'}>
       <span>Unduh Tabel Alokasi (CSV)</span>
     </a>
-    <a class="eq-button" href={'/compare?left=' + result.id}>
-      <span>Bandingkan Skenario</span>
+    <a class="eq-button" href={compareHref ?? '/compare?left=' + result.id}>
+      <span>{compareHref ? 'Bandingkan dengan skenario awal' : 'Bandingkan Skenario'}</span>
     </a>
     <a class="eq-button" href={'/scenarios/' + result.id}>
       <span>Buka Tautan Snapshot</span>

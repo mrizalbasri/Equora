@@ -426,6 +426,7 @@ def list_scenarios(session: DBSession):
             "created_at": record.payload["created_at"],
             "status": record.payload["allocation"]["status"],
             "release_id": record.release_id,
+            "education_level": record.payload["parameters"].get("education_level", "SD"),
         }
         for record in records
     ]
