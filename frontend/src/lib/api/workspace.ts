@@ -4,6 +4,7 @@ export type Workspace = components['schemas']['WorkspaceView'];
 export type Observation = components['schemas']['ObservationView'];
 export type Observations = components['schemas']['ObservationsView'];
 export type RegionInsights = components['schemas']['RegionInsightsView'];
+export type RegionMapInsights = components['schemas']['RegionMapInsightsView'];
 export type Snapshot = components['schemas']['ScenarioView'];
 export type SavedScenario = components['schemas']['SavedScenarioView'];
 export type Review = components['schemas']['DecisionReview'];

@@ -24,6 +24,7 @@ from app.api.views import (
     ObservationsView,
     ProvinceView,
     RegionInsightsView,
+    RegionMapInsightsView,
     RegionProfileView,
     SavedScenarioView,
     SourceView,
@@ -203,6 +204,24 @@ def regions(
     ]
 
 
+@router.get("/regions/insights-map", response_model=RegionMapInsightsView)
+def region_map_insights(
+    session: DBSession,
+    indicator: str,
+    education_level: EducationLevel = "SD",
+    release_id: str | None = None,
+):
+    from app.services.region_insights import build_region_map_insights
+
+    payload = local_release(session, release_id)
+    if education_level not in payload["scopes"]:
+        raise HTTPException(422, "Jenjang tidak tersedia pada rilis ini")
+    try:
+        return build_region_map_insights(payload, education_level, indicator)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+
 @router.get("/regions/{code}", response_model=RegionProfileView)
 def region(
     code: str,
@@ -253,8 +272,9 @@ def observations(
     education_level: EducationLevel = "SD",
     q: str = Query(default="", max_length=100),
     region_code: str | None = None,
+    release_id: str | None = None,
 ):
-    payload = local_release(session)
+    payload = local_release(session, release_id)
     source = next(
         (source for source in payload["sources"] if source["source_id"] == indicator), None
     )
@@ -327,8 +347,9 @@ def export_observations(
     education_level: EducationLevel = "SD",
     q: str = Query(default="", max_length=100),
     region_code: str | None = None,
+    release_id: str | None = None,
 ):
-    result = observations(session, indicator, education_level, q, region_code)
+    result = observations(session, indicator, education_level, q, region_code, release_id)
     rows = [
         [
             "release_id",

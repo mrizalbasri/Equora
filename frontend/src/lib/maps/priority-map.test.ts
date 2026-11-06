@@ -1,0 +1,160 @@
+import { describe, expect, it } from 'vitest';
+import type { Observation, RegionMapInsights } from '$lib/api/workspace';
+import { buildPriorityMapView } from './priority-map';
+
+const observations: Observation[] = [
+  {
+    code: '11',
+    name: 'Provinsi Alpha',
+    value: '20',
+    source_value: '20',
+    denominator: '10',
+    source_cell: 'I5',
+    status: 'available',
+  },
+  {
+    code: '12',
+    name: 'Provinsi Beta',
+    value: '60',
+    source_value: '60',
+    denominator: '20',
+    source_cell: 'I6',
+    status: 'available',
+  },
+  {
+    code: '13',
+    name: 'Provinsi Gamma',
+    value: null,
+    source_value: null,
+    denominator: '10',
+    source_cell: 'I7',
+    status: 'missing',
+  },
+];
+
+const insights = {
+  release_id: 'synthetic-release',
+  status: 'local_review',
+  academic_year: '2025/2026',
+  education_level: 'SD',
+  ownership: 'Total',
+  indicator: {
+    source_id: 'sanitation_percent',
+    title: 'Sanitasi dasar',
+    unit: 'percent',
+    definition: 'Synthetic only',
+  },
+  median: '40',
+  available_regions: 2,
+  total_regions: 3,
+  rows: [
+    {
+      code: '11',
+      name: 'Provinsi Alpha',
+      value: '20',
+      comparison: 'below',
+      delta_from_median: '-20',
+      rank: 2,
+      available_indicators: 4,
+      total_indicators: 4,
+      completeness_ratio: '1',
+      attention_source_id: 'sanitation_percent',
+      unavailable_reason: null,
+    },
+    {
+      code: '12',
+      name: 'Provinsi Beta',
+      value: '60',
+      comparison: 'above',
+      delta_from_median: '20',
+      rank: 1,
+      available_indicators: 2,
+      total_indicators: 4,
+      completeness_ratio: '0.5',
+      attention_source_id: null,
+      unavailable_reason: null,
+    },
+    {
+      code: '13',
+      name: 'Provinsi Gamma',
+      value: null,
+      comparison: 'unavailable',
+      delta_from_median: null,
+      rank: null,
+      available_indicators: 0,
+      total_indicators: 4,
+      completeness_ratio: '0',
+      attention_source_id: null,
+      unavailable_reason: 'missing',
+    },
+  ],
+  limitations: ['Synthetic only'],
+} satisfies RegionMapInsights;
+
+describe('buildPriorityMapView', () => {
+  it('uses the fixed percent scale and keeps missing values distinct', () => {
+    const result = buildPriorityMapView(observations, true, 'value', insights);
+
+    expect(result.available).toBe(true);
+    expect(result.rows[0]).toMatchObject({
+      code: '11',
+      fill: '#b4d1e8',
+      tooltip: 'Provinsi Alpha · 20%',
+    });
+    expect(result.rows[2]).toMatchObject({
+      fill: '#d8dce0',
+      tooltip: 'Provinsi Gamma · Data tidak tersedia / di luar filter',
+    });
+    expect(result.legend.description).toContain('0–100%');
+  });
+
+  it('presents relative direction without turning it into a policy score', () => {
+    const result = buildPriorityMapView(observations, true, 'median', insights);
+
+    expect(result.available).toBe(true);
+    expect(result.rows[0].fill).toBe('#d97706');
+    expect(result.rows[0].tooltip).toBe(
+      'Provinsi Alpha · 20 poin persentase di bawah median',
+    );
+    expect(result.rows[1].fill).toBe('#2563a6');
+    expect(result.rows[1].tooltip).toBe(
+      'Provinsi Beta · 20 poin persentase di atas median',
+    );
+    expect(result.legend.items.map((item) => item.label)).toEqual([
+      'Di bawah median',
+      'Setara median',
+      'Di atas median',
+      'Tidak tersedia',
+    ]);
+  });
+
+  it('shows comparable indicator coverage without a danger scale', () => {
+    const result = buildPriorityMapView(
+      observations,
+      true,
+      'completeness',
+      insights,
+    );
+
+    expect(result.rows[0].fill).toBe('#2f6f73');
+    expect(result.rows[0].tooltip).toBe(
+      'Provinsi Alpha · 4 dari 4 indikator dapat dibandingkan',
+    );
+    expect(result.rows[1].fill).toBe('#9fc6c4');
+    expect(result.rows[2].fill).toBe('#eef5f5');
+    expect(result.legend.description).toContain('kelengkapan indikator');
+  });
+
+  it('disables the median mode for a non-percent indicator', () => {
+    const nonPercent: RegionMapInsights = structuredClone(insights);
+    nonPercent.indicator.unit = 'school_count';
+    nonPercent.median = null;
+
+    const result = buildPriorityMapView(observations, false, 'median', nonPercent);
+
+    expect(result.available).toBe(false);
+    expect(result.unavailableReason).toBe(
+      'Perbandingan median hanya tersedia untuk indikator akses persentase.',
+    );
+  });
+});

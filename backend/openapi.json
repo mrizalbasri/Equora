@@ -275,6 +275,79 @@
         }
       }
     },
+    "/api/v1/regions/insights-map": {
+      "get": {
+        "summary": "Region Map Insights",
+        "operationId": "region_map_insights_api_v1_regions_insights_map_get",
+        "parameters": [
+          {
+            "name": "indicator",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Indicator"
+            }
+          },
+          {
+            "name": "education_level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "TK",
+                "SD",
+                "SMP",
+                "SMA",
+                "SMK",
+                "SLB"
+              ],
+              "type": "string",
+              "default": "SD",
+              "title": "Education Level"
+            }
+          },
+          {
+            "name": "release_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Release Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionMapInsightsView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/regions/{code}": {
       "get": {
         "summary": "Region",
@@ -480,6 +553,22 @@
               ],
               "title": "Region Code"
             }
+          },
+          {
+            "name": "release_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Release Id"
+            }
           }
         ],
         "responses": {
@@ -564,6 +653,22 @@
                 }
               ],
               "title": "Region Code"
+            }
+          },
+          {
+            "name": "release_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Release Id"
             }
           }
         ],
@@ -1984,6 +2089,224 @@
           "limitations"
         ],
         "title": "RegionInsightsView"
+      },
+      "RegionMapIndicatorView": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "title": "Source Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "percent",
+              "school_count"
+            ],
+            "title": "Unit"
+          },
+          "definition": {
+            "type": "string",
+            "title": "Definition"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_id",
+          "title",
+          "unit",
+          "definition"
+        ],
+        "title": "RegionMapIndicatorView"
+      },
+      "RegionMapInsightsView": {
+        "properties": {
+          "release_id": {
+            "type": "string",
+            "title": "Release Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "academic_year": {
+            "type": "string",
+            "title": "Academic Year"
+          },
+          "education_level": {
+            "type": "string",
+            "title": "Education Level"
+          },
+          "ownership": {
+            "type": "string",
+            "title": "Ownership"
+          },
+          "indicator": {
+            "$ref": "#/components/schemas/RegionMapIndicatorView"
+          },
+          "median": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Median"
+          },
+          "available_regions": {
+            "type": "integer",
+            "title": "Available Regions"
+          },
+          "total_regions": {
+            "type": "integer",
+            "title": "Total Regions"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/RegionMapRowView"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "release_id",
+          "status",
+          "academic_year",
+          "education_level",
+          "ownership",
+          "indicator",
+          "median",
+          "available_regions",
+          "total_regions",
+          "rows",
+          "limitations"
+        ],
+        "title": "RegionMapInsightsView"
+      },
+      "RegionMapRowView": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "comparison": {
+            "type": "string",
+            "enum": [
+              "below",
+              "equal",
+              "above",
+              "unavailable"
+            ],
+            "title": "Comparison"
+          },
+          "delta_from_median": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delta From Median"
+          },
+          "rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank"
+          },
+          "available_indicators": {
+            "type": "integer",
+            "title": "Available Indicators"
+          },
+          "total_indicators": {
+            "type": "integer",
+            "title": "Total Indicators"
+          },
+          "completeness_ratio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completeness Ratio"
+          },
+          "attention_source_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attention Source Id"
+          },
+          "unavailable_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name",
+          "value",
+          "comparison",
+          "delta_from_median",
+          "rank",
+          "available_indicators",
+          "total_indicators",
+          "completeness_ratio",
+          "attention_source_id",
+          "unavailable_reason"
+        ],
+        "title": "RegionMapRowView"
       },
       "RegionOption": {
         "properties": {

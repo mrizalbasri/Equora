@@ -180,6 +180,61 @@ test('explorer API failure is explicit and retryable', async ({ page }) => {
   );
   await expect(page.getByRole('button', { name: 'Coba lagi' })).toBeVisible();
 });
+
+test('explorer switches priority views and carries selected evidence to Studio', async ({
+  page,
+}) => {
+  await mockWorkspace(page);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.goto('/explore?view=median');
+
+  await expect(
+    page.getByRole('button', { name: 'Terhadap median', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await page
+    .getByRole('button', { name: 'Provinsi Synthetic Alpha', exact: true })
+    .click();
+  const summary = page.getByLabel('Ringkasan wilayah terpilih');
+  await expect(summary).toContainText('Median provinsi');
+  await expect(summary).toContainText('Hanya satu provinsi memiliki nilai. Belum ada pembanding antarprovinsi.');
+  await expect(summary).toContainText('4 dari 4 indikator');
+  await expect(
+    summary.getByRole('link', { name: 'Coba fokus ini di Studio' }),
+  ).toHaveAttribute(
+    'href',
+    /\/studio\?level=SD&release=synthetic-release&province=11&focus=sanitation_percent/,
+  );
+
+  await page
+    .getByRole('button', { name: 'Kelengkapan data', exact: true })
+    .click();
+  await expect(page).toHaveURL(/view=completeness/);
+  await expect(
+    page.getByRole('button', { name: 'Kelengkapan data', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+  ).toBe(true);
+});
+
+test('explorer keeps the value view usable when map insights fail', async ({ page }) => {
+  await mockWorkspace(page);
+  await page.route('**/api/v1/regions/insights-map?*', (route) =>
+    route.fulfill({ status: 503, json: { detail: 'Insight belum tersedia' } }),
+  );
+  await page.goto('/explore?view=median');
+
+  await expect(page.getByRole('alert')).toContainText('Insight belum tersedia');
+  await expect(
+    page.getByRole('button', { name: 'Nilai indikator', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(
+    page.getByRole('button', { name: 'Terhadap median', exact: true }),
+  ).toBeDisabled();
+  await expect(
+    page.getByRole('button', { name: 'Provinsi Synthetic Alpha', exact: true }),
+  ).toBeVisible();
+});
 test('admin rejects an invalid token and clears the input', async ({
   page,
 }) => {
