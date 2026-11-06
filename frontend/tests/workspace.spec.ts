@@ -278,10 +278,56 @@ test('comparison load failure offers retry without claiming scenarios are empty'
   });
   await page.goto('/compare');
   await expect(page.getByRole('alert')).toContainText('Daftar skenario belum tersedia');
-  await expect(page.getByRole('heading', { name: 'Perlu minimal dua skenario tersimpan' })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Siapkan perbandingan pertama' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Coba lagi', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Perlu minimal dua skenario tersimpan' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Siapkan perbandingan pertama' })).toBeVisible();
   await expect(page.getByRole('alert')).toHaveCount(0);
+});
+
+test('comparison keeps both scenarios selected after creating a counterpart on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await mockWorkspace(page);
+  const base = { id: snapshot.id, name: 'Sanitasi', created_at: snapshot.created_at,
+    status: 'optimal', education_level: 'SMP', release_id: snapshot.release_id };
+  const counterpart = { ...base, id: '22222222-2222-4222-8222-222222222222', name: 'Digital' };
+  let saved = [base];
+  await page.route('**/api/v1/scenarios', route => {
+    if (route.request().method() === 'POST') {
+      // Saving a counterpart can push the original out of the latest 50 summaries.
+      saved = [counterpart];
+      return route.fulfill({ json: { ...snapshot, id: counterpart.id, parameters: route.request().postDataJSON() } });
+    }
+    return route.fulfill({ json: saved });
+  });
+  await page.route('**/api/v1/scenarios/' + base.id, route => route.fulfill({
+    json: { ...snapshot, parameters: { ...snapshot.parameters, education_level: 'SMP', name: base.name } },
+  }));
+  await page.goto('/compare');
+  await expect(page.getByRole('heading', { name: 'Tambahkan skenario pembanding' })).toBeVisible();
+  await expect(page.locator('.scenario-slots')).toContainText(base.name);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.getByRole('link', { name: 'Buat skenario pembanding' }).click();
+  await expect(page.getByLabel('Konteks perbandingan')).toContainText('Jenjang SMP');
+  await page.getByRole('button', { name: 'Hitung Alokasi & Simpan Snapshot' }).click();
+  await expect(page.getByRole('link', { name: 'Bandingkan Snapshot', exact: true })).toHaveAttribute(
+    'href', `/compare?left=${base.id}&right=${counterpart.id}`,
+  );
+  await page.getByRole('link', { name: 'Bandingkan dengan skenario awal' }).click();
+  await expect(page.getByRole('combobox', { name: 'Skenario awal' })).toHaveValue(base.id);
+  await expect(page.getByRole('combobox', { name: 'Skenario pembanding' })).toHaveValue(counterpart.id);
+});
+
+test('comparison explains an unsolvable linked scenario instead of substituting another pair', async ({ page }) => {
+  await mockWorkspace(page);
+  const item = { name: 'Alokasi', created_at: snapshot.created_at, release_id: snapshot.release_id, status: 'optimal' };
+  await page.route('**/api/v1/scenarios', (route) => route.fulfill({ json: [
+    { ...item, id: snapshot.id, status: 'infeasible' }, { ...item, id: 'second' }, { ...item, id: 'third' },
+  ] }));
+  await page.goto('/compare?left=' + snapshot.id);
+  await expect(page.getByRole('alert')).toContainText('belum menghasilkan alokasi');
+  await expect(page.getByRole('button', { name: 'Bandingkan', exact: true })).toHaveCount(0);
+  await page.getByRole('link', { name: 'Pilih ulang skenario' }).click();
+  await expect(page.getByRole('button', { name: 'Bandingkan', exact: true })).toBeEnabled();
 });
 
 test('comparison reports coverage and clears stale results when selection changes', async ({
@@ -319,7 +365,7 @@ test('comparison reports coverage and clears stale results when selection change
   const coverage = page.locator('.coverage-box').first();
   await expect(coverage).toContainText('Skenario Awal');
   await expect(coverage.locator('.stat-coverage')).toHaveText(/1\s*\/\s*1 provinsi/);
-  await expect(coverage).toContainText('Menerima 2 paket total.');
+  await expect(coverage).toContainText('menerima 2 paket dalam simulasi.');
   await expect(coverage).toContainText('1 wilayah dikecualikan karena data tidak lengkap.');
   await page
     .getByRole('combobox', { name: 'Skenario awal', exact: true })

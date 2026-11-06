@@ -156,3 +156,4 @@ class SavedScenarioView(BaseModel):
     created_at: str
     status: str
     release_id: str
+    education_level: str = "SD"
