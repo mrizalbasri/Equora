@@ -44,6 +44,7 @@ for (const width of [360, 1440]) {
     await expect(map.getByRole('link', { name: 'OpenStreetMap contributors' })).toBeVisible();
     await map.click({ position: { x: (await map.boundingBox())!.width / 2, y: 160 } });
     await expect(page.getByRole('heading', { name: 'Provinsi Synthetic Alpha' })).toBeVisible();
+    await expect(page.getByLabel('Ringkasan wilayah terpilih')).toBeFocused();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await map.screenshot({ path: testInfo.outputPath(`basemap-${width}.png`) });
   });

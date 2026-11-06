@@ -196,7 +196,7 @@ test('explorer switches priority views and carries selected evidence to Studio',
     .click();
   const summary = page.getByLabel('Ringkasan wilayah terpilih');
   await expect(summary).toContainText('Median provinsi');
-  await expect(summary).toContainText('20 poin persentase di bawah median');
+  await expect(summary).toContainText('Hanya satu provinsi memiliki nilai. Belum ada pembanding antarprovinsi.');
   await expect(summary).toContainText('4 dari 4 indikator');
   await expect(
     summary.getByRole('link', { name: 'Coba fokus ini di Studio' }),
