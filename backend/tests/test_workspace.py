@@ -172,8 +172,20 @@ def test_explicit_headers_and_percentage_scale(tmp_path, wide, scale, value, exp
         read_source(path, record)
 
 
-def test_write_guard_and_admin_auth():
-    with TestClient(create_app(Settings(_env_file=None))) as client:
+def test_write_guard_and_admin_auth(payload, monkeypatch):
+    import importlib
+
+    module = importlib.import_module("app.api.workspace")
+    published = {
+        **calculate_scenario(payload, params(payload)),
+        "id": "11111111-1111-4111-8111-111111111111",
+        "data_status": "published",
+        "created_at": "2026-10-21T00:00:00Z",
+    }
+    monkeypatch.setattr(module, "get_snapshot", lambda _session, _id: published)
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[session_for] = lambda: None
+    with TestClient(app) as client:
         assert client.post("/api/v1/admin/import", json={}).status_code == 401
         assert client.post("/api/v1/scenarios", content="x" * 65537).status_code == 413
         assert (
@@ -182,6 +194,8 @@ def test_write_guard_and_admin_auth():
             ).status_code
             == 403
         )
+        csv_text = client.get(f"/api/v1/scenarios/{published['id']}/export").text
+        assert f"{published['id']},{payload['id']},published,11,2,demo_assumption" in csv_text
 
 
 def test_public_profiles_preserve_requested_release(payload, monkeypatch):

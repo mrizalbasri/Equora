@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Literal
 
 from alembic.config import Config
@@ -11,14 +12,18 @@ from sqlalchemy.exc import SQLAlchemyError
 router = APIRouter(tags=["health"])
 
 
-def database_is_ready(connection, *, require_published: bool = False) -> bool:
+@lru_cache(maxsize=1)
+def migration_heads() -> frozenset[str]:
     from app.core.config import BACKEND_DIR
 
     config = Config(str(BACKEND_DIR / "alembic.ini"))
     config.set_main_option("script_location", str(BACKEND_DIR / "migrations"))
-    heads = set(ScriptDirectory.from_config(config).get_heads())
+    return frozenset(ScriptDirectory.from_config(config).get_heads())
+
+
+def database_is_ready(connection, *, require_published: bool = False) -> bool:
     installed = set(connection.execute(text("SELECT version_num FROM alembic_version")).scalars())
-    if installed != heads:
+    if installed != migration_heads():
         return False
     release = connection.execute(
         text("SELECT payload FROM local_releases ORDER BY created_at DESC, id DESC LIMIT 1")
