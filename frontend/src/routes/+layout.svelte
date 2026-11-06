@@ -1,4 +1,5 @@
 <script lang="ts">
+  import '@fontsource-variable/inter/wght.css';
   import '../app.css';
   import { onMount, tick } from 'svelte';
   import { afterNavigate, onNavigate } from '$app/navigation';
@@ -15,10 +16,12 @@
     if (!document.startViewTransition) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     return new Promise((resolve) => {
-      document.startViewTransition(async () => {
+      const transition = document.startViewTransition(async () => {
         resolve();
         await navigation.complete;
       });
+      // A second navigation can skip the visual transition while routing succeeds.
+      void transition.ready.catch(() => {});
     });
   });
 
