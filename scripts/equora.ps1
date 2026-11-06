@@ -100,8 +100,8 @@ Tidak ada pembuatan database atau migrasi otomatis.
         Invoke-Backend -CommandArguments @('uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', '18000')
     }
     'check' {
-        Invoke-Backend -CommandArguments @('ruff', 'check', '.', '../scripts/export_openapi.py', '../scripts/test_postgres.py')
-        Invoke-Backend -CommandArguments @('ruff', 'format', '--check', '.', '../scripts/export_openapi.py', '../scripts/test_postgres.py')
+        Invoke-Backend -CommandArguments @('ruff', 'check', '.', '../scripts')
+        Invoke-Backend -CommandArguments @('ruff', 'format', '--check', '.', '../scripts')
         Invoke-Backend -CommandArguments @('python', '../scripts/check_docs.py')
         Invoke-Frontend -CommandArguments @('check')
         Invoke-Frontend -CommandArguments @('check:api')

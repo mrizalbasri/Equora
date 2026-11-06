@@ -22,9 +22,7 @@ def main():
     parser.add_argument("--base-url", default="http://127.0.0.1:18000")
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
-    with httpx.Client(
-        base_url=args.base_url.rstrip("/") + "/api/v1/", timeout=30
-    ) as client:
+    with httpx.Client(base_url=args.base_url.rstrip("/") + "/api/v1/", timeout=30) as client:
         for path in ("health/ready", "workspace", "regions", "datasets"):
             response = client.get(path)
             response.raise_for_status()
@@ -77,11 +75,7 @@ def main():
         pdf.raise_for_status()
         if not pdf.content.startswith(b"%PDF"):
             raise RuntimeError("Invalid comparison PDF")
-        print(
-            json.dumps(
-                {"created_scenarios": identifiers, "comparison_and_exports": "ok"}
-            )
-        )
+        print(json.dumps({"created_scenarios": identifiers, "comparison_and_exports": "ok"}))
 
 
 if __name__ == "__main__":
