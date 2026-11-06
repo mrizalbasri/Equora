@@ -20,6 +20,7 @@
   let right = $state('');
   let error = $state('');
   let busy = $state(false);
+  let names = $state<Record<string, string>>({});
   let result = $state<{
     objective_comparable: boolean;
     coverage: Record<
@@ -45,21 +46,6 @@
     right: Snapshot;
   }>();
 
-  const names = $derived<Record<string, string>>(
-    result
-      ? { ...result.right.region_names, ...result.left.region_names }
-      : {},
-  );
-  const isSolvable = (item: SavedScenario) =>
-    item.status === 'optimal' || item.status === 'feasible';
-  const selectedLeft = $derived(saved.find((item) => item.id === left));
-  const selectedRight = $derived(saved.find((item) => item.id === right));
-  const isCompatible = (item: SavedScenario, base = selectedLeft) =>
-    isSolvable(item) &&
-    (!base ||
-      (item.release_id === base.release_id &&
-        (item.education_level ?? 'SD') === (base.education_level ?? 'SD')));
-
   function formatDate(iso: string) {
     try {
       return new Date(iso).toLocaleString('id-ID', {
@@ -71,28 +57,18 @@
     }
   }
 
-  function selectLeft() {
-    result = undefined;
-    const base = saved.find((item) => item.id === left);
-    const currentRight = saved.find((item) => item.id === right);
-    if (!currentRight || currentRight.id === left || !isCompatible(currentRight, base)) {
-      right = saved.find((item) => item.id !== left && isCompatible(item, base))?.id ?? '';
-    }
-  }
-
   async function load() {
     loading = true;
     error = '';
     try {
-      const items = await api<SavedScenario[]>('scenarios');
+      const [items, regions] = await Promise.all([
+        api<SavedScenario[]>('scenarios'),
+        api<{ code: string; name: string }[]>('regions'),
+      ]);
       saved = items;
-      const requestedLeft = page.url.searchParams.get('left');
-      const validRequested = items.find(
-        (item) => item.id === requestedLeft && isSolvable(item),
-      );
-      left = validRequested?.id ?? items.find(isSolvable)?.id ?? items[0]?.id ?? '';
-      const base = items.find((item) => item.id === left);
-      right = items.find((item) => item.id !== left && isCompatible(item, base))?.id ?? '';
+      left = page.url.searchParams.get('left') ?? saved[0]?.id ?? '';
+      right = saved.find((item) => item.id !== left)?.id ?? '';
+      names = Object.fromEntries(regions.map((row) => [row.code, row.name]));
     } catch (e) {
       error = (e as Error).message;
     } finally {
@@ -205,13 +181,13 @@
           Skenario awal
           <select
             bind:value={left}
-            onchange={selectLeft}
+            onchange={() => (result = undefined)}
             required
           >
             <option value="">Pilih snapshot</option>
             {#each saved as item}
-              <option value={item.id} disabled={!isSolvable(item)}>
-                {item.name} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : ''}
+              <option value={item.id}>
+                {item.name} · {formatDate(item.created_at)}
               </option>
             {/each}
           </select>
@@ -225,15 +201,15 @@
           >
             <option value="">Pilih snapshot</option>
             {#each saved as item}
-              <option value={item.id} disabled={!isCompatible(item)}>
-                {item.name} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : !isCompatible(item) ? ' · rilis/jenjang berbeda' : ''}
+              <option value={item.id}>
+                {item.name} · {formatDate(item.created_at)}
               </option>
             {/each}
           </select>
         </label>
         <button
           class="eq-button eq-button-primary compare-submit"
-          disabled={busy || !selectedLeft || !selectedRight || left === right || !isCompatible(selectedRight, selectedLeft)}
+          disabled={busy || !left || !right || left === right}
         >
           {busy ? 'Membandingkan…' : 'Bandingkan'}
         </button>
