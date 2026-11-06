@@ -2668,6 +2668,11 @@
           "release_id": {
             "type": "string",
             "title": "Release Id"
+          },
+          "education_level": {
+            "type": "string",
+            "title": "Education Level",
+            "default": "SD"
           }
         },
         "type": "object",

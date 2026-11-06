@@ -20,7 +20,6 @@
   let right = $state('');
   let error = $state('');
   let busy = $state(false);
-  let names = $state<Record<string, string>>({});
   let result = $state<{
     objective_comparable: boolean;
     coverage: Record<
@@ -46,6 +45,28 @@
     right: Snapshot;
   }>();
 
+  const names = $derived<Record<string, string>>(
+    result
+      ? { ...result.right.region_names, ...result.left.region_names }
+      : {},
+  );
+  const isSolvable = (item: SavedScenario) =>
+    item.status === 'optimal' || item.status === 'feasible';
+  const selectedLeft = $derived(saved.find((item) => item.id === left));
+  const selectedRight = $derived(saved.find((item) => item.id === right));
+  const studioHref = $derived(selectedLeft && isSolvable(selectedLeft)
+    ? '/studio?' + new URLSearchParams({
+        base: selectedLeft.id,
+        release: selectedLeft.release_id,
+        level: selectedLeft.education_level ?? 'SD',
+      })
+    : '/studio');
+  const isCompatible = (item: SavedScenario, base = selectedLeft) =>
+    isSolvable(item) &&
+    (!base ||
+      (item.release_id === base.release_id &&
+        (item.education_level ?? 'SD') === (base.education_level ?? 'SD')));
+
   function formatDate(iso: string) {
     try {
       return new Date(iso).toLocaleString('id-ID', {
@@ -57,18 +78,32 @@
     }
   }
 
+  function selectLeft(id: string) {
+    left = id;
+    result = undefined;
+    const base = saved.find((item) => item.id === left);
+    const currentRight = saved.find((item) => item.id === right);
+    if (!currentRight || currentRight.id === left || !isCompatible(currentRight, base)) {
+      right = saved.find((item) => item.id !== left && isCompatible(item, base))?.id ?? '';
+    }
+  }
+
   async function load() {
     loading = true;
     error = '';
     try {
-      const [items, regions] = await Promise.all([
-        api<SavedScenario[]>('scenarios'),
-        api<{ code: string; name: string }[]>('regions'),
-      ]);
+      const items = await api<SavedScenario[]>('scenarios');
       saved = items;
-      left = page.url.searchParams.get('left') ?? saved[0]?.id ?? '';
-      right = saved.find((item) => item.id !== left)?.id ?? '';
-      names = Object.fromEntries(regions.map((row) => [row.code, row.name]));
+      const requestedLeft = page.url.searchParams.get('left');
+      const validRequested = items.find(
+        (item) => item.id === requestedLeft && isSolvable(item),
+      );
+      const paired = items.find((base) => isSolvable(base) &&
+        items.some((item) => item.id !== base.id && isCompatible(item, base)));
+      left = validRequested?.id ?? paired?.id ?? items.find(isSolvable)?.id ?? '';
+      const base = items.find((item) => item.id === left);
+      const matches = items.filter((item) => item.id !== left && isCompatible(item, base));
+      right = matches.find((item) => item.id === page.url.searchParams.get('right'))?.id ?? matches[0]?.id ?? '';
     } catch (e) {
       error = (e as Error).message;
     } finally {
@@ -159,20 +194,28 @@
     <p class="work-panel" role="status">Memuat skenario tersimpan…</p>
   {:else if error && saved.length < 2}
     <p class="work-muted">Daftar skenario belum dapat dimuat. Coba lagi atau buka <a href="/studio">Studio simulasi</a>.</p>
-  {:else if saved.length < 2}
-    <div class="empty-state">
-      <div class="empty-state-icon">
-        <Icon name="compare" size={24} />
-      </div>
-      <h3>Perlu minimal dua skenario tersimpan</h3>
-      <p>
-        Perbandingan alokasi membutuhkan sedikitnya dua snapshot skenario untuk
-        menganalisis perbedaan peringkat, jangkauan provinsi, dan pergeseran anggaran.
-      </p>
-      <a class="eq-button eq-button-primary" href="/studio">
-        Buka Studio Simulasi
+  {:else if saved.length < 2 || !selectedLeft}
+    <section class="work-panel comparison-start">
+      <h2>{selectedLeft ? 'Tambahkan skenario pembanding' : 'Siapkan perbandingan pertama'}</h2>
+      <p class="work-muted">{selectedLeft
+        ? 'Gunakan rilis dan jenjang yang sama. Coba ubah satu asumsi agar perbedaan hasil mudah ditelusuri.'
+        : saved.length ? 'Skenario tersimpan belum menghasilkan alokasi. Hitung skenario yang memenuhi batas anggaran dan kapasitas di Studio.'
+        : 'Mulai dengan satu anggaran, lalu bandingkan dua pilihan prioritas.'}</p>
+      <dl class="scenario-slots">
+        <div>
+          <dt>Skenario awal</dt>
+          <dd>{selectedLeft?.name ?? 'Belum tersedia'}</dd>
+          {#if selectedLeft}<small>Jenjang {selectedLeft.education_level ?? 'SD'}</small>{/if}
+        </div>
+        <div class="open-slot">
+          <dt>Skenario pembanding</dt>
+          <dd>Belum tersedia</dd>
+        </div>
+      </dl>
+      <a class="eq-button eq-button-primary" href={studioHref}>
+        {selectedLeft ? 'Buat skenario pembanding' : 'Buat skenario awal'}
       </a>
-    </div>
+    </section>
   {:else}
     <form onsubmit={compare} class="work-panel compare-form">
       <h2>Pilih skenario untuk dibandingkan</h2>
@@ -180,14 +223,15 @@
         <label>
           Skenario awal
           <select
-            bind:value={left}
-            onchange={() => (result = undefined)}
+            value={left}
+            disabled={busy}
+            onchange={(event) => selectLeft(event.currentTarget.value)}
             required
           >
-            <option value="">Pilih snapshot</option>
+            <option value="" disabled>Pilih skenario</option>
             {#each saved as item}
-              <option value={item.id}>
-                {item.name} · {formatDate(item.created_at)}
+              <option value={item.id} disabled={!isSolvable(item)}>
+                {item.name} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : ''}
               </option>
             {/each}
           </select>
@@ -196,27 +240,29 @@
           Skenario pembanding
           <select
             bind:value={right}
+            disabled={busy}
             onchange={() => (result = undefined)}
             required
           >
             <option value="">Pilih snapshot</option>
             {#each saved as item}
-              <option value={item.id}>
-                {item.name} · {formatDate(item.created_at)}
+              <option value={item.id} disabled={item.id === left || !isCompatible(item)}>
+                {item.name} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : !isCompatible(item) ? ' · rilis/jenjang berbeda' : ''}
               </option>
             {/each}
           </select>
         </label>
         <button
           class="eq-button eq-button-primary compare-submit"
-          disabled={busy || !left || !right || left === right}
+          disabled={busy || !selectedLeft || !selectedRight || left === right || !isCompatible(selectedRight, selectedLeft)}
         >
           {busy ? 'Membandingkan…' : 'Bandingkan'}
         </button>
       </div>
-      {#if left && right && left === right}
+      {#if !saved.some((item) => item.id !== left && isCompatible(item))}
         <p class="work-muted helper-text">
-          Pilih dua skenario berbeda untuk melihat pergeseran alokasi.
+          Belum ada pembanding dengan rilis dan jenjang yang sama.
+          <a href={studioHref}>Buat skenario pembanding</a>
         </p>
       {/if}
     </form>
@@ -238,12 +284,13 @@
             <span class="eq-badge {key === 'left' ? 'eq-badge-neutral' : 'eq-badge-primary'}">
               {key === 'left' ? 'Skenario Awal' : 'Skenario Pembanding'}
             </span>
+            <h3>{scenarioLabel(key === 'left' ? left : right)}</h3>
             <p class="stat stat-coverage">
               {value.receiving_regions}
               <span class="stat-unit">/ {value.eligible_regions} provinsi</span>
             </p>
             <p class="work-muted">
-              Menerima <strong>{value.total_packages}</strong> paket total.
+              menerima <strong>{number(value.total_packages)} paket</strong> dalam simulasi.
               {#if value.excluded_regions > 0}
                 {value.excluded_regions} wilayah dikecualikan karena data tidak lengkap.
               {:else}
@@ -252,9 +299,9 @@
             </p>
             {#if impacts[key] && impacts[key]!.totalPackages > 0 && impacts[key]!.schoolsInNeed > 0}
               <p class="impact-line">
-                ≈ <strong>{number(impacts[key]!.totalPackages)}</strong> sekolah difasilitasi
-                ({number(impacts[key]!.percent ?? 0, 1)}% dari kebutuhan terdata untuk
-                {labels[impacts[key]!.focus]?.toLowerCase()}).
+                Dengan asumsi satu paket per sekolah, jumlah paket setara dengan
+                {number(impacts[key]!.percent ?? 0, 1)}% dari estimasi kebutuhan
+                {labels[impacts[key]!.focus]?.toLowerCase()} di provinsi penerima.
               </p>
             {/if}
           </div>
@@ -262,8 +309,7 @@
       </div>
       {#if impactsVisible}
         <p class="work-muted impact-footnote">
-          Estimasi dengan asumsi 1 paket = rehabilitasi untuk 1 satuan pendidikan,
-          dihitung dari jumlah sekolah pada snapshot masing-masing skenario.
+          Estimasi kebutuhan menggunakan data agregat sekolah. Rasio dapat melebihi 100% karena paket dapat mencakup beberapa jenis fasilitas.
           <a href="/methodology">Baca metodologi</a>.
         </p>
       {/if}
@@ -336,6 +382,25 @@
 </WorkspaceShell>
 
 <style>
+  .comparison-start h2, .coverage-box h3 { margin: 0; }
+  .scenario-slots {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .scenario-slots > div {
+    padding: 16px;
+    border: 1px solid var(--eq-border);
+    border-radius: var(--eq-radius-sm);
+    background: var(--eq-surface-subtle);
+    overflow-wrap: anywhere;
+  }
+  .scenario-slots .open-slot { background: var(--eq-surface); border-style: dashed; }
+  .scenario-slots dt, .scenario-slots small { color: var(--eq-text-secondary); font-size: .875rem; }
+  .scenario-slots dd { margin: 4px 0; font-weight: 650; }
+  .coverage-box h3 { margin-top: 10px; font-size: 1.05rem; overflow-wrap: anywhere; }
+  @media (max-width: 600px) { .scenario-slots { grid-template-columns: 1fr; } }
   .compare-form {
     margin-bottom: 24px;
   }

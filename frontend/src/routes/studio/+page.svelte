@@ -52,6 +52,12 @@
     Object.fromEntries(regions.map((row) => [row.code, row.name])),
   );
   const provinceParam = $derived(page.url.searchParams.get('province'));
+  const baseId = $derived(page.url.searchParams.get('base'));
+  const compareResultHref = $derived(baseId && result && baseId !== result.id &&
+    result.parameters.education_level === page.url.searchParams.get('level') &&
+    ['optimal', 'feasible'].includes(result.allocation.status)
+    ? '/compare?' + new URLSearchParams({ left: baseId, right: result.id })
+    : undefined);
   const provinceName = $derived(provinceParam ? names[provinceParam] : undefined);
   const total = $derived(
     Object.values(weights).reduce((a, b) => a + (Number(b) || 0), 0),
@@ -248,8 +254,8 @@
   subtitle="Atur kebutuhan dan anggaran, simpan skenario, lalu uji keputusan, pemerataan antarprovinsi, dan bukti sumbernya."
 >
   {#if page.url.searchParams.has('release')}
-    <aside class="work-panel" aria-label="Konteks dari profil wilayah">
-      <strong>Melanjutkan dari profil wilayah{provinceName ? ` · ${provinceName}` : ''}</strong>
+    <aside class="work-panel" aria-label={baseId ? 'Konteks perbandingan' : 'Konteks dari profil wilayah'}>
+      <strong>{baseId ? 'Menyiapkan skenario pembanding' : 'Melanjutkan dari profil wilayah'}{provinceName ? ` · ${provinceName}` : ''}</strong>
       <p>Rilis {page.url.searchParams.get('release')} · Jenjang {level}. {provinceName ? `Cakupan awal adalah ${provinceName}; tambahkan provinsi lain bila perlu.` : 'Cakupan awal adalah seluruh provinsi yang tersedia pada jenjang ini.'} Periksa cakupan dan asumsi sebelum menghitung.</p>
       {#if focusIndicator}<p><strong>Titik awal fokus: {labels[focusIndicator] ?? focusIndicator}.</strong> Bobot 70% hanya diisi sebagai titik awal dari profil wilayah dan dapat diubah; ini bukan rekomendasi kebijakan.</p>{/if}
       {#if error && !workspace}<a class="eq-button" href="/studio">Buka Studio dengan rilis aktif</a>{/if}
@@ -571,6 +577,9 @@
   </form>
 
   {#if result}
+    {#if compareResultHref}
+      <div class="work-panel"><a class="eq-button eq-button-primary" href={compareResultHref}>Bandingkan dengan skenario awal</a></div>
+    {/if}
     <ScenarioResult {result} {names} />
   {/if}
 

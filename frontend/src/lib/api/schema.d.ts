@@ -911,6 +911,11 @@ export interface components {
             status: string;
             /** Release Id */
             release_id: string;
+            /**
+             * Education Level
+             * @default SD
+             */
+            education_level: string;
         };
         /** ScenarioInput */
         "ScenarioInput-Input": {
