@@ -186,7 +186,7 @@ export function buildScenarioMapView(
 ): PriorityMapPresentation {
   const names: Record<string, string> = {
     ...Object.fromEntries(snapshot.input_rows.map((row) => [row.code, row.name])),
-    ...(snapshot.region_names ?? {}),
+    ...snapshot.region_names,
     ...regionNames,
   };
   const allocations = snapshot.allocation.allocations ?? {};
@@ -211,10 +211,7 @@ export function buildScenarioMapView(
     };
   }
 
-  const maxPackages = Math.max(
-    1,
-    ...Object.values(allocations).map((count) => Number(count ?? 0)),
-  );
+  const maxPackages = Math.max(1, ...Object.values(allocations));
 
   const rankedRows: PriorityMapDisplayRow[] = snapshot.priority.ranked.map(
     (row) => {
@@ -225,9 +222,7 @@ export function buildScenarioMapView(
         return {
           code: row.region_code,
           name,
-          fill: Number.isFinite(score)
-            ? scaleColor(belowColors, score, 1)
-            : missingColor,
+          fill: scaleColor(belowColors, score, 1),
           tooltip: `${name} · Peringkat #${row.rank} · Skor urgensi ${format(score)}${
             solverOk ? ` · Alokasi ${format(packages)} paket` : ''
           }`,

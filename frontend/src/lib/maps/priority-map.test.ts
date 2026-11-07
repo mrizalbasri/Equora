@@ -297,10 +297,12 @@ describe('buildScenarioMapView', () => {
     expect(view.legend.description).toContain('0–2 paket');
   });
 
-  it('disables allocation map when solver status is infeasible', () => {
+  it('disables allocation map when solver status is infeasible and falls back to code when name is unmapped', () => {
     const infeasible = structuredClone(scenarioFixture);
     infeasible.allocation.status = 'infeasible';
-    infeasible.allocation.allocations = {};
+    infeasible.allocation.allocations = null as unknown as Record<string, number>;
+    infeasible.input_rows = [];
+    infeasible.region_names = {};
 
     const allocView = buildScenarioMapView(infeasible, 'allocation');
     expect(allocView.available).toBe(false);
@@ -309,7 +311,16 @@ describe('buildScenarioMapView', () => {
     const urgencyView = buildScenarioMapView(infeasible, 'urgency');
     expect(urgencyView.available).toBe(true);
     expect(urgencyView.rows[0].tooltip).toBe(
-      'Provinsi Alpha · Peringkat #1 · Skor urgensi 0,85',
+      '11 · Peringkat #1 · Skor urgensi 0,85',
     );
+    expect(urgencyView.rows[2].tooltip).toBe(
+      '13 · Dikecualikan dari peringkat (data belum lengkap)',
+    );
+
+    const feasible = structuredClone(scenarioFixture);
+    feasible.allocation.status = 'feasible';
+    delete feasible.allocation.allocations['12'];
+    const feasibleUrgency = buildScenarioMapView(feasible, 'urgency');
+    expect(feasibleUrgency.rows[1].tooltip).toContain('Alokasi 0 paket');
   });
 });
