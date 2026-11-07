@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
   import { labels, number, rupiah, type Snapshot } from '$lib/api/workspace';
   import {
     equityConcentration,
@@ -297,13 +297,37 @@
   </details>
 </section>
 
-<nav class="result-tools" aria-label="Periksa hasil skenario">
-  <a class="eq-button eq-button-primary" href="#uji-keputusan"> Uji keputusan & pemerataan
-  </a>
-  <a class="eq-button" href="#peta-urgensi"> Peta GIS urgensi & alokasi
-  </a>
-  <a class="eq-button" href="#telusur-bukti"> Telusur bukti data
-  </a>
+<nav class="result-nav-panel" aria-label="Periksa hasil skenario">
+  <div class="result-nav-header">
+    <span class="eq-kicker">NAVIGASI LAPORAN SIMULASI</span>
+    <p class="result-nav-subtitle">Lompat langsung ke visualisasi spasial, uji sensitivitas keputusan, atau audit data:</p>
+  </div>
+  <div class="result-nav-links">
+    <a class="result-nav-card" href="#peta-urgensi">
+      <span class="nav-card-num" aria-hidden="true">1</span>
+      <span class="nav-card-body">
+        <strong class="nav-card-title">Peta GIS urgensi & alokasi</strong>
+        <span class="nav-card-sub" aria-hidden="true">Visualisasi spasial & solver CP-SAT</span>
+      </span>
+      <span class="nav-card-arrow" aria-hidden="true">↓</span>
+    </a>
+    <a class="result-nav-card" href="#uji-keputusan">
+      <span class="nav-card-num" aria-hidden="true">2</span>
+      <span class="nav-card-body">
+        <strong class="nav-card-title">Uji keputusan & pemerataan</strong>
+        <span class="nav-card-sub" aria-hidden="true">Uji asumsi anggaran & Indeks Gini</span>
+      </span>
+      <span class="nav-card-arrow" aria-hidden="true">↓</span>
+    </a>
+    <a class="result-nav-card" href="#telusur-bukti">
+      <span class="nav-card-num" aria-hidden="true">3</span>
+      <span class="nav-card-body">
+        <strong class="nav-card-title">Telusur bukti data</strong>
+        <span class="nav-card-sub" aria-hidden="true">Peringkat 38 provinsi & bukti SHA-256</span>
+      </span>
+      <span class="nav-card-arrow" aria-hidden="true">↓</span>
+    </a>
+  </div>
 </nav>
 
 <section id="peta-urgensi" class="work-panel scenario-gis-panel" aria-labelledby="scenario-gis-title">
@@ -322,7 +346,8 @@
         aria-pressed={activeMapMode === 'urgency'}
         onclick={() => (mapMode = 'urgency')}
       >
-        Tingkat urgensi (MCDA)
+        <span class="mode-btn-label">Tingkat urgensi (MCDA)</span>
+        <span class="mode-btn-tag">Kebutuhan sekolah</span>
       </button>
       <button
         type="button"
@@ -331,7 +356,8 @@
         disabled={!solverOk}
         onclick={() => (mapMode = 'allocation')}
       >
-        Sebaran alokasi (CP-SAT)
+        <span class="mode-btn-label">Sebaran alokasi (CP-SAT)</span>
+        <span class="mode-btn-tag">Distribusi anggaran</span>
       </button>
     </div>
   </div>
@@ -574,11 +600,91 @@
     flex-wrap: wrap;
     font-size: 13px;
   }
-  .result-tools {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+  .result-nav-panel {
+    background: var(--eq-surface);
+    border: 1px solid var(--eq-border);
+    border-radius: 14px;
+    padding: 16px 20px 18px;
     margin-block: 20px 24px;
+    box-shadow: var(--eq-shadow-card);
+  }
+  .result-nav-header {
+    margin-bottom: 12px;
+  }
+  .result-nav-subtitle {
+    font-size: 13px;
+    color: var(--eq-text-secondary);
+    margin-top: 3px;
+  }
+  .result-nav-links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .result-nav-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    text-decoration: none;
+    color: var(--eq-text);
+    transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+  }
+  .result-nav-card:hover {
+    background: #ffffff;
+    border-color: var(--eq-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgb(18 100 216 / 8%);
+  }
+  .nav-card-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary);
+    font-weight: 750;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav-card-body {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+  }
+  .nav-card-title {
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--eq-text);
+  }
+  .nav-card-sub {
+    font-size: 11px;
+    color: var(--eq-text-muted);
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-card-arrow {
+    color: var(--eq-text-muted);
+    font-size: 13px;
+    transition: transform 140ms ease, color 140ms ease;
+    flex-shrink: 0;
+  }
+  .result-nav-card:hover .nav-card-arrow {
+    transform: translateY(2px);
+    color: var(--eq-primary);
+  }
+  @media (max-width: 860px) {
+    .result-nav-links {
+      grid-template-columns: 1fr;
+    }
   }
   .rank-index {
     font-weight: 650;
@@ -799,27 +905,48 @@
   .gis-mode-switch {
     display: inline-grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    padding: 3px;
+    padding: 4px;
     border: 1px solid var(--eq-border);
-    border-radius: 8px;
+    border-radius: 10px;
     background: var(--eq-surface-subtle);
+    gap: 4px;
     max-width: 100%;
   }
   .gis-mode-btn {
     min-height: 44px;
-    padding: 8px 12px;
-    border: 0;
-    border-radius: 6px;
+    padding: 6px 14px;
+    border: 1px solid transparent;
+    border-radius: 8px;
     background: transparent;
     color: var(--eq-text-secondary);
-    font-size: 12px;
-    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    text-align: left;
     cursor: pointer;
+    transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+  }
+  .gis-mode-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--eq-text);
   }
   .gis-mode-btn[aria-pressed='true'] {
     background: var(--eq-surface);
     color: var(--eq-primary-hover);
-    box-shadow: 0 1px 3px rgb(30 52 73 / 12%);
+    border-color: var(--eq-border);
+    box-shadow: 0 1px 4px rgb(15 23 42 / 8%);
+  }
+  .mode-btn-label {
+    font-size: 12px;
+    font-weight: 650;
+  }
+  .mode-btn-tag {
+    font-size: 10px;
+    color: var(--eq-text-muted);
+  }
+  .gis-mode-btn[aria-pressed='true'] .mode-btn-tag {
+    color: var(--eq-primary);
   }
   .gis-mode-btn:disabled {
     cursor: not-allowed;

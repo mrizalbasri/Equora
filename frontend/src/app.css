@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+﻿@import 'tailwindcss';
 
 :root {
   color-scheme: light;
@@ -187,6 +187,9 @@ section[id], main[id] { scroll-margin-top: 112px; }
 .workspace dd { margin: 0; overflow-wrap: anywhere; }
 .workspace details { border-top: 1px solid var(--eq-border); padding-block: 16px; }
 .workspace summary { cursor: pointer; min-height: 48px; align-content: center; font-weight: 600; }
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::marker { display: none; content: ""; }
 .workspace .stat { font-size: 1.8rem; letter-spacing: -.04em; font-weight: 650; font-variant-numeric: tabular-nums; }
 .workspace .bar { height: 8px; background: var(--eq-primary); border-radius: 3px; margin-top: 6px; }
 .maplibregl-ctrl-group button { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
