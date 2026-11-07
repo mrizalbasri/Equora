@@ -1,4 +1,4 @@
-import { PUBLIC_SITEMAP_PATHS } from '$lib/seo';
+import { PUBLIC_SITEMAP_PATHS } from '../../lib/seo';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = ({ url }) => {
