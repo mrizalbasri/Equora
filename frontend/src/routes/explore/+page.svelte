@@ -222,7 +222,7 @@
   });
 </script>
 
-<svelte:head><title>Explorer pendidikan · Equora</title></svelte:head>
+<svelte:head><title>Explorer pendidikan · Equora</title><meta name="description" content="Telusuri peta tematik dan tabel indikator fasilitas sekolah antarprovinsi berdasarkan jenjang serta periksa bukti sumbernya." /></svelte:head>
 <WorkspaceShell
   title="Explorer pendidikan"
   subtitle="Telusuri akses fasilitas sekolah, bandingkan wilayah, dan periksa sumber di balik angkanya."

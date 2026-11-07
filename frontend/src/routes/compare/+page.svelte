@@ -198,7 +198,7 @@
   );
 </script>
 
-<svelte:head><title>Perbandingan skenario · Equora</title></svelte:head>
+<svelte:head><title>Perbandingan skenario · Equora</title><meta name="description" content="Bandingkan dua snapshot skenario alokasi yang kompatibel untuk menganalisis perubahan paket, peringkat provinsi, dan jangkauan anggaran." /></svelte:head>
 <WorkspaceShell
   title="Perbandingan skenario"
   subtitle="Perubahan paket dan peringkat dibaca pada versi data, jenjang, metode, dan model yang kompatibel."
