@@ -20,7 +20,7 @@ from app.optimization.allocation import AllocationCase, RegionOption, evaluate_a
 from app.optimization.coverage import solve_coverage
 from app.services.decision_review import changed_parameters, review_snapshot, stability
 from app.services.workspace import calculate_scenario
-from tests.test_workspace import params, payload  # noqa: F401
+from tests.test_workspace import params
 
 
 @pytest.mark.parametrize("budget", range(0, 16))

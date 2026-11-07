@@ -17,7 +17,6 @@ from app.etl.education import LEVELS
 from app.etl.local_release import CORE, read_source
 from app.main import create_app
 from app.services.workspace import calculate_scenario, compare_snapshots, priority
-from tests.conftest import payload  # noqa: F401
 
 
 def params(payload, **kwargs):
