@@ -41,12 +41,22 @@ Alur aplikasi: **jelajahi kondisi daerah → coba skenario prioritas → baca te
 | Bagian | Route | Yang dapat dilakukan |
 | --- | --- | --- |
 | Pendidikan di Daerah Saya | `/daerah` | Profil fasilitas per provinsi, benchmark relatif terhadap median provinsi, perbandingan indikator, penelusuran sumber, dan tautan temuan. |
-| Explorer | `/explore` | Peta tematik dan tabel provinsi dengan filter indikator dan jenjang, serta ekspor CSV. |
-| Studio simulasi | `/studio` | Mengatur bobot indikator, wilayah, anggaran, biaya, dan kapasitas untuk mencoba skenario alokasi. |
+| Explorer GIS | `/explore` | Peta tematik interaktif (MapLibre GL + PMTiles) untuk nilai indikator, posisi terhadap median, dan kelengkapan data, disertai tabel provinsi serta ekspor CSV. |
+| Studio simulasi & Peta Urgensi | `/studio`, `/scenarios/[id]` | Mengatur bobot indikator (MCDA), anggaran, biaya, dan kapasitas (CP-SAT), dilengkapi **Peta GIS Tingkat Urgensi & Sebaran Alokasi Paket** interaktif. |
 | Ringkasan temuan | `/studio`, `/compare` | Hasil simulasi sebagai narasi: konsentrasi anggaran, indikator fokus, estimasi sekolah difasilitasi, dan asumsi biaya. |
-| Snapshot dan Compare | `/compare` | Menyimpan dan membandingkan dua skenario yang kompatibel, lengkap dengan ekspor PDF. |
+| Snapshot dan Compare | `/compare` | Menyimpan dan membandingkan dua skenario yang kompatibel, lengkap dengan ekspor Memo Kebijakan PDF. |
 | Katalog dan metodologi | `/datasets`, `/methodology` | Metadata dataset, definisi indikator, metode perhitungan, dan batas penggunaannya. |
-| Impor admin | `/admin` | Menyiapkan data lokal melalui manifest yang diaudit, dengan token admin terpisah. |
+| Impor admin & Tata kelola | `/admin` | Menyiapkan data lokal melalui manifest yang diaudit (SHA-256 & validasi skema ETL Polars), dengan otorisasi token admin terpisah. |
+
+### Alur pengguna & batasan peran (User Flow)
+
+Platform memisahkan interaksi antara masyarakat umum, perencana kebijakan/pemerintah, dan administrator data:
+
+| Peran pengguna | Rute utama | Fokus interaksi | Batasan & transparansi |
+| --- | --- | --- | --- |
+| **Masyarakat Umum** | `/daerah`, `/explore`, `/datasets` | Memantau kondisi fasilitas sekolah provinsi sendiri, membaca peta GIS & benchmark median, serta mengunduh CSV terbuka. | Akses langsung tanpa login; bersifat *read-only* terhadap dataset rilis aktif. |
+| **Perencana & Pemerintah** | `/studio`, `/compare`, `/scenarios/[id]` | Menguji simulasi bobot prioritas (MCDA) & optimasi anggaran (CP-SAT), menganalisis peta GIS tingkat urgensi alokasi, uji sensitivitas, dan mengunduh Memo Kebijakan PDF. | Menyimpan *snapshot* skenario terikat versi data (`release_id`) tanpa mengubah data dasar. |
+| **Administrator Data** | `/admin` (`POST /api/v1/admin/import`) | Menjalankan *pipeline* ETL Polars untuk memverifikasi *manifest* berkas sumber Kemendikdasmen dan memperbarui *snapshot* rilis. | Dilindungi `Bearer ADMIN_TOKEN`; menolak otomatis (*fail-closed*) berkas yang gagal verifikasi SHA-256 atau struktur sel. |
 
 Seluruh fitur publik dapat digunakan tanpa login atau pendaftaran. Fitur yang memerlukan data membutuhkan backend, database, dan rilis lokal yang sudah disiapkan. Snapshot berada di workspace bersama dan dapat dibaca pengguna lain yang mengakses aplikasi; jangan menyimpan informasi pribadi di dalamnya.
 
@@ -133,15 +143,27 @@ pnpm dev
 
 Petunjuk Windows, macOS/Linux, Corepack, dan konfigurasi lanjutan tersedia di [README frontend](frontend/README.md) serta [README backend](backend/README.md).
 
-## Struktur repository
+## Struktur repository & modularitas
+
+Arsitektur dirancang modular untuk memudahkan pengembangan saat integrasi data publik skala besar (lintas tahun ajaran maupun perluasan cakupan ke tingkat Kabupaten/Kota):
 
 ```text
 Equora/
-├── frontend/       Aplikasi SvelteKit, komponen, peta, dan aset merek
-├── backend/        API FastAPI, ETL, analisis, solver, dan migrasi
-├── data/           Metadata sumber, fixture sintetis, dan panduan data
-├── scripts/        Skrip pengujian dan alat pengembangan
-└── .github/        Workflow CI serta template issue dan pull request
+├── frontend/                  Aplikasi SvelteKit 2 & TypeScript 5.9
+│   └── src/lib/
+│       ├── api/               Klien API & kontrak OpenAPI tergenerasi (schema.d.ts)
+│       ├── maps/              Adapter GIS murni (priority-map.ts) & tile PMTiles/MapLibre
+│       ├── insight/           Kalkulator analitik murni (konsentrasi, dampak sekolah)
+│       └── components/        Komponen modular (ProvinceMap, ScenarioResult, DecisionReview)
+├── backend/                   API FastAPI & Python 3.14
+│   └── app/
+│       ├── etl/               Pipeline ingest Polars & validator fail-closed (SHA-256, sel, BPS)
+│       ├── priority/          Mesin skor kebutuhan Multi-Criteria Decision Analysis (MCDA)
+│       ├── allocation/        Solver optimasi OR-Tools CP-SAT, baseline, & sensitivity review
+│       └── reports/           Generator Memo Kebijakan PDF & ekspor CSV
+├── data/                      Metadata sumber, fixture sintetis, dan panduan data
+├── scripts/                   Skrip pengujian dan alat pengembangan
+└── .github/                   Workflow CI serta template issue dan pull request
 ```
 
 ## Pemeriksaan pengembangan

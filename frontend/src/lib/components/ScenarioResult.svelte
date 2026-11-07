@@ -5,6 +5,11 @@
     focusIndicator,
     schoolImpact,
   } from '$lib/insight/insight';
+  import {
+    buildScenarioMapView,
+    type ScenarioMapMode,
+  } from '$lib/maps/priority-map';
+  import ProvinceMap from './ProvinceMap.svelte';
   import DecisionReview from './DecisionReview.svelte';
   import ScenarioEvidence from './ScenarioEvidence.svelte';
 
@@ -13,7 +18,15 @@
     names = {},
     compareHref,
   }: { result: Snapshot; names?: Record<string, string>; compareHref?: string } = $props();
-  const regionNames = $derived(result.region_names ?? names);
+  const regionNames = $derived({
+    ...Object.fromEntries(result.input_rows.map((row) => [row.code, row.name])),
+    ...names,
+    ...(result.region_names ?? {}),
+  });
+
+  let mapMode = $state<ScenarioMapMode>('urgency');
+  let mapAttempt = $state(0);
+  let selectedMapCode = $state('');
 
   const allocations = $derived(result.allocation.allocations ?? {});
   const totalAllocatedPackages = $derived(
@@ -42,6 +55,20 @@
   );
   const impact = $derived(
     solverOk ? schoolImpact(result.input_rows, result.parameters.weights, result.allocation.allocations) : null
+  );
+  const activeMapMode = $derived<ScenarioMapMode>(
+    mapMode === 'allocation' && !solverOk ? 'urgency' : mapMode
+  );
+  const scenarioMapPresentation = $derived(
+    buildScenarioMapView(result, activeMapMode, regionNames)
+  );
+  const activeRegionCode = $derived(
+    selectedMapCode && result.priority.ranked.some((r) => r.region_code === selectedMapCode)
+      ? selectedMapCode
+      : (result.priority.ranked[0]?.region_code ?? '')
+  );
+  const activeRankedRow = $derived(
+    result.priority.ranked.find((r) => r.region_code === activeRegionCode)
   );
 </script>
 
@@ -273,9 +300,77 @@
 <nav class="result-tools" aria-label="Periksa hasil skenario">
   <a class="eq-button eq-button-primary" href="#uji-keputusan"> Uji keputusan & pemerataan
   </a>
+  <a class="eq-button" href="#peta-urgensi"> Peta GIS urgensi & alokasi
+  </a>
   <a class="eq-button" href="#telusur-bukti"> Telusur bukti data
   </a>
 </nav>
+
+<section id="peta-urgensi" class="work-panel scenario-gis-panel" aria-labelledby="scenario-gis-title">
+  <div class="gis-header">
+    <div>
+      <span class="eq-kicker">DASBOR ANALITIK GIS</span>
+      <h2 id="scenario-gis-title" class="gis-title">Peta sebaran tingkat urgensi & alokasi paket</h2>
+      <p class="work-muted">
+        Visualisasi spasial hasil perhitungan MCDA dan solver optimasi CP-SAT pada cakupan {result.case.regions.length} provinsi ({result.parameters.education_level}).
+      </p>
+    </div>
+    <div class="gis-mode-switch" role="group" aria-label="Mode peta simulasi">
+      <button
+        type="button"
+        class="gis-mode-btn"
+        aria-pressed={activeMapMode === 'urgency'}
+        onclick={() => (mapMode = 'urgency')}
+      >
+        Tingkat urgensi (MCDA)
+      </button>
+      <button
+        type="button"
+        class="gis-mode-btn"
+        aria-pressed={activeMapMode === 'allocation'}
+        disabled={!solverOk}
+        onclick={() => (mapMode = 'allocation')}
+      >
+        Sebaran alokasi (CP-SAT)
+      </button>
+    </div>
+  </div>
+
+  {#key `${result.id}-${mapAttempt}`}
+    <ProvinceMap
+      silentStatus
+      presentation={scenarioMapPresentation}
+      selected={activeRegionCode}
+      onselect={(code) => (selectedMapCode = code)}
+      onretry={() => mapAttempt++}
+    />
+  {/key}
+
+  {#if activeRankedRow}
+    <div class="gis-inspector" aria-label="Sorotan provinsi pada peta simulasi">
+      <div class="gis-inspector-main">
+        <span class="eq-kicker">SOROTAN WILAYAH · PERINGKAT #{activeRankedRow.rank}</span>
+        <strong>{regionNames[activeRankedRow.region_code] ?? activeRankedRow.region_code}</strong>
+        <p class="work-muted">
+          Skor kebutuhan MCDA: <code>{number(activeRankedRow.score, 4)}</code> ·
+          Alokasi: <strong>{number(allocations[activeRankedRow.region_code] ?? 0)} paket</strong>
+        </p>
+      </div>
+      <div class="gis-inspector-actions">
+        <a
+          class="eq-button"
+          href={'/daerah?' + new URLSearchParams({
+            province: activeRankedRow.region_code,
+            level: result.parameters.education_level,
+            release: result.release_id,
+          })}
+        >
+          Profil wilayah
+        </a>
+      </div>
+    </div>
+  {/if}
+</section>
 
 {#key result.id}
   <DecisionReview snapshot={result} />
@@ -684,5 +779,80 @@
   }
   .impact-details table {
     margin-top: 10px;
+  }
+  .scenario-gis-panel {
+    margin-bottom: 24px;
+    scroll-margin-top: 88px;
+  }
+  .gis-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .gis-title {
+    font-size: 1.25rem;
+    margin: 4px 0 6px;
+  }
+  .gis-mode-switch {
+    display: inline-grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 3px;
+    border: 1px solid var(--eq-border);
+    border-radius: 8px;
+    background: var(--eq-surface-subtle);
+    max-width: 100%;
+  }
+  .gis-mode-btn {
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--eq-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .gis-mode-btn[aria-pressed='true'] {
+    background: var(--eq-surface);
+    color: var(--eq-primary-hover);
+    box-shadow: 0 1px 3px rgb(30 52 73 / 12%);
+  }
+  .gis-mode-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .gis-inspector {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--eq-border);
+    border-radius: 10px;
+    background: var(--eq-surface-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .gis-inspector-main {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+  }
+  .gis-inspector-main strong {
+    font-size: 15px;
+    color: var(--eq-text);
+  }
+  .gis-inspector-main p {
+    margin: 0;
+    font-size: 13px;
+  }
+  @media (max-width: 600px) {
+    .gis-mode-switch {
+      width: 100%;
+    }
   }
 </style>
