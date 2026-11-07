@@ -94,9 +94,7 @@ def main():
             )
             restored = summary(args.container, scratch)
             if restored != before:
-                raise RuntimeError(
-                    "Restored counts differ; rerun with scenario writes paused."
-                )
+                raise RuntimeError("Restored counts differ; rerun with scenario writes paused.")
             manifest["restore_verified"] = True
         finally:
             if created and re.fullmatch(r"equora_restorecheck_[0-9a-f]{32}", scratch):

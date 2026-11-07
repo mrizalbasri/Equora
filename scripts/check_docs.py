@@ -1,8 +1,8 @@
 """Check local file targets in the repository's Markdown links."""
 
-from pathlib import Path
 import re
 import subprocess
+from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,11 +12,12 @@ try:
         ["git", "ls-files", "*.md", "*/*.md", "*/*/*.md"],
         cwd=ROOT,
         text=True,
-        encoding="utf-8"
+        encoding="utf-8",
     ).splitlines()
     files = [ROOT / f for f in tracked_files if (ROOT / f).exists()]
 except Exception:
-    files = [f for f in ROOT.rglob("*.md") if not any(part in {".git", "node_modules", ".venv", "venv", "docs"} for part in f.parts)]
+    excluded = {".git", "node_modules", ".venv", "venv", "docs"}
+    files = [f for f in ROOT.rglob("*.md") if not any(part in excluded for part in f.parts)]
 
 errors = []
 for source in files:

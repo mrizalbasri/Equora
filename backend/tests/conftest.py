@@ -11,6 +11,54 @@ from sqlalchemy.orm import Session
 
 from app.core.config import Settings, get_settings
 from app.db.session import build_engine
+from app.etl.local_release import CORE
+
+
+@pytest.fixture
+def payload():
+    sources = [
+        {
+            "source_id": key,
+            "unit": "percent",
+            "source_url": "https://example.org/synthetic",
+            "title": "Synthetic " + key,
+            "sha256": "a" * 64,
+            "license_status": "synthetic_fixture_only",
+            "quality": {"SD": {"missing": 0, "numeric": 4}},
+            "year": 2025,
+            "academic_year": "2025/2026",
+            "publisher": "Synthetic",
+            "definition": "Synthetic tests only",
+            "storage_scale": "percentage_points",
+        }
+        for key in CORE
+    ]
+    rows = [
+        {
+            "code": code,
+            "name": "Synthetic " + code,
+            "values": {**dict.fromkeys(CORE, value), "institutions_count": denominator},
+            "cells": dict.fromkeys(CORE, "I5"),
+        }
+        for code, value, denominator in (
+            ("11", "20", "10"),
+            ("12", "60", "20"),
+            ("13", "0", "0"),
+            ("14", None, "10"),
+        )
+    ]
+    return {
+        "id": "synthetic-release-workspace",
+        "status": "local_review",
+        "year": 2025,
+        "ownership": "Total",
+        "adapter_version": "synthetic",
+        "region_namespace": "synthetic",
+        "academic_year": "2025/2026",
+        "sources": sources,
+        "scopes": {"SD": rows},
+        "limitations": ["Synthetic tests only"],
+    }
 
 
 @pytest.fixture(scope="module")

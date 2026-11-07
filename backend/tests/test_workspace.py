@@ -19,53 +19,6 @@ from app.main import create_app
 from app.services.workspace import calculate_scenario, compare_snapshots, priority
 
 
-@pytest.fixture
-def payload():
-    sources = [
-        {
-            "source_id": key,
-            "unit": "percent",
-            "source_url": "https://example.org/synthetic",
-            "title": "Synthetic " + key,
-            "sha256": "a" * 64,
-            "license_status": "synthetic_fixture_only",
-            "quality": {"SD": {"missing": 0, "numeric": 4}},
-            "year": 2025,
-            "academic_year": "2025/2026",
-            "publisher": "Synthetic",
-            "definition": "Synthetic tests only",
-            "storage_scale": "percentage_points",
-        }
-        for key in CORE
-    ]
-    rows = [
-        {
-            "code": code,
-            "name": "Synthetic " + code,
-            "values": {**dict.fromkeys(CORE, value), "institutions_count": denominator},
-            "cells": dict.fromkeys(CORE, "I5"),
-        }
-        for code, value, denominator in (
-            ("11", "20", "10"),
-            ("12", "60", "20"),
-            ("13", "0", "0"),
-            ("14", None, "10"),
-        )
-    ]
-    return {
-        "id": "synthetic-release-workspace",
-        "status": "local_review",
-        "year": 2025,
-        "ownership": "Total",
-        "adapter_version": "synthetic",
-        "region_namespace": "synthetic",
-        "academic_year": "2025/2026",
-        "sources": sources,
-        "scopes": {"SD": rows},
-        "limitations": ["Synthetic tests only"],
-    }
-
-
 def params(payload, **kwargs):
     return ScenarioInput(
         release_id=payload["id"],
@@ -172,8 +125,20 @@ def test_explicit_headers_and_percentage_scale(tmp_path, wide, scale, value, exp
         read_source(path, record)
 
 
-def test_write_guard_and_admin_auth():
-    with TestClient(create_app(Settings(_env_file=None))) as client:
+def test_write_guard_and_admin_auth(payload, monkeypatch):
+    import importlib
+
+    module = importlib.import_module("app.api.workspace")
+    published = {
+        **calculate_scenario(payload, params(payload)),
+        "id": "11111111-1111-4111-8111-111111111111",
+        "data_status": "published",
+        "created_at": "2026-10-21T00:00:00Z",
+    }
+    monkeypatch.setattr(module, "get_snapshot", lambda _session, _id: published)
+    app = create_app(Settings(_env_file=None))
+    app.dependency_overrides[session_for] = lambda: None
+    with TestClient(app) as client:
         assert client.post("/api/v1/admin/import", json={}).status_code == 401
         assert client.post("/api/v1/scenarios", content="x" * 65537).status_code == 413
         assert (
@@ -182,6 +147,8 @@ def test_write_guard_and_admin_auth():
             ).status_code
             == 403
         )
+        csv_text = client.get(f"/api/v1/scenarios/{published['id']}/export").text
+        assert f"{published['id']},{payload['id']},published,11,2,demo_assumption" in csv_text
 
 
 def test_public_profiles_preserve_requested_release(payload, monkeypatch):

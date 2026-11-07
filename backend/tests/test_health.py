@@ -106,3 +106,24 @@ def test_write_budget_rejects_repeated_posts_and_recovers(monkeypatch):
         assert client.get("/api/v1/health/live").status_code == 200
         clock[0] += 61
         assert client.post("/api/v1/absent").status_code == 404
+
+
+def test_write_guard_allows_non_serialized_posts_when_locked():
+    import asyncio
+
+    from app.core.write_guard import WriteGuard
+
+    async def run():
+        app = create_app(Settings(_env_file=None))
+        guard = WriteGuard(app, origins=["http://localhost:5173"], lock_timeout=0.01)
+        await guard.lock.acquire()
+        try:
+            with TestClient(guard) as client:
+                assert client.post("/api/v1/absent").status_code == 404
+                locked = client.post("/api/v1/scenarios", json={})
+                assert locked.status_code == 429
+                assert locked.headers["retry-after"] == "1"
+        finally:
+            guard.lock.release()
+
+    asyncio.run(run())

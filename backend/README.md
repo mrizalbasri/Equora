@@ -44,6 +44,17 @@ Jika port API 8000 sudah digunakan, atur `API_PORT` pada `.env`, misalnya 18000.
 
 Alternatif dari root dengan PowerShell: `.\scripts\equora.ps1 backend`. Perintah gabungan tersedia di [panduan scripts](../scripts/README.md).
 
+## Publikasi image Docker Hub
+
+Workflow `Publish backend image` membangun `backend/Dockerfile` pada pull request tanpa memublikasikannya. Push ke `main` memublikasikan tag `latest` dan `sha-<commit>`, sedangkan tag Git `vX.Y.Z` juga memublikasikan `X.Y.Z` dan `X.Y`. Workflow dapat dijalankan manual tanpa push secara default; aktifkan input `publish` hanya jika revision tersebut memang akan dipublikasikan.
+
+Siapkan repository `equora-backend` di Docker Hub, lalu tambahkan konfigurasi GitHub Actions berikut:
+
+- Repository variable `DOCKERHUB_USERNAME`: nama pengguna atau namespace Docker Hub.
+- Repository secret `DOCKERHUB_TOKEN`: access token Docker Hub dengan izin write untuk repository image; jangan gunakan password akun.
+
+Secara default image dipublikasikan sebagai `<DOCKERHUB_USERNAME>/equora-backend`. Jika nama atau namespace berbeda, atur repository variable `DOCKERHUB_IMAGE` ke nama lengkap seperti `organisasi/nama-image`. Token hanya dibaca oleh job publikasi dan tidak diperlukan oleh build pull request.
+
 ## Struktur
 
 ```text

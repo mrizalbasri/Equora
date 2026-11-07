@@ -529,10 +529,10 @@ def export_scenario(snapshot_id: UUID, session: DBSession):
             [
                 result["id"],
                 result["release_id"],
-                "local_review",
+                result["data_status"],
                 code,
                 packages,
-                "demo_assumption",
+                result["parameters"].get("cost_source_type", "demo_assumption"),
                 result["allocation"]["model_version"],
                 result["created_at"],
             ]
