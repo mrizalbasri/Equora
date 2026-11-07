@@ -15,7 +15,7 @@
   });
 </script>
 
-<svelte:head><title>Detail sumber · Equora</title></svelte:head>
+<svelte:head><title>{source?.title ? `${source.title} · Equora` : 'Detail sumber · Equora'}</title><meta name="description" content={source?.definition ?? 'Periksa definisi indikator, asal berkas, satuan pengukuran, dan ringkasan kualitas sumber data pendidikan di Equora.'} /></svelte:head>
 <WorkspaceShell
   title="Detail dan kualitas sumber"
   subtitle="Periksa definisi dan asal data sebelum menggunakannya dalam analisis."

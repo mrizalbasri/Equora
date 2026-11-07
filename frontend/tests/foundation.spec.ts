@@ -9,6 +9,16 @@ test('built frontend serves landing HTML and a separate health route', async ({ 
   const health = await request.get('/health');
   expect(health.ok()).toBeTruthy();
   expect(await health.json()).toEqual({ status: 'ok' });
+  const robots = await request.get('/robots.txt');
+  expect(robots.ok()).toBeTruthy();
+  expect(await robots.text()).toContain('Disallow: /admin');
+  const sitemap = await request.get('/sitemap.xml');
+  expect(sitemap.ok()).toBeTruthy();
+  expect(sitemap.headers()['content-type']).toContain('application/xml');
+  expect(await sitemap.text()).toContain('/methodology</loc>');
+  const llms = await request.get('/llms.txt');
+  expect(llms.ok()).toBeTruthy();
+  expect(await llms.text()).toContain('# Equora');
 });
 
 test('catalog exposes API source and unknown source errors', async ({ page }) => {

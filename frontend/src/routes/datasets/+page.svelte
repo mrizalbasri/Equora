@@ -26,7 +26,7 @@
   });
 </script>
 
-<svelte:head><title>Katalog dataset · Equora</title></svelte:head>
+<svelte:head><title>Katalog dataset · Equora</title><meta name="description" content="Telusuri katalog indikator fasilitas pendidikan beserta definisi, satuan, periode, checksum SHA-256, dan catatan kualitas data." /></svelte:head>
 <WorkspaceShell
   title="Katalog dataset"
   subtitle="Sepuluh indikator dari berkas pendidikan yang Anda sediakan, dengan definisi, skala, hash, dan pemeriksaan kualitas."
