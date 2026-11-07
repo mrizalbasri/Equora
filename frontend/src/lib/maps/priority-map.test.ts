@@ -319,7 +319,7 @@ describe('buildScenarioMapView', () => {
 
     const feasible = structuredClone(scenarioFixture);
     feasible.allocation.status = 'feasible';
-    delete feasible.allocation.allocations['12'];
+    feasible.allocation.allocations = { '11': 5 };
     const feasibleUrgency = buildScenarioMapView(feasible, 'urgency');
     expect(feasibleUrgency.rows[1].tooltip).toContain('Alokasi 0 paket');
   });
