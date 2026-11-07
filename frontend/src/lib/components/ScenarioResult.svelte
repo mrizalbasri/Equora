@@ -12,6 +12,7 @@
   import ProvinceMap from './ProvinceMap.svelte';
   import DecisionReview from './DecisionReview.svelte';
   import ScenarioEvidence from './ScenarioEvidence.svelte';
+  import Icon from './Icon.svelte';
 
   let {
     result,
@@ -251,19 +252,32 @@
     {/if}
   {/if}
 
-  <div class="work-actions result-actions">
-    <a class="eq-button eq-button-primary action-pdf-highlight" href={'/api/v1/scenarios/' + result.id + '/pdf'}>
-      <span>Unduh Memo Kebijakan (PDF)</span>
-    </a>
-    <a class="eq-button" href={'/api/v1/scenarios/' + result.id + '/export'}>
-      <span>Unduh Tabel Alokasi (CSV)</span>
-    </a>
-    <a class="eq-button" href={compareHref ?? '/compare?left=' + result.id}>
-      <span>{compareHref ? 'Bandingkan dengan skenario awal' : 'Bandingkan Skenario'}</span>
-    </a>
-    <a class="eq-button" href={'/scenarios/' + result.id}>
-      <span>Buka Tautan Snapshot</span>
-    </a>
+  <div class="scenario-action-bar" aria-label="Tindakan dokumen dan skenario">
+    <div class="action-bar-group primary-actions">
+      <a
+        class="action-btn action-btn-pdf"
+        href={'/api/v1/scenarios/' + result.id + '/pdf'}
+        aria-label="Unduh Memo Kebijakan (PDF)"
+      >
+        <span class="btn-icon" aria-hidden="true"><Icon name="download" size={16} /></span>
+        <span class="btn-text">Unduh Memo Kebijakan (PDF)</span>
+        <span class="btn-chip" aria-hidden="true">Resmi</span>
+      </a>
+      <a class="action-btn action-btn-secondary" href={'/api/v1/scenarios/' + result.id + '/export'}>
+        <span class="btn-icon" aria-hidden="true"><Icon name="database" size={16} /></span>
+        <span class="btn-text">Unduh Tabel Alokasi (CSV)</span>
+      </a>
+    </div>
+    <div class="action-bar-group secondary-actions">
+      <a class="action-btn action-btn-ghost" href={compareHref ?? '/compare?left=' + result.id}>
+        <span class="btn-icon" aria-hidden="true"><Icon name="compare" size={16} /></span>
+        <span class="btn-text">{compareHref ? 'Bandingkan dengan skenario awal' : 'Bandingkan Skenario'}</span>
+      </a>
+      <a class="action-btn action-btn-ghost" href={'/scenarios/' + result.id}>
+        <span class="btn-icon" aria-hidden="true"><Icon name="share" size={16} /></span>
+        <span class="btn-text">Buka Tautan Snapshot</span>
+      </a>
+    </div>
   </div>
 
   <details class="params-details">
@@ -568,8 +582,101 @@
     font-size: 13px;
     margin-bottom: 16px;
   }
-  .result-actions {
-    margin-block: 16px;
+  .scenario-action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-block: 20px 24px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--eq-surface);
+    border: 1px solid var(--eq-border);
+    box-shadow: 0 1px 3px rgb(15 23 42 / 4%);
+  }
+  .action-bar-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 150ms ease;
+  }
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .action-btn-pdf {
+    background: linear-gradient(135deg, #1264d8, #0e4faf);
+    color: #ffffff;
+    border: 1px solid #0e4faf;
+    box-shadow: 0 2px 6px rgb(18 100 216 / 25%);
+  }
+  .action-btn-pdf:hover {
+    background: linear-gradient(135deg, #0e4faf, #0a3d8a);
+    box-shadow: 0 4px 12px rgb(18 100 216 / 35%);
+    transform: translateY(-1px);
+  }
+  .action-btn-pdf .btn-chip {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+  .action-btn-secondary {
+    background: var(--eq-surface);
+    color: var(--eq-text);
+    border: 1px solid var(--eq-border);
+  }
+  .action-btn-secondary:hover {
+    background: var(--eq-surface-subtle);
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgb(15 23 42 / 6%);
+  }
+  .action-btn-ghost {
+    background: var(--eq-surface-subtle);
+    color: var(--eq-text-secondary);
+    border: 1px solid var(--eq-border);
+  }
+  .action-btn-ghost:hover {
+    background: #ffffff;
+    color: var(--eq-primary-hover);
+    border-color: var(--eq-primary);
+    transform: translateY(-1px);
+  }
+  @media (max-width: 760px) {
+    .scenario-action-bar {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 10px;
+    }
+    .action-bar-group {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+    .action-btn {
+      width: 100%;
+      justify-content: center;
+    }
   }
   .params-details {
     margin-top: 16px;
@@ -843,16 +950,7 @@
     color: var(--eq-text-secondary);
     line-height: 1.55;
   }
-  .action-pdf-highlight {
-    background: var(--eq-primary);
-    color: white;
-    border-color: var(--eq-primary);
-    font-weight: 650;
-  }
-  .action-pdf-highlight:hover {
-    background: var(--eq-primary-hover);
-    color: white;
-  }
+
 
   /* Estimasi dampak: sekolah difasilitasi */
   .impact-card {
