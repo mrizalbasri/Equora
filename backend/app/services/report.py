@@ -106,7 +106,7 @@ def snapshot_pdf(snapshot, comparison=None):
         ["Atribut Snapshot", "Nilai", "Ringkasan Hasil", "Nilai"],
         [
             "ID Snapshot",
-            cell(snapshot["id"]),
+            cell(snapshot.get("id", "-")),
             "Status Solver",
             str(alloc["status"]),
         ],
@@ -162,7 +162,10 @@ def snapshot_pdf(snapshot, comparison=None):
         right = comparison["right"]
         right_params = right["parameters"]
         paragraph("Perbandingan dua skenario", styles["Heading2"])
-        paragraph(f"Pembanding: {right_params['name']} (ID: {right['id']} · {right['created_at']})")
+        paragraph(
+            f"Pembanding: {right_params['name']} "
+            f"(ID: {right.get('id', '-')} · {right.get('created_at', '-')})"
+        )
         delta_idr = comparison["budget_delta_idr"]
         delta_prefix = "+" if delta_idr > 0 else ""
         paragraph(f"Selisih biaya terpakai (pembanding − awal): {delta_prefix}{_rupiah(delta_idr)}")
