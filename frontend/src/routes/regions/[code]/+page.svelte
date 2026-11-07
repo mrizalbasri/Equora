@@ -40,7 +40,7 @@
   }
 </script>
 
-<svelte:head><title>{data?.name ?? 'Detail wilayah'} · Equora</title></svelte:head>
+<svelte:head><title>{data?.name ?? 'Detail wilayah'} · Equora</title><meta name="description" content="Profil indikator fasilitas sekolah, denominator institusi, dan referensi sel sumber untuk wilayah provinsi." /></svelte:head>
 <WorkspaceShell
   title={data?.name ?? 'Detail wilayah'}
   subtitle="Indikator fasilitas, denominator sekolah, dan koordinat sel sumber pada scope yang sama."

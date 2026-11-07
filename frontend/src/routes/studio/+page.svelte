@@ -255,7 +255,7 @@
   }
 </script>
 
-<svelte:head><title>Studio simulasi · Equora</title></svelte:head>
+<svelte:head><title>Studio simulasi · Equora</title><meta name="description" content="Atur bobot prioritas indikator, cakupan wilayah, dan batasan anggaran untuk menguji skenario alokasi fasilitas pendidikan." /></svelte:head>
 <WorkspaceShell
   title="Studio simulasi"
   subtitle="Atur kebutuhan dan anggaran, simpan skenario, lalu uji keputusan, pemerataan antarprovinsi, dan bukti sumbernya."

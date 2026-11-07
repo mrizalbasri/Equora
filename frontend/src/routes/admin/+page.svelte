@@ -26,7 +26,7 @@
   }
 </script>
 
-<svelte:head><title>Impor lokal · Equora</title></svelte:head>
+<svelte:head><title>Impor lokal · Equora</title><meta name="description" content="Halaman administrasi untuk memeriksa dan mengimpor manifest data pendidikan lokal terverifikasi." /></svelte:head>
 <WorkspaceShell
   title="Impor lokal terverifikasi"
   subtitle="Ulangi impor berkas yang sudah tercantum dalam manifest audit. Impor menghasilkan snapshot review lokal dan tidak memublikasikan data."

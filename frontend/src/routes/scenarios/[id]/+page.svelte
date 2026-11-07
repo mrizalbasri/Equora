@@ -22,7 +22,7 @@
   });
 </script>
 
-<svelte:head><title>Snapshot skenario · Equora</title></svelte:head>
+<svelte:head><title>Snapshot skenario · Equora</title><meta name="description" content="Tautan snapshot parameter dan hasil perhitungan skenario alokasi fasilitas pendidikan." /></svelte:head>
 <WorkspaceShell
   title="Snapshot skenario"
   subtitle="Parameter dan hasil perhitungan tersimpan bersama versi data yang digunakan."

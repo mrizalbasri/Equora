@@ -1,0 +1,20 @@
+# Equora
+
+> Equora adalah aplikasi web analisis data publik untuk menelusuri kondisi fasilitas pendidikan antarprovinsi di Indonesia, membaca posisi relatif terhadap median provinsi pada jenjang yang sepadan, dan menguji skenario alokasi sumber daya secara transparan.
+
+## Halaman Publik Utama
+
+- [Beranda](/) — Ringkasan masalah ketimpangan fasilitas sekolah antardaerah dan pintu masuk alur eksplorasi.
+- [Pendidikan di Daerah Saya](/daerah) — Profil fasilitas sekolah per provinsi, perbandingan dengan median provinsi, dan penelusuran indikator.
+- [Explorer Pendidikan](/explore) — Peta tematik (choropleth) dan tabel indikator sanitasi dasar, air bersih, akses internet, serta komputer pembelajaran berdasarkan jenjang (SD, SMP, SMA, SMK).
+- [Studio Simulasi](/studio) — Simulasi prioritas kebutuhan (MCDA) dan optimasi alokasi paket fasilitas menggunakan CP-SAT (OR-Tools) dengan batasan anggaran dan kapasitas.
+- [Perbandingan Skenario](/compare) — Analisis komparatif antara dua snapshot skenario pada rilis data dan jenjang yang kompatibel.
+- [Katalog Dataset](/datasets) — Metadata sumber indikator, definisi operasional, periode tahun ajaran, checksum SHA-256, dan catatan kualitas data.
+- [Metodologi](/methodology) — Penjelasan rumus skor kebutuhan MCDA, model matematis CP-SAT, aturan nilai hilang (`null` tidak dianggap nol), serta batas interpretasi hasil.
+- [Tentang Equora](/about) — Tujuan, sasaran pengguna, dan prinsip transparansi data Equora.
+
+## Prinsip & Batas Interpretasi
+
+- **Nilai hilang (`null`) bukan nol**: Wilayah dengan indikator wajib yang belum tersedia dikecualikan secara eksplisit dari pemeringkatan dan tidak diisi dengan angka tebakan.
+- **Provenance terverifikasi**: Setiap angka indikator ditautkan ke sumber data, tahun ajaran, satuan, dan sel asal pada berkas sumber.
+- **Simulasi bukan keputusan anggaran resmi**: Asumsi biaya per paket dan kapasitas penyerapan di Studio Simulasi merupakan parameter uji skenario untuk eksplorasi kebijakan, bukan ketetapan anggaran pemerintah.
