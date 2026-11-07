@@ -434,6 +434,21 @@
               {/each}{#if !shortlist.length}<p class="work-muted">
                 Belum ada nilai pada hasil filter ini.
               </p>{/if}
+            {#if workspace?.core_indicators.includes(indicator)}
+              <div style="margin-top: 14px;">
+                <a
+                  class="eq-button eq-button-primary region-detail-link"
+                  href={'/studio?' +
+                    new URLSearchParams({
+                      level,
+                      release: data.release_id,
+                      focus: indicator,
+                    })}
+                >
+                  Simulasikan urgensi di Studio
+                </a>
+              </div>
+            {/if}
           </div>
         {/if}
         <div class="interpretation">

@@ -72,6 +72,48 @@
     <p class="scenario-note">Simulasi berbasis data dan asumsi. Bukan keputusan anggaran resmi.</p>
   </section>
 
+  <section id="peran" class="eq-container roles" aria-labelledby="roles-title">
+    <div class="section-intro" data-motion="left">
+      <h2 id="roles-title">Satu platform.<br /><span>Batasan peran yang jelas.</span></h2>
+      <p>Alur interaksi dipisahkan antara eksplorasi masyarakat umum, simulasi kebijakan pemerintah, dan tata kelola impor data oleh admin.</p>
+    </div>
+    <div class="role-cards" data-motion="right">
+      <article class="role-card">
+        <div class="role-header">
+          <span class="role-badge">Akses Terbuka · Tanpa Login</span>
+          <h3>Masyarakat Umum & Warga</h3>
+        </div>
+        <p>Memantau kondisi fasilitas sekolah di provinsi sendiri, membandingkan terhadap median nasional di peta GIS, serta menelusuri bukti sel sumber asli.</p>
+        <div class="role-links">
+          <a href="/daerah">Profil Daerah Saya</a>
+          <a href="/explore">Peta GIS Explorer</a>
+        </div>
+      </article>
+      <article class="role-card">
+        <div class="role-header">
+          <span class="role-badge">Decision Support · Simulasi</span>
+          <h3>Perencana & Pemerintah</h3>
+        </div>
+        <p>Menguji bobot prioritas MCDA dan batasan anggaran dengan solver CP-SAT, melihat peta tingkat urgensi alokasi, serta mengunduh Memo Kebijakan PDF.</p>
+        <div class="role-links">
+          <a href="/studio">Studio Simulasi</a>
+          <a href="/compare">Bandingkan Skenario</a>
+        </div>
+      </article>
+      <article class="role-card">
+        <div class="role-header">
+          <span class="role-badge">Otorisasi Token · Audit ETL</span>
+          <h3>Administrator Data</h3>
+        </div>
+        <p>Memverifikasi manifest dataset Kemendikdasmen (SHA-256 checksum, skema kolom, dan cakupan wilayah) melalui pipeline ETL modular sebelum rilis aktif.</p>
+        <div class="role-links">
+          <a href="/admin">Panel Impor Admin</a>
+          <a href="/datasets">Katalog Dataset</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
   <section id="sumber" class="eq-container sources" aria-labelledby="sources-title">
     <div class="section-intro" data-motion="left">
       <h2 id="sources-title">Angka yang jelas.<br /><span>Sumber yang terbuka.</span></h2>
@@ -141,7 +183,15 @@
   .product-preview { margin: 54px auto 0; max-width: 1160px; text-align: center; }
   figure { margin: 0; }
   .school-illustration { display: block; width: 100%; height: auto; }
-  .workflow, .sources, .method { display: grid; grid-template-columns: 1fr 1.15fr; gap: 80px; padding-block: 112px; }
+  .workflow, .roles, .sources, .method { display: grid; grid-template-columns: 1fr 1.15fr; gap: 80px; padding-block: 112px; }
+  .roles { padding-bottom: 32px; }
+  .role-cards { display: grid; gap: 18px; }
+  .role-card { padding: 22px 24px; border: 1px solid #e8eaec; border-radius: 14px; background: var(--eq-surface); }
+  .role-header { display: grid; gap: 6px; }
+  .role-badge { font-size: 11px; font-weight: 650; text-transform: uppercase; letter-spacing: 0.05em; color: var(--eq-primary); }
+  .role-card p { margin-top: 10px; color: var(--eq-text-secondary); font-size: 14px; line-height: 1.65; }
+  .role-links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px; }
+  .role-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; font-weight: 600; color: var(--eq-primary); }
   .section-intro { align-self: start; max-width: 425px; }
   h2 { font-size: clamp(2rem, 3.5vw, 3.2rem); line-height: 1.08; font-weight: 590; letter-spacing: -0.035em; }
   h2 span { color: #747b82; }
@@ -193,7 +243,7 @@
   @media (prefers-reduced-motion: reduce) { .landing-progress { display: none; } }
   @media (min-width: 1024px) { .landing-hero { padding-top: 48px; } }
   @media (max-width: 900px) {
-    .workflow, .sources, .method { gap: 40px; grid-template-columns: 1fr 1fr; padding-block: 80px; }
+    .workflow, .roles, .sources, .method { gap: 40px; grid-template-columns: 1fr 1fr; padding-block: 80px; }
     .scenario-section { padding: 48px 36px 28px; gap: 36px; }
     .source-row { grid-template-columns: 1fr; }
   }
@@ -205,7 +255,7 @@
     .hero-actions { gap: 8px 20px; margin-top: 24px; }
     .hero-actions .text-link { font-size: 13px; }
     .product-preview { margin-top: 34px; }
-    .workflow, .sources, .method { grid-template-columns: 1fr; gap: 34px; padding-block: 64px; }
+    .workflow, .roles, .sources, .method { grid-template-columns: 1fr; gap: 34px; padding-block: 64px; }
     h2 { font-size: 34px; }
     .section-intro > p { margin-top: 18px; }
     .workflow-list li { padding-block: 20px; }

@@ -17,11 +17,13 @@
     selected,
     onselect,
     onretry,
+    silentStatus = false,
   }: {
     presentation: PriorityMapPresentation;
     selected: string;
     onselect: (code: string) => void;
     onretry: () => void;
+    silentStatus?: boolean;
   } = $props();
   let container: HTMLDivElement;
   let map: LibreMap | undefined;
@@ -209,16 +211,16 @@
   aria-busy={!rendered && !failure}
   aria-label="Peta sebaran indikator provinsi; gunakan tabel untuk memilih wilayah dengan keyboard."
 ></div>
-{#if failure}<p role="status" class="work-muted">{failure}</p>
+{#if failure}<p role={silentStatus ? undefined : 'status'} class="work-muted">{failure}</p>
   <button class="eq-button" onclick={onretry}>Muat ulang peta</button>{/if}
-{#if rendered && !failure}<p role="status" class="map-ready">
+{#if rendered && !failure}<p role={silentStatus ? undefined : 'status'} class="map-ready">
     Peta siap · {geo?.features.length ?? 0} batas provinsi.
   </p>{/if}
 {#if !failure}
-  {#if basemapStatus === 'loading'}<p role="status" class="map-ready">Memuat basemap OpenStreetMap…</p>{/if}
-  {#if basemapStatus === 'ready'}<p role="status" class="map-ready">Basemap OpenStreetMap · Protomaps · zoom hingga 7.</p>{/if}
+  {#if basemapStatus === 'loading'}<p role={silentStatus ? undefined : 'status'} class="map-ready">Memuat basemap OpenStreetMap…</p>{/if}
+  {#if basemapStatus === 'ready'}<p role={silentStatus ? undefined : 'status'} class="map-ready">Basemap OpenStreetMap · Protomaps · zoom hingga 7.</p>{/if}
   {#if basemapStatus === 'failed'}
-    <p role="status" class="map-ready">Basemap gagal dimuat. Layer indikator dan tabel tetap tersedia.</p>
+    <p role={silentStatus ? undefined : 'status'} class="map-ready">Basemap gagal dimuat. Layer indikator dan tabel tetap tersedia.</p>
     <button class="eq-button" onclick={onretry}>Coba lagi basemap</button>
   {/if}
 {/if}

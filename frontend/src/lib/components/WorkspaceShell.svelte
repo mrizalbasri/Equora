@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
   import { tick, type Snippet } from 'svelte';
   import { page } from '$app/state';
   import Icon from './Icon.svelte';
@@ -41,6 +41,15 @@
   const location = $derived(
     allItems.find((item) => active(item.href, item.sub))?.label ??
       (page.url.pathname === '/admin' ? 'Impor data' : 'Workspace'),
+  );
+  const roleBadge = $derived(
+    page.url.pathname === '/admin'
+      ? 'Peran: Admin Data'
+      : page.url.pathname === '/studio' ||
+          page.url.pathname === '/compare' ||
+          page.url.pathname.startsWith('/scenarios')
+        ? 'Peran: Perencana & Pemerintah'
+        : 'Peran: Masyarakat Umum',
   );
 
   async function closeMenu() {
@@ -142,21 +151,22 @@
         </div>
       {/each}
 
-      {#if page.url.pathname === '/admin'}
-        <div class="nav-group">
-          <p class="nav-section-title">Pengelolaan lokal</p>
-          <a
-            href="/admin"
-            class="sidebar-link"
-            aria-current="page"
-            onclick={() => (menuOpen = false)}
-          >
-            <span class="icon-wrap"><Icon name="shield" size={18} /></span>
-            <span class="link-label">Impor data</span>
+      <div class="nav-group">
+        <p class="nav-section-title">Tata kelola admin</p>
+        <a
+          href="/admin"
+          class="sidebar-link"
+          aria-current={page.url.pathname === '/admin' ? 'page' : undefined}
+          onclick={() => (menuOpen = false)}
+        >
+          <span class="icon-wrap"><Icon name="shield" size={18} /></span>
+          <span class="link-label">Impor data</span>
+          <span class="nav-badge" aria-hidden="true">Token</span>
+          {#if page.url.pathname === '/admin'}
             <span class="active-indicator" aria-hidden="true"></span>
-          </a>
-        </div>
-      {/if}
+          {/if}
+        </a>
+      </div>
     </nav>
 
     <div class="sidebar-bottom">
@@ -166,7 +176,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="status-text">
-          <span class="status-title">Workspace Publik</span>
+          <span class="status-title">{roleBadge}</span>
           <span class="status-desc">Review Data 2025/2026</span>
         </div>
       </div>
@@ -206,7 +216,7 @@
         </p>
       </div>
       <div class="topbar-right">
-        <span class="local-mode">Workspace lokal</span>
+        <span class="local-mode">{roleBadge} · Workspace lokal</span>
         <a
           href="/methodology"
           class="help-link"

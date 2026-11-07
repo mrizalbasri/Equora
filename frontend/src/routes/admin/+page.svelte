@@ -85,11 +85,95 @@
       </a>
     </div>
   {/if}
+
+  <section class="work-panel admin-governance-panel" aria-labelledby="role-matrix-title">
+    <span class="eq-kicker">VALIDASI ALUR PENGGUNA (USER FLOW)</span>
+    <h2 id="role-matrix-title">Batasan fitur masyarakat umum vs pemerintah & admin</h2>
+    <p class="work-muted" style="margin-bottom: 16px;">
+      Platform memisahkan hak akses pembacaan publik, simulasi kebijakan, dan mutasi rilis dataset agar transparansi data tetap terjaga.
+    </p>
+    <div class="work-table">
+      <table>
+        <caption>Matriks peran, akses fitur, dan batasan otorisasi</caption>
+        <thead>
+          <tr>
+            <th>Peran pengguna</th>
+            <th>Rute utama</th>
+            <th>Hak interaksi & fitur</th>
+            <th>Batasan & pengamanan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Masyarakat Umum</strong></td>
+            <td><code>/daerah</code>, <code>/explore</code>, <code>/datasets</code></td>
+            <td>Melihat profil fasilitas provinsi, peta GIS sebaran & selisih median, bukti sel workbook, serta ekspor CSV.</td>
+            <td>Akses terbuka tanpa login; <em>read-only</em> terhadap rilis dataset aktif.</td>
+          </tr>
+          <tr>
+            <td><strong>Perencana & Pemerintah</strong></td>
+            <td><code>/studio</code>, <code>/compare</code>, <code>/scenarios/[id]</code></td>
+            <td>Menjalankan simulasi prioritas MCDA & alokasi CP-SAT, melihat peta GIS urgensi alokasi, uji sensitivitas, dan unduh Memo Kebijakan PDF.</td>
+            <td>Menyimpan snapshot skenario terisolasi versi rilis (<code>release_id</code>) tanpa mengubah data dasar.</td>
+          </tr>
+          <tr>
+            <td><strong>Administrator Data</strong></td>
+            <td><code>/admin</code> (<code>POST /api/v1/admin/import</code>)</td>
+            <td>Menjalankan pipeline ETL Polars untuk memvalidasi manifest berkas sumber dan memperbarui snapshot rilis.</td>
+            <td>Wajib <code>Bearer ADMIN_TOKEN</code>; gagal otomatis (<em>fail-closed</em>) jika SHA-256 checksum atau struktur sel tidak cocok.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="work-panel admin-governance-panel" aria-labelledby="modularity-title">
+    <span class="eq-kicker">KESIAPAN TEKNIS SKALA BESAR</span>
+    <h2 id="modularity-title">Arsitektur modular frontend & backend</h2>
+    <div class="work-grid">
+      <div class="arch-card">
+        <strong>1. Pipeline ETL Polars & Manifest Registry</strong>
+        <p class="work-muted">
+          Modul <code>backend/app/etl/</code> memvalidasi SHA-256, header, denominator, dan kode BPS secara vektorisasi sehingga siap diperluas ke tingkat Kabupaten/Kota atau lintas tahun ajaran.
+        </p>
+      </div>
+      <div class="arch-card">
+        <strong>2. Mesin MCDA & Solver CP-SAT Terpisah</strong>
+        <p class="work-muted">
+          Modul <code>backend/app/priority/</code> dan <code>backend/app/allocation/</code> terpisah dari lapisan HTTP, mendukung penambahan indikator baru maupun batasan kebijakan daerah tanpa mengubah kontrak utama.
+        </p>
+      </div>
+      <div class="arch-card">
+        <strong>3. Kontrak OpenAPI & Adapter GIS Murni</strong>
+        <p class="work-muted">
+          Komponen SvelteKit (<code>ProvinceMap</code>, <code>ScenarioResult</code>, <code>DecisionReview</code>) mengonsumsi skema TypeScript tergenerasi dari OpenAPI dan tile vektor <code>PMTiles</code> berefisiensi tinggi.
+        </p>
+      </div>
+    </div>
+  </section>
 </WorkspaceShell>
 
 <style>
-  .admin-import-panel {
-    max-width: 780px;
+  .admin-import-panel,
+  .admin-governance-panel {
+    max-width: 960px;
+  }
+  .arch-card {
+    padding: 14px 16px;
+    border: 1px solid var(--eq-border);
+    border-radius: 10px;
+    background: var(--eq-surface-subtle);
+    display: grid;
+    gap: 6px;
+  }
+  .arch-card strong {
+    font-size: 14px;
+    color: var(--eq-text);
+  }
+  .arch-card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
   }
   .security-note {
     font-size: 12px;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { Observation, RegionMapInsights } from '$lib/api/workspace';
-import { buildPriorityMapView } from './priority-map';
+import type { Observation, RegionMapInsights, Snapshot } from '$lib/api/workspace';
+import { buildPriorityMapView, buildScenarioMapView } from './priority-map';
 
 const observations: Observation[] = [
   {
@@ -156,5 +156,171 @@ describe('buildPriorityMapView', () => {
     expect(result.unavailableReason).toBe(
       'Perbandingan median hanya tersedia untuk indikator akses persentase.',
     );
+  });
+});
+
+const scenarioFixture = {
+  id: '11111111-1111-4111-8111-111111111111',
+  release_id: 'synthetic-release',
+  data_status: 'local_review',
+  created_at: '2026-10-21T00:00:00Z',
+  region_names: { '11': 'Provinsi Alpha' },
+  input_rows: [
+    {
+      code: '11',
+      name: 'Provinsi Alpha',
+      values: { sanitation_percent: '20', institutions_count: '10' },
+      cells: { sanitation_percent: 'I5' },
+    },
+    {
+      code: '12',
+      name: 'Provinsi Beta',
+      values: { sanitation_percent: '60', institutions_count: '20' },
+      cells: { sanitation_percent: 'I6' },
+    },
+    {
+      code: '13',
+      name: 'Provinsi Gamma',
+      values: { sanitation_percent: null, institutions_count: '10' },
+      cells: { sanitation_percent: 'I7' },
+    },
+  ],
+  case: {
+    budget_idr: 30,
+    priority_scale: 10000,
+    cost_source_type: 'demo_assumption',
+    regions: [
+      {
+        region_code: '11',
+        cost_idr: 10,
+        capacity: 2,
+        minimum_packages: 0,
+        priority_units: 8000,
+      },
+      {
+        region_code: '12',
+        cost_idr: 10,
+        capacity: 2,
+        minimum_packages: 0,
+        priority_units: 4000,
+      },
+    ],
+  },
+  parameters: {
+    name: 'Synthetic scenario',
+    education_level: 'SD',
+    budget_idr: 30,
+    cost_idr: 10,
+    capacity: 2,
+    minimum_packages: 0,
+    weights: { sanitation_percent: '1.0' },
+  },
+  priority: {
+    method_version: 'synthetic-method',
+    excluded: { '13': ['sanitation_percent'] },
+    ranked: [
+      {
+        region_code: '11',
+        rank: 1,
+        score: '0.85',
+        contributions: { sanitation_percent: '0.85' },
+      },
+      {
+        region_code: '12',
+        rank: 2,
+        score: '0.35',
+        contributions: { sanitation_percent: '0.35' },
+      },
+    ],
+  },
+  allocation: {
+    status: 'optimal',
+    allocations: { '11': 2, '12': 0 },
+    evaluation: {
+      budget_used_idr: 20,
+      budget_remaining_idr: 10,
+      objective_units: 17000,
+    },
+    model_version: 'synthetic-model',
+    reason: null,
+    solver_version: 'synthetic',
+    best_bound_units: 17000,
+    absolute_gap_units: 0,
+    max_time_seconds: 5,
+  },
+  baselines: {},
+  sources: [],
+  limitations: [],
+} as unknown as Snapshot;
+
+describe('buildScenarioMapView', () => {
+  it('maps MCDA urgency scores and marks excluded regions', () => {
+    const view = buildScenarioMapView(scenarioFixture, 'urgency', {
+      '13': 'Provinsi Gamma',
+    });
+
+    expect(view.available).toBe(true);
+    expect(view.rows).toHaveLength(3);
+    expect(view.rows[0]).toMatchObject({
+      code: '11',
+      fill: '#d97706',
+      tooltip: 'Provinsi Alpha · Peringkat #1 · Skor urgensi 0,85 · Alokasi 2 paket',
+    });
+    expect(view.rows[1]).toMatchObject({
+      code: '12',
+      fill: '#f7cfaa',
+      tooltip: 'Provinsi Beta · Peringkat #2 · Skor urgensi 0,35 · Alokasi 0 paket',
+    });
+    expect(view.rows[2]).toMatchObject({
+      code: '13',
+      fill: '#d8dce0',
+      tooltip: 'Provinsi Gamma · Dikecualikan dari peringkat (data belum lengkap)',
+    });
+    expect(view.legend.description).toContain('urgensi MCDA');
+  });
+
+  it('maps CP-SAT package allocations and distinguishes zero-package regions', () => {
+    const view = buildScenarioMapView(scenarioFixture, 'allocation');
+
+    expect(view.available).toBe(true);
+    expect(view.rows[0]).toMatchObject({
+      code: '11',
+      fill: '#14507c',
+      tooltip: 'Provinsi Alpha · 2 paket dialokasikan · Peringkat urgensi #1',
+    });
+    expect(view.rows[1]).toMatchObject({
+      code: '12',
+      fill: '#eef2f6',
+      tooltip: 'Provinsi Beta · 0 paket dialokasikan · Peringkat urgensi #2',
+    });
+    expect(view.rows[2].fill).toBe('#d8dce0');
+    expect(view.legend.description).toContain('0–2 paket');
+  });
+
+  it('disables allocation map when solver status is infeasible and falls back to code when name is unmapped', () => {
+    const infeasible = structuredClone(scenarioFixture);
+    infeasible.allocation.status = 'infeasible';
+    infeasible.allocation.allocations = null as unknown as Record<string, number>;
+    infeasible.input_rows = [];
+    infeasible.region_names = {};
+
+    const allocView = buildScenarioMapView(infeasible, 'allocation');
+    expect(allocView.available).toBe(false);
+    expect(allocView.unavailableReason).toContain('belum memiliki solusi alokasi');
+
+    const urgencyView = buildScenarioMapView(infeasible, 'urgency');
+    expect(urgencyView.available).toBe(true);
+    expect(urgencyView.rows[0].tooltip).toBe(
+      '11 · Peringkat #1 · Skor urgensi 0,85',
+    );
+    expect(urgencyView.rows[2].tooltip).toBe(
+      '13 · Dikecualikan dari peringkat (data belum lengkap)',
+    );
+
+    const feasible = structuredClone(scenarioFixture);
+    feasible.allocation.status = 'feasible';
+    feasible.allocation.allocations = { '11': 5 };
+    const feasibleUrgency = buildScenarioMapView(feasible, 'urgency');
+    expect(feasibleUrgency.rows[1].tooltip).toContain('Alokasi 0 paket');
   });
 });

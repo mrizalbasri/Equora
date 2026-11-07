@@ -6,9 +6,9 @@
   <ol>
     <li class="journey-card card-studio">
       <div class="card-body">
-        <span class="step-num">01 · Simulasi Alokasi</span>
+        <span class="step-num">01 · Perencana & Pemerintah</span>
         <strong>Uji Formula & Anggaran</strong>
-        <p>Atur bobot prioritas (Sanitasi vs TIK) dan plafon anggaran. Solver CP-SAT menghitung alokasi paket paling optimal ke 38 provinsi.</p>
+        <p>Atur bobot prioritas (MCDA) dan plafon anggaran. Solver CP-SAT menghitung alokasi paket ke 38 provinsi disertai peta GIS tingkat urgensi.</p>
       </div>
       <a class="step-cta cta-primary" href="/studio">
         <span>Buka Studio Simulasi</span>
@@ -17,9 +17,9 @@
 
     <li class="journey-card card-compare">
       <div class="card-body">
-        <span class="step-num">02 · Sandingkan Skenario</span>
-        <strong>Bandingkan 2 Kebijakan</strong>
-        <p>Sandingkan dua hasil simulasi berdampingan. Lihat daerah mana yang bergeser nasib alokasinya dan verifikasi konsistensi parameter.</p>
+        <span class="step-num">02 · Evaluasi Kebijakan</span>
+        <strong>Bandingkan 2 Skenario</strong>
+        <p>Sandingkan dua hasil simulasi berdampingan. Lihat daerah mana yang bergeser alokasinya dan unduh Memo Kebijakan PDF.</p>
       </div>
       <a class="step-cta" href="/compare">
         <span>Bandingkan Skenario</span>
@@ -28,9 +28,9 @@
 
     <li class="journey-card card-explore">
       <div class="card-body">
-        <span class="step-num">03 · Verifikasi Data</span>
-        <strong>Telusuri Peta & Sumber</strong>
-        <p>Periksa data dasar agregat 38 provinsi yang dipakai simulasi. Cek kelengkapan indikator dan tautan provenance resmi Kemendikdasmen.</p>
+        <span class="step-num">03 · Masyarakat Umum</span>
+        <strong>Telusuri Peta GIS & Sumber</strong>
+        <p>Periksa peta sebaran fasilitas 38 provinsi, profil daerah, serta tautan provenance resmi Kemendikdasmen secara terbuka tanpa login.</p>
       </div>
       <a class="step-cta" href="/explore">
         <span>Buka Data Explorer</span>
@@ -43,6 +43,9 @@
     </div>
     <div class="ref-item">
       <span>Formula matematis di <a href="/methodology">metodologi simulasi</a></span>
+    </div>
+    <div class="ref-item">
+      <span>Verifikasi & impor manifest di <a href="/admin">panel admin data</a></span>
     </div>
   </div>
 </section>

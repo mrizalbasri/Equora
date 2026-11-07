@@ -1,9 +1,11 @@
 import type {
   Observation,
   RegionMapInsights,
+  Snapshot,
 } from '$lib/api/workspace';
 
 export type PriorityMapMode = 'value' | 'median' | 'completeness';
+export type ScenarioMapMode = 'urgency' | 'allocation';
 
 export type PriorityMapDisplayRow = {
   code: string;
@@ -174,5 +176,106 @@ export function buildPriorityMapView(
         : mode === 'median'
           ? medianLegend()
           : completenessLegend(),
+  };
+}
+
+export function buildScenarioMapView(
+  snapshot: Snapshot,
+  mode: ScenarioMapMode,
+  regionNames: Record<string, string> = {},
+): PriorityMapPresentation {
+  const names: Record<string, string> = {
+    ...Object.fromEntries(snapshot.input_rows.map((row) => [row.code, row.name])),
+    ...snapshot.region_names,
+    ...regionNames,
+  };
+  const allocations = snapshot.allocation.allocations ?? {};
+  const solverOk =
+    snapshot.allocation.status === 'optimal' ||
+    snapshot.allocation.status === 'feasible';
+
+  if (mode === 'allocation' && !solverOk) {
+    return {
+      available: false,
+      unavailableReason:
+        'Skenario ini belum memiliki solusi alokasi paket yang layak.',
+      rows: [],
+      legend: {
+        items: [
+          { color: '#eef2f6', label: '0 paket' },
+          { color: valueColors[4], label: 'Alokasi paket' },
+          { color: missingColor, label: 'Dikecualikan' },
+        ],
+        description: 'Sebaran paket intervensi hasil optimasi CP-SAT.',
+      },
+    };
+  }
+
+  const maxPackages = Math.max(1, ...Object.values(allocations));
+
+  const rankedRows: PriorityMapDisplayRow[] = snapshot.priority.ranked.map(
+    (row) => {
+      const name = names[row.region_code] ?? row.region_code;
+      const score = Number(row.score);
+      const packages = Number(allocations[row.region_code] ?? 0);
+      if (mode === 'urgency') {
+        return {
+          code: row.region_code,
+          name,
+          fill: scaleColor(belowColors, score, 1),
+          tooltip: `${name} · Peringkat #${row.rank} · Skor urgensi ${format(score)}${
+            solverOk ? ` · Alokasi ${format(packages)} paket` : ''
+          }`,
+        };
+      }
+      return {
+        code: row.region_code,
+        name,
+        fill:
+          packages <= 0
+            ? '#eef2f6'
+            : scaleColor(valueColors, packages, maxPackages),
+        tooltip: `${name} · ${format(packages)} paket dialokasikan · Peringkat urgensi #${row.rank}`,
+      };
+    },
+  );
+
+  const excludedRows: PriorityMapDisplayRow[] = Object.keys(
+    snapshot.priority.excluded,
+  ).map((code) => {
+    const name = names[code] ?? code;
+    return {
+      code,
+      name,
+      fill: missingColor,
+      tooltip: `${name} · Dikecualikan dari peringkat (data belum lengkap)`,
+    };
+  });
+
+  return {
+    available: true,
+    unavailableReason: '',
+    rows: [...rankedRows, ...excludedRows],
+    legend:
+      mode === 'urgency'
+        ? {
+            items: [
+              { color: belowColors[0], label: 'Urgensi rendah' },
+              { color: belowColors[2], label: 'Urgensi sedang' },
+              { color: belowColors[4], label: 'Urgensi tertinggi' },
+              { color: missingColor, label: 'Dikecualikan' },
+            ],
+            description:
+              'Skala skor kebutuhan/urgensi MCDA (0–1) sesuai bobot prioritas skenario.',
+          }
+        : {
+            items: [
+              { color: '#eef2f6', label: '0 paket' },
+              { color: valueColors[2], label: 'Alokasi sedang' },
+              { color: valueColors[4], label: 'Alokasi tertinggi' },
+              { color: missingColor, label: 'Dikecualikan' },
+            ],
+            description: `Sebaran alokasi paket hasil solver CP-SAT (0–${format(maxPackages)} paket).`,
+          },
   };
 }
