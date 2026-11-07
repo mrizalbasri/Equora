@@ -1,4 +1,6 @@
-"""Temporary local preview server for the interactive map without PostgreSQL."""
+"""Temporary local preview server for the interactive map and studio without PostgreSQL."""
+
+import os
 
 import uvicorn
 from fastapi import HTTPException
@@ -70,16 +72,44 @@ payload = {
 }
 
 
+class PreviewSession:
+    # ponytail: in-memory session stub for PostgreSQL-free local preview (resets on restart)
+    def __init__(self):
+        self.info: dict = {}
+        self.records: dict[str, object] = {}
+
+    def execute(self, _stmt):
+        return None
+
+    def scalar(self, _stmt):
+        return len(self.records)
+
+    def scalars(self, _stmt):
+        items = list(reversed(list(self.records.values())))
+        return type("Result", (), {"all": lambda self: items})()
+
+    def add(self, record):
+        self.records[str(record.id)] = record
+
+    def commit(self):
+        return None
+
+    def get(self, _model, key):
+        return self.records.get(str(key))
+
+
 def preview_release(_session, release_id=None):
     if release_id not in (None, payload["id"]):
         raise HTTPException(404, "Rilis preview tidak ditemukan")
     return payload
 
 
+preview_session = PreviewSession()
 workspace_api.local_release = preview_release
 app = create_app(Settings(_env_file=None))
-app.dependency_overrides[session_for] = lambda: None
+app.dependency_overrides[session_for] = lambda: preview_session
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    port = int(os.getenv("API_PORT", "18000"))
+    uvicorn.run(app, host="127.0.0.1", port=port)
