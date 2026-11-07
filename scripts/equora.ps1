@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('help', 'dev', 'frontend', 'backend', 'backend-local', 'check', 'test', 'openapi')]
+    [ValidateSet('help', 'dev', 'frontend', 'backend', 'backend-local', 'preview', 'check', 'test', 'openapi')]
     [string]$Task = 'help'
 )
 
@@ -73,13 +73,14 @@ switch ($Task) {
         Write-Output @'
 Equora: .\scripts\equora.ps1 <perintah>
 
-dev       Jalankan API Docker, lalu frontend lokal di terminal ini.
-frontend  Jalankan frontend lokal dengan pnpm dev.
-backend   Jalankan API melalui backend/compose.yaml.
+dev           Jalankan API Docker, lalu frontend lokal di terminal ini.
+frontend      Jalankan frontend lokal dengan pnpm dev.
+backend       Jalankan API melalui backend/compose.yaml.
 backend-local Jalankan API dari lingkungan Python proyek pada 127.0.0.1:18000.
-check     Periksa lint, format, dokumentasi, tipe dan kontrak API.
-test      Jalankan pytest, Vitest, build dan tes HTTP Playwright.
-openapi   Ekspor OpenAPI dan buat ulang tipe TypeScript.
+preview       Jalankan API preview sintetis tanpa PostgreSQL pada 127.0.0.1:18000.
+check         Periksa lint, format, dokumentasi, tipe dan kontrak API.
+test          Jalankan pytest, Vitest, build dan tes HTTP Playwright.
+openapi       Ekspor OpenAPI dan buat ulang tipe TypeScript.
 
 Ctrl+C menghentikan frontend; API Docker tetap berjalan.
 Tidak ada pembuatan database atau migrasi otomatis.
@@ -98,6 +99,9 @@ Tidak ada pembuatan database atau migrasi otomatis.
     }
     'backend-local' {
         Invoke-Backend -CommandArguments @('uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', '18000')
+    }
+    'preview' {
+        Invoke-Backend -CommandArguments @('python', '../scripts/preview_synthetic_backend.py')
     }
     'check' {
         Invoke-Backend -CommandArguments @('ruff', 'check', '.', '../scripts')

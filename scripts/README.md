@@ -20,6 +20,7 @@ Pasang dependensi terlebih dahulu sesuai [README utama](../README.md). Jalankan 
 | `frontend` | Menjalankan frontend lokal saja |
 | `backend` | Menjalankan API melalui `backend/compose.yaml` |
 | `backend-local` | Menjalankan API dari lingkungan Python proyek pada `127.0.0.1:18000`; PostgreSQL yang sudah ada tetap digunakan |
+| `preview` | Menjalankan API preview sintetis di memori pada `127.0.0.1:18000` tanpa memerlukan PostgreSQL (cocok untuk demo cepat) |
 | `check` | Ruff, tautan dokumentasi, typecheck, kontrak TypeScript dan pemeriksaan whitespace Git |
 | `test` | pytest, Vitest, build frontend dan tes HTTP Playwright |
 | `openapi` | Mengekspor schema FastAPI dan membuat ulang tipe TypeScript; kedua artefak berubah jika kontrak berubah |
