@@ -304,6 +304,15 @@
     font-weight: 600;
     font-size: 14px;
     color: var(--eq-text);
+    list-style: none;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .journey-guide > summary::-webkit-details-marker,
+  .journey-guide > summary::marker {
+    display: none !important;
+    content: "" !important;
   }
   .journey-summary-main {
     display: inline-flex;
@@ -696,9 +705,15 @@
     padding: 10px 14px;
     cursor: pointer;
     font-weight: 400;
+    list-style: none;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
+  .workspace-context summary::-webkit-details-marker,
   .workspace-context summary::marker {
-    content: '';
+    display: none !important;
+    content: '' !important;
   }
   .context-more {
     color: var(--eq-primary-hover);

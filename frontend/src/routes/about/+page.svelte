@@ -22,7 +22,7 @@
     <div class="landing-progress" aria-hidden="true"></div>
     <header class="intro">
       <div class="intro-copy">
-        <h1 data-motion="blur">Kenali daerahnya.<br />Periksa datanya.<br /><span>Pahami pilihannya.</span></h1>
+        <h1>Kenali daerahnya.<br />Periksa datanya.<br /><span>Pahami pilihannya.</span></h1>
         <p class="lead" data-motion="fade" data-motion-delay="70">Equora membantu Anda memahami perbedaan akses fasilitas pendidikan antardaerah, menelusuri sumbernya, dan mencoba pilihan alokasi sumber daya.</p>
         <div class="intro-actions" data-motion="scale" data-motion-delay="140">
           <a class="eq-button eq-button-primary" href="/daerah">Lihat kondisi provinsi <Icon name="arrow" size={18} /></a>

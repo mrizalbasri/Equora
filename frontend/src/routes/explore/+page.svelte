@@ -5,7 +5,8 @@
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ProvinceMap from '$lib/components/ProvinceMap.svelte';
   import MapReadingGuide from '$lib/components/MapReadingGuide.svelte';
-  import Icon from '$lib/components/Icon.svelte';
+  import Icon, { type IconName } from '$lib/components/Icon.svelte';
+  import CustomDropdown, { type DropdownGroup } from '$lib/components/CustomDropdown.svelte';
   import {
     api,
     labels,
@@ -153,6 +154,51 @@
     mapInsights?.rows.find((row) => row.code === selected),
   );
   const isPercent = $derived(data?.source.unit === 'percent');
+  const indicatorDropdownGroups = $derived<DropdownGroup[]>([
+    {
+      label: 'Persentase Akses Fasilitas (%)',
+      options: (workspace?.sources ?? [])
+        .filter((s) => s.unit === 'percent')
+        .map((s) => {
+          const catItem = indicatorCatalog[0]?.items.find((i) => i.id === s.source_id);
+          const icon: IconName = s.source_id.includes('water')
+            ? 'water'
+            : s.source_id.includes('internet')
+              ? 'internet'
+              : s.source_id.includes('computer')
+                ? 'computer'
+                : 'sanitation';
+          return {
+            value: s.source_id,
+            label: `${labels[s.source_id] ?? s.title} (%)`,
+            badge: 'Persentase (%)',
+            desc: catItem?.desc ?? s.definition,
+            icon,
+          };
+        }),
+    },
+    {
+      label: 'Jumlah Fisik Unit Sekolah',
+      options: (workspace?.sources ?? [])
+        .filter((s) => s.unit !== 'percent')
+        .map((s) => {
+          const catItem = indicatorCatalog[1]?.items.find((i) => i.id === s.source_id);
+          let icon: IconName = 'education';
+          if (s.source_id.includes('electricity')) icon = 'development';
+          else if (s.source_id.includes('water')) icon = 'water';
+          else if (s.source_id.includes('handwashing')) icon = 'sanitation';
+          else if (s.source_id.includes('internet')) icon = 'internet';
+          else if (s.source_id.includes('computer')) icon = 'computer';
+          return {
+            value: s.source_id,
+            label: labels[s.source_id] ?? s.title,
+            badge: 'Jumlah Unit',
+            desc: catItem?.desc ?? s.definition,
+            icon,
+          };
+        }),
+    },
+  ]);
   const available = $derived(filtered.filter((row) => row.value !== null));
   const values = $derived(available.map((row) => Number(row.value)));
   const minimum = $derived(values.length ? Math.min(...values) : null);
@@ -315,28 +361,17 @@
 >
   <p style="margin-bottom: 18px;"><a class="eq-button" href="/daerah">Pendidikan di Daerah Saya</a> Pilih provinsi untuk membaca kondisi fasilitas dengan penjelasan sederhana.</p>
   <section class="explorer-filters" aria-label="Filter data pendidikan">
-    <label class="indicator-filter"
-      >Indikator<select
+    <div class="indicator-filter-wrapper">
+      <span class="filter-label">Indikator</span>
+      <CustomDropdown
+        id="explore-indicator-select"
+        label="Indikator"
         bind:value={indicator}
-        onchange={load}
+        groups={indicatorDropdownGroups}
         disabled={!workspace}
-      >
-        <optgroup label="── Persentase Akses Fasilitas (%) ──">
-          {#each (workspace?.sources ?? []).filter((s) => s.unit === 'percent') as source}
-            <option value={source.source_id}>
-              {labels[source.source_id] ?? source.title} (%)
-            </option>
-          {/each}
-        </optgroup>
-        <optgroup label="── Jumlah Fisik Unit Sekolah ──">
-          {#each (workspace?.sources ?? []).filter((s) => s.unit !== 'percent') as source}
-            <option value={source.source_id}>
-              {labels[source.source_id] ?? source.title}
-            </option>
-          {/each}
-        </optgroup>
-      </select></label
-    >
+        onchange={() => load()}
+      />
+    </div>
     <label
       >Jenjang<select bind:value={level} onchange={load}
         >{#each workspace?.education_levels ?? ['SD'] as item}<option
@@ -727,13 +762,18 @@
     border-radius: 12px;
     margin-bottom: 20px;
   }
-  .explorer-filters label {
+  .explorer-filters label,
+  .indicator-filter-wrapper {
     display: grid;
     gap: 7px;
     font-size: 12px;
     color: var(--eq-text-secondary);
     font-weight: 550;
     min-width: 0;
+  }
+  .filter-label {
+    display: block;
+    line-height: 1;
   }
   .explorer-filters select {
     max-width: none;

@@ -288,22 +288,34 @@
     font-size: 11px;
     display: inline-flex;
     align-items: center;
+    list-style: none;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .attribution summary::-webkit-details-marker,
+  .attribution summary::marker {
+    display: none !important;
+    content: "" !important;
   }
   .attribution-chip {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 3px 8px;
+    padding: 4px 10px;
     border-radius: 6px;
     background: var(--eq-surface-subtle);
     border: 1px solid var(--eq-border);
     color: var(--eq-text-secondary);
     font-size: 11px;
-    transition: color 140ms ease, border-color 140ms ease;
+    font-weight: 550;
+    transition: all 140ms ease;
   }
-  .attribution summary:hover .attribution-chip {
-    color: var(--eq-text);
-    border-color: #cbd5e1;
+  .attribution summary:hover .attribution-chip,
+  .attribution[open] .attribution-chip {
+    color: var(--eq-primary);
+    background: var(--eq-primary-tint);
+    border-color: #bfdbfe;
   }
   .attr-icon {
     font-size: 10px;
