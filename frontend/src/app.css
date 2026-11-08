@@ -257,10 +257,66 @@ section[id], main[id] { scroll-margin-top: 112px; }
 .work-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; }
 .work-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; margin-block: 24px; }
 .work-controls label, .work-field { display: grid; gap: 6px; font-size: 14px; min-width: 0; }
-.workspace input:not([type=checkbox]), .workspace select { border: 1px solid var(--eq-control-border); border-radius: 8px; padding: 12px; min-height: 48px; font-size: 16px; width: 100%; background: white; color: var(--eq-text); }
+.workspace input:not([type=checkbox]),
+.workspace select {
+  border: 1px solid #d0d7e2;
+  border-radius: 10px;
+  padding: 10px 14px;
+  min-height: 48px;
+  font-size: 14.5px;
+  width: 100%;
+  background-color: #ffffff;
+  color: var(--eq-text);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.workspace input:not([type=checkbox]):hover,
+.workspace select:hover:not(:disabled) {
+  border-color: #9cb5d9;
+}
+
+.workspace input:not([type=checkbox]):focus,
+.workspace input:not([type=checkbox]):focus-visible,
+.workspace select:focus,
+.workspace select:focus-visible {
+  outline: none;
+  border-color: var(--eq-primary);
+  box-shadow: 0 0 0 3px rgba(18, 100, 216, 0.15);
+}
+
 .workspace input[type=checkbox] { min-width: 24px; min-height: 24px; accent-color: var(--eq-primary); }
 .workspace label:has(input[type=checkbox]) { min-height: 48px; cursor: pointer; }
-.workspace select { max-width: 360px; }
+
+.workspace select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23536276'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-position: right 14px center;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  padding-right: 38px;
+  cursor: pointer;
+  max-width: 360px;
+}
+
+.workspace select optgroup {
+  font-weight: 700;
+  font-size: 11.5px;
+  color: var(--eq-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #f8fafc;
+  padding: 6px 4px;
+}
+
+.workspace select option {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--eq-text);
+  background: #ffffff;
+  padding: 6px 8px;
+}
 
 .work-muted { color: var(--eq-text-secondary); font-size: 14px; }
 .work-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-block: 18px; }
