@@ -39,16 +39,17 @@ export function createLandingMotion() {
       const delay = Number(element.getAttribute('data-motion-delay') ?? 0);
       const distance = window.innerWidth < 640 ? 10 : 22;
       const variants: Record<string, Keyframe[]> = {
-        fade: [{ opacity: 0 }, { opacity: 1 }],
+        fade: [{ opacity: 0, translate: `0 ${distance}px` }, { opacity: 1, translate: '0 0' }],
+        focus: [{ opacity: 0, translate: `0 ${distance}px`, scale: '0.99' }, { opacity: 1, translate: '0 0', scale: '1' }],
+        unfold: [{ opacity: 0, translate: `0 ${distance}px`, scale: '0.985' }, { opacity: 1, translate: '0 0', scale: '1' }],
         up: [{ opacity: 0, translate: `0 ${distance}px` }, { opacity: 1, translate: '0 0' }],
         down: [{ opacity: 0, translate: `0 ${-distance}px` }, { opacity: 1, translate: '0 0' }],
         left: [{ opacity: 0, translate: `${-distance}px 0` }, { opacity: 1, translate: '0 0' }],
         right: [{ opacity: 0, translate: `${distance}px 0` }, { opacity: 1, translate: '0 0' }],
-        scale: [{ opacity: 0, scale: '0.95' }, { opacity: 1, scale: '1' }],
+        scale: [{ opacity: 0, scale: '0.96' }, { opacity: 1, scale: '1' }],
         pop: [{ opacity: 0, scale: '0.94' }, { opacity: 1, scale: '1' }],
         blur: [{ opacity: 0, filter: 'blur(8px)', scale: '0.985' }, { opacity: 1, filter: 'blur(0px)', scale: '1' }],
-        focus: [{ opacity: 0, filter: 'blur(6px)', scale: '0.99' }, { opacity: 1, filter: 'blur(0px)', scale: '1' }],
-        unfold: [{ opacity: 0, translate: `0 ${Math.round(distance * 0.4)}px`, scale: '0.97' }, { opacity: 1, translate: '0 0', scale: '1' }],
+        dissolve: [{ opacity: 0 }, { opacity: 1 }],
       };
       const durations: Record<string, number> = {
         fade: 600,
