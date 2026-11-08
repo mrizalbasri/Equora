@@ -4,6 +4,7 @@
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ScenarioResult from '$lib/components/ScenarioResult.svelte';
   import Icon from '$lib/components/Icon.svelte';
+  import CustomDropdown, { type DropdownOption } from '$lib/components/CustomDropdown.svelte';
   import { focusedWeights } from '$lib/studio-focus';
   import {
     api,
@@ -49,6 +50,23 @@
   let loadingRegions = $state(true);
   let contextRequest = 0;
   let regionRequest = 0;
+
+  const levelDescriptions: Record<string, string> = {
+    TK: 'Taman Kanak-Kanak / PAUD',
+    SD: 'Sekolah Dasar',
+    SMP: 'Sekolah Menengah Pertama',
+    SMA: 'Sekolah Menengah Atas',
+    SMK: 'Sekolah Menengah Kejuruan',
+    SLB: 'Sekolah Luar Biasa',
+  };
+  const levelDropdownOptions = $derived<DropdownOption[]>(
+    (workspace?.education_levels ?? ['SD']).map((lvl) => ({
+      value: lvl,
+      label: lvl,
+      desc: levelDescriptions[lvl] ?? lvl,
+      icon: 'education',
+    })),
+  );
 
   const names = $derived(
     Object.fromEntries(regions.map((row) => [row.code, row.name])),
@@ -293,14 +311,17 @@
           Nama skenario
           <input bind:value={name} required maxlength="100" />
         </label>
-        <label class="work-field">
-          Jenjang
-          <select value={level} onchange={(event) => changeLevel(event.currentTarget.value)} disabled={!workspace || busy}>
-            {#each workspace?.education_levels ?? ['SD'] as item}
-              <option>{item}</option>
-            {/each}
-          </select>
-        </label>
+        <div class="work-field">
+          <span class="field-title">Jenjang</span>
+          <CustomDropdown
+            id="studio-level-select"
+            label="Jenjang"
+            value={level}
+            options={levelDropdownOptions}
+            disabled={!workspace || busy}
+            onchange={(val) => changeLevel(val)}
+          />
+        </div>
         <label class="work-field">
             <span class="field-title">Batas anggaran simulasi (Rp)</span>
           <input

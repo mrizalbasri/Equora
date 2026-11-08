@@ -6,7 +6,7 @@
   import ProvinceMap from '$lib/components/ProvinceMap.svelte';
   import MapReadingGuide from '$lib/components/MapReadingGuide.svelte';
   import Icon, { type IconName } from '$lib/components/Icon.svelte';
-  import CustomDropdown, { type DropdownGroup } from '$lib/components/CustomDropdown.svelte';
+  import CustomDropdown, { type DropdownGroup, type DropdownOption } from '$lib/components/CustomDropdown.svelte';
   import {
     api,
     labels,
@@ -199,6 +199,22 @@
         }),
     },
   ]);
+  const levelDescriptions: Record<string, string> = {
+    TK: 'Taman Kanak-Kanak / PAUD',
+    SD: 'Sekolah Dasar',
+    SMP: 'Sekolah Menengah Pertama',
+    SMA: 'Sekolah Menengah Atas',
+    SMK: 'Sekolah Menengah Kejuruan',
+    SLB: 'Sekolah Luar Biasa',
+  };
+  const levelDropdownOptions = $derived<DropdownOption[]>(
+    (workspace?.education_levels ?? ['SD']).map((lvl) => ({
+      value: lvl,
+      label: lvl,
+      desc: levelDescriptions[lvl] ?? lvl,
+      icon: 'education',
+    })),
+  );
   const available = $derived(filtered.filter((row) => row.value !== null));
   const values = $derived(available.map((row) => Number(row.value)));
   const minimum = $derived(values.length ? Math.min(...values) : null);
@@ -372,13 +388,17 @@
         onchange={() => load()}
       />
     </div>
-    <label
-      >Jenjang<select bind:value={level} onchange={load}
-        >{#each workspace?.education_levels ?? ['SD'] as item}<option
-            >{item}</option
-          >{/each}</select
-      ></label
-    >
+    <div class="level-filter-wrapper">
+      <span class="filter-label">Jenjang</span>
+      <CustomDropdown
+        id="explore-level-select"
+        label="Jenjang"
+        bind:value={level}
+        options={levelDropdownOptions}
+        disabled={!workspace}
+        onchange={() => load()}
+      />
+    </div>
     <label class="province-filter"
       >Cari provinsi<span class="search-control"
         ><Icon name="search" size={17} /><input
@@ -763,7 +783,8 @@
     margin-bottom: 20px;
   }
   .explorer-filters label,
-  .indicator-filter-wrapper {
+  .indicator-filter-wrapper,
+  .level-filter-wrapper {
     display: grid;
     gap: 7px;
     font-size: 12px;
@@ -771,16 +792,14 @@
     font-weight: 550;
     min-width: 0;
   }
+  .level-filter-wrapper {
+    min-width: 140px;
+  }
   .filter-label {
     display: block;
     line-height: 1;
   }
-  .explorer-filters select {
-    max-width: none;
-    font-size: 13.5px;
-    font-weight: 550;
-    border-color: #d0d7e2;
-  }
+
   .indicator-guide-banner {
     display: flex;
     align-items: center;

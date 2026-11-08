@@ -9,6 +9,7 @@
     type ReviewTrial,
   } from '$lib/api/workspace';
   import Icon from './Icon.svelte';
+  import CustomDropdown, { type DropdownOption } from './CustomDropdown.svelte';
   let { snapshot }: { snapshot: Snapshot } = $props();
   let budget = $state(10);
   let cost = $state(0);
@@ -42,6 +43,43 @@
       label = label.replace(key, value);
     return label;
   }
+  const testedIndicatorOptions = $derived<DropdownOption[]>(
+    Object.keys(snapshot.parameters.weights).map((key) => {
+      const icon = key.includes('water')
+        ? 'water'
+        : key.includes('internet')
+          ? 'internet'
+          : key.includes('computer')
+            ? 'computer'
+            : 'sanitation';
+      return {
+        value: key,
+        label: labels[key] ?? key,
+        icon,
+      };
+    }),
+  );
+  const trialOptions = $derived<DropdownOption[]>(
+    current
+      ? [
+          {
+            value: 'what_if',
+            label: 'Pilihan asumsi Anda',
+            desc: 'Skenario berdasarkan pengujian asumsi',
+          },
+          {
+            value: 'coverage',
+            label: 'Jangkauan terlebih dahulu',
+            desc: 'Prioritas jangkauan wilayah paling luas',
+          },
+          ...current.sensitivity.map((item, index) => ({
+            value: String(index),
+            label: trialLabel(item),
+            desc: 'Uji sensitivitas skenario',
+          })),
+        ]
+      : [],
+  );
   async function calculate(event: SubmitEvent) {
     event.preventDefault();
     const request = ++sequence;
@@ -127,13 +165,15 @@
             bind:value={cost}
           /><span>Berlaku juga pada biaya khusus wilayah</span></label
         >
-        <label class="work-field"
-          >Indikator yang diuji<select bind:value={indicator}
-            >{#each Object.keys(snapshot.parameters.weights) as key}<option
-                value={key}>{labels[key] ?? key}</option
-              >{/each}</select
-          ></label
-        >
+        <div class="work-field">
+          <span class="field-title">Indikator yang diuji</span>
+          <CustomDropdown
+            id="review-indicator-select"
+            label="Indikator yang diuji"
+            bind:value={indicator}
+            options={testedIndicatorOptions}
+          />
+        </div>
         <label class="work-field"
           >Perubahan bobot relatif (%)<input
             type="number"
@@ -363,15 +403,15 @@
           </table>
         </div>
       </details>
-      <label class="work-field trial-picker"
-        >Telusuri perubahan per provinsi<select bind:value={selectedTrial}
-          ><option value="what_if">Pilihan asumsi Anda</option><option
-            value="coverage">Jangkauan terlebih dahulu</option
-          >{#each current.sensitivity as item, index}<option
-              value={String(index)}>{trialLabel(item)}</option
-            >{/each}</select
-        ></label
-      >
+      <div class="work-field trial-picker">
+        <span class="field-title">Telusuri perubahan per provinsi</span>
+        <CustomDropdown
+          id="review-trial-select"
+          label="Telusuri perubahan per provinsi"
+          bind:value={selectedTrial}
+          options={trialOptions}
+        />
+      </div>
       {#if activeTrial}<div class="work-table">
           <table>
             <caption

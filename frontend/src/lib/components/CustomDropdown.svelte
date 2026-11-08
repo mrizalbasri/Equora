@@ -8,6 +8,7 @@
     badge?: string;
     desc?: string;
     icon?: IconName;
+    disabled?: boolean;
   }
 
   export interface DropdownGroup {
@@ -104,9 +105,7 @@
     bind:value
     {disabled}
     class="sr-select"
-    style="display: none;"
     tabindex="-1"
-    aria-hidden="true"
     onchange={(e) => {
       value = e.currentTarget.value;
       onchange?.(value);
@@ -116,13 +115,13 @@
       {#each groups as group}
         <optgroup label={group.label}>
           {#each group.options as opt}
-            <option value={opt.value}>{opt.label}</option>
+            <option value={opt.value} disabled={opt.disabled}>{opt.label}</option>
           {/each}
         </optgroup>
       {/each}
     {:else}
       {#each options as opt}
-        <option value={opt.value}>{opt.label}</option>
+        <option value={opt.value} disabled={opt.disabled}>{opt.label}</option>
       {/each}
     {/if}
   </select>
@@ -134,11 +133,10 @@
     class:is-open={isOpen}
     class:is-disabled={disabled}
     {disabled}
-    role="combobox"
     aria-controls={listboxId}
     aria-haspopup="listbox"
     aria-expanded={isOpen}
-    aria-label={label ?? (selectedItem?.label ?? placeholder)}
+    aria-label={label ? `${label}: ${selectedItem?.label ?? placeholder}` : (selectedItem?.label ?? placeholder)}
     onclick={toggleOpen}
     onkeydown={handleTriggerKeyDown}
   >
@@ -181,9 +179,14 @@
                   type="button"
                   role="option"
                   aria-selected={opt.value === value}
+                  aria-disabled={opt.disabled}
+                  disabled={opt.disabled}
                   class="dropdown-item"
                   class:selected={opt.value === value}
-                  onclick={() => selectOption(opt.value)}
+                  class:is-disabled={opt.disabled}
+                  onclick={() => {
+                    if (!opt.disabled) selectOption(opt.value);
+                  }}
                 >
                   <div class="item-leading">
                     {#if opt.icon}
@@ -217,9 +220,14 @@
                 type="button"
                 role="option"
                 aria-selected={opt.value === value}
+                aria-disabled={opt.disabled}
+                disabled={opt.disabled}
                 class="dropdown-item"
                 class:selected={opt.value === value}
-                onclick={() => selectOption(opt.value)}
+                class:is-disabled={opt.disabled}
+                onclick={() => {
+                  if (!opt.disabled) selectOption(opt.value);
+                }}
               >
                 <div class="item-leading">
                   {#if opt.icon}
@@ -259,7 +267,16 @@
   }
 
   .sr-select {
-    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 48px;
+    min-width: 48px;
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    z-index: -1;
   }
 
   .dropdown-trigger {
@@ -429,6 +446,12 @@
 
   .dropdown-item.selected {
     background: #eff6ff;
+  }
+
+  .dropdown-item.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   .item-leading {
