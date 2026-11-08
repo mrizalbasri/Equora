@@ -5,7 +5,6 @@ from datetime import UTC, datetime
 from uuid import uuid4
 
 import uvicorn
-from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 
 import app.api.workspace as workspace_api
@@ -36,10 +35,10 @@ try:
         "quality",
     }
     payload["sources"] = [
-        {k: v for k, v in s.items() if k in allowed_source_keys}
-        for s in payload["sources"]
+        {k: v for k, v in s.items() if k in allowed_source_keys} for s in payload["sources"]
     ]
 except Exception:
+
     def source(source_id: str, title: str) -> dict:
         return {
             "source_id": source_id,
@@ -52,7 +51,9 @@ except Exception:
             "unit": "percent",
             "retrieved_at": None,
             "license_status": "synthetic_fixture_only",
-            "definition": "Data sintetis untuk meninjau antarmuka; bukan kondisi provinsi sebenarnya.",
+            "definition": (
+                "Data sintetis untuk meninjau antarmuka; bukan kondisi provinsi sebenarnya."
+            ),
             "storage_scale": "percentage_points",
             "quality": {"SD": {"missing": 0, "numeric": 4}},
         }

@@ -396,6 +396,7 @@
         bind:value={level}
         options={levelDropdownOptions}
         disabled={!workspace}
+        align="right"
         onchange={() => load()}
       />
     </div>
@@ -791,9 +792,6 @@
     color: var(--eq-text-secondary);
     font-weight: 550;
     min-width: 0;
-  }
-  .level-filter-wrapper {
-    min-width: 140px;
   }
   .filter-label {
     display: block;

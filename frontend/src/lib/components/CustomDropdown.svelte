@@ -24,6 +24,7 @@
     options = [],
     disabled = false,
     placeholder = 'Pilih...',
+    align = 'left',
     onchange,
   }: {
     id?: string;
@@ -33,6 +34,7 @@
     options?: DropdownOption[];
     disabled?: boolean;
     placeholder?: string;
+    align?: 'left' | 'right';
     onchange?: (val: string) => void;
   } = $props();
 
@@ -136,7 +138,7 @@
     aria-controls={listboxId}
     aria-haspopup="listbox"
     aria-expanded={isOpen}
-    aria-label={label ? `${label}: ${selectedItem?.label ?? placeholder}` : (selectedItem?.label ?? placeholder)}
+    aria-label={selectedItem?.label ?? placeholder}
     onclick={toggleOpen}
     onkeydown={handleTriggerKeyDown}
   >
@@ -161,6 +163,7 @@
     <div
       id={listboxId}
       class="dropdown-popover"
+      class:align-right={align === 'right'}
       role="listbox"
       aria-label={label}
     >
@@ -283,10 +286,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     min-height: 48px;
-    padding: 10px 14px;
+    padding: 10px 12px;
     background: #ffffff;
     border: 1px solid #d0d7e2;
     border-radius: 10px;
@@ -371,6 +376,7 @@
     min-width: 100%;
     width: max-content;
     max-width: min(440px, 94vw);
+    box-sizing: border-box;
     background: #ffffff;
     border: 1px solid var(--eq-border);
     border-radius: 13px;
@@ -380,6 +386,11 @@
     z-index: 100;
     overflow: hidden;
     animation: eq-dropdown-appear 150ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .dropdown-popover.align-right {
+    left: auto;
+    right: 0;
   }
 
   @keyframes eq-dropdown-appear {
@@ -539,10 +550,15 @@
 
   @media (max-width: 600px) {
     .dropdown-popover {
+      max-width: calc(100vw - 32px);
+    }
+    .dropdown-popover:not(.align-right) {
       left: 0;
+      right: auto;
+    }
+    .dropdown-popover.align-right {
+      left: auto;
       right: 0;
-      width: 100%;
-      max-width: 100%;
     }
   }
 </style>
