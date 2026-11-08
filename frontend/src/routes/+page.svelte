@@ -204,7 +204,7 @@
   h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
   .workflow-list p { margin-top: 9px; color: var(--eq-text-secondary); font-size: 14px; line-height: 1.7; }
   .workflow-list a { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; font-size: 13px; font-weight: 600; }
-  .scenario-section { margin: 0; padding: 68px max(32px, calc((100% - 1200px) / 2)) 30px; background: #163a5f; color: #fff; display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px 80px; }
+  .scenario-section { width: min(1200px, calc(100% - 48px)); margin: 40px auto; padding: 68px 64px 30px; border-radius: 28px; background: #163a5f; color: #fff; display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px 80px; box-sizing: border-box; }
   .scenario-copy h2 { font-size: clamp(2.8rem, 4.5vw, 4.1rem); }
   .scenario-copy h2 > span { color: #b8cee3; }
   .scenario-copy > p { max-width: 410px; color: #d0d7dd; font-size: 15px; line-height: 1.75; margin: 24px 0; }
@@ -259,7 +259,7 @@
     h2 { font-size: 34px; }
     .section-intro > p { margin-top: 18px; }
     .workflow-list li { padding-block: 20px; }
-    .scenario-section { padding: 38px 16px 24px; grid-template-columns: 1fr; gap: 28px; }
+    .scenario-section { width: calc(100% - 24px); margin: 24px auto; padding: 38px 20px 24px; grid-template-columns: 1fr; gap: 28px; border-radius: 20px; }
     .scenario-copy h2 { font-size: 42px; }
     .scenario-copy > p { font-size: 14px; }
     .scenario-factors > div { padding-block: 18px; }
