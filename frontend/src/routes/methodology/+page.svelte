@@ -298,8 +298,8 @@
   .methodology-footer { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--eq-border); }
   @media (prefers-reduced-motion: no-preference) {
     .landing-progress { transition: scale 120ms linear; }
-    .toc a { transition: color 140ms ease, border-color 140ms ease, background-color 140ms ease, translate 160ms ease; }
-    .toc a:hover { translate: 2px 0; }
+    .toc a { transition: color 140ms ease, border-color 140ms ease, background-color 140ms ease; }
+
     .state-grid div { transition: border-color 180ms ease, box-shadow 180ms ease, translate 180ms ease; }
     .state-grid div:hover { border-color: var(--eq-primary); box-shadow: 0 8px 20px rgb(15 23 42 / 5%); translate: 0 -2px; }
     .glossary div { transition: border-color 180ms ease, translate 180ms ease; }
@@ -385,6 +385,11 @@
     top: 128px;
     max-height: calc(100dvh - 152px);
     overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
   .toc-title {
     color: var(--eq-text-muted);
@@ -403,18 +408,28 @@
     gap: 8px;
     min-height: 44px;
     font-size: 0.875rem;
-    padding: 8px 0 8px 14px;
+    padding: 8px 12px 8px 14px;
     text-decoration: none;
     transition: color 140ms ease, border-color 140ms ease, background-color 140ms ease;
   }
-  .toc a:hover,
-  .toc a:focus-visible,
+  .toc a:hover {
+    background-color: var(--eq-surface-subtle);
+    color: var(--eq-text);
+  }
+  .toc a:focus-visible {
+    outline: 2px solid var(--eq-focus);
+    outline-offset: -2px;
+  }
   .toc a[aria-current='location'] {
     border-color: var(--eq-primary);
     background-color: var(--eq-primary-tint);
     color: var(--eq-primary);
+    font-weight: 650;
   }
-  .toc a[aria-current='location'] { font-weight: 650; }
+  .toc a[aria-current='location']:hover {
+    background-color: var(--eq-primary-tint);
+    color: var(--eq-primary-hover);
+  }
   .toc a :global(svg) { flex: 0 0 auto; }
   .facilities-artwork { max-width: 760px; margin: 28px 0; }
   .facilities-artwork img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--eq-border); box-shadow: 0 16px 40px rgb(15 23 42 / 6%); }
@@ -753,6 +768,14 @@
       position: static;
       max-height: none;
       overflow: visible;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .toc-title {
+      width: 100%;
+      margin-bottom: 4px;
     }
     .toc a {
       background: var(--eq-surface-subtle);
@@ -760,9 +783,15 @@
       border-radius: var(--eq-radius-sm);
       display: inline-flex;
       align-content: center;
-      margin-bottom: 6px;
-      margin-right: 8px;
+      margin: 0;
       padding: 6px 12px;
+    }
+    .toc a:hover {
+      background: var(--eq-border);
+    }
+    .toc a[aria-current='location'] {
+      background-color: var(--eq-primary-tint);
+      color: var(--eq-primary);
     }
     .example,
     .state-grid {
