@@ -252,8 +252,19 @@
       </details>
 
       <details class="journey-guide">
-        <summary>Panduan alur dan halaman</summary>
-        <AnalysisJourney />
+        <summary>
+          <span class="journey-summary-main">
+            <span class="journey-badge-icon" aria-hidden="true"><Icon name="chart" size={16} /></span>
+            <span>Panduan alur dan halaman</span>
+          </span>
+          <span class="journey-summary-action">
+            <span class="journey-action-label">Buka panduan alur</span>
+            <span class="journey-chevron" aria-hidden="true">▾</span>
+          </span>
+        </summary>
+        <div class="journey-guide-drawer">
+          <AnalysisJourney />
+        </div>
       </details>
 
       {@render children()}
@@ -268,14 +279,81 @@
 
 <style>
   .journey-guide {
-    margin-block: 16px 24px;
+    margin-block: 14px 20px;
+    border: 1px solid var(--eq-border);
+    border-radius: 12px;
+    background: var(--eq-surface);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .journey-guide:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgb(15 23 42 / 4%);
+  }
+  .journey-guide[open] {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 14px rgb(15 23 42 / 6%);
   }
   .journey-guide > summary {
     cursor: pointer;
-    min-height: 44px;
-    align-content: center;
-    color: var(--eq-primary-hover);
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    gap: 12px;
     font-weight: 600;
+    font-size: 14px;
+    color: var(--eq-text);
+    list-style: none;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .journey-guide > summary::-webkit-details-marker,
+  .journey-guide > summary::marker {
+    display: none !important;
+    content: "" !important;
+  }
+  .journey-summary-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .journey-badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary);
+  }
+  .journey-summary-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 550;
+    color: var(--eq-primary-hover);
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+  }
+  .journey-chevron {
+    transition: transform 180ms ease;
+    font-size: 12px;
+    line-height: 1;
+  }
+  .journey-guide[open] .journey-chevron {
+    transform: rotate(180deg);
+  }
+  .journey-guide-drawer {
+    border-top: 1px solid var(--eq-border);
+    padding: 16px;
+    background: var(--eq-surface-subtle);
+    border-radius: 0 0 12px 12px;
   }
   .app-frame {
     min-height: 100dvh;
@@ -627,9 +705,15 @@
     padding: 10px 14px;
     cursor: pointer;
     font-weight: 400;
+    list-style: none;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
+  .workspace-context summary::-webkit-details-marker,
   .workspace-context summary::marker {
-    content: '';
+    display: none !important;
+    content: '' !important;
   }
   .context-more {
     color: var(--eq-primary-hover);
@@ -776,15 +860,6 @@
   }
   .app-frame :global(.eq-button) {
     gap: 8px;
-    transition:
-      background 160ms ease,
-      color 160ms ease;
-  }
-  .app-frame :global(.eq-button:active) {
-    transform: none;
-  }
-  .app-frame :global(.eq-button:disabled) {
-    opacity: 0.55;
   }
   @media (max-width: 550px) {
     .app-topbar {

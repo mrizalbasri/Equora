@@ -9,6 +9,7 @@
     type ReviewTrial,
   } from '$lib/api/workspace';
   import Icon from './Icon.svelte';
+  import CustomDropdown, { type DropdownOption } from './CustomDropdown.svelte';
   let { snapshot }: { snapshot: Snapshot } = $props();
   let budget = $state(10);
   let cost = $state(0);
@@ -42,6 +43,43 @@
       label = label.replace(key, value);
     return label;
   }
+  const testedIndicatorOptions = $derived<DropdownOption[]>(
+    Object.keys(snapshot.parameters.weights).map((key) => {
+      const icon = key.includes('water')
+        ? 'water'
+        : key.includes('internet')
+          ? 'internet'
+          : key.includes('computer')
+            ? 'computer'
+            : 'sanitation';
+      return {
+        value: key,
+        label: labels[key] ?? key,
+        icon,
+      };
+    }),
+  );
+  const trialOptions = $derived<DropdownOption[]>(
+    current
+      ? [
+          {
+            value: 'what_if',
+            label: 'Pilihan asumsi Anda',
+            desc: 'Skenario berdasarkan pengujian asumsi',
+          },
+          {
+            value: 'coverage',
+            label: 'Jangkauan terlebih dahulu',
+            desc: 'Prioritas jangkauan wilayah paling luas',
+          },
+          ...current.sensitivity.map((item, index) => ({
+            value: String(index),
+            label: trialLabel(item),
+            desc: 'Uji sensitivitas skenario',
+          })),
+        ]
+      : [],
+  );
   async function calculate(event: SubmitEvent) {
     event.preventDefault();
     const request = ++sequence;
@@ -127,13 +165,15 @@
             bind:value={cost}
           /><span>Berlaku juga pada biaya khusus wilayah</span></label
         >
-        <label class="work-field"
-          >Indikator yang diuji<select bind:value={indicator}
-            >{#each Object.keys(snapshot.parameters.weights) as key}<option
-                value={key}>{labels[key] ?? key}</option
-              >{/each}</select
-          ></label
-        >
+        <div class="work-field">
+          <span class="field-title">Indikator yang diuji</span>
+          <CustomDropdown
+            id="review-indicator-select"
+            label="Indikator yang diuji"
+            bind:value={indicator}
+            options={testedIndicatorOptions}
+          />
+        </div>
         <label class="work-field"
           >Perubahan bobot relatif (%)<input
             type="number"
@@ -146,10 +186,17 @@
         >
       </div>
       <div class="review-submit">
-        <button class="eq-button eq-button-primary"
-          >{busy
-            ? 'Menguji dan memvalidasi…'
-            : 'Jalankan uji keputusan'}</button>
+        <button class="eq-button eq-button-primary" disabled={busy}>
+          {#if busy}
+            <span class="btn-spinner" aria-hidden="true"></span>
+            Menguji dan memvalidasi…
+          {:else}
+            <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM6.75 9.25a.75.75 0 000 1.5h4.59l-2.1 2.1a.75.75 0 001.06 1.06l3.38-3.38a.75.75 0 000-1.06l-3.38-3.38a.75.75 0 10-1.06 1.06l2.1 2.1H6.75z" clip-rule="evenodd" />
+            </svg>
+            Jalankan uji keputusan
+          {/if}
+        </button>
         <p>Perubahan −25% sampai +25%. Skenario awal tetap tersimpan.</p>
       </div>
     </fieldset>
@@ -356,15 +403,15 @@
           </table>
         </div>
       </details>
-      <label class="work-field trial-picker"
-        >Telusuri perubahan per provinsi<select bind:value={selectedTrial}
-          ><option value="what_if">Pilihan asumsi Anda</option><option
-            value="coverage">Jangkauan terlebih dahulu</option
-          >{#each current.sensitivity as item, index}<option
-              value={String(index)}>{trialLabel(item)}</option
-            >{/each}</select
-        ></label
-      >
+      <div class="work-field trial-picker">
+        <span class="field-title">Telusuri perubahan per provinsi</span>
+        <CustomDropdown
+          id="review-trial-select"
+          label="Telusuri perubahan per provinsi"
+          bind:value={selectedTrial}
+          options={trialOptions}
+        />
+      </div>
       {#if activeTrial}<div class="work-table">
           <table>
             <caption
@@ -402,8 +449,13 @@
             data.
           </p>
         </div>
-        <button class="eq-button" onclick={download}
-          >Unduh bukti uji (JSON)</button>
+        <button class="eq-button" onclick={download}>
+          <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" width="17" height="17" aria-hidden="true">
+            <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" />
+            <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+          </svg>
+          Unduh bukti uji (JSON)
+        </button>
       </div>
       <details>
         <summary>Metode dan batas uji keputusan</summary>

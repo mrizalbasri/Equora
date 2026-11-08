@@ -4,6 +4,7 @@
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ScenarioResult from '$lib/components/ScenarioResult.svelte';
   import Icon from '$lib/components/Icon.svelte';
+  import CustomDropdown, { type DropdownOption } from '$lib/components/CustomDropdown.svelte';
   import { focusedWeights } from '$lib/studio-focus';
   import {
     api,
@@ -49,6 +50,23 @@
   let loadingRegions = $state(true);
   let contextRequest = 0;
   let regionRequest = 0;
+
+  const levelDescriptions: Record<string, string> = {
+    TK: 'Taman Kanak-Kanak / PAUD',
+    SD: 'Sekolah Dasar',
+    SMP: 'Sekolah Menengah Pertama',
+    SMA: 'Sekolah Menengah Atas',
+    SMK: 'Sekolah Menengah Kejuruan',
+    SLB: 'Sekolah Luar Biasa',
+  };
+  const levelDropdownOptions = $derived<DropdownOption[]>(
+    (workspace?.education_levels ?? ['SD']).map((lvl) => ({
+      value: lvl,
+      label: lvl,
+      desc: levelDescriptions[lvl] ?? lvl,
+      icon: 'education',
+    })),
+  );
 
   const names = $derived(
     Object.fromEntries(regions.map((row) => [row.code, row.name])),
@@ -293,14 +311,17 @@
           Nama skenario
           <input bind:value={name} required maxlength="100" />
         </label>
-        <label class="work-field">
-          Jenjang
-          <select value={level} onchange={(event) => changeLevel(event.currentTarget.value)} disabled={!workspace || busy}>
-            {#each workspace?.education_levels ?? ['SD'] as item}
-              <option>{item}</option>
-            {/each}
-          </select>
-        </label>
+        <div class="work-field">
+          <span class="field-title">Jenjang</span>
+          <CustomDropdown
+            id="studio-level-select"
+            label="Jenjang"
+            value={level}
+            options={levelDropdownOptions}
+            disabled={!workspace || busy}
+            onchange={(val) => changeLevel(val)}
+          />
+        </div>
         <label class="work-field">
             <span class="field-title">Batas anggaran simulasi (Rp)</span>
           <input
@@ -472,7 +493,17 @@
 
     <details class="region-override-details">
       <summary>
-        3. Pilih wilayah dan sesuaikan biaya/kapasitas ({selected.length} dari {regions.length} terpilih)
+        <span class="region-summary-left">
+          <span class="step-badge" aria-hidden="true">3</span>
+          <strong>Pilih wilayah dan sesuaikan biaya/kapasitas</strong>
+          <span class="selected-count-badge">
+            {selected.length} dari {regions.length} terpilih
+          </span>
+        </span>
+        <span class="region-summary-toggle">
+          <span class="toggle-text">Atur wilayah</span>
+          <span class="region-chevron" aria-hidden="true">▾</span>
+        </span>
       </summary>
 
       <div class="region-filter-bar">
@@ -486,17 +517,17 @@
             class="region-search-input"
           />
         </div>
-        <div class="work-actions" style="margin: 0;">
+        <div class="work-actions region-select-actions" style="margin: 0;">
           <button
             type="button"
-            class="eq-button"
+            class="eq-button eq-button-sm"
             onclick={() => (selected = regions.map((row) => row.code))}
           >
             Pilih semua
           </button>
           <button
             type="button"
-            class="eq-button"
+            class="eq-button eq-button-sm"
             onclick={() => (selected = [])}
           >
             Kosongkan
@@ -513,7 +544,7 @@
             </label>
             <button
               type="button"
-              class="eq-button"
+              class="eq-button eq-button-sm region-override-btn"
               onclick={() => toggleOverride(row.code)}
             >
               {overrides[row.code] ? 'Hapus penyesuaian' : 'Sesuaikan'}
@@ -566,19 +597,24 @@
       </div>
     </details>
 
-    <p class="work-muted" id="public-scenario-notice">Skenario disimpan di ruang bersama. Nama, parameter, dan hasil dapat dibaca pengguna lain. Jangan masukkan data pribadi atau informasi rahasia.</p>
-    <div class="work-actions" aria-describedby="public-scenario-notice">
-      <button
-        class="eq-button eq-button-primary"
-        disabled={busy || loadingRegions || !workspace || total !== 100 || !selected.length}
-      >
-
-        <span>{busy ? 'Menghitung dan memvalidasi…' : 'Hitung Alokasi & Simpan Snapshot'}</span>
-      </button>
-      <a class="eq-button" href={compareResultHref ?? (baseId ? '/compare?' + new URLSearchParams({ left: baseId }) : '/compare')}>
-
-        <span>Bandingkan Snapshot</span>
-      </a>
+    <div class="studio-submit-bar" aria-describedby="public-scenario-notice">
+      <div class="studio-privacy-notice" id="public-scenario-notice">
+        <span class="notice-icon" aria-hidden="true"><Icon name="shield" size={16} /></span>
+        <span>Skenario disimpan di ruang bersama. Nama, parameter, dan hasil dapat dibaca pengguna lain. Jangan masukkan data pribadi atau informasi rahasia.</span>
+      </div>
+      <div class="studio-action-buttons">
+        <button
+          class="eq-button eq-button-primary studio-btn-calc"
+          disabled={busy || loadingRegions || !workspace || total !== 100 || !selected.length}
+        >
+          <span class="btn-icon" aria-hidden="true"><Icon name="sliders" size={17} /></span>
+          <span>{busy ? 'Menghitung dan memvalidasi…' : 'Hitung Alokasi & Simpan Snapshot'}</span>
+        </button>
+        <a class="eq-button studio-btn-compare" href={compareResultHref ?? (baseId ? '/compare?' + new URLSearchParams({ left: baseId }) : '/compare')}>
+          <span class="btn-icon" aria-hidden="true"><Icon name="compare" size={17} /></span>
+          <span>Bandingkan Snapshot</span>
+        </a>
+      </div>
     </div>
     </fieldset>
   </form>
@@ -618,8 +654,11 @@
       <div class="saved-scenarios-grid">
         {#each saved as item}
           <div class="saved-scenario-card">
-            <div class="saved-card-top">
-              <a href={'/scenarios/' + item.id} class="saved-title">{item.name}</a>
+            <div class="saved-card-header">
+              <div class="saved-title-group">
+                <span class="saved-icon" aria-hidden="true"><Icon name="chart" size={15} /></span>
+                <a href={'/scenarios/' + item.id} class="saved-title">{item.name}</a>
+              </div>
               <span
                 class="eq-badge {item.status?.toLowerCase() === 'optimal' || item.status?.toLowerCase() === 'feasible'
                   ? 'eq-badge-success'
@@ -629,16 +668,20 @@
               </span>
             </div>
             <p class="work-muted saved-time">
+              <span class="time-dot" aria-hidden="true">•</span>
               {new Date(item.created_at).toLocaleString('id-ID', {
                 dateStyle: 'medium',
                 timeStyle: 'short',
               })}
             </p>
             <div class="saved-actions">
-              <a class="eq-button eq-button-subtle" href={'/scenarios/' + item.id}>
-                Buka hasil
+              <a class="saved-action-btn saved-btn-primary" href={'/scenarios/' + item.id}>
+                <span>Buka hasil</span>
+                <span class="btn-arrow" aria-hidden="true">→</span>
               </a>
-              <a class="eq-button eq-button-subtle" href={'/compare?left=' + item.id}> Bandingkan
+              <a class="saved-action-btn saved-btn-secondary" href={'/compare?left=' + item.id}>
+                <span class="btn-icon" aria-hidden="true"><Icon name="compare" size={14} /></span>
+                <span>Bandingkan</span>
               </a>
             </div>
           </div>
@@ -695,7 +738,6 @@
     margin-bottom: 16px;
   }
   .studio-form fieldset > details,
-  .studio-form fieldset > .work-actions,
   #public-scenario-notice {
     grid-column: 1/-1;
   }
@@ -709,6 +751,106 @@
     cursor: pointer;
     font-weight: 600;
     font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 48px;
+    padding: 2px 0;
+  }
+  .region-summary-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .step-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary);
+    font-weight: 700;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .selected-count-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    color: var(--eq-primary-hover);
+  }
+  .region-summary-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 550;
+    color: var(--eq-text-secondary);
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+  }
+  .region-chevron {
+    transition: transform 180ms ease;
+  }
+  .region-override-details[open] .region-chevron {
+    transform: rotate(180deg);
+  }
+  .studio-submit-bar {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .studio-privacy-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: var(--eq-text-muted);
+    line-height: 1.5;
+  }
+  .notice-icon {
+    color: var(--eq-primary);
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+  .studio-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .studio-btn-calc {
+    background: linear-gradient(135deg, #1264d8, #0e4faf);
+    border-color: #0e4faf;
+    box-shadow: 0 2px 8px rgb(18 100 216 / 20%);
+    gap: 8px;
+  }
+  .studio-btn-calc:hover:not(:disabled) {
+    background: linear-gradient(135deg, #0e4faf, #0a3d8a);
+    box-shadow: 0 4px 14px rgb(18 100 216 / 30%);
+    transform: translateY(-1px);
+  }
+  .studio-btn-compare {
+    gap: 8px;
+    background: var(--eq-surface);
+  }
+  .studio-btn-compare:hover {
+    background: var(--eq-surface-subtle);
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
   }
   .region-filter-bar {
     display: flex;
@@ -757,10 +899,6 @@
     border-radius: 8px;
     border: 1px solid var(--eq-border);
   }
-  .studio-form fieldset > .work-actions {
-    margin: 0;
-    padding-block: 4px 12px;
-  }
   .weight-composition > span {
     transition: width 240ms cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -798,18 +936,45 @@
     margin-top: 16px;
   }
   .saved-scenario-card {
-    background: var(--eq-surface-subtle);
+    background: var(--eq-surface);
     border: 1px solid var(--eq-border);
-    border-radius: var(--eq-radius-sm);
+    border-radius: 14px;
     padding: 16px 18px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 10px;
-    transition: border-color 150ms ease, box-shadow 150ms ease;
+    gap: 12px;
+    box-shadow: var(--eq-shadow-card);
+    transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
   }
   .saved-scenario-card:hover {
     border-color: var(--eq-primary);
+    box-shadow: 0 8px 20px rgb(18 100 216 / 8%);
+    transform: translateY(-2px);
+  }
+  .saved-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .saved-title-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+  }
+  .saved-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
   }
   .field-title {
     display: inline-flex;
@@ -841,23 +1006,55 @@
     gap: 10px;
   }
   .preset-card {
-    background: var(--eq-surface);
-    border: 1px solid var(--eq-border);
-    border-radius: 10px;
-    padding: 10px 12px;
+    background: #ffffff;
+    border: 1.5px solid #dbe2ea;
+    border-radius: 12px;
+    padding: 11px 14px;
     text-align: left;
     cursor: pointer;
-    transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    user-select: none;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      transform 120ms ease,
+      box-shadow 150ms ease;
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
   .preset-card:hover {
-    border-color: var(--eq-primary);
+    border-color: #9cb5d9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
+  }
+  .preset-card:active {
+    transform: scale(0.985);
   }
   .preset-card.active {
     border-color: var(--eq-primary);
-    background: var(--eq-primary-tint);
+    background: #f0f6ff;
+    box-shadow:
+      0 0 0 1px var(--eq-primary),
+      0 2px 8px rgba(18, 100, 216, 0.12);
+  }
+  .region-select-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .region-override-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 550;
+    border-color: #cbd5e1;
+    white-space: nowrap;
+    margin-left: auto;
+  }
+  .region-override-btn:hover {
+    border-color: var(--eq-primary);
+    color: var(--eq-primary-hover);
   }
   .preset-card-top {
     display: flex;
@@ -881,12 +1078,6 @@
     }
   }
 
-  .saved-card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-  }
   .saved-title {
     font-size: 14px;
     font-weight: 650;
@@ -905,14 +1096,53 @@
   .saved-actions {
     display: flex;
     gap: 8px;
-    margin-top: 6px;
+    margin-top: 4px;
     flex-wrap: wrap;
+    border-top: 1px solid var(--eq-border);
+    padding-top: 12px;
   }
-  .eq-button-subtle {
-    min-height: 48px;
-    padding: 6px 12px;
-    font-size: 12px;
-    background: var(--eq-surface);
+  .saved-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 140ms ease;
+    flex: 1 1 120px;
+  }
+  .saved-btn-primary {
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary-hover);
+    border: 1px solid #bfdbfe;
+  }
+  .saved-btn-primary:hover {
+    background: var(--eq-primary);
+    color: #ffffff;
+    border-color: var(--eq-primary);
+    box-shadow: 0 2px 6px rgb(18 100 216 / 25%);
+  }
+  .btn-arrow {
+    transition: transform 140ms ease;
+    font-size: 13px;
+  }
+  .saved-btn-primary:hover .btn-arrow {
+    transform: translateX(2px);
+  }
+  .saved-btn-secondary {
+    background: var(--eq-surface-subtle);
+    color: var(--eq-text-secondary);
+    border: 1px solid var(--eq-border);
+  }
+  .saved-btn-secondary:hover {
+    background: #ffffff;
+    color: var(--eq-text);
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 6px rgb(15 23 42 / 5%);
   }
   @media (max-width: 1100px) {
     .studio-form {

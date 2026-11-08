@@ -41,13 +41,32 @@ export function createLandingMotion() {
       const variants: Record<string, Keyframe[]> = {
         fade: [{ opacity: 0, translate: `0 ${distance}px` }, { opacity: 1, translate: '0 0' }],
         focus: [{ opacity: 0, translate: `0 ${distance}px`, scale: '0.99' }, { opacity: 1, translate: '0 0', scale: '1' }],
+        unfold: [{ opacity: 0, translate: `0 ${distance}px`, scale: '0.985' }, { opacity: 1, translate: '0 0', scale: '1' }],
+        up: [{ opacity: 0, translate: `0 ${distance}px` }, { opacity: 1, translate: '0 0' }],
+        down: [{ opacity: 0, translate: `0 ${-distance}px` }, { opacity: 1, translate: '0 0' }],
         left: [{ opacity: 0, translate: `${-distance}px 0` }, { opacity: 1, translate: '0 0' }],
         right: [{ opacity: 0, translate: `${distance}px 0` }, { opacity: 1, translate: '0 0' }],
-        unfold: [{ opacity: 0, translate: `0 ${distance}px`, scale: '0.985' }, { opacity: 1, translate: '0 0', scale: '1' }],
+        scale: [{ opacity: 0, scale: '0.96' }, { opacity: 1, scale: '1' }],
+        pop: [{ opacity: 0, scale: '0.94' }, { opacity: 1, scale: '1' }],
+        blur: [{ opacity: 0, filter: 'blur(8px)', scale: '0.985' }, { opacity: 1, filter: 'blur(0px)', scale: '1' }],
+        dissolve: [{ opacity: 0 }, { opacity: 1 }],
+      };
+      const durations: Record<string, number> = {
+        fade: 600,
+        blur: 700,
+        focus: 750,
+        down: 750,
+        up: 750,
+        left: 750,
+        right: 750,
+        scale: 750,
+        pop: 750,
+        unfold: 900,
       };
       const variant = element.getAttribute('data-motion') || 'fade';
+      const duration = durations[variant] ?? 750;
       prepare(element, variants[variant] ?? variants.fade,
-        { duration: variant === 'unfold' ? 1050 : 850, delay: Math.min(Math.max(delay, 0), 280), fill: 'both', easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+        { duration, delay: Math.min(Math.max(delay, 0), 280), fill: 'both', easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
       element.setAttribute('data-motion-state', 'waiting');
       observer.observe(element);
     }

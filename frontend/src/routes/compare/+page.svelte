@@ -3,6 +3,7 @@
   import { page } from '$app/state';
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import Icon from '$lib/components/Icon.svelte';
+  import CustomDropdown, { type DropdownOption } from '$lib/components/CustomDropdown.svelte';
   import CompareSummary from '$lib/components/CompareSummary.svelte';
   import { compareSummary, schoolImpact, type SchoolImpact } from '$lib/insight/insight';
   import {
@@ -77,6 +78,38 @@
       return iso;
     }
   }
+
+  const leftOptions = $derived<DropdownOption[]>([
+    { value: '', label: 'Pilih skenario', disabled: true },
+    ...saved.map((item) => ({
+      value: item.id,
+      label: item.name,
+      badge: item.education_level ?? 'SD',
+      desc: `${item.education_level ?? 'SD'} · ${formatDate(item.created_at)}${!isSolvable(item) ? ' · tanpa solusi' : ''}`,
+      icon: 'chart' as const,
+      disabled: !isSolvable(item),
+    })),
+  ]);
+
+  const rightOptions = $derived<DropdownOption[]>([
+    { value: '', label: 'Pilih snapshot' },
+    ...saved.map((item) => {
+      const disabled = item.id === left || !isCompatible(item);
+      const note = !isSolvable(item)
+        ? ' · tanpa solusi'
+        : !isCompatible(item)
+          ? ' · rilis/jenjang berbeda'
+          : '';
+      return {
+        value: item.id,
+        label: item.name,
+        badge: item.education_level ?? 'SD',
+        desc: `${item.education_level ?? 'SD'} · ${formatDate(item.created_at)}${note}`,
+        icon: 'chart' as const,
+        disabled,
+      };
+    }),
+  ]);
 
   function selectLeft(id: string) {
     left = id;
@@ -244,38 +277,30 @@
     <form onsubmit={compare} class="work-panel compare-form">
       <h2>Pilih skenario untuk dibandingkan</h2>
       <div class="work-controls">
-        <label>
-          Skenario awal
-          <select
+        <div class="work-field">
+          <span class="field-title">Skenario awal</span>
+          <CustomDropdown
+            id="compare-left-select"
+            label="Skenario awal"
             value={left}
+            options={leftOptions}
             disabled={busy}
-            onchange={(event) => selectLeft(event.currentTarget.value)}
-            required
-          >
-            <option value="" disabled>Pilih skenario</option>
-            {#each saved as item}
-              <option value={item.id} disabled={!isSolvable(item)}>
-                {item.name} · {item.education_level ?? 'SD'} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : ''}
-              </option>
-            {/each}
-          </select>
-        </label>
-        <label>
-          Skenario pembanding
-          <select
+            placeholder="Pilih skenario..."
+            onchange={(val) => selectLeft(val)}
+          />
+        </div>
+        <div class="work-field">
+          <span class="field-title">Skenario pembanding</span>
+          <CustomDropdown
+            id="compare-right-select"
+            label="Skenario pembanding"
             bind:value={right}
+            options={rightOptions}
             disabled={busy}
+            placeholder="Pilih snapshot..."
             onchange={() => (result = undefined)}
-            required
-          >
-            <option value="">Pilih snapshot</option>
-            {#each saved as item}
-              <option value={item.id} disabled={item.id === left || !isCompatible(item)}>
-                {item.name} · {item.education_level ?? 'SD'} · {formatDate(item.created_at)}{!isSolvable(item) ? ' · tanpa solusi' : !isCompatible(item) ? ' · rilis/jenjang berbeda' : ''}
-              </option>
-            {/each}
-          </select>
-        </label>
+          />
+        </div>
         <button
           class="eq-button eq-button-primary compare-submit"
           disabled={busy || !selectedLeft || !selectedRight || left === right || !isCompatible(selectedRight, selectedLeft)}

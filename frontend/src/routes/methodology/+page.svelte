@@ -68,13 +68,13 @@
   <article class="eq-container methodology" use:landingScroll>
     <div class="landing-progress" aria-hidden="true"></div>
     <header class="hero">
-      <p class="eyebrow">Panduan membaca data dan simulasi</p>
-      <h1 data-motion="focus">Bagaimana Equora menjelaskan prioritas dan skenario.</h1>
+      <p class="eyebrow" data-motion="down">Panduan membaca data dan simulasi</p>
+      <h1 data-motion="blur">Bagaimana Equora menjelaskan prioritas dan skenario.</h1>
       <p class="intro" data-motion="fade" data-motion-delay="60">
         Halaman ini menjelaskan perhitungan pada snapshot review lokal. Skor dan status model membantu
         membandingkan asumsi; hasilnya belum membuktikan dampak nyata atau kelayakan kebijakan.
       </p>
-      <div class="version-note" data-motion="fade" data-motion-delay="120">
+      <div class="version-note" data-motion="down" data-motion-delay="120">
         <strong>Status metode</strong>
         <span>Weighted normalized needs v1 · allocation sandbox single-intervention-demo-v1</span>
       </div>
@@ -98,11 +98,11 @@
             dengan nilai lebih tinggi berarti kebutuhan lebih besar. Tahun, jenjang, unit, wilayah,
             dan versi data harus kompatibel sebelum perhitungan dijalankan.
           </p>
-          <figure class="facilities-artwork" data-motion="unfold">
+          <figure class="facilities-artwork" data-motion="scale">
             <img src="/images/editorial/school-facilities.webp" alt="Ilustrasi fasilitas cuci tangan, tangki air, dan ruang komputer di sekolah." width="1983" height="793" loading="lazy" decoding="async" />
             <figcaption>Sanitasi, air, internet, dan komputer menjadi konteks indikator yang dibaca bersama. Ilustrasi fasilitas, bukan dokumentasi sekolah tertentu.</figcaption>
           </figure>
-          <div class="callout" data-motion="fade">
+          <div class="callout" data-motion="right">
             <strong>Snapshot review lokal · 2025/2026</strong>
             <p>
               Sepuluh workbook pengguna, 38 provinsi, enam jenjang dan kolom Total telah diproses.
@@ -142,7 +142,7 @@
           <div class="formula" aria-label="Rumus skor prioritas" data-motion="unfold">
             <code>score_i = Σ (weight_j × need_ij)</code>
           </div>
-          <div class="example" data-motion="focus">
+          <div class="example" data-motion="left">
             <div>
               <span class="example-label">Contoh sintetis · bukan data provinsi</span>
               <h3>SYN-A mendapat skor 0,55</h3>
@@ -167,7 +167,7 @@
             indikator dengan bobot positif dikeluarkan dari ranking dan dicatat bersama indikator yang
             hilang. Nilai nol tetap merupakan nilai valid dan berbeda dari missing.
           </p>
-          <div class="state-grid" data-motion="fade">
+          <div class="state-grid" data-motion="scale">
             <div><strong>Nilai nol</strong><span>Masuk perhitungan sebagai kebutuhan 0.</span></div>
             <div><strong>Missing</strong><span>Dicatat dan dikeluarkan jika indikatornya berbobot positif.</span></div>
             <div><strong>Coverage</strong><span>Dilaporkan dari jumlah input, bukan ditebak sebagai kualitas.</span></div>
@@ -186,7 +186,7 @@
             <code>subject to Σ(cost_i × x_i) ≤ budget</code>
             <code>minimum_i ≤ x_i ≤ capacity_i</code>
           </div>
-          <div class="callout warning" data-motion="fade">
+          <div class="callout warning" data-motion="right">
             <strong>Interpretasi harus dibatasi</strong>
             <p>
               Objective adalah proxy kebutuhan berbobot. Ia bukan jumlah sekolah yang pasti terbantu,
@@ -233,7 +233,7 @@
               <span>Unduhan JSON menyertakan snapshot, parameter, versi metode, dan hasil percobaan untuk diperiksa ulang. Perbedaan alokasi dapat berasal dari solusi dengan skor setara.</span>
             </li>
           </ul>
-          <div class="status-table" role="table" aria-label="Arti status model" data-motion="unfold">
+          <div class="status-table" role="table" aria-label="Arti status model" data-motion="scale">
             <div role="row"><span class="status-name" role="cell">optimal</span><span role="cell">Solusi terbaik dibuktikan untuk model dan batas waktu yang dinyatakan.</span></div>
             <div role="row"><span class="status-name" role="cell">feasible</span><span role="cell">Solusi memenuhi constraint, tetapi optimum belum terbukti.</span></div>
             <div role="row"><span class="status-name" role="cell">infeasible</span><span role="cell">Solver membuktikan tidak ada solusi yang memenuhi constraint.</span></div>
@@ -252,7 +252,7 @@
         </section>
 
         <section id="limits" aria-labelledby="limits-title" class="limits">
-          <div class="limits-heading" data-motion="focus">
+          <div class="limits-heading" data-motion="left">
             <span class="limits-number" aria-hidden="true">06</span>
             <div>
               <p class="limits-label">Batas interpretasi</p>
@@ -264,7 +264,7 @@
             </div>
           </div>
 
-          <div class="limits-boundary" data-motion="fade" data-motion-delay="80">
+          <div class="limits-boundary" data-motion="right" data-motion-delay="80">
             <div class="limits-column">
               <p class="limits-column-title"><span aria-hidden="true">01</span> Dapat digunakan untuk</p>
               <ul>

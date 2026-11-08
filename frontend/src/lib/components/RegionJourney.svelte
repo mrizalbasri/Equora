@@ -3,6 +3,7 @@
   import { goto } from '$app/navigation';
   import WorkspaceShell from './WorkspaceShell.svelte';
   import ProvincePicker from './ProvincePicker.svelte';
+  import CustomDropdown, { type DropdownOption } from './CustomDropdown.svelte';
   import Icon from './Icon.svelte';
   import RegionPrioritySummary from './RegionPrioritySummary.svelte';
   import { api, labels, number, type RegionInsights, type Workspace } from '$lib/api/workspace';
@@ -29,6 +30,14 @@
   const local = $derived(workspace?.status !== 'published');
   const availableCount = $derived(profile ? percentSources.filter((source) => facilityValue(profile!, source) !== null).length : 0);
   const levelNames: Record<string, string> = { TK: 'Taman Kanak-kanak', SD: 'Sekolah Dasar', SMP: 'Sekolah Menengah Pertama', SMA: 'Sekolah Menengah Atas', SMK: 'Sekolah Menengah Kejuruan', SLB: 'Sekolah Luar Biasa' };
+  const levelDropdownOptions = $derived<DropdownOption[]>(
+    (workspace?.education_levels ?? [level]).map((item) => ({
+      value: item,
+      label: item,
+      desc: levelNames[item] ?? item,
+      icon: 'education',
+    })),
+  );
 
   $effect(() => {
     const params = { province, level, release, compare, attempt };
@@ -136,12 +145,18 @@
     <p>Pilih provinsi dan jenjang sekolah. Anda tidak perlu masuk akun.</p>
     <div class="journey-controls">
       <ProvincePicker id="your-province" label="Provinsi Anda" options={regions} value={province} onchange={(code) => navigate(code)} disabled={!workspace || !!error} />
-      <label><span class="control-label" id="school-level-label"><Icon name="education" size={20} />Jenjang sekolah</span>
-        <select aria-labelledby="school-level-label" aria-describedby="school-level-hint" value={level} onchange={(event) => navigate(province, event.currentTarget.value)} disabled={!workspace || !!error}>
-          {#each workspace?.education_levels ?? [level] as item}<option value={item}>{item} · {levelNames[item] ?? item}</option>{/each}
-        </select>
+      <div class="school-level-field">
+        <span class="control-label" id="school-level-label"><Icon name="education" size={20} />Jenjang sekolah</span>
+        <CustomDropdown
+          id="school-level-select"
+          label="Jenjang sekolah"
+          value={level}
+          options={levelDropdownOptions}
+          disabled={!workspace || !!error}
+          onchange={(val) => navigate(province, val)}
+        />
         <span class="control-hint" id="school-level-hint">Pilih tingkat sekolah yang ingin Anda lihat.</span>
-      </label>
+      </div>
     </div>
   </section>
 
@@ -269,7 +284,7 @@
   .control-label { display: flex; align-items: center; gap: 8px; }
   .control-label :global(svg) { color: var(--eq-primary-hover); }
   .control-hint { font-size: 14px; font-weight: 400; color: var(--eq-text-secondary); line-height: 1.5; }
-  select, textarea { width: 100%; max-width: 100%; border: 1px solid var(--eq-control-border); border-radius: 8px; padding: 12px; background: var(--eq-surface); color: var(--eq-text); font: inherit; min-height: 52px; }
+  textarea { width: 100%; max-width: 100%; border: 1px solid var(--eq-control-border); border-radius: 8px; padding: 12px; background: var(--eq-surface); color: var(--eq-text); font: inherit; min-height: 52px; }
   .review-message { margin-top: 20px; color: var(--eq-warning); background: var(--eq-warning-tint); padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.7; }
   .profile-overview { display: flex; justify-content: space-between; align-items: start; gap: 24px; padding-block: 40px 24px; }
   .profile-overview > div { min-width: 0; }

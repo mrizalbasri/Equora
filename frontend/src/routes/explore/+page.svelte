@@ -5,7 +5,8 @@
   import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
   import ProvinceMap from '$lib/components/ProvinceMap.svelte';
   import MapReadingGuide from '$lib/components/MapReadingGuide.svelte';
-  import Icon from '$lib/components/Icon.svelte';
+  import Icon, { type IconName } from '$lib/components/Icon.svelte';
+  import CustomDropdown, { type DropdownGroup, type DropdownOption } from '$lib/components/CustomDropdown.svelte';
   import {
     api,
     labels,
@@ -34,6 +35,92 @@
   let requestId = 0;
   let mapAttempt = $state(0);
   let evidencePanel = $state<HTMLElement>();
+  let showGuide = $state(false);
+
+  const indicatorCatalog = [
+    {
+      category: 'Indikator Persentase Akses (%)',
+      desc: 'Proporsi sekolah yang telah memenuhi standar kelayakan fasilitas.',
+      items: [
+        {
+          id: 'sanitation_percent',
+          name: 'Sanitasi dasar',
+          unit: 'Persentase (%)',
+          desc: 'Proporsi sekolah dengan ketersediaan jamban terpisah dan berfungsi layak untuk siswa laki-laki dan perempuan.',
+          source: 'Kemendikbudristek (Data Pokok Pendidikan)',
+        },
+        {
+          id: 'water_percent',
+          name: 'Ketersediaan air',
+          unit: 'Persentase (%)',
+          desc: 'Proporsi sekolah dengan sumber air bersih terlindungi dan mencukupi kebutuhan sanitasi harian.',
+          source: 'Kemendikbudristek',
+        },
+        {
+          id: 'internet_percent',
+          name: 'Akses internet',
+          unit: 'Persentase (%)',
+          desc: 'Proporsi sekolah yang terhubung dengan akses internet aktif untuk pembelajaran dan asesmen.',
+          source: 'Kemendikbudristek',
+        },
+        {
+          id: 'computers_percent',
+          name: 'Ketersediaan komputer',
+          unit: 'Persentase (%)',
+          desc: 'Proporsi sekolah yang memiliki perangkat komputer/laptop operasional untuk kegiatan belajar.',
+          source: 'Kemendikbudristek',
+        },
+      ],
+    },
+    {
+      category: 'Data Agregat Unit Sekolah (Jumlah Fisik)',
+      desc: 'Banyaknya unit sekolah fisik yang memiliki fasilitas tertentu atau total populasi sekolah.',
+      items: [
+        {
+          id: 'institutions_count',
+          name: 'Jumlah sekolah',
+          unit: 'Jumlah Unit',
+          desc: 'Total populasi satuan pendidikan (sekolah negeri dan swasta) pada jenjang terpilih.',
+          source: 'Kemendikbudristek',
+        },
+        {
+          id: 'electricity_count',
+          name: 'Sekolah dengan listrik',
+          unit: 'Jumlah Unit',
+          desc: 'Banyaknya unit sekolah yang tersambung aliran listrik PLN atau sumber daya mandiri.',
+          source: 'Kemendikbudristek',
+        },
+        {
+          id: 'water_count',
+          name: 'Sekolah dengan air',
+          unit: 'Jumlah Unit',
+          desc: 'Banyaknya unit sekolah yang memiliki sumber air di lingkungan sekolah.',
+          source: 'Kemendikbudristek',
+        },
+        {
+          id: 'handwashing_count',
+          name: 'Sekolah dengan fasilitas cuci tangan',
+          unit: 'Jumlah Unit',
+          desc: 'Banyaknya unit sekolah dengan sarana cuci tangan air mengalir dan sabun (CTPS).',
+          source: 'Kemendikbudristek',
+        },
+        {
+          id: 'internet_count',
+          name: 'Sekolah dengan internet',
+          unit: 'Jumlah Unit',
+          desc: 'Banyaknya unit sekolah fisik yang telah memiliki fasilitas jaringan internet.',
+          source: 'Kemendikbudristek',
+        },
+        {
+          id: 'computers_count',
+          name: 'Sekolah dengan ≥5 komputer',
+          unit: 'Jumlah Unit',
+          desc: 'Banyaknya unit sekolah yang memiliki minimal 5 komputer untuk pelaksanaan ANBK/lab.',
+          source: 'Kemendikbudristek',
+        },
+      ],
+    },
+  ];
   async function selectProvince(code: string) {
     selected = code;
     await tick();
@@ -67,6 +154,67 @@
     mapInsights?.rows.find((row) => row.code === selected),
   );
   const isPercent = $derived(data?.source.unit === 'percent');
+  const indicatorDropdownGroups = $derived<DropdownGroup[]>([
+    {
+      label: 'Persentase Akses Fasilitas (%)',
+      options: (workspace?.sources ?? [])
+        .filter((s) => s.unit === 'percent')
+        .map((s) => {
+          const catItem = indicatorCatalog[0]?.items.find((i) => i.id === s.source_id);
+          const icon: IconName = s.source_id.includes('water')
+            ? 'water'
+            : s.source_id.includes('internet')
+              ? 'internet'
+              : s.source_id.includes('computer')
+                ? 'computer'
+                : 'sanitation';
+          return {
+            value: s.source_id,
+            label: `${labels[s.source_id] ?? s.title} (%)`,
+            badge: 'Persentase (%)',
+            desc: catItem?.desc ?? s.definition,
+            icon,
+          };
+        }),
+    },
+    {
+      label: 'Jumlah Fisik Unit Sekolah',
+      options: (workspace?.sources ?? [])
+        .filter((s) => s.unit !== 'percent')
+        .map((s) => {
+          const catItem = indicatorCatalog[1]?.items.find((i) => i.id === s.source_id);
+          let icon: IconName = 'education';
+          if (s.source_id.includes('electricity')) icon = 'development';
+          else if (s.source_id.includes('water')) icon = 'water';
+          else if (s.source_id.includes('handwashing')) icon = 'sanitation';
+          else if (s.source_id.includes('internet')) icon = 'internet';
+          else if (s.source_id.includes('computer')) icon = 'computer';
+          return {
+            value: s.source_id,
+            label: labels[s.source_id] ?? s.title,
+            badge: 'Jumlah Unit',
+            desc: catItem?.desc ?? s.definition,
+            icon,
+          };
+        }),
+    },
+  ]);
+  const levelDescriptions: Record<string, string> = {
+    TK: 'Taman Kanak-Kanak / PAUD',
+    SD: 'Sekolah Dasar',
+    SMP: 'Sekolah Menengah Pertama',
+    SMA: 'Sekolah Menengah Atas',
+    SMK: 'Sekolah Menengah Kejuruan',
+    SLB: 'Sekolah Luar Biasa',
+  };
+  const levelDropdownOptions = $derived<DropdownOption[]>(
+    (workspace?.education_levels ?? ['SD']).map((lvl) => ({
+      value: lvl,
+      label: lvl,
+      desc: levelDescriptions[lvl] ?? lvl,
+      icon: 'education',
+    })),
+  );
   const available = $derived(filtered.filter((row) => row.value !== null));
   const values = $derived(available.map((row) => Number(row.value)));
   const minimum = $derived(values.length ? Math.min(...values) : null);
@@ -229,24 +377,29 @@
 >
   <p style="margin-bottom: 18px;"><a class="eq-button" href="/daerah">Pendidikan di Daerah Saya</a> Pilih provinsi untuk membaca kondisi fasilitas dengan penjelasan sederhana.</p>
   <section class="explorer-filters" aria-label="Filter data pendidikan">
-    <label class="indicator-filter"
-      >Indikator<select
+    <div class="indicator-filter-wrapper">
+      <span class="filter-label">Indikator</span>
+      <CustomDropdown
+        id="explore-indicator-select"
+        label="Indikator"
         bind:value={indicator}
-        onchange={load}
+        groups={indicatorDropdownGroups}
         disabled={!workspace}
-        >{#each workspace?.sources ?? [] as source}<option
-            value={source.source_id}
-            >{labels[source.source_id] ?? source.title}</option
-          >{/each}</select
-      ></label
-    >
-    <label
-      >Jenjang<select bind:value={level} onchange={load}
-        >{#each workspace?.education_levels ?? ['SD'] as item}<option
-            >{item}</option
-          >{/each}</select
-      ></label
-    >
+        onchange={() => load()}
+      />
+    </div>
+    <div class="level-filter-wrapper">
+      <span class="filter-label">Jenjang</span>
+      <CustomDropdown
+        id="explore-level-select"
+        label="Jenjang"
+        bind:value={level}
+        options={levelDropdownOptions}
+        disabled={!workspace}
+        align="right"
+        onchange={() => load()}
+      />
+    </div>
     <label class="province-filter"
       >Cari provinsi<span class="search-control"
         ><Icon name="search" size={17} /><input
@@ -263,6 +416,70 @@
       >
     </div>
   </section>
+
+  {#if data?.source}
+    <div class="indicator-guide-banner">
+      <div class="indicator-guide-main">
+        <span class="guide-type-badge {isPercent ? 'badge-percent' : 'badge-count'}">
+          {isPercent ? 'Persentase Akses (%)' : 'Jumlah Fisik (Unit)'}
+        </span>
+        <div class="guide-text">
+          <strong class="guide-title">{labels[indicator] ?? data.source.title}</strong>
+          <span class="guide-sep" aria-hidden="true">·</span>
+          <span class="guide-desc">{data.source.definition}</span>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="guide-toggle-btn"
+        onclick={() => (showGuide = !showGuide)}
+        aria-expanded={showGuide}
+      >
+        <span class="btn-icon" aria-hidden="true"><Icon name="book" size={15} /></span>
+        <span>{showGuide ? 'Tutup panduan' : 'Kamus indikator'}</span>
+        <span class="guide-chevron" class:open={showGuide} aria-hidden="true">▾</span>
+      </button>
+    </div>
+
+    {#if showGuide}
+      <div class="indicator-dictionary-drawer">
+        <div class="dictionary-header">
+          <div>
+            <h3 class="dictionary-title">Kamus & Panduan Indikator Fasilitas Sekolah</h3>
+            <p class="dictionary-sub">Dokumentasi terbuka mengenai definisi 10 indikator pendidikan, satuan pengukuran, dan dasar metodologinya (Kemendikbudristek 2025/2026).</p>
+          </div>
+          <span class="dictionary-pill">Data Pokok Pendidikan (Dapodik)</span>
+        </div>
+        <div class="dictionary-grid">
+          {#each indicatorCatalog as group}
+            <div class="dictionary-group">
+              <div class="group-header">
+                <h4 class="dictionary-group-title">{group.category}</h4>
+                <p class="group-desc">{group.desc}</p>
+              </div>
+              <div class="group-cards">
+                {#each group.items as item}
+                  <div class="dict-card" class:dict-card-active={item.id === indicator}>
+                    <div class="dict-card-top">
+                      <strong class="dict-name">{item.name}</strong>
+                      <span class="dict-unit-tag">{item.unit}</span>
+                    </div>
+                    <p class="dict-desc">{item.desc}</p>
+                    <div class="dict-footer">
+                      <span class="dict-source-label">Sumber: {item.source}</span>
+                      {#if item.id === indicator}
+                        <span class="dict-active-chip">Sedang aktif</span>
+                      {/if}
+                    </div>
+                  </div>
+                {/each}
+              </div>
+            </div>
+          {/each}
+        </div>
+      </div>
+    {/if}
+  {/if}
   {#if loading}<div class="explorer-loading" role="status">
       <span class="loading-line"></span>Memuat observasi pendidikan…
     </div>{/if}
@@ -566,7 +783,9 @@
     border-radius: 12px;
     margin-bottom: 20px;
   }
-  .explorer-filters label {
+  .explorer-filters label,
+  .indicator-filter-wrapper,
+  .level-filter-wrapper {
     display: grid;
     gap: 7px;
     font-size: 12px;
@@ -574,11 +793,230 @@
     font-weight: 550;
     min-width: 0;
   }
-  .explorer-filters select {
-    max-width: none;
+  .filter-label {
+    display: block;
+    line-height: 1;
+  }
+
+  .indicator-guide-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 16px;
+    background: #ffffff;
+    border: 1px solid var(--eq-border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    flex-wrap: wrap;
+  }
+  .indicator-guide-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+  .guide-type-badge {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .badge-percent {
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary-hover);
+    border: 1px solid #bfdbfe;
+  }
+  .badge-count {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+  }
+  .guide-text {
     font-size: 13px;
-    border-color: var(--eq-control-border);
-    padding-inline: 12px 30px;
+    line-height: 1.45;
+    color: var(--eq-text);
+    min-width: 0;
+  }
+  .guide-title {
+    font-weight: 650;
+  }
+  .guide-sep {
+    margin-inline: 6px;
+    color: var(--eq-text-muted);
+  }
+  .guide-desc {
+    color: var(--eq-text-secondary);
+  }
+  .guide-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 6px 12px;
+    border-radius: 7px;
+    border: 1px solid var(--eq-border);
+    background: var(--eq-surface-subtle);
+    color: var(--eq-text);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+    white-space: nowrap;
+  }
+  .guide-toggle-btn:hover {
+    background: #ffffff;
+    border-color: var(--eq-primary);
+    color: var(--eq-primary-hover);
+  }
+  .guide-chevron {
+    font-size: 12px;
+    transition: transform 180ms ease;
+  }
+  .guide-chevron.open {
+    transform: rotate(180deg);
+  }
+  .indicator-dictionary-drawer {
+    background: #ffffff;
+    border: 1px solid var(--eq-border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    animation: eq-fade-slide-up 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .dictionary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    border-bottom: 1px solid var(--eq-border);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .dictionary-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--eq-text);
+    margin: 0 0 4px;
+  }
+  .dictionary-sub {
+    font-size: 13px;
+    color: var(--eq-text-secondary);
+    margin: 0;
+  }
+  .dictionary-pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    border-radius: 20px;
+    color: var(--eq-text-muted);
+    white-space: nowrap;
+  }
+  .dictionary-grid {
+    display: grid;
+    gap: 22px;
+  }
+  .group-header {
+    margin-bottom: 10px;
+  }
+  .dictionary-group-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--eq-primary);
+    margin: 0 0 2px;
+  }
+  .group-desc {
+    font-size: 12px;
+    color: var(--eq-text-muted);
+    margin: 0;
+  }
+  .group-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+  .dict-card {
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    border-radius: 9px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 140ms ease, background-color 140ms ease;
+  }
+  .dict-card:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+  }
+  .dict-card-active {
+    background: #ffffff;
+    border-color: var(--eq-primary);
+    box-shadow: 0 0 0 1px var(--eq-primary), 0 2px 6px rgba(18, 100, 216, 0.08);
+  }
+  .dict-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .dict-name {
+    font-size: 13.5px;
+    font-weight: 650;
+    color: var(--eq-text);
+  }
+  .dict-unit-tag {
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 2px 6px;
+    background: #ffffff;
+    border: 1px solid var(--eq-border);
+    border-radius: 4px;
+    color: var(--eq-text-secondary);
+  }
+  .dict-card-active .dict-unit-tag {
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary-hover);
+    border-color: #bfdbfe;
+  }
+  .dict-desc {
+    font-size: 12px;
+    color: var(--eq-text-secondary);
+    line-height: 1.45;
+    margin: 0;
+    flex: 1;
+  }
+  .dict-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding-top: 4px;
+    border-top: 1px dashed var(--eq-border);
+    margin-top: 2px;
+  }
+  .dict-source-label {
+    font-size: 10.5px;
+    color: var(--eq-text-muted);
+  }
+  .dict-active-chip {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--eq-primary);
   }
   .filter-scope {
     border-left: 1px solid var(--eq-border);

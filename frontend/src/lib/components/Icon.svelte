@@ -1,3 +1,35 @@
+<script module lang="ts">
+  export type IconName =
+    | 'share'
+    | 'retry'
+    | 'external'
+    | 'education'
+    | 'users'
+    | 'development'
+    | 'water'
+    | 'internet'
+    | 'computer'
+    | 'sanitation'
+    | 'compass'
+    | 'chart'
+    | 'sliders'
+    | 'database'
+    | 'compare'
+    | 'book'
+    | 'shield'
+    | 'arrow'
+    | 'download'
+    | 'search'
+    | 'menu'
+    | 'close'
+    | 'info'
+    | 'chevron'
+    | 'home'
+    | 'map'
+    | 'check'
+    | 'alert';
+</script>
+
 <script lang="ts">
   import SettingsAdjust from 'carbon-icons-svelte/lib/SettingsAdjust.svelte';
   import Warning from 'carbon-icons-svelte/lib/Warning.svelte';
@@ -59,7 +91,7 @@
     check: Checkmark,
     alert: Warning,
   };
-  let { name, size = 20 }: { name: keyof typeof icons; size?: number } =
+  let { name, size = 20 }: { name: IconName; size?: number } =
     $props();
   const Glyph = $derived(icons[name]);
 </script>

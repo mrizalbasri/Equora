@@ -232,13 +232,21 @@
 </div>
 <p class="map-scale">{presentation.legend.description} Batas komunitas yang disederhanakan; basemap bukan sumber indikator pendidikan.</p>
 {#if geo}<details class="attribution">
-    <summary>Batas komunitas: Deny Herianto · CC BY 4.0</summary>
-    <p>
-      {geo.attribution}
-      <a href="https://creativecommons.org/licenses/by/4.0/"
-        >Lisensi CC BY 4.0</a
-      >
-    </p>
+    <summary>
+      <span class="attribution-chip">
+        <span class="attr-icon" aria-hidden="true">ℹ</span>
+        <span>Batas komunitas: Deny Herianto · CC BY 4.0</span>
+        <span class="attr-chevron" aria-hidden="true">▾</span>
+      </span>
+    </summary>
+    <div class="attr-drawer">
+      <p>
+        {geo.attribution}
+        <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer"
+          >Lisensi CC BY 4.0</a
+        >
+      </p>
+    </div>
   </details>{/if}
 
 <style>
@@ -267,22 +275,68 @@
     border: 1px solid #9ba9b6;
   }
   .attribution {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--eq-text-secondary);
     margin-top: 10px;
-    padding: 10px 0 0;
+    padding-top: 8px;
     border-top: 1px solid var(--eq-border);
   }
   .attribution summary {
-    font-weight: 400;
-    min-height: 32px;
+    font-weight: 500;
+    min-height: 28px;
     cursor: pointer;
     font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    list-style: none;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
-  .attribution p {
-    font-size: 12px;
+  .attribution summary::-webkit-details-marker,
+  .attribution summary::marker {
+    display: none !important;
+    content: "" !important;
+  }
+  .attribution-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    color: var(--eq-text-secondary);
+    font-size: 11px;
+    font-weight: 550;
+    transition: all 140ms ease;
+  }
+  .attribution summary:hover .attribution-chip,
+  .attribution[open] .attribution-chip {
+    color: var(--eq-primary);
+    background: var(--eq-primary-tint);
+    border-color: #bfdbfe;
+  }
+  .attr-icon {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--eq-primary);
+  }
+  .attr-chevron {
+    font-size: 10px;
+    transition: transform 180ms ease;
+  }
+  .attribution[open] .attr-chevron {
+    transform: rotate(180deg);
+  }
+  .attr-drawer p {
+    font-size: 11px;
     line-height: 1.6;
-    margin-block: 6px;
+    margin: 6px 0 0;
+    padding: 8px 12px;
+    background: var(--eq-surface-subtle);
+    border-radius: 6px;
+    border: 1px solid var(--eq-border);
   }
   .map-ready {
     font-size: 11px;

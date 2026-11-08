@@ -12,6 +12,7 @@
   import ProvinceMap from './ProvinceMap.svelte';
   import DecisionReview from './DecisionReview.svelte';
   import ScenarioEvidence from './ScenarioEvidence.svelte';
+  import Icon from './Icon.svelte';
 
   let {
     result,
@@ -251,19 +252,32 @@
     {/if}
   {/if}
 
-  <div class="work-actions result-actions">
-    <a class="eq-button eq-button-primary action-pdf-highlight" href={'/api/v1/scenarios/' + result.id + '/pdf'}>
-      <span>Unduh Memo Kebijakan (PDF)</span>
-    </a>
-    <a class="eq-button" href={'/api/v1/scenarios/' + result.id + '/export'}>
-      <span>Unduh Tabel Alokasi (CSV)</span>
-    </a>
-    <a class="eq-button" href={compareHref ?? '/compare?left=' + result.id}>
-      <span>{compareHref ? 'Bandingkan dengan skenario awal' : 'Bandingkan Skenario'}</span>
-    </a>
-    <a class="eq-button" href={'/scenarios/' + result.id}>
-      <span>Buka Tautan Snapshot</span>
-    </a>
+  <div class="scenario-action-bar" aria-label="Tindakan dokumen dan skenario">
+    <div class="action-bar-group primary-actions">
+      <a
+        class="action-btn action-btn-pdf"
+        href={'/api/v1/scenarios/' + result.id + '/pdf'}
+        aria-label="Unduh Memo Kebijakan (PDF)"
+      >
+        <span class="btn-icon" aria-hidden="true"><Icon name="download" size={16} /></span>
+        <span class="btn-text">Unduh Memo Kebijakan (PDF)</span>
+        <span class="btn-chip" aria-hidden="true">Resmi</span>
+      </a>
+      <a class="action-btn action-btn-secondary" href={'/api/v1/scenarios/' + result.id + '/export'}>
+        <span class="btn-icon" aria-hidden="true"><Icon name="database" size={16} /></span>
+        <span class="btn-text">Unduh Tabel Alokasi (CSV)</span>
+      </a>
+    </div>
+    <div class="action-bar-group secondary-actions">
+      <a class="action-btn action-btn-ghost" href={compareHref ?? '/compare?left=' + result.id}>
+        <span class="btn-icon" aria-hidden="true"><Icon name="compare" size={16} /></span>
+        <span class="btn-text">{compareHref ? 'Bandingkan dengan skenario awal' : 'Bandingkan Skenario'}</span>
+      </a>
+      <a class="action-btn action-btn-ghost" href={'/scenarios/' + result.id}>
+        <span class="btn-icon" aria-hidden="true"><Icon name="share" size={16} /></span>
+        <span class="btn-text">Buka Tautan Snapshot</span>
+      </a>
+    </div>
   </div>
 
   <details class="params-details">
@@ -297,13 +311,37 @@
   </details>
 </section>
 
-<nav class="result-tools" aria-label="Periksa hasil skenario">
-  <a class="eq-button eq-button-primary" href="#uji-keputusan"> Uji keputusan & pemerataan
-  </a>
-  <a class="eq-button" href="#peta-urgensi"> Peta GIS urgensi & alokasi
-  </a>
-  <a class="eq-button" href="#telusur-bukti"> Telusur bukti data
-  </a>
+<nav class="result-nav-panel" aria-label="Periksa hasil skenario">
+  <div class="result-nav-header">
+    <span class="eq-kicker">NAVIGASI LAPORAN SIMULASI</span>
+    <p class="result-nav-subtitle">Lompat langsung ke visualisasi spasial, uji sensitivitas keputusan, atau audit data:</p>
+  </div>
+  <div class="result-nav-links">
+    <a class="result-nav-card" href="#peta-urgensi">
+      <span class="nav-card-num" aria-hidden="true">1</span>
+      <span class="nav-card-body">
+        <strong class="nav-card-title">Peta GIS urgensi & alokasi</strong>
+        <span class="nav-card-sub" aria-hidden="true">Visualisasi spasial & solver CP-SAT</span>
+      </span>
+      <span class="nav-card-arrow" aria-hidden="true">↓</span>
+    </a>
+    <a class="result-nav-card" href="#uji-keputusan">
+      <span class="nav-card-num" aria-hidden="true">2</span>
+      <span class="nav-card-body">
+        <strong class="nav-card-title">Uji keputusan & pemerataan</strong>
+        <span class="nav-card-sub" aria-hidden="true">Uji asumsi anggaran & Indeks Gini</span>
+      </span>
+      <span class="nav-card-arrow" aria-hidden="true">↓</span>
+    </a>
+    <a class="result-nav-card" href="#telusur-bukti">
+      <span class="nav-card-num" aria-hidden="true">3</span>
+      <span class="nav-card-body">
+        <strong class="nav-card-title">Telusur bukti data</strong>
+        <span class="nav-card-sub" aria-hidden="true">Peringkat 38 provinsi & bukti SHA-256</span>
+      </span>
+      <span class="nav-card-arrow" aria-hidden="true">↓</span>
+    </a>
+  </div>
 </nav>
 
 <section id="peta-urgensi" class="work-panel scenario-gis-panel" aria-labelledby="scenario-gis-title">
@@ -322,7 +360,8 @@
         aria-pressed={activeMapMode === 'urgency'}
         onclick={() => (mapMode = 'urgency')}
       >
-        Tingkat urgensi (MCDA)
+        <span class="mode-btn-label">Tingkat urgensi (MCDA)</span>
+        <span class="mode-btn-tag">Kebutuhan sekolah</span>
       </button>
       <button
         type="button"
@@ -331,7 +370,8 @@
         disabled={!solverOk}
         onclick={() => (mapMode = 'allocation')}
       >
-        Sebaran alokasi (CP-SAT)
+        <span class="mode-btn-label">Sebaran alokasi (CP-SAT)</span>
+        <span class="mode-btn-tag">Distribusi anggaran</span>
       </button>
     </div>
   </div>
@@ -358,14 +398,17 @@
       </div>
       <div class="gis-inspector-actions">
         <a
-          class="eq-button"
+          class="eq-button inspector-profile-btn"
           href={'/daerah?' + new URLSearchParams({
             province: activeRankedRow.region_code,
             level: result.parameters.education_level,
             release: result.release_id,
           })}
         >
-          Profil wilayah
+          <span>Profil wilayah</span>
+          <svg class="btn-arrow-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+          </svg>
         </a>
       </div>
     </div>
@@ -542,8 +585,101 @@
     font-size: 13px;
     margin-bottom: 16px;
   }
-  .result-actions {
-    margin-block: 16px;
+  .scenario-action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-block: 20px 24px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--eq-surface);
+    border: 1px solid var(--eq-border);
+    box-shadow: 0 1px 3px rgb(15 23 42 / 4%);
+  }
+  .action-bar-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 150ms ease;
+  }
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .action-btn-pdf {
+    background: linear-gradient(135deg, #1264d8, #0e4faf);
+    color: #ffffff;
+    border: 1px solid #0e4faf;
+    box-shadow: 0 2px 6px rgb(18 100 216 / 25%);
+  }
+  .action-btn-pdf:hover {
+    background: linear-gradient(135deg, #0e4faf, #0a3d8a);
+    box-shadow: 0 4px 12px rgb(18 100 216 / 35%);
+    transform: translateY(-1px);
+  }
+  .action-btn-pdf .btn-chip {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+  .action-btn-secondary {
+    background: var(--eq-surface);
+    color: var(--eq-text);
+    border: 1px solid var(--eq-border);
+  }
+  .action-btn-secondary:hover {
+    background: var(--eq-surface-subtle);
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgb(15 23 42 / 6%);
+  }
+  .action-btn-ghost {
+    background: var(--eq-surface-subtle);
+    color: var(--eq-text-secondary);
+    border: 1px solid var(--eq-border);
+  }
+  .action-btn-ghost:hover {
+    background: #ffffff;
+    color: var(--eq-primary-hover);
+    border-color: var(--eq-primary);
+    transform: translateY(-1px);
+  }
+  @media (max-width: 760px) {
+    .scenario-action-bar {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 10px;
+    }
+    .action-bar-group {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+    .action-btn {
+      width: 100%;
+      justify-content: center;
+    }
   }
   .params-details {
     margin-top: 16px;
@@ -574,11 +710,91 @@
     flex-wrap: wrap;
     font-size: 13px;
   }
-  .result-tools {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+  .result-nav-panel {
+    background: var(--eq-surface);
+    border: 1px solid var(--eq-border);
+    border-radius: 14px;
+    padding: 16px 20px 18px;
     margin-block: 20px 24px;
+    box-shadow: var(--eq-shadow-card);
+  }
+  .result-nav-header {
+    margin-bottom: 12px;
+  }
+  .result-nav-subtitle {
+    font-size: 13px;
+    color: var(--eq-text-secondary);
+    margin-top: 3px;
+  }
+  .result-nav-links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .result-nav-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    text-decoration: none;
+    color: var(--eq-text);
+    transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+  }
+  .result-nav-card:hover {
+    background: #ffffff;
+    border-color: var(--eq-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgb(18 100 216 / 8%);
+  }
+  .nav-card-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary);
+    font-weight: 750;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav-card-body {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+  }
+  .nav-card-title {
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--eq-text);
+  }
+  .nav-card-sub {
+    font-size: 11px;
+    color: var(--eq-text-muted);
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-card-arrow {
+    color: var(--eq-text-muted);
+    font-size: 13px;
+    transition: transform 140ms ease, color 140ms ease;
+    flex-shrink: 0;
+  }
+  .result-nav-card:hover .nav-card-arrow {
+    transform: translateY(2px);
+    color: var(--eq-primary);
+  }
+  @media (max-width: 860px) {
+    .result-nav-links {
+      grid-template-columns: 1fr;
+    }
   }
   .rank-index {
     font-weight: 650;
@@ -737,16 +953,7 @@
     color: var(--eq-text-secondary);
     line-height: 1.55;
   }
-  .action-pdf-highlight {
-    background: var(--eq-primary);
-    color: white;
-    border-color: var(--eq-primary);
-    font-weight: 650;
-  }
-  .action-pdf-highlight:hover {
-    background: var(--eq-primary-hover);
-    color: white;
-  }
+
 
   /* Estimasi dampak: sekolah difasilitasi */
   .impact-card {
@@ -799,31 +1006,84 @@
   .gis-mode-switch {
     display: inline-grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    padding: 3px;
-    border: 1px solid var(--eq-border);
-    border-radius: 8px;
-    background: var(--eq-surface-subtle);
+    padding: 4px;
+    border: 1px solid #dce4ee;
+    border-radius: 12px;
+    background: #edf2f7;
+    gap: 4px;
     max-width: 100%;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
   }
   .gis-mode-btn {
     min-height: 44px;
-    padding: 8px 12px;
-    border: 0;
-    border-radius: 6px;
+    padding: 6px 16px;
+    border: 1px solid transparent;
+    border-radius: 9px;
     background: transparent;
     color: var(--eq-text-secondary);
-    font-size: 12px;
-    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    text-align: left;
     cursor: pointer;
+    user-select: none;
+    transition:
+      background-color 140ms ease,
+      color 140ms ease,
+      border-color 140ms ease,
+      box-shadow 140ms ease,
+      transform 120ms ease;
+  }
+  .gis-mode-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--eq-text);
+  }
+  .gis-mode-btn:active:not(:disabled) {
+    transform: scale(0.985);
   }
   .gis-mode-btn[aria-pressed='true'] {
-    background: var(--eq-surface);
+    background: #ffffff;
     color: var(--eq-primary-hover);
-    box-shadow: 0 1px 3px rgb(30 52 73 / 12%);
+    border-color: rgba(15, 23, 42, 0.08);
+    box-shadow:
+      0 2px 6px rgba(15, 23, 42, 0.08),
+      0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+  .mode-btn-label {
+    font-size: 12px;
+    font-weight: 650;
+  }
+  .mode-btn-tag {
+    font-size: 10.5px;
+    color: var(--eq-text-muted);
+    font-weight: 500;
+  }
+  .gis-mode-btn[aria-pressed='true'] .mode-btn-tag {
+    color: var(--eq-primary);
+    font-weight: 600;
   }
   .gis-mode-btn:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+  }
+  .inspector-profile-btn {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    font-weight: 600;
+    gap: 8px;
+    padding: 9px 18px;
+  }
+  .inspector-profile-btn:hover {
+    border-color: var(--eq-primary);
+    color: var(--eq-primary-hover);
+    background: var(--eq-primary-tint);
+  }
+  .inspector-profile-btn:hover .btn-arrow-icon {
+    transform: translateX(3px);
+  }
+  .btn-arrow-icon {
+    transition: transform 140ms ease;
   }
   .gis-inspector {
     margin-top: 14px;

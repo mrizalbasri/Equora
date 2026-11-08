@@ -24,21 +24,21 @@
       <div class="intro-copy">
         <h1>Kenali daerahnya.<br />Periksa datanya.<br /><span>Pahami pilihannya.</span></h1>
         <p class="lead" data-motion="fade" data-motion-delay="70">Equora membantu Anda memahami perbedaan akses fasilitas pendidikan antardaerah, menelusuri sumbernya, dan mencoba pilihan alokasi sumber daya.</p>
-        <div class="intro-actions" data-motion="focus" data-motion-delay="140">
+        <div class="intro-actions" data-motion="scale" data-motion-delay="140">
           <a class="eq-button eq-button-primary" href="/daerah">Lihat kondisi provinsi <Icon name="arrow" size={18} /></a>
           <a class="intro-link" href="/#pratinjau">Kenali alur analisis</a>
         </div>
       </div>
-      <figure class="artwork" data-motion="unfold" data-motion-delay="180">
+      <figure class="artwork" data-motion="right" data-motion-delay="180">
         <img src="/images/editorial/education-discussion.webp" alt="Ilustrasi tiga pendidik mendiskusikan kebutuhan fasilitas pendidikan di perpustakaan." width="1536" height="1024" decoding="async" />
         <figcaption>Di balik setiap angka, ada kebutuhan pendidikan yang perlu dipahami.</figcaption>
       </figure>
     </header>
 
     <ul class="context" aria-label="Cakupan dan status Equora">
-      <li data-motion="fade"><strong>Tingkat provinsi</strong><span>Data agregat, bukan per sekolah</span></li>
-      <li data-motion="fade" data-motion-delay="70"><strong>2025/2026</strong><span>Konteks tahun ajaran</span></li>
-      <li data-motion="fade" data-motion-delay="140"><strong>Review lokal</strong><span>Data dan fitur masih ditinjau</span></li>
+      <li data-motion="down"><strong>Tingkat provinsi</strong><span>Data agregat, bukan per sekolah</span></li>
+      <li data-motion="down" data-motion-delay="70"><strong>2025/2026</strong><span>Konteks tahun ajaran</span></li>
+      <li data-motion="down" data-motion-delay="140"><strong>Review lokal</strong><span>Data dan fitur masih ditinjau</span></li>
     </ul>
 
     <section class="journey" id="cara-kerja" aria-labelledby="journey-title">
@@ -53,7 +53,7 @@
             </button>
           {/each}
         </div>
-        <div id="journey-preview" class="preview" aria-live="polite" aria-atomic="true" data-motion="unfold" data-motion-delay="120">
+        <div id="journey-preview" class="preview" aria-live="polite" aria-atomic="true" data-motion="right" data-motion-delay="120">
           {#key selected}<div class="preview-body">
           <span class="preview-label">Cara kerja Equora</span>
           <h3>{current.detail}</h3>
@@ -66,7 +66,7 @@
       </div>
     </section>
 
-    <section class="purpose" aria-labelledby="purpose-title" data-motion="focus">
+    <section class="purpose" aria-labelledby="purpose-title" data-motion="scale">
       <h2 id="purpose-title">Angka saja<br />belum cukup.</h2>
       <div><p class="purpose-lead">Dua angka terlihat sebanding. Tetapi apakah tahun, jenjang, dan definisinya sama?</p><p>Equora dibangun untuk menghadirkan konteks bersama data. Anda dapat membaca perbedaan akses, memeriksa asal angka, lalu memahami bagaimana asumsi memengaruhi pilihan alokasi.</p><a href="/methodology">Pelajari cara membaca hasil <Icon name="arrow" size={18} /></a></div>
     </section>
@@ -79,14 +79,14 @@
 
     <section class="transparency" aria-labelledby="transparency-title">
       <div class="section-heading" data-motion="left"><h2 id="transparency-title">Terbuka tentang data.<br />Jelas tentang batasnya.</h2><p>Periksa konteks ini sebelum membawa hasil ke dalam kajian atau diskusi.</p></div>
-      <div class="disclosures" data-motion="unfold" data-motion-delay="90">
+      <div class="disclosures" data-motion="scale" data-motion-delay="90">
         <details open><summary>Apa yang bisa disimpulkan dari data?</summary><div><p>Persentase akses menunjukkan proporsi sekolah yang memenuhi definisi fasilitas pada sumbernya. Bandingkan indikator, jenjang, dan periode yang sama.</p><p>Data agregat provinsi tidak menggambarkan kondisi setiap sekolah. Nilai yang tidak tersedia ditandai terpisah dan tidak dianggap nol.</p><a href="/datasets">Periksa sumber dan kualitas data <Icon name="arrow" size={16} /></a></div></details>
         <details><summary>Apakah hasil simulasi merupakan keputusan resmi?</summary><div><p>Hasil alokasi bergantung pada data, bobot, dan asumsi yang digunakan. Hasil ini bukan keputusan anggaran resmi, prediksi dampak pendidikan, atau pengganti kajian lapangan.</p><a href="/methodology#limits">Baca batas interpretasi <Icon name="arrow" size={16} /></a></div></details>
         <details><summary>Sejauh mana Equora dikembangkan?</summary><div><p>Penjelajah data, peta provinsi, katalog dataset, simulasi, serta penyimpanan dan perbandingan skenario tersedia untuk review lokal. Hosting publik belum dipilih dan lisensi redistribusi data masih perlu diverifikasi.</p><p>Equora disiapkan untuk Web In Action, MIA 2026.</p><a href="https://github.com/mrizalbasri/Equora">Lihat kode dan dokumentasi proyek <Icon name="external" size={16} /></a></div></details>
       </div>
     </section>
 
-    <footer class="closing" data-motion="focus"><div><h2>Mulai dari daerah<br />yang Anda kenal.</h2><p>Pilih provinsi, temukan konteksnya, lalu ajukan pertanyaan berikutnya.</p></div><a class="eq-button eq-button-primary" href="/daerah">Jelajahi provinsi Anda <Icon name="arrow" size={18} /></a></footer>
+    <footer class="closing" data-motion="scale"><div><h2>Mulai dari daerah<br />yang Anda kenal.</h2><p>Pilih provinsi, temukan konteksnya, lalu ajukan pertanyaan berikutnya.</p></div><a class="eq-button eq-button-primary" href="/daerah">Jelajahi provinsi Anda <Icon name="arrow" size={18} /></a></footer>
   </article>
 </PublicShell>
 
@@ -125,7 +125,7 @@
   .preview-note { display: block; color: var(--eq-text-secondary); font-size: 12px; line-height: 1.6; margin-top: 16px; }
   .purpose { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; padding: 52px; background: linear-gradient(135deg, var(--eq-primary-tint) 0%, #f5f9ff 100%); border: 1px solid #cfe2ff; border-radius: 20px; }
   .purpose p { color: var(--eq-text-secondary); line-height: 1.8; } .purpose .purpose-lead { color: var(--eq-text); font-size: 21px; font-weight: 550; margin-bottom: 16px; }
-  section a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; text-underline-offset: 5px; }
+  section a { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; text-underline-offset: 5px; }
   .purpose a { margin-top: 18px; font-weight: 600; color: var(--eq-primary-hover); }
   .audience dl { margin: 32px 0 20px; }
   .audience dl > div { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; padding: 26px 0; border-bottom: 1px solid var(--eq-border); }

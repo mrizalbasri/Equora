@@ -1,7 +1,15 @@
 <script lang="ts">
   import { labels, number, rupiah, type Snapshot } from '$lib/api/workspace';
+  import CustomDropdown, { type DropdownOption } from './CustomDropdown.svelte';
   let { snapshot }: { snapshot: Snapshot } = $props();
   let code = $state('');
+  const regionOptions = $derived<DropdownOption[]>(
+    snapshot.input_rows?.map((row, index) => ({
+      value: index === 0 ? '' : row.code,
+      label: row.name,
+      icon: 'map',
+    })) ?? [],
+  );
   const selected = $derived(
     snapshot.input_rows?.find((row) => row.code === code) ??
       snapshot.input_rows?.[0],
@@ -48,14 +56,15 @@
     </div>
   </header>
   {#if selected}
-    <label class="work-field region-picker"
-      >Provinsi yang diperiksa<select bind:value={code}
-        ><option value="">{snapshot.input_rows[0].name}</option
-        >{#each snapshot.input_rows.slice(1) as row}<option value={row.code}
-            >{row.name}</option
-          >{/each}</select
-      ></label
-    >
+    <div class="work-field region-picker">
+      <span class="field-title">Provinsi yang diperiksa</span>
+      <CustomDropdown
+        id="evidence-region-select"
+        label="Provinsi yang diperiksa"
+        bind:value={code}
+        options={regionOptions}
+      />
+    </div>
     <div class="evidence-summary">
       <div>
         <p class="work-muted">{selected.name}</p>
