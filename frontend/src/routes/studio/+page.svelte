@@ -496,17 +496,17 @@
             class="region-search-input"
           />
         </div>
-        <div class="work-actions" style="margin: 0;">
+        <div class="work-actions region-select-actions" style="margin: 0;">
           <button
             type="button"
-            class="eq-button"
+            class="eq-button eq-button-sm"
             onclick={() => (selected = regions.map((row) => row.code))}
           >
             Pilih semua
           </button>
           <button
             type="button"
-            class="eq-button"
+            class="eq-button eq-button-sm"
             onclick={() => (selected = [])}
           >
             Kosongkan
@@ -523,7 +523,7 @@
             </label>
             <button
               type="button"
-              class="eq-button"
+              class="eq-button eq-button-sm region-override-btn"
               onclick={() => toggleOverride(row.code)}
             >
               {overrides[row.code] ? 'Hapus penyesuaian' : 'Sesuaikan'}
@@ -985,23 +985,55 @@
     gap: 10px;
   }
   .preset-card {
-    background: var(--eq-surface);
-    border: 1px solid var(--eq-border);
-    border-radius: 10px;
-    padding: 10px 12px;
+    background: #ffffff;
+    border: 1.5px solid #dbe2ea;
+    border-radius: 12px;
+    padding: 11px 14px;
     text-align: left;
     cursor: pointer;
-    transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    user-select: none;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      transform 120ms ease,
+      box-shadow 150ms ease;
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
   .preset-card:hover {
-    border-color: var(--eq-primary);
+    border-color: #9cb5d9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
+  }
+  .preset-card:active {
+    transform: scale(0.985);
   }
   .preset-card.active {
     border-color: var(--eq-primary);
-    background: var(--eq-primary-tint);
+    background: #f0f6ff;
+    box-shadow:
+      0 0 0 1px var(--eq-primary),
+      0 2px 8px rgba(18, 100, 216, 0.12);
+  }
+  .region-select-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .region-override-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 550;
+    border-color: #cbd5e1;
+    white-space: nowrap;
+    margin-left: auto;
+  }
+  .region-override-btn:hover {
+    border-color: var(--eq-primary);
+    color: var(--eq-primary-hover);
   }
   .preset-card-top {
     display: flex;

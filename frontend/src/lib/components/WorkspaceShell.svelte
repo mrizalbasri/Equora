@@ -845,15 +845,6 @@
   }
   .app-frame :global(.eq-button) {
     gap: 8px;
-    transition:
-      background 160ms ease,
-      color 160ms ease;
-  }
-  .app-frame :global(.eq-button:active) {
-    transform: none;
-  }
-  .app-frame :global(.eq-button:disabled) {
-    opacity: 0.55;
   }
   @media (max-width: 550px) {
     .app-topbar {

@@ -1,4 +1,4 @@
-﻿<script lang="ts">
+<script lang="ts">
   import { labels, number, rupiah, type Snapshot } from '$lib/api/workspace';
   import {
     equityConcentration,
@@ -398,14 +398,17 @@
       </div>
       <div class="gis-inspector-actions">
         <a
-          class="eq-button"
+          class="eq-button inspector-profile-btn"
           href={'/daerah?' + new URLSearchParams({
             province: activeRankedRow.region_code,
             level: result.parameters.education_level,
             release: result.release_id,
           })}
         >
-          Profil wilayah
+          <span>Profil wilayah</span>
+          <svg class="btn-arrow-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+          </svg>
         </a>
       </div>
     </div>
@@ -1004,17 +1007,18 @@
     display: inline-grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 4px;
-    border: 1px solid var(--eq-border);
-    border-radius: 10px;
-    background: var(--eq-surface-subtle);
+    border: 1px solid #dce4ee;
+    border-radius: 12px;
+    background: #edf2f7;
     gap: 4px;
     max-width: 100%;
+    box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
   }
   .gis-mode-btn {
     min-height: 44px;
-    padding: 6px 14px;
+    padding: 6px 16px;
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: 9px;
     background: transparent;
     color: var(--eq-text-secondary);
     display: flex;
@@ -1023,32 +1027,63 @@
     gap: 2px;
     text-align: left;
     cursor: pointer;
-    transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+    user-select: none;
+    transition:
+      background-color 140ms ease,
+      color 140ms ease,
+      border-color 140ms ease,
+      box-shadow 140ms ease,
+      transform 120ms ease;
   }
   .gis-mode-btn:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.75);
     color: var(--eq-text);
   }
+  .gis-mode-btn:active:not(:disabled) {
+    transform: scale(0.985);
+  }
   .gis-mode-btn[aria-pressed='true'] {
-    background: var(--eq-surface);
+    background: #ffffff;
     color: var(--eq-primary-hover);
-    border-color: var(--eq-border);
-    box-shadow: 0 1px 4px rgb(15 23 42 / 8%);
+    border-color: rgba(15, 23, 42, 0.08);
+    box-shadow:
+      0 2px 6px rgba(15, 23, 42, 0.08),
+      0 1px 2px rgba(15, 23, 42, 0.04);
   }
   .mode-btn-label {
     font-size: 12px;
     font-weight: 650;
   }
   .mode-btn-tag {
-    font-size: 10px;
+    font-size: 10.5px;
     color: var(--eq-text-muted);
+    font-weight: 500;
   }
   .gis-mode-btn[aria-pressed='true'] .mode-btn-tag {
     color: var(--eq-primary);
+    font-weight: 600;
   }
   .gis-mode-btn:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+  }
+  .inspector-profile-btn {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    font-weight: 600;
+    gap: 8px;
+    padding: 9px 18px;
+  }
+  .inspector-profile-btn:hover {
+    border-color: var(--eq-primary);
+    color: var(--eq-primary-hover);
+    background: var(--eq-primary-tint);
+  }
+  .inspector-profile-btn:hover .btn-arrow-icon {
+    transform: translateX(3px);
+  }
+  .btn-arrow-icon {
+    transition: transform 140ms ease;
   }
   .gis-inspector {
     margin-top: 14px;

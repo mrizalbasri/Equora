@@ -20,15 +20,15 @@
   <section class="landing-hero eq-container" aria-labelledby="hero-title" use:landingScroll>
     <div class="landing-progress" aria-hidden="true"></div>
     <div class="hero-copy">
-      <h1 id="hero-title" data-motion="focus"><span>Beda wilayah.</span><br />Beda kebutuhan.</h1>
+      <h1 id="hero-title" data-motion="blur"><span>Beda wilayah.</span><br />Beda kebutuhan.</h1>
       <p data-motion="fade" data-motion-delay="70">Bagaimana fasilitas sekolah di provinsi Anda?<br class="desktop-break" /> Lihat kondisi sanitasi, air, internet, dan komputer. Bandingkan angkanya dan periksa sumbernya.</p>
-      <div class="hero-actions" data-motion="focus" data-motion-delay="140">
+      <div class="hero-actions" data-motion="scale" data-motion-delay="140">
         <a class="landing-button primary" href="/daerah">Pendidikan di Daerah Saya</a>
         <a class="text-link" href="/explore">Telusuri data pendidikan</a>
       </div>
     </div>
 
-    <div id="pratinjau" class="product-preview" data-motion="unfold" data-motion-delay="210">
+    <div id="pratinjau" class="product-preview" data-motion="scale" data-motion-delay="210">
       <figure>
         <img class="school-illustration" src="/images/landing/school-editorial.webp"
           alt="Ilustrasi sekolah dengan ruang kelas, fasilitas air dan cuci tangan, serta laboratorium komputer."
@@ -58,7 +58,7 @@
     </ol>
   </section>
 
-  <section class="scenario-section" aria-labelledby="scenario-title" data-motion="focus">
+  <section class="scenario-section" aria-labelledby="scenario-title" data-motion="scale">
     <div class="scenario-copy">
       <h2 id="scenario-title"><span>Satu anggaran.</span><br />Banyak kemungkinan.</h2>
       <p>Bobot dan batasan yang berbeda dapat menghasilkan alokasi yang berbeda. Beri ruang untuk mengujinya sebelum menarik kesimpulan.</p>
@@ -158,7 +158,7 @@
     </div>
   </section>
 
-  <section class="eq-container closing" aria-label="Mulai menggunakan Equora" data-motion="focus">
+  <section class="eq-container closing" aria-label="Mulai menggunakan Equora" data-motion="scale">
     <h2>Mulai dari pertanyaan<br /><span>yang ingin Anda jawab.</span></h2>
     <a class="landing-button primary" href="/daerah">Lihat pendidikan di daerah saya</a>
     <p>Pilih provinsi dan baca kondisi fasilitas sekolah tanpa login.</p>
