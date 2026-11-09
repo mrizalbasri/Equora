@@ -32,7 +32,7 @@ Equora adalah aplikasi web untuk mengeksplorasi data fasilitas pendidikan di Ind
 
 Proyek ini disiapkan untuk Web In Action (WIA), MIA 2026. Antarmuka menggunakan Bahasa Indonesia, dengan penjelasan untuk publik serta rincian metode, sumber, dan batas data.
 
-> **Status:** aplikasi tersedia untuk pengembangan dan penggunaan lokal. Hosting publik dan rilis data terverifikasi belum tersedia. Data workspace berstatus `local_review`; hasil simulasi bukan keputusan anggaran resmi.
+> **Status:** purwarupa frontend tersedia sebagai pratinjau publik di [equora-tau.vercel.app](https://equora-tau.vercel.app). Layanan data (API FastAPI + PostgreSQL) masih dijalankan secara lokal, sehingga fitur berbasis data pada pratinjau publik memerlukan backend yang aktif. Data workspace berstatus `local_review`; hasil simulasi bukan keputusan anggaran resmi.
 
 ## Fitur
 
@@ -71,7 +71,8 @@ Karya sementara yang telah diimplementasikan per tahap First Draft Submission:
 - [x] **Ringkasan temuan & estimasi dampak** — narasi hasil simulasi pada Studio dan Compare, serta penjelasan asumsi biaya per paket.
 - [x] **Komparasi skenario (`/compare`)** — perbandingan alokasi antar skenario dan pemerataan fasilitas.
 - [x] **Katalog dataset & metodologi (`/datasets`, `/methodology`)** — metadata indikator resmi Kemendikdasmen dan batas penggunaan data.
-- [ ] **Deployment hosting publik** — direncanakan pada tahap akhir penyisihan; aplikasi saat ini siap dijalankan secara lokal dan container Docker.
+- [x] **Pratinjau frontend publik (`equora-tau.vercel.app`)** — halaman statis dan rute utama dapat diakses sebagai pratinjau.
+- [ ] **Layanan data publik (API + PostgreSQL terverifikasi)** — diperlukan agar Explorer GIS, Studio, dan Compare berjalan penuh di pratinjau publik.
 
 ## Bahasa dan teknologi
 
@@ -150,17 +151,21 @@ Arsitektur dirancang modular untuk memudahkan pengembangan saat integrasi data p
 ```text
 Equora/
 ├── frontend/                  Aplikasi SvelteKit 2 & TypeScript 5.9
-│   └── src/lib/
-│       ├── api/               Klien API & kontrak OpenAPI tergenerasi (schema.d.ts)
-│       ├── maps/              Adapter GIS murni (priority-map.ts) & tile PMTiles/MapLibre
-│       ├── insight/           Kalkulator analitik murni (konsentrasi, dampak sekolah)
-│       └── components/        Komponen modular (ProvinceMap, ScenarioResult, DecisionReview)
+│   └── src/
+│       ├── routes/            Halaman publik, studio, perbandingan, dan admin
+│       ├── lib/api/           Klien API & kontrak OpenAPI tergenerasi (schema.d.ts)
+│       ├── lib/maps/          Adapter GIS murni (priority-map.ts) & tile PMTiles/MapLibre
+│       ├── lib/insight/       Kalkulator analitik murni (konsentrasi, dampak sekolah)
+│       └── lib/components/    Komponen modular (ProvinceMap, ScenarioResult, DecisionReview)
 ├── backend/                   API FastAPI & Python 3.14
 │   └── app/
+│       ├── api/               Endpoint workspace, decision views, dan health check
 │       ├── etl/               Pipeline ingest Polars & validator fail-closed (SHA-256, sel, BPS)
-│       ├── priority/          Mesin skor kebutuhan Multi-Criteria Decision Analysis (MCDA)
-│       ├── allocation/        Solver optimasi OR-Tools CP-SAT, baseline, & sensitivity review
-│       └── reports/           Generator Memo Kebijakan PDF & ekspor CSV
+│       ├── analysis/          Mesin skor kebutuhan MCDA (priority.py)
+│       ├── optimization/      Solver OR-Tools CP-SAT & pembanding baseline (allocation.py, coverage.py)
+│       ├── services/          Ringkasan wilayah, tinjauan keputusan, geometri, Memo Kebijakan PDF
+│       ├── db/                Session, registry, dan base SQLAlchemy
+│       └── core/              Konfigurasi, write guard, dan otorisasi admin
 ├── data/                      Metadata sumber, fixture sintetis, dan panduan data
 ├── scripts/                   Skrip pengujian dan alat pengembangan
 └── .github/                   Workflow CI serta template issue dan pull request
