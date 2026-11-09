@@ -480,6 +480,8 @@ export interface components {
             definition: string;
             /** Storage Scale */
             storage_scale: string;
+            /** Layout */
+            layout?: string | null;
             /** Quality */
             quality: {
                 [key: string]: components["schemas"]["QualityCount"];
@@ -1058,6 +1060,8 @@ export interface components {
             definition: string;
             /** Storage Scale */
             storage_scale: string;
+            /** Layout */
+            layout?: string | null;
             /** Quality */
             quality: {
                 [key: string]: components["schemas"]["QualityCount"];

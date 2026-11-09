@@ -1344,6 +1344,17 @@
             "type": "string",
             "title": "Storage Scale"
           },
+          "layout": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Layout"
+          },
           "quality": {
             "additionalProperties": {
               "$ref": "#/components/schemas/QualityCount"
@@ -3052,6 +3063,17 @@
           "storage_scale": {
             "type": "string",
             "title": "Storage Scale"
+          },
+          "layout": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Layout"
           },
           "quality": {
             "additionalProperties": {
