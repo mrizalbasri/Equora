@@ -25,8 +25,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     settings = get_settings()
     try:
-        valid_target = (
-            settings.database_url and make_url(settings.database_url).database == "equora"
+        valid_target = settings.database_url and make_url(settings.database_url).database in (
+            "equora",
+            "neondb",
         )
     except SQLAlchemyError:
         valid_target = False

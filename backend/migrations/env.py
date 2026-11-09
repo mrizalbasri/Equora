@@ -7,13 +7,17 @@ from app.db.session import build_engine
 
 target_metadata = Base.metadata
 
-if not get_settings().database_url:
+if not (get_settings().database_url_unpooled or get_settings().database_url):
     raise ValueError("Set DATABASE_URL to the Equora target before running migrations")
 
 
 def run_migrations_offline() -> None:
+    settings = get_settings()
+    url = settings.database_url_unpooled or settings.database_url
+    if url.startswith("postgres://"):
+        url = "postgresql://" + url[len("postgres://") :]
     context.configure(
-        url=get_settings().database_url,
+        url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -24,7 +28,8 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    engine = build_engine(get_settings())
+    # Use unpooled direct connection for DDL migrations (Neon best practice)
+    engine = build_engine(get_settings(), use_unpooled=True)
     try:
         with engine.connect() as connection:
             context.configure(

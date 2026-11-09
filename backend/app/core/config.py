@@ -5,18 +5,29 @@ from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
+ROOT_DIR = BACKEND_DIR.parent
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=BACKEND_DIR / ".env", env_file_encoding="utf-8", extra="ignore"
+        env_file=(
+            BACKEND_DIR / ".env",
+            ROOT_DIR / ".env",
+            BACKEND_DIR / ".env.local",
+            ROOT_DIR / ".env.local",
+        ),
+        env_file_encoding="utf-8",
+        extra="ignore",
     )
 
     app_name: str = "Equora API"
     database_url: str | None = None
+    database_url_unpooled: str | None = None
+    neon_branch: str | None = None
+    neon_branch_id: str | None = None
     admin_token: SecretStr | None = None
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
-    data_dir: Path = Field(default=BACKEND_DIR.parent / "data")
+    data_dir: Path = Field(default=ROOT_DIR / "data")
     write_requests_per_minute: int = Field(default=60, ge=1, le=10000)
     max_saved_scenarios: int = Field(default=10000, ge=1, le=1000000)
     require_published_data: bool = False
