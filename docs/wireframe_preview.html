@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Wireframe Equora - First Draft Submission</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0f172a;
+      color: #334155;
+      padding: 40px;
+      min-width: 1400px;
+    }
+    .container {
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+    .deck-header {
+      text-align: center;
+      margin-bottom: 32px;
+      color: #f8fafc;
+    }
+    .deck-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .deck-header p {
+      font-size: 15px;
+      color: #94a3b8;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .wireframe-card {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      background: #f1f5f9;
+      padding: 14px 20px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-title h2 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .browser-frame {
+      background: #ffffff;
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      font-size: 13px;
+    }
+
+    /* Shared Wireframe Elements */
+    .wf-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      background: #f8fafc;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 8px;
+    }
+    .wf-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .wf-logo-box {
+      width: 22px;
+      height: 22px;
+      background: #94a3b8;
+      border-radius: 4px;
+    }
+    .wf-nav-links {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .wf-link {
+      height: 12px;
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    .wf-btn {
+      padding: 6px 14px;
+      background: #0284c7;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Landing Specific */
+    .landing-hero {
+      text-align: center;
+      padding: 24px 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .wf-h1 {
+      height: 28px;
+      width: 65%;
+      background: #334155;
+      border-radius: 6px;
+    }
+    .wf-sub {
+      height: 12px;
+      width: 80%;
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    .wf-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .wf-btn-outline {
+      padding: 6px 14px;
+      border: 1.5px dashed #94a3b8;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 6px;
+    }
+    .wf-preview-box {
+      width: 100%;
+      height: 190px;
+      background: #f8fafc;
+      border: 2px dashed #94a3b8;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #64748b;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .wf-steps {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .wf-step-card {
+      padding: 12px;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 8px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .wf-step-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0284c7;
+    }
+    .wf-line-title {
+      height: 12px;
+      width: 70%;
+      background: #475569;
+      border-radius: 3px;
+    }
+    .wf-line-desc {
+      height: 8px;
+      width: 90%;
+      background: #cbd5e1;
+      border-radius: 2px;
+    }
+
+    /* Workspace Specific */
+    .ws-layout {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 14px;
+      min-height: 440px;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+    .ws-sidebar {
+      border-right: 1.5px dashed #cbd5e1;
+      padding-right: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ws-nav-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .ws-section-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ws-nav-item {
+      padding: 6px 8px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ws-nav-item.active {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0369a1;
+    }
+    .ws-nav-item.sub {
+      margin-left: 8px;
+      font-size: 9px;
+    }
+    .ws-main {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ws-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .ws-crumb {
+      font-size: 10px;
+      color: #64748b;
+      font-weight: 600;
+    }
+    .ws-content-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 12px;
+      flex: 1;
+    }
+    .ws-map-box {
+      border: 2px dashed #94a3b8;
+      border-radius: 8px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .ws-panel-box {
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .ws-filter-row {
+      display: flex;
+      gap: 6px;
+    }
+    .ws-select {
+      flex: 1;
+      height: 22px;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 9px;
+      padding: 0 6px;
+      display: flex;
+      align-items: center;
+      color: #475569;
+    }
+    .ws-table-mock {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .ws-table-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 6px;
+      background: #f8fafc;
+      border-radius: 4px;
+      font-size: 9px;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="deck-header">
+      <h1>Arsitektur Tata Letak & Wireframe Antarmuka</h1>
+      <p>Equora: Explainable Decision Support Platform · Web In Action 2026</p>
+    </div>
+
+    <div class="grid-2">
+      <!-- Wireframe 1 -->
+      <div class="wireframe-card">
+        <div class="card-title">
+          <h2>01. Wireframe: Landing Page Publik</h2>
+          <span class="badge">Rute: / (Beranda)</span>
+        </div>
+        <div class="browser-frame">
+          <div class="wf-nav">
+            <div class="wf-brand">
+              <div class="wf-logo-box"></div>
+              <span>Equora</span>
+            </div>
+            <div class="wf-nav-links">
+              <span style="font-size:11px;color:#64748b">Cara Kerja</span>
+              <span style="font-size:11px;color:#64748b">Tentang</span>
+              <div class="wf-btn">Mulai Eksplorasi →</div>
+            </div>
+          </div>
+
+          <div class="landing-hero">
+            <div class="wf-h1"></div>
+            <div class="wf-sub"></div>
+            <div class="wf-sub" style="width: 50%;"></div>
+            <div class="wf-actions">
+              <div class="wf-btn">Pendidikan di Daerah Saya</div>
+              <div class="wf-btn-outline">Telusuri Data Pendidikan</div>
+            </div>
+          </div>
+
+          <div class="wf-preview-box">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span>[ Ilustrasi Editorial Sekolah & Preview Antarmuka ]</span>
+          </div>
+
+          <div class="wf-steps">
+            <div class="wf-step-card">
+              <span class="wf-step-num">01</span>
+              <div class="wf-line-title"></div>
+              <div class="wf-line-desc"></div>
+            </div>
+            <div class="wf-step-card">
+              <span class="wf-step-num">02</span>
+              <div class="wf-line-title"></div>
+              <div class="wf-line-desc"></div>
+            </div>
+            <div class="wf-step-card">
+              <span class="wf-step-num">03</span>
+              <div class="wf-line-title"></div>
+              <div class="wf-line-desc"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wireframe 2 -->
+      <div class="wireframe-card">
+        <div class="card-title">
+          <h2>02. Wireframe: Workspace Shell (Dashboard)</h2>
+          <span class="badge">Rute: /explore & /studio</span>
+        </div>
+        <div class="browser-frame">
+          <div class="ws-layout">
+            <!-- Sidebar -->
+            <div class="ws-sidebar">
+              <div class="wf-brand" style="margin-bottom: 8px;">
+                <div class="wf-logo-box"></div>
+                <span style="font-size: 11px;">Equora Workspace</span>
+              </div>
+
+              <div class="ws-nav-section">
+                <span class="ws-section-label">Eksplorasi</span>
+                <div class="ws-nav-item active">⊚ Explorer Peta</div>
+                <div class="ws-nav-item">◈ Profil Daerah</div>
+              </div>
+
+              <div class="ws-nav-section">
+                <span class="ws-section-label">Simulasi</span>
+                <div class="ws-nav-item">⚙ Studio Simulasi</div>
+                <div class="ws-nav-item sub">↳ Skenario</div>
+                <div class="ws-nav-item sub">↳ Komparasi</div>
+              </div>
+
+              <div class="ws-nav-section">
+                <span class="ws-section-label">Referensi</span>
+                <div class="ws-nav-item">▤ Dataset Resmi</div>
+                <div class="ws-nav-item">📖 Metodologi</div>
+              </div>
+
+              <div style="margin-top: auto; padding: 6px; background: #e2e8f0; border-radius: 6px; font-size: 8px; color: #475569; text-align: center;">
+                ● Review Data 2025/2026
+              </div>
+            </div>
+
+            <!-- Workspace Main -->
+            <div class="ws-main">
+              <div class="ws-topbar">
+                <span class="ws-crumb">Ruang Analisis &gt; <strong>Explorer Peta Tematik</strong></span>
+                <span style="font-size: 9px; padding: 2px 6px; background: #fef3c7; color: #92400e; border-radius: 4px; font-weight: 600;">Data Review Lokal</span>
+              </div>
+
+              <div class="ws-content-grid">
+                <!-- Map Area -->
+                <div class="ws-map-box">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+                    <line x1="8" y1="2" x2="8" y2="18"/>
+                    <line x1="16" y1="6" x2="16" y2="22"/>
+                  </svg>
+                  <span>[ Kanvas Peta Interaktif 38 Provinsi ]</span>
+                  <span style="font-size: 9px; color: #94a3b8;">(MapLibre GL · Choropleth Layer)</span>
+                </div>
+
+                <!-- Control & Table Area -->
+                <div class="ws-panel-box">
+                  <span style="font-size: 10px; font-weight: 700; color: #1e293b;">Filter &amp; Parameter</span>
+                  <div class="ws-filter-row">
+                    <div class="ws-select">Jenjang: SD ▾</div>
+                    <div class="ws-select">Tahun: 2025/2026 ▾</div>
+                  </div>
+                  <div class="ws-select" style="width: 100%;">Indikator: Sanitasi Dasar ▾</div>
+
+                  <span style="font-size: 10px; font-weight: 700; color: #1e293b; margin-top: 6px;">Ringkasan Wilayah</span>
+                  <div class="ws-table-mock">
+                    <div class="ws-table-row"><span>Aceh</span><strong style="color:#0284c7">82.4%</strong></div>
+                    <div class="ws-table-row"><span>Sumatera Utara</span><strong style="color:#0284c7">74.1%</strong></div>
+                    <div class="ws-table-row"><span>Jawa Barat</span><strong style="color:#0284c7">91.8%</strong></div>
+                    <div class="ws-table-row"><span>NTT</span><strong style="color:#0284c7">56.2%</strong></div>
+                    <div class="ws-table-row"><span>Papua</span><strong style="color:#0284c7">48.9%</strong></div>
+                  </div>
+                  <div class="wf-btn" style="margin-top: auto; padding: 4px 8px; font-size: 9px; background: #475569;">Ekspor Data (.CSV)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
