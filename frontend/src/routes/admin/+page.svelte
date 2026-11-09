@@ -334,13 +334,11 @@
 
           <!-- INPUT TOKEN OTORISASI -->
           <div class="work-field token-field-group">
-            <label for="admin-token-input">
-              Token Otorisasi Administrator
-              <span class="required-star">*</span>
-            </label>
+            <label for="admin-token-input">Token otentikasi admin</label>
             <div class="token-input-wrap">
               <input
                 id="admin-token-input"
+                aria-label="Token otentikasi admin"
                 type={showToken ? 'text' : 'password'}
                 bind:value={token}
                 required
@@ -365,7 +363,7 @@
               disabled={busy || !token}
             >
               <Icon name="check" size={18} />
-              <span>{busy ? 'Memverifikasi berkas & mengimpor…' : 'Jalankan Verifikasi & Terbitkan Rilis'}</span>
+              <span>{busy ? 'Memverifikasi berkas & mengimpor…' : 'Periksa & impor snapshot'}</span>
             </button>
           </div>
 
@@ -764,10 +762,6 @@
   /* TOKEN FIELD */
   .token-field-group {
     margin-bottom: 18px;
-  }
-  .required-star {
-    color: var(--eq-danger);
-    margin-left: 2px;
   }
   .token-input-wrap {
     display: flex;
