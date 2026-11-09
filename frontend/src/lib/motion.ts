@@ -42,7 +42,7 @@ export function createLandingMotion() {
       const vDist = isMobile ? 14 : 28;
       const variants: Record<string, Keyframe[]> = {
         fade: [{ opacity: 0 }, { opacity: 1 }],
-        focus: [{ opacity: 0, scale: '0.94', filter: 'brightness(1.12)' }, { opacity: 1, scale: '1', filter: 'brightness(1)' }],
+        focus: [{ opacity: 0, scale: '0.98', filter: 'brightness(1.08)' }, { opacity: 1, scale: '1', filter: 'brightness(1)' }],
         unfold: [
           { opacity: 0, transform: 'perspective(1000px) rotateX(12deg) translateY(14px)' },
           { opacity: 1, transform: 'perspective(1000px) rotateX(0deg) translateY(0)' },
@@ -51,8 +51,8 @@ export function createLandingMotion() {
         down: [{ opacity: 0, translate: `0 ${-vDist}px` }, { opacity: 1, translate: '0 0' }],
         left: [{ opacity: 0, translate: `${-hDist}px 0` }, { opacity: 1, translate: '0 0' }],
         right: [{ opacity: 0, translate: `${hDist}px 0` }, { opacity: 1, translate: '0 0' }],
-        scale: [{ opacity: 0, scale: '0.90' }, { opacity: 1, scale: '1' }],
-        pop: [{ opacity: 0, scale: '0.85' }, { opacity: 1, scale: '1' }],
+        scale: [{ opacity: 0, scale: '0.98' }, { opacity: 1, scale: '1' }],
+        pop: [{ opacity: 0, scale: '0.96' }, { opacity: 1, scale: '1' }],
         blur: [{ opacity: 0, filter: 'blur(10px)', scale: '0.98' }, { opacity: 1, filter: 'blur(0px)', scale: '1' }],
         dissolve: [{ opacity: 0 }, { opacity: 1 }],
       };
