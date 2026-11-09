@@ -45,7 +45,7 @@
       <span>Formula matematis di <a href="/methodology">metodologi simulasi</a></span>
     </div>
     <div class="ref-item">
-      <span>Verifikasi & impor manifest di <a href="/admin">panel admin data</a></span>
+      <span>Verifikasi & integritas manifest di <a href="/datasets">katalog dataset terverifikasi</a></span>
     </div>
   </div>
 </section>
