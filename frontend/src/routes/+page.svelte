@@ -13,7 +13,7 @@
 
 <svelte:head>
   <title>Equora | Data pendidikan untuk keputusan yang lebih terarah</title>
-  <meta name="description" content="Telusuri fasilitas pendidikan antarprovinsi, atur prioritas kebutuhan, dan uji skenario alokasi anggaran dengan data serta asumsi yang bisa ditelusuri." />
+  <meta name="description" content="Telusuri fasilitas pendidikan antarprovinsi dengan data terbuka, periksa sumber dan asumsi, lalu uji skenario alokasi anggaran yang dapat dipertanggungjawabkan." />
 </svelte:head>
 
 <PublicShell calm>
@@ -21,7 +21,7 @@
     <div class="landing-progress" aria-hidden="true"></div>
     <div class="hero-copy">
       <h1 id="hero-title" data-motion="focus"><span>Beda wilayah.</span><br />Beda kebutuhan.</h1>
-      <p data-motion="fade" data-motion-delay="70">Bagaimana fasilitas sekolah di provinsi Anda?<br class="desktop-break" /> Lihat kondisi sanitasi, air, internet, dan komputer. Bandingkan angkanya dan periksa sumbernya.</p>
+      <p data-motion="fade" data-motion-delay="70">Bagaimana fasilitas sekolah di provinsi Anda?<br class="desktop-break" /> Periksa sanitasi, air, internet, dan komputer lewat data terbuka — lengkap dengan sumber, asumsi, dan simulasi prioritas yang bisa dipertanggungjawabkan.</p>
       <div class="hero-actions" data-motion="focus" data-motion-delay="140">
         <a class="landing-button primary" href="/daerah">Pendidikan di Daerah Saya</a>
         <a class="text-link" href="/explore">Telusuri data pendidikan</a>

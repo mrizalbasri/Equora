@@ -69,7 +69,7 @@ migrations/      # Alembic
 tests/
 ```
 
-ETL menyediakan adapter staging XLSX pendidikan untuk scope satu jenjang/Total, quality report dan provenance lokal. Registry draft dapat mencatat hasil staging secara transaksional di PostgreSQL; belum menerbitkan release. Analisis dan optimasi menyediakan sandbox sintetis sesuai MCDA dan alokasi, belum terhubung ke HTTP, database atau UI. Import admin, registry published dan API domain belum tersedia. Migrasi `0001` menginisialisasi riwayat; `0002` menambah lima tabel registry draft.
+ETL menyediakan adapter staging XLSX pendidikan untuk scope satu jenjang/Total, quality report dan provenance lokal. Registry dapat mencatat hasil staging secara transaksional di PostgreSQL dan menerbitkan rilis lokal. Analisis MCDA, optimasi alokasi CP-SAT, API workspace, impor admin, serta ekspor memo kebijakan sudah terhubung ke HTTP dan UI. Migrasi `0001` menginisialisasi riwayat; migrasi berikutnya menambah tabel registry, rilis, dan skenario.
 
 ## Pemeriksaan
 

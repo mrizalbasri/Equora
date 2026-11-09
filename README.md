@@ -33,6 +33,8 @@ Equora adalah aplikasi web untuk mengeksplorasi data fasilitas pendidikan di Ind
 Proyek ini disiapkan untuk Web In Action (WIA), MIA 2026. Antarmuka menggunakan Bahasa Indonesia, dengan penjelasan untuk publik serta rincian metode, sumber, dan batas data.
 
 > **Status:** purwarupa frontend tersedia sebagai pratinjau publik di [equora-tau.vercel.app](https://equora-tau.vercel.app). Layanan data (API FastAPI + PostgreSQL) masih dijalankan secara lokal, sehingga fitur berbasis data pada pratinjau publik memerlukan backend yang aktif. Data workspace berstatus `local_review`; hasil simulasi bukan keputusan anggaran resmi.
+>
+> Panduan menyambungkan layanan data ke pratinjau publik: [docs/deployment-public.md](docs/deployment-public.md).
 
 ## Fitur
 
@@ -59,6 +61,10 @@ Platform memisahkan interaksi antara masyarakat umum, perencana kebijakan/pemeri
 | **Administrator Data** | `/admin` (`POST /api/v1/admin/import`) | Menjalankan *pipeline* ETL Polars untuk memverifikasi *manifest* berkas sumber Kemendikdasmen dan memperbarui *snapshot* rilis. | Dilindungi `Bearer ADMIN_TOKEN`; menolak otomatis (*fail-closed*) berkas yang gagal verifikasi SHA-256 atau struktur sel. |
 
 Seluruh fitur publik dapat digunakan tanpa login atau pendaftaran. Fitur yang memerlukan data membutuhkan backend, database, dan rilis lokal yang sudah disiapkan. Snapshot berada di workspace bersama dan dapat dibaca pengguna lain yang mengakses aplikasi; jangan menyimpan informasi pribadi di dalamnya.
+
+### Peta situs & wireframe
+
+Peta situs lengkap, alur pengguna per peran, dan inventaris wireframe tersedia di [docs/sitemap.md](docs/sitemap.md). Wireframe interaktif dapat dibuka melalui [docs/wireframe_preview.html](docs/wireframe_preview.html), dengan versi gambar di [docs/wireframe_equora.png](docs/wireframe_equora.png).
 
 ## Progress saat ini
 
