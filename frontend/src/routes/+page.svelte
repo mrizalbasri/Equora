@@ -107,7 +107,7 @@
         </div>
         <p>Memverifikasi manifest dataset Kemendikdasmen (SHA-256 checksum, skema kolom, dan cakupan wilayah) melalui pipeline ETL modular sebelum rilis aktif.</p>
         <div class="role-links">
-          <a href="/admin">Panel Impor Admin</a>
+          <a href="/methodology">Audit & Metodologi</a>
           <a href="/datasets">Katalog Dataset</a>
         </div>
       </article>

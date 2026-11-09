@@ -15,8 +15,9 @@ from app.etl.registry import register_staging
 
 def main():
     settings = get_settings()
-    if not settings.database_url or make_url(settings.database_url).database != "equora":
-        raise SystemExit("Use the dedicated equora database")
+    valid_db = ("equora", "neondb")
+    if not settings.database_url or make_url(settings.database_url).database not in valid_db:
+        raise SystemExit("Use the dedicated equora or neondb database")
     payload, staged = build_release(settings.data_dir)
     engine = build_engine(settings)
     try:

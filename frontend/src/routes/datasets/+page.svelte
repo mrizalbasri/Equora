@@ -117,7 +117,7 @@
       <strong>Kelola berkas sumber</strong>
       <p class="work-muted">Ingin memverifikasi ulang hash SHA-256 atau menjalankan impor snapshot baru?</p>
     </div>
-    <a class="eq-button" href="/admin"> Kelola impor lokal
+    <a class="eq-button" href="/methodology"> Pelajari audit data
     </a>
   </div>
 </WorkspaceShell>

@@ -15,6 +15,7 @@ class QualityCount(BaseModel):
 class SourceView(SourceMetadata):
     definition: str
     storage_scale: str
+    layout: str | None = None
     quality: dict[str, QualityCount]
 
 
