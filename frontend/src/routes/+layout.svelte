@@ -16,7 +16,7 @@
     `${page.url.origin}${cleanPath === '/' ? '' : cleanPath}`,
   );
   const ogImageUrl = $derived(
-    `${page.url.origin}/images/seo/equora-og.webp`,
+    `${page.url.origin}/images/editorial/education-discussion.webp`,
   );
   const jsonLdTag = $derived(
     `<script type="application/ld+json">${buildStructuredData(page.url.origin, cleanPath)}</` +
@@ -58,12 +58,9 @@
   <meta property="og:description" content={seo.description} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:image" content={ogImageUrl} />
-  <meta property="og:image:type" content="image/webp" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
   <meta
     property="og:image:alt"
-    content="Equora — Data fasilitas pendidikan untuk keputusan yang lebih terarah"
+    content="Ilustrasi diskusi perencanaan fasilitas pendidikan antardaerah di Equora"
   />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={seo.title} />
