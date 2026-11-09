@@ -20,15 +20,15 @@
   <section class="landing-hero eq-container" aria-labelledby="hero-title" use:landingScroll>
     <div class="landing-progress" aria-hidden="true"></div>
     <div class="hero-copy">
-      <h1 id="hero-title" data-motion="focus"><span>Beda wilayah.</span><br />Beda kebutuhan.</h1>
+      <h1 id="hero-title" data-motion="blur"><span>Beda wilayah.</span><br />Beda kebutuhan.</h1>
       <p data-motion="fade" data-motion-delay="70">Bagaimana fasilitas sekolah di provinsi Anda?<br class="desktop-break" /> Periksa sanitasi, air, internet, dan komputer lewat data terbuka — lengkap dengan sumber, asumsi, dan simulasi prioritas yang bisa dipertanggungjawabkan.</p>
-      <div class="hero-actions" data-motion="focus" data-motion-delay="140">
+      <div class="hero-actions" data-motion="pop" data-motion-delay="140">
         <a class="landing-button primary" href="/daerah">Pendidikan di Daerah Saya</a>
         <a class="text-link" href="/explore">Telusuri data pendidikan</a>
       </div>
     </div>
 
-    <div id="pratinjau" class="product-preview" data-motion="unfold" data-motion-delay="210">
+    <div id="pratinjau" class="product-preview" data-motion="scale" data-motion-delay="200">
       <figure>
         <img class="school-illustration" src="/images/landing/school-editorial.webp"
           alt="Ilustrasi sekolah dengan ruang kelas, fasilitas air dan cuci tangan, serta laboratorium komputer."
@@ -58,13 +58,13 @@
     </ol>
   </section>
 
-  <section class="scenario-section" aria-labelledby="scenario-title" data-motion="focus">
-    <div class="scenario-copy">
+  <section class="scenario-section" aria-labelledby="scenario-title">
+    <div class="scenario-copy" data-motion="left">
       <h2 id="scenario-title"><span>Satu anggaran.</span><br />Banyak kemungkinan.</h2>
       <p>Bobot dan batasan yang berbeda dapat menghasilkan alokasi yang berbeda. Beri ruang untuk mengujinya sebelum menarik kesimpulan.</p>
       <a class="landing-button light" href="/studio">Coba skenario Anda</a>
     </div>
-    <dl class="scenario-factors">
+    <dl class="scenario-factors" data-motion="pop" data-motion-delay="100">
       <div><dt>Kebutuhan</dt><dd>Sanitasi, air, internet, komputer.</dd></div>
       <div><dt>Batasan</dt><dd>Anggaran, biaya, kapasitas, pemerataan.</dd></div>
       <div><dt>Jejak keputusan</dt><dd>Parameter, versi data, hasil tersimpan.</dd></div>
@@ -73,12 +73,12 @@
   </section>
 
   <section id="peran" class="eq-container roles" aria-labelledby="roles-title">
-    <div class="section-intro" data-motion="left">
+    <div class="section-intro" data-motion="down">
       <h2 id="roles-title">Satu platform.<br /><span>Batasan peran yang jelas.</span></h2>
       <p>Alur interaksi dipisahkan antara eksplorasi masyarakat umum, simulasi kebijakan pemerintah, dan tata kelola impor data oleh admin.</p>
     </div>
-    <div class="role-cards" data-motion="right">
-      <article class="role-card">
+    <div class="role-cards">
+      <article class="role-card" data-motion="left">
         <div class="role-header">
           <span class="role-badge">Akses Terbuka · Tanpa Login</span>
           <h3>Masyarakat Umum & Warga</h3>
@@ -89,7 +89,7 @@
           <a href="/explore">Peta GIS Explorer</a>
         </div>
       </article>
-      <article class="role-card">
+      <article class="role-card" data-motion="scale" data-motion-delay="90">
         <div class="role-header">
           <span class="role-badge">Decision Support · Simulasi</span>
           <h3>Perencana & Pemerintah</h3>
@@ -100,7 +100,7 @@
           <a href="/compare">Bandingkan Skenario</a>
         </div>
       </article>
-      <article class="role-card">
+      <article class="role-card" data-motion="right" data-motion-delay="180">
         <div class="role-header">
           <span class="role-badge">Otorisasi Token · Audit ETL</span>
           <h3>Administrator Data</h3>
@@ -133,7 +133,7 @@
   </section>
 
   <section id="metode" class="eq-container method" aria-labelledby="method-title">
-    <div class="section-intro" data-motion="left">
+    <div class="section-intro" data-motion="right">
       <h2 id="method-title">Pahami alasannya.<br /><span>Kenali batasannya.</span></h2>
       <p>Data, asumsi, dan metode selalu menjadi bagian dari cara membaca hasil.</p>
       <a class="text-link" href="/methodology">Baca metodologi</a>
@@ -158,7 +158,7 @@
     </div>
   </section>
 
-  <section class="eq-container closing" aria-label="Mulai menggunakan Equora" data-motion="focus">
+  <section class="eq-container closing" aria-label="Mulai menggunakan Equora" data-motion="pop">
     <h2>Mulai dari pertanyaan<br /><span>yang ingin Anda jawab.</span></h2>
     <a class="landing-button primary" href="/daerah">Lihat pendidikan di daerah saya</a>
     <p>Pilih provinsi dan baca kondisi fasilitas sekolah tanpa login.</p>

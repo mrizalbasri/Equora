@@ -37,36 +37,47 @@ export function createLandingMotion() {
     for (const element of document.querySelectorAll(targets)) {
       if (revealed.has(element)) continue;
       const delay = Number(element.getAttribute('data-motion-delay') ?? 0);
-      const distance = window.innerWidth < 640 ? 10 : 22;
+      const isMobile = window.innerWidth < 640;
+      const hDist = isMobile ? 18 : 36;
+      const vDist = isMobile ? 14 : 28;
       const variants: Record<string, Keyframe[]> = {
-        fade: [{ opacity: 0, translate: `0 ${distance}px` }, { opacity: 1, translate: '0 0' }],
-        focus: [{ opacity: 0, translate: `0 ${distance}px`, scale: '0.99' }, { opacity: 1, translate: '0 0', scale: '1' }],
-        unfold: [{ opacity: 0, translate: `0 ${distance}px`, scale: '0.985' }, { opacity: 1, translate: '0 0', scale: '1' }],
-        up: [{ opacity: 0, translate: `0 ${distance}px` }, { opacity: 1, translate: '0 0' }],
-        down: [{ opacity: 0, translate: `0 ${-distance}px` }, { opacity: 1, translate: '0 0' }],
-        left: [{ opacity: 0, translate: `${-distance}px 0` }, { opacity: 1, translate: '0 0' }],
-        right: [{ opacity: 0, translate: `${distance}px 0` }, { opacity: 1, translate: '0 0' }],
-        scale: [{ opacity: 0, scale: '0.96' }, { opacity: 1, scale: '1' }],
-        pop: [{ opacity: 0, scale: '0.94' }, { opacity: 1, scale: '1' }],
-        blur: [{ opacity: 0, filter: 'blur(8px)', scale: '0.985' }, { opacity: 1, filter: 'blur(0px)', scale: '1' }],
+        fade: [{ opacity: 0 }, { opacity: 1 }],
+        focus: [{ opacity: 0, scale: '0.94', filter: 'brightness(1.12)' }, { opacity: 1, scale: '1', filter: 'brightness(1)' }],
+        unfold: [
+          { opacity: 0, transform: 'perspective(1000px) rotateX(12deg) translateY(14px)' },
+          { opacity: 1, transform: 'perspective(1000px) rotateX(0deg) translateY(0)' },
+        ],
+        up: [{ opacity: 0, translate: `0 ${vDist}px` }, { opacity: 1, translate: '0 0' }],
+        down: [{ opacity: 0, translate: `0 ${-vDist}px` }, { opacity: 1, translate: '0 0' }],
+        left: [{ opacity: 0, translate: `${-hDist}px 0` }, { opacity: 1, translate: '0 0' }],
+        right: [{ opacity: 0, translate: `${hDist}px 0` }, { opacity: 1, translate: '0 0' }],
+        scale: [{ opacity: 0, scale: '0.90' }, { opacity: 1, scale: '1' }],
+        pop: [{ opacity: 0, scale: '0.85' }, { opacity: 1, scale: '1' }],
+        blur: [{ opacity: 0, filter: 'blur(10px)', scale: '0.98' }, { opacity: 1, filter: 'blur(0px)', scale: '1' }],
         dissolve: [{ opacity: 0 }, { opacity: 1 }],
       };
       const durations: Record<string, number> = {
-        fade: 600,
-        blur: 700,
-        focus: 750,
-        down: 750,
-        up: 750,
-        left: 750,
-        right: 750,
-        scale: 750,
-        pop: 750,
-        unfold: 900,
+        fade: 550,
+        blur: 650,
+        focus: 650,
+        down: 650,
+        up: 600,
+        left: 650,
+        right: 650,
+        scale: 600,
+        pop: 550,
+        unfold: 750,
+      };
+      const easings: Record<string, string> = {
+        pop: 'cubic-bezier(0.34, 1.4, 0.64, 1)',
+        unfold: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        blur: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
       };
       const variant = element.getAttribute('data-motion') || 'fade';
-      const duration = durations[variant] ?? 750;
+      const duration = durations[variant] ?? 650;
+      const easing = easings[variant] ?? 'cubic-bezier(0.16, 1, 0.3, 1)';
       prepare(element, variants[variant] ?? variants.fade,
-        { duration, delay: Math.min(Math.max(delay, 0), 280), fill: 'both', easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+        { duration, delay: Math.min(Math.max(delay, 0), 280), fill: 'both', easing });
       element.setAttribute('data-motion-state', 'waiting');
       observer.observe(element);
     }
