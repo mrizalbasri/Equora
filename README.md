@@ -82,7 +82,7 @@ Bahasa utama proyek adalah **TypeScript** pada frontend dan **Python** pada back
 | --- | --- | --- |
 | Frontend | Svelte 5, SvelteKit 2, TypeScript 5.9 | Halaman publik, workspace, routing, dan integrasi API. |
 | Tampilan | Tailwind CSS 4, Carbon Icons | Styling dan ikon antarmuka. |
-| Peta dan grafik | MapLibre GL, PMTiles, ECharts | Peta provinsi, basemap, dan visualisasi indikator. |
+| Peta dan grafik | MapLibre GL, PMTiles | Peta choropleth provinsi, basemap, dan legenda visual indikator. |
 | Backend | Python 3.14, FastAPI, Pydantic 2 | API, validasi input, dan kontrak OpenAPI. |
 | Database | PostgreSQL, SQLAlchemy 2, Alembic | Registry dataset, rilis lokal, snapshot, dan migrasi. |
 | Pengolahan data | Polars, openpyxl | Membaca workbook, staging, dan pemeriksaan kualitas data. |
