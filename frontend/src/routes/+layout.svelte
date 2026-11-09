@@ -16,7 +16,7 @@
     `${page.url.origin}${cleanPath === '/' ? '' : cleanPath}`,
   );
   const ogImageUrl = $derived(
-    `${page.url.origin}/images/editorial/education-discussion.png`,
+    `${page.url.origin}/images/editorial/education-discussion.webp`,
   );
   const jsonLdTag = $derived(
     `<script type="application/ld+json">${buildStructuredData(page.url.origin, cleanPath)}</` +
