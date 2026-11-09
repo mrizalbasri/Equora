@@ -1612,7 +1612,7 @@
   }
   @media (max-width: 1050px) {
     .explorer-filters {
-      grid-template-columns: minmax(160px, 1fr) 90px minmax(140px, 1fr);
+      grid-template-columns: minmax(160px, 1fr) 116px minmax(140px, 1fr);
     }
     .filter-scope {
       grid-column: 1/-1;
@@ -1655,7 +1655,7 @@
   }
   @media (max-width: 600px) {
     .explorer-filters {
-      grid-template-columns: minmax(0, 1fr) 90px;
+      grid-template-columns: minmax(0, 1fr) 116px;
       padding: 16px;
       gap: 14px;
     }
