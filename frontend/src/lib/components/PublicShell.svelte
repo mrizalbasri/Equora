@@ -148,7 +148,7 @@
 
     <div class="footer-landscape" aria-hidden="true">
       <img
-        src="/images/footer/equora-school-landscape.png"
+        src="/images/footer/equora-school-landscape.webp"
         alt=""
         width="2172"
         height="724"

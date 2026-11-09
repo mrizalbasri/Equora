@@ -14,8 +14,8 @@ Exact export prompt and input reference are recorded in [school-editorial-prompt
 
 Captured from the running local Equora app on 22 October 2026, at a desktop viewport of 1440 × 1050. These are static screenshots, not live data or generated results.
 
-- `explorer.png`: `/explore`, sanitation, SD, 2025/2026, local review snapshot. Includes the real map, region values, and map attribution. The landing caption identifies the snapshot and links to the interactive Explorer.
-- `studio.png`: `/studio`, initial form parameters. The capture labels costs as demo assumptions and contains no computed allocation result.
+- `explorer.png` / `explorer.webp`: `/explore`, sanitation, SD, 2025/2026, local review snapshot. Includes the real map, region values, and map attribution. The landing caption identifies the snapshot and links to the interactive Explorer.
+- `studio.png` / `studio.webp`: `/studio`, initial form parameters. The capture labels costs as demo assumptions and contains no computed allocation result.
 
 Map attribution: Protomaps, OpenStreetMap contributors, Natural Earth; community province boundaries by Deny Herianto, CC BY 4.0. See the map asset provenance in `../../maps/README.md`.
 

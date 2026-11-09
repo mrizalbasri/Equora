@@ -36,7 +36,8 @@
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; font-size: 16px; line-height: 1.55; }
+html, body { margin: 0; overflow-x: clip; }
+body { font-size: 16px; line-height: 1.55; }
 h1, h2, h3, p { margin: 0; }
 h1, h2, h3 { line-height: 1.15; font-weight: 650; text-wrap: balance; }
 p { text-wrap: pretty; }
