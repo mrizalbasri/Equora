@@ -23,6 +23,23 @@ Per 21 Oktober 2026, database lokal `equora` dan `equora_test` sudah dibuat pada
 
 Liveness tidak memerlukan database. Readiness mengembalikan 503 jika koneksi belum dikonfigurasi atau database gagal dihubungi, tanpa membocorkan detail koneksi. Readiness memeriksa konektivitas, bukan kelengkapan schema bisnis. Tidak ada pembuatan database, `create_all`, atau migrasi saat startup.
 
+## Login administrator
+
+Atur `ADMIN_TOKEN` sebagai rahasia acak yang kuat di environment backend.
+Masuk melalui `/admin/login` di frontend menggunakan token tersebut; tanpa sesi,
+dashboard `/admin` tidak dapat dibuka. Tidak diperlukan akun atau migrasi baru.
+
+- `POST /api/v1/admin/session`: verifikasi Bearer token dan terbitkan sesi satu jam.
+- `GET /api/v1/admin/session`: verifikasi cookie `equora_admin_session`.
+- `POST /api/v1/admin/import`: menerima sesi valid atau Bearer token untuk klien langsung.
+
+Endpoint sesi tidak memerlukan database dan dilindungi pembatasan permintaan
+tulis yang sama. Sesi ditandatangani dengan kunci dari `ADMIN_TOKEN`, bukan berisi
+token utama. Rotasi token lalu restart backend membatalkan sesi lama; semua replica
+harus memakai token yang sama. Restart dengan token yang sama tidak mengakhiri sesi.
+Logout menghapus cookie browser, bukan mencabut sesi individual di server.
+Jangan mencatat token atau cookie dalam log. Gunakan HTTPS untuk deployment publik.
+
 ## Seluruh backend lewat Docker
 
 ```powershell

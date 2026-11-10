@@ -84,6 +84,7 @@ export function normalizePathname(pathname: string): string {
 export function resolveSeo(pathname: string): RouteSeo {
   const clean = normalizePathname(pathname);
   if (ROUTE_SEO[clean]) return ROUTE_SEO[clean];
+  if (clean.startsWith('/admin/')) return { ...ROUTE_SEO['/admin'], noindex: true };
   if (clean.startsWith('/datasets/')) {
     return {
       title: 'Detail sumber · Equora',

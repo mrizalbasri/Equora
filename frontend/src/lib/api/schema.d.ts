@@ -379,10 +379,35 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Session */
+        get: operations["session_api_v1_admin_session_get"];
+        put?: never;
+        /** Login */
+        post: operations["login_api_v1_admin_session_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AdminSession */
+        AdminSession: {
+            /** Session Token */
+            session_token: string;
+            /** Expires In */
+            expires_in: number;
+        };
         /** AllocationCase */
         AllocationCase: {
             /** Budget Idr */
@@ -1820,6 +1845,57 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    session_api_v1_admin_session_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    login_api_v1_admin_session_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminSession"];
                 };
             };
             /** @description Validation Error */

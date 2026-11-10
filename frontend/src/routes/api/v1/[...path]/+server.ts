@@ -1,7 +1,8 @@
 import { env } from '$env/dynamic/private';
+import { adminCookieHeader } from '$lib/server/admin-session';
 import type { RequestHandler } from './$types';
 
-const proxy: RequestHandler = async ({ params, request, url, fetch }) => {
+const proxy: RequestHandler = async ({ params, request, url, fetch, cookies }) => {
   if (!/^[a-zA-Z0-9/_-]+$/.test(params.path) || params.path.includes('..'))
     return new Response(null, { status: 404 });
   if (request.method === 'POST' && request.headers.get('origin') !== url.origin)
@@ -31,6 +32,7 @@ const proxy: RequestHandler = async ({ params, request, url, fetch }) => {
         ...(request.headers.has('authorization')
           ? { Authorization: request.headers.get('authorization')! }
           : {}),
+        ...(params.path.startsWith('admin/') ? adminCookieHeader(cookies) : {}),
       },
       signal: AbortSignal.timeout(30000),
     });

@@ -40,3 +40,6 @@ docs/
 design-qa.md
 .superpowers/
 .neon
+scripts/*proposal*.py
+scripts/*12page*.py
+scripts/*patch*.py

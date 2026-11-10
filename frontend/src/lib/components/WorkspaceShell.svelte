@@ -39,13 +39,10 @@
 
   const allItems = $derived(navGroups.flatMap((g) => g.items));
   const location = $derived(
-    allItems.find((item) => active(item.href, item.sub))?.label ??
-      (page.url.pathname === '/admin' ? 'Impor data' : 'Workspace'),
+    allItems.find((item) => active(item.href, item.sub))?.label ?? 'Workspace',
   );
   const roleBadge = $derived(
-    page.url.pathname === '/admin'
-      ? 'Peran: Admin Data'
-      : page.url.pathname === '/studio' ||
+    page.url.pathname === '/studio' ||
           page.url.pathname === '/compare' ||
           page.url.pathname.startsWith('/scenarios')
         ? 'Peran: Perencana & Pemerintah'
@@ -150,24 +147,6 @@
           {/each}
         </div>
       {/each}
-      {#if page.url.pathname.startsWith('/admin')}
-        <div class="nav-group">
-          <p class="nav-section-title">Area Terbatas</p>
-          <a
-            href="/admin"
-            class="sidebar-link"
-            aria-current={page.url.pathname === '/admin' ? 'page' : undefined}
-            onclick={() => (menuOpen = false)}
-          >
-            <span class="icon-wrap"><Icon name="shield" size={18} /></span>
-            <span class="link-label">Pusat Kendali Data</span>
-            <span class="nav-badge" aria-hidden="true">Admin</span>
-            {#if page.url.pathname === '/admin'}
-              <span class="active-indicator" aria-hidden="true"></span>
-            {/if}
-          </a>
-        </div>
-      {/if}
     </nav>
 
     <div class="sidebar-bottom">

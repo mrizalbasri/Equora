@@ -50,6 +50,14 @@ directory = "coverage/html"
 [tool.ruff]
 target-version = "py314"
 line-length = 100
+extend-exclude = [
+    "../scripts/*proposal*.py",
+    "../scripts/*12page*.py",
+    "../scripts/*patch*.py",
+    "scripts/*proposal*.py",
+    "scripts/*12page*.py",
+    "scripts/*patch*.py",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
