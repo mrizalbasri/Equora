@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.admin_auth import router as admin_auth_router
 from app.api.health import router
 from app.api.workspace import router as workspace_router
 from app.core.config import Settings, get_settings
@@ -37,6 +38,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.include_router(router, prefix="/api/v1")
     app.include_router(workspace_router, prefix="/api/v1")
+    app.include_router(admin_auth_router, prefix="/api/v1")
     return app
 
 

@@ -38,12 +38,28 @@ Frontend dijalankan langsung melalui pnpm. Isi `API_BASE_URL` pada `.env` sesuai
 ## Akses publik
 
 Eksplorasi data, profil daerah, simulasi, perbandingan dan ekspor dapat digunakan
-langsung tanpa akun. Tidak ada halaman login, pendaftaran, atau profil akun.
+langsung tanpa akun. Tidak ada pendaftaran atau profil akun untuk pengguna publik.
 Snapshot tersimpan di workspace bersama dan dapat dibaca pengguna aplikasi lain;
 jangan memasukkan informasi pribadi ke nama atau parameter skenario.
 
-Impor data melalui `/admin` tetap memerlukan token admin backend yang terpisah.
+Dashboard `/admin` memerlukan login di `/admin/login` menggunakan `ADMIN_TOKEN`
+yang sudah dikonfigurasi di backend. Token diverifikasi server-side, lalu diganti
+dengan cookie sesi bertanda tangan selama satu jam (HttpOnly, SameSite Strict,
+Secure pada HTTPS). Token utama tidak disimpan di browser atau localStorage.
+Tidak perlu menyalin `ADMIN_TOKEN` ke environment frontend; cukup `API_BASE_URL`.
+Impor menggunakan sesi dan tetap diperiksa backend. Tombol **Keluar admin**
+menghapus cookie; rotasi token backend membatalkan semua sesi yang telah dibuat.
+Logout tidak mencabut salinan cookie yang sudah dicuri; salinan itu berlaku sampai
+kedaluwarsa atau token dirotasi. Gunakan HTTPS dan token acak yang kuat.
+Deploy backend dan frontend bersama agar endpoint sesi tersedia sebelum login dipakai.
 Tes `public-access.spec.ts` memastikan alur publik tidak memanggil penyedia login dan route akun lama mengembalikan 404.
+
+Dashboard admin memakai `AdminShell`, terpisah dari `WorkspaceShell` publik.
+Sidebar hanya memuat ringkasan data, sinkronisasi/impor, katalog indikator, serta
+peran/keamanan; tautan **Buka aplikasi publik** kembali ke Explorer.
+Pilihan bagian disimpan di hash URL (`/admin#catalog`, `/admin#governance`,
+`/admin#sync`) agar refresh dan tombol kembali mempertahankan konteks.
+Login tetap memakai key backend yang sama, bukan akun atau password baru.
 
 ## Pemeriksaan dan kontrak
 
@@ -57,6 +73,10 @@ pnpm test:e2e
 ```
 
 Tes E2E menggunakan Playwright pada hasil build. Jalankan `pnpm exec playwright install chromium` sekali sebelum tes lokal; workflow GitHub Actions mengunduh Chromium secara otomatis dengan dependensi sistemnya. Pada Windows dengan Microsoft Edge terpasang, dapat memakai `$env:PLAYWRIGHT_CHANNEL = 'msedge'`. Screenshot disimpan pada `test-results/` (diabaikan Git). CI memasang Chromium sebelum tes. Jalankan `pnpm build` terlebih dahulu; tes memakai preview hasil build.
+
+Playwright menjalankan upstream autentikasi sintetis di port 18081 dan preview di
+port 4173 dengan `API_BASE_URL` khusus tes. Kedua port harus kosong. Tes login,
+cookie, impor, dan logout tidak mengakses backend atau data pengguna.
 
 `src/lib/api/schema.d.ts` dihasilkan dari `backend/openapi.json`. Setelah backend mengekspor schema baru:
 

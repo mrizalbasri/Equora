@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import WorkspaceShell from '$lib/components/WorkspaceShell.svelte';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
+  import AdminShell from '$lib/components/AdminShell.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import { api } from '$lib/api/workspace';
 
@@ -17,9 +19,9 @@
     items?: unknown[];
   };
 
-  let activeTab = $state<'sync' | 'catalog' | 'governance'>('sync');
-  let token = $state('');
-  let showToken = $state(false);
+  const activeTab = $derived(
+    page.url.hash === '#catalog' ? 'catalog' : page.url.hash === '#governance' ? 'governance' : 'sync',
+  );
   let busy = $state(false);
   let error = $state('');
   let logs = $state<string[]>([]);
@@ -62,7 +64,7 @@
       logs = [
         `[${new Date().toLocaleTimeString()}] Berkas terpilih: ${file.name} (${selectedFileSize})`,
         `[${new Date().toLocaleTimeString()}] Memeriksa ekstensi .xlsx dan integritas MIME type...`,
-        `[${new Date().toLocaleTimeString()}] Siap diproses melalui pipeline ETL Polars. Masukkan token otorisasi untuk memulai.`,
+        `[${new Date().toLocaleTimeString()}] Siap diproses melalui pipeline ETL Polars menggunakan sesi admin.`,
       ];
     }
   }
@@ -73,13 +75,23 @@
     error = '';
     result = undefined;
     logs = [
-      `[${new Date().toLocaleTimeString()}] Menginisialisasi otorisasi admin bearer token...`,
+      `[${new Date().toLocaleTimeString()}] Memeriksa sesi admin...`,
       `[${new Date().toLocaleTimeString()}] Memindai folder manifest data/ dan berkas XLSX sumber...`,
       `[${new Date().toLocaleTimeString()}] Mengeksekusi hashing SHA-256 dan validasi header sel...`,
     ];
 
     try {
-      const res = await api<ImportResult>('admin/import', {}, token);
+      const response = await fetch('/api/v1/admin/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{}',
+      });
+      if (response.status === 401) {
+        window.location.assign('/admin/login');
+        return;
+      }
+      if (!response.ok) throw new Error('Impor gagal. Periksa berkas, konfigurasi, atau coba lagi nanti.');
+      const res: ImportResult = await response.json();
       result = res;
       activeRelease = {
         id: res.release_id,
@@ -101,7 +113,6 @@
       ];
     } finally {
       busy = false;
-      token = '';
     }
   }
 
@@ -198,10 +209,7 @@
   <meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-<WorkspaceShell
-  title="Pusat Kendali Tata Kelola Data"
-  subtitle="Area terbatas administrasi dataset pendidikan nasional, verifikasi integritas berkas, dan sinkronisasi rilis snapshot."
->
+<AdminShell>
   <!-- BADGE STATUS SISTEM -->
   <div class="admin-top-bar">
     <div class="system-pills">
@@ -265,7 +273,7 @@
       aria-selected={activeTab === 'sync'}
       class="tab-btn"
       class:active={activeTab === 'sync'}
-      onclick={() => (activeTab = 'sync')}
+      onclick={() => goto('/admin#sync', { noScroll: true, keepFocus: true })}
     >
       <Icon name="sliders" size={16} />
       <span>Sinkronisasi & Impor Dataset</span>
@@ -276,7 +284,7 @@
       aria-selected={activeTab === 'catalog'}
       class="tab-btn"
       class:active={activeTab === 'catalog'}
-      onclick={() => (activeTab = 'catalog')}
+      onclick={() => goto('/admin#catalog', { noScroll: true, keepFocus: true })}
     >
       <Icon name="database" size={16} />
       <span>Katalog 10 Indikator Aktif</span>
@@ -287,7 +295,7 @@
       aria-selected={activeTab === 'governance'}
       class="tab-btn"
       class:active={activeTab === 'governance'}
-      onclick={() => (activeTab = 'governance')}
+      onclick={() => goto('/admin#governance', { noScroll: true, keepFocus: true })}
     >
       <Icon name="shield" size={16} />
       <span>Matriks Peran & Keamanan</span>
@@ -332,35 +340,11 @@
             </label>
           </div>
 
-          <!-- INPUT TOKEN OTORISASI -->
-          <div class="work-field token-field-group">
-            <label for="admin-token-input">Token otentikasi admin</label>
-            <div class="token-input-wrap">
-              <input
-                id="admin-token-input"
-                aria-label="Token otentikasi admin"
-                type={showToken ? 'text' : 'password'}
-                bind:value={token}
-                required
-                autocomplete="off"
-                placeholder="Masukkan ADMIN_TOKEN dari environment backend..."
-              />
-              <button
-                type="button"
-                class="token-toggle-btn"
-                onclick={() => (showToken = !showToken)}
-                aria-label={showToken ? 'Sembunyikan token' : 'Perlihatkan token'}
-              >
-                {showToken ? 'Sembunyikan' : 'Lihat'}
-              </button>
-            </div>
-          </div>
-
           <div class="work-actions">
             <button
               type="submit"
               class="eq-button eq-button-primary submit-action-btn"
-              disabled={busy || !token}
+              disabled={busy}
             >
               <Icon name="check" size={18} />
               <span>{busy ? 'Memverifikasi berkas & mengimpor…' : 'Periksa & impor snapshot'}</span>
@@ -369,7 +353,7 @@
 
           <p class="security-caption">
             <Icon name="shield" size={14} />
-            Token rahasia hanya dikirim melalui header otorisasi terenkripsi untuk satu sesi permintaan ini dan tidak pernah disimpan di peramban.
+            Sesi admin diverifikasi oleh server dan berlaku satu jam. Token utama tidak disimpan di browser. Keluar setelah selesai mengelola data.
           </p>
         </form>
 
@@ -392,7 +376,7 @@
             </div>
             <div class="terminal-body">
               {#if logs.length === 0}
-                <div class="term-line term-muted">Menunggu pemicu verifikasi... Masukkan token admin di sebelah kiri untuk menjalankan sinkronisasi.</div>
+                <div class="term-line term-muted">Sesi admin aktif. Klik Periksa &amp; impor snapshot untuk menjalankan sinkronisasi.</div>
                 <div class="term-line term-dim">Pemeriksaan: SHA-256 hash | openpyxl parser | polars vectorization | postgresql atomicity</div>
               {:else}
                 {#each logs as logLine}
@@ -556,7 +540,7 @@
       </section>
     </div>
   {/if}
-</WorkspaceShell>
+</AdminShell>
 
 <style>
   .admin-top-bar {
@@ -759,33 +743,6 @@
     border: 0;
   }
 
-  /* TOKEN FIELD */
-  .token-field-group {
-    margin-bottom: 18px;
-  }
-  .token-input-wrap {
-    display: flex;
-    gap: 6px;
-    margin-top: 6px;
-  }
-  .token-input-wrap input {
-    flex: 1;
-    height: 44px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--eq-control-border);
-    background: var(--eq-surface);
-    font-size: 14px;
-  }
-  .token-toggle-btn {
-    padding: 0 14px;
-    border: 1px solid var(--eq-border);
-    background: var(--eq-surface-subtle);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--eq-text-secondary);
-  }
   .submit-action-btn {
     width: 100%;
     justify-content: center;

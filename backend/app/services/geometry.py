@@ -21,9 +21,10 @@ def geometry(data_dir=None):
 
     manifest = json.loads(manifest_path.read_text("utf-8"))
     raw = raw_path.read_bytes()
-    if hashlib.sha256(raw).hexdigest() != manifest["sha256"]:
+    normalized = raw.replace(b"\r\n", b"\n")
+    if hashlib.sha256(normalized).hexdigest() != manifest["sha256"]:
         raise ValueError("Boundary hash changed")
-    payload = json.loads(raw)
+    payload = json.loads(normalized)
     mapping = {row["feature_id"]: row for row in manifest["crosswalk"]}
     if len(mapping) != 38 or len(payload["features"]) != 38:
         raise ValueError("Boundary count changed")

@@ -18,6 +18,30 @@
   let menuOpen = $state(false);
   let menuButton = $state<HTMLButtonElement>();
   let navElement = $state<HTMLElement>();
+  let footerDecorEl = $state<HTMLElement | null>(null);
+  let footerActive = $state(false);
+
+  $effect(() => {
+    if (!footerDecorEl) return;
+
+    let isIntersecting = false;
+    const updateActive = () => {
+      footerActive = isIntersecting && !document.hidden;
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isIntersecting = entry.isIntersecting;
+      updateActive();
+    });
+    observer.observe(footerDecorEl);
+
+    document.addEventListener('visibilitychange', updateActive);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', updateActive);
+    };
+  });
 
   $effect(() => {
     page.url.href;
@@ -155,6 +179,118 @@
         loading="lazy"
         decoding="async"
       />
+      <div
+        class="footer-decor"
+        class:paused={!footerActive}
+        bind:this={footerDecorEl}
+        aria-hidden="true"
+      >
+        <div class="decor-sunlight"></div>
+        <svg class="decor-cloud" viewBox="0 0 180 60">
+          <path d="M7 49C-4 35 15 23 31 29C25 1 67-4 80 21C94 4 126 10 127 32C155 18 179 37 174 49Z" fill="#fff0cd" />
+        </svg>
+        <svg class="decor-cloud decor-cloud-back" viewBox="0 0 180 60">
+          <path d="M7 49C-4 35 15 23 31 29C25 1 67-4 80 21C94 4 126 10 127 32C155 18 179 37 174 49Z" fill="#fff0cd" />
+        </svg>
+        <svg class="decor-flock decor-flock-1" viewBox="0 0 130 50" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path class="bird" d="M102 22Q107 15 112 22Q117 15 122 22" />
+          <path class="bird" d="M78 14Q83 8 88 14Q93 8 98 14" />
+          <path class="bird" d="M52 8Q57 2 62 8Q67 2 72 8" />
+          <path class="bird" d="M26 3Q31 -2 36 3Q41 -2 46 3" />
+          <path class="bird" d="M76 32Q81 26 86 32Q91 26 96 32" />
+          <path class="bird" d="M50 40Q55 34 60 40Q65 34 70 40" />
+          <path class="bird" d="M22 47Q27 41 32 47Q37 41 42 47" />
+        </svg>
+        <svg class="decor-flock decor-flock-2" viewBox="0 0 100 42" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path class="bird" d="M74 16Q79 10 84 16Q89 10 94 16" />
+          <path class="bird" d="M52 8Q57 2 62 8Q67 2 72 8" />
+          <path class="bird" d="M50 25Q55 19 60 25Q65 19 70 25" />
+          <path class="bird" d="M26 18Q31 12 36 18Q41 12 46 18" />
+          <path class="bird" d="M4 29Q9 23 14 29Q19 23 24 29" />
+        </svg>
+        <svg class="decor-flock decor-flock-3" viewBox="0 0 110 36" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <path class="bird" d="M86 14Q91 8 96 14Q101 8 106 14" />
+          <path class="bird" d="M64 8Q69 3 74 8Q79 3 84 8" />
+          <path class="bird" d="M66 22Q71 16 76 22Q81 16 86 22" />
+          <path class="bird" d="M42 16Q47 11 52 16Q57 11 62 16" />
+          <path class="bird" d="M22 10Q27 5 32 10Q37 5 42 10" />
+          <path class="bird" d="M2 24Q7 19 12 24Q17 19 22 24" />
+        </svg>
+        <svg class="decor-flock decor-flock-4" viewBox="0 0 80 30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path class="bird" d="M56 12Q61 6 66 12Q71 6 76 12" />
+          <path class="bird" d="M36 6Q41 1 46 6Q51 1 56 6" />
+          <path class="bird" d="M34 20Q39 15 44 20Q49 15 54 20" />
+          <path class="bird" d="M12 16Q17 11 22 16Q27 11 32 16" />
+        </svg>
+        <svg class="decor-cyclist decor-cyclist-lead" viewBox="0 0 80 70">
+          <ellipse cx="40" cy="65" rx="37" ry="2.2" fill="#173d3b" opacity=".22" />
+          <g fill="none" stroke="#1c4847" stroke-width="2">
+            <g class="wheel">
+              <circle cx="17" cy="51" r="13" fill="#d6d5a6" fill-opacity=".22" />
+              <path d="M17 38V64M4 51H30M8 42L26 60M8 60L26 42" stroke-width=".6" />
+            </g>
+            <g class="wheel">
+              <circle cx="63" cy="51" r="13" fill="#d6d5a6" fill-opacity=".22" />
+              <path d="M63 38V64M50 51H76M54 42L72 60M54 60L72 42" stroke-width=".6" />
+            </g>
+            <path d="M17 51L29 32L39 51H17L49 33L63 51M39 51L29 29M24 29H33M49 33L45 26L52 24" stroke="#e3c57e" stroke-width="2.4" stroke-linejoin="round" />
+          </g>
+          <g class="rider rider-bounce">
+            <path d="M35 21L29 37L39 46" fill="none" stroke="#1a4146" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M36 20L43 29L49 28" fill="none" stroke="#e2bd7a" stroke-width="3.6" stroke-linecap="round" />
+            <path d="M33 17Q38 14 41 22L36 31L28 28Z" fill="#eed8a4" />
+            <path d="M31 18L27 28" stroke="#173f48" stroke-width="5" stroke-linecap="round" />
+            <circle cx="40" cy="10" r="5.5" fill="#dfb678" />
+            <path d="M34 10Q33 2 40 3Q47 3 46 9" fill="#173f48" />
+          </g>
+          <g class="pedals" fill="none" stroke="#173f48" stroke-width="2">
+            <path d="M31 47H41M31 45V49M41 45V49" />
+          </g>
+        </svg>
+        <svg class="decor-cyclist decor-cyclist-buddy" viewBox="0 0 80 70">
+          <ellipse cx="40" cy="65" rx="37" ry="2.2" fill="#173d3b" opacity=".2" />
+          <g fill="none" stroke="#1c4847" stroke-width="2">
+            <g class="wheel">
+              <circle cx="17" cy="51" r="13" fill="#d6d5a6" fill-opacity=".22" />
+              <path d="M17 38V64M4 51H30M8 42L26 60M8 60L26 42" stroke-width=".6" />
+            </g>
+            <g class="wheel">
+              <circle cx="63" cy="51" r="13" fill="#d6d5a6" fill-opacity=".22" />
+              <path d="M63 38V64M50 51H76M54 42L72 60M54 60L72 42" stroke-width=".6" />
+            </g>
+            <path d="M17 51L29 32L39 51H17L49 33L63 51M39 51L29 29M24 29H33M49 33L45 26L52 24" stroke="#c48358" stroke-width="2.4" stroke-linejoin="round" />
+          </g>
+          <g class="rider rider-bounce">
+            <path d="M35 21L29 37L39 46" fill="none" stroke="#183e44" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M36 20L43 29L49 28" fill="none" stroke="#d58652" stroke-width="3.6" stroke-linecap="round" />
+            <path d="M33 17Q38 14 41 22L36 31L28 28Z" fill="#cf6852" />
+            <path d="M31 18L27 28" stroke="#14373e" stroke-width="5" stroke-linecap="round" />
+            <circle cx="40" cy="10" r="5.5" fill="#dfb678" />
+            <path d="M34 10Q33 2 40 3Q47 3 46 9" fill="#14373e" />
+          </g>
+          <g class="pedals" fill="none" stroke="#173f48" stroke-width="2">
+            <path d="M31 47H41M31 45V49M41 45V49" />
+          </g>
+        </svg>
+        <div class="decor-butterfly decor-butterfly-1">
+          <svg viewBox="0 0 16 16">
+            <path d="M8 8C-4-7-1 17 8 9C17 17 20-7 8 8Z" fill="currentColor" />
+            <path d="M8 5V12" stroke="#214c48" stroke-width="1" />
+          </svg>
+        </div>
+        <div class="decor-butterfly decor-butterfly-2">
+          <svg viewBox="0 0 16 16">
+            <path d="M8 8C-4-7-1 17 8 9C17 17 20-7 8 8Z" fill="currentColor" />
+            <path d="M8 5V12" stroke="#214c48" stroke-width="1" />
+          </svg>
+        </div>
+        <div class="decor-butterfly decor-butterfly-3">
+          <svg viewBox="0 0 16 16">
+            <path d="M8 8C-4-7-1 17 8 9C17 17 20-7 8 8Z" fill="currentColor" />
+            <path d="M8 5V12" stroke="#214c48" stroke-width="1" />
+          </svg>
+        </div>
+      </div>
     </div>
   </footer>
 </div>
@@ -436,6 +572,168 @@
     object-fit: cover;
     object-position: center bottom;
   }
+  .footer-decor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .decor-sunlight {
+    position: absolute;
+    inset: 36% 8% 5%;
+    background: radial-gradient(ellipse at 54% 45%, #ffe5a21c, transparent 64%);
+    animation: decor-sunlight 12s ease-in-out infinite alternate;
+  }
+  .decor-cloud {
+    position: absolute;
+    top: 48%;
+    left: 6%;
+    width: 160px;
+    height: 45px;
+    opacity: 0.35;
+    filter: blur(2px);
+    animation: decor-cloud 28s ease-in-out infinite alternate;
+  }
+  .decor-cloud-back {
+    top: 42%;
+    left: 69%;
+    width: 110px;
+    opacity: 0.23;
+    animation-duration: 38s;
+    animation-delay: -12s;
+  }
+  .decor-flock {
+    position: absolute;
+    left: -120px;
+    color: #faeab8;
+    pointer-events: none;
+    animation: decor-flight 24s linear infinite;
+  }
+  .decor-flock-1 {
+    top: 38%;
+    width: 104px;
+    height: 40px;
+    animation-duration: 25s;
+    animation-delay: 0s;
+  }
+  .decor-flock-2 {
+    top: 26%;
+    width: 82px;
+    height: 34px;
+    opacity: 0.75;
+    animation-duration: 29s;
+    animation-delay: -11s;
+  }
+  .decor-flock-3 {
+    top: 17%;
+    width: 72px;
+    height: 24px;
+    opacity: 0.6;
+    animation-duration: 33s;
+    animation-delay: -19s;
+  }
+  .decor-flock-4 {
+    top: 48%;
+    width: 64px;
+    height: 24px;
+    opacity: 0.85;
+    animation-duration: 21s;
+    animation-delay: -7s;
+  }
+  .bird {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: decor-wings 850ms ease-in-out infinite alternate;
+  }
+  .bird:nth-child(2) {
+    animation-delay: -220ms;
+  }
+  .bird:nth-child(3) {
+    animation-delay: -450ms;
+  }
+  .bird:nth-child(4) {
+    animation-delay: -140ms;
+  }
+  .bird:nth-child(5) {
+    animation-delay: -360ms;
+  }
+  .bird:nth-child(6) {
+    animation-delay: -520ms;
+  }
+  .bird:nth-child(7) {
+    animation-delay: -280ms;
+  }
+  .decor-cyclist {
+    position: absolute;
+    bottom: 3.8%;
+    left: -12%;
+    width: clamp(40px, 4.2vw, 54px);
+    height: auto;
+    animation: decor-ride 36s linear infinite;
+  }
+  .decor-cyclist-lead {
+    animation-delay: -1.4s;
+  }
+  .decor-cyclist-buddy {
+    bottom: 4.5%;
+    scale: 0.86;
+    opacity: 0.95;
+    animation-delay: 0s;
+  }
+  .wheel {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: decor-spin 850ms linear infinite;
+  }
+  .pedals {
+    transform-origin: 36px 47px;
+    animation: decor-spin 1700ms linear infinite;
+  }
+  .rider-bounce {
+    animation: decor-bounce 900ms ease-in-out infinite alternate;
+  }
+  .decor-butterfly {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    animation: decor-flutter-path 10s ease-in-out infinite;
+  }
+  .decor-butterfly-1 {
+    bottom: 11%;
+    left: 91%;
+    color: #f4d995;
+  }
+  .decor-butterfly-2 {
+    bottom: 7%;
+    left: 85%;
+    color: #eed074;
+    scale: 0.8;
+    animation-duration: 8.5s;
+    animation-delay: -3.8s;
+  }
+  .decor-butterfly-3 {
+    bottom: 6%;
+    left: 14%;
+    color: #faeab8;
+    scale: 0.75;
+    animation-duration: 11.5s;
+    animation-delay: -6.5s;
+  }
+  .decor-butterfly svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .decor-butterfly path {
+    transform-origin: 8px 8px;
+    animation: decor-butterfly-wing 280ms ease-in-out infinite alternate;
+  }
+  .footer-decor.paused *,
+  .footer-decor.paused *::before,
+  .footer-decor.paused *::after {
+    animation-play-state: paused !important;
+  }
   .disclaimer {
     text-align: right;
   }
@@ -539,6 +837,33 @@
     .footer-landscape img {
       object-position: 50% bottom;
     }
+    .decor-cloud {
+      top: 62%;
+      width: 100px;
+    }
+    .decor-cloud-back {
+      display: none;
+    }
+    .decor-flock-1 {
+      top: 36%;
+      width: 74px;
+      height: 28px;
+    }
+    .decor-flock-2,
+    .decor-flock-3 {
+      display: none;
+    }
+    .decor-cyclist {
+      width: 40px;
+      bottom: 2.7%;
+      animation-duration: 28s;
+    }
+    .decor-cyclist-buddy {
+      display: none;
+    }
+    .decor-butterfly {
+      display: none;
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -570,6 +895,100 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes decor-cloud {
+    to {
+      translate: 70px 4px;
+    }
+  }
+
+  @keyframes decor-sunlight {
+    to {
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes decor-flight {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0;
+    }
+    3% {
+      opacity: 0.85;
+    }
+    94% {
+      opacity: 0.85;
+    }
+    100% {
+      transform: translate3d(calc(100vw + 240px), -65px, 0);
+      opacity: 0;
+    }
+  }
+
+  @keyframes decor-wings {
+    to {
+      scale: 1 0.55;
+    }
+  }
+
+  @keyframes decor-ride {
+    0%,
+    5% {
+      left: -12%;
+    }
+    63%,
+    100% {
+      left: 112%;
+    }
+  }
+
+  @keyframes decor-spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes decor-bounce {
+    to {
+      translate: 0 -0.6px;
+    }
+  }
+
+  @keyframes decor-flutter-path {
+    0%,
+    100% {
+      translate: 0 0;
+      rotate: -12deg;
+    }
+    30% {
+      translate: -20px -24px;
+      rotate: 12deg;
+    }
+    65% {
+      translate: 8px -12px;
+      rotate: -6deg;
+    }
+  }
+
+  @keyframes decor-butterfly-wing {
+    to {
+      scale: 0.3 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-decor *,
+    .footer-decor *::before,
+    .footer-decor *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    .decor-cyclist,
+    .decor-flock,
+    .decor-butterfly {
+      display: none;
     }
   }
 </style>

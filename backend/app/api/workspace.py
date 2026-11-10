@@ -3,13 +3,12 @@
 import csv
 import io
 import json
-import secrets
 from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Annotated, Literal
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlalchemy import func, select, text
@@ -30,6 +29,7 @@ from app.api.views import (
     SourceView,
     WorkspaceView,
 )
+from app.core.admin_auth import require_admin
 from app.db.registry import LocalRelease, ScenarioSnapshot
 from app.etl.education import EducationLevel
 from app.etl.local_release import CORE
@@ -549,20 +549,6 @@ def export_pdf(snapshot_id: UUID, session: DBSession):
         media_type="application/pdf",
         headers={"Content-Disposition": f'attachment; filename="equora-{snapshot_id}.pdf"'},
     )
-
-
-def require_admin(request: Request, authorization: str | None = Header(default=None)):
-    configured = request.app.state.settings.admin_token
-    if (
-        not configured
-        or not authorization
-        or not secrets.compare_digest(
-            authorization.encode(), ("Bearer " + configured.get_secret_value()).encode()
-        )
-    ):
-        raise HTTPException(
-            401, "Token admin lokal diperlukan", headers={"WWW-Authenticate": "Bearer"}
-        )
 
 
 @router.post("/admin/import", dependencies=[Depends(require_admin)])

@@ -235,38 +235,6 @@ test('explorer keeps the value view usable when map insights fail', async ({ pag
     page.getByRole('button', { name: 'Provinsi Synthetic Alpha', exact: true }),
   ).toBeVisible();
 });
-test('admin rejects an invalid token and clears the input', async ({
-  page,
-}) => {
-  await mockWorkspace(page);
-  await page.goto('/admin');
-  await page.getByLabel('Token otentikasi admin', { exact: true }).fill('invalid');
-  await page.getByRole('button', { name: 'Periksa & impor snapshot' }).click();
-  await expect(page.getByRole('alert')).toContainText(
-    'Token admin lokal diperlukan',
-  );
-  await expect(
-    page.getByLabel('Token otentikasi admin', { exact: true }),
-  ).toHaveValue('');
-});
-
-test('admin accepts valid token and displays imported snapshot status', async ({
-  page,
-}) => {
-  await mockWorkspace(page);
-  await page.goto('/admin');
-  await page.getByLabel('Token otentikasi admin', { exact: true }).fill('valid-secret');
-  await page.getByRole('button', { name: 'Periksa & impor snapshot' }).click();
-  await expect(page.getByRole('status')).toContainText(
-    'Impor lokal berhasil diselesaikan!',
-  );
-  await expect(page.getByRole('status')).toContainText('10');
-  await expect(page.getByRole('status')).toContainText('synthetic-release');
-  await expect(
-    page.getByRole('link', { name: 'Buka Katalog & Kualitas Dataset' }),
-  ).toBeVisible();
-});
-
 test('comparison load failure offers retry without claiming scenarios are empty', async ({ page }) => {
   await mockWorkspace(page);
   let calls = 0;

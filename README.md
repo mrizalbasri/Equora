@@ -48,7 +48,7 @@ Alur aplikasi: **jelajahi kondisi daerah → coba skenario prioritas → baca te
 | Ringkasan temuan | `/studio`, `/compare` | Hasil simulasi sebagai narasi: konsentrasi anggaran, indikator fokus, estimasi sekolah difasilitasi, dan asumsi biaya. |
 | Snapshot dan Compare | `/compare` | Menyimpan dan membandingkan dua skenario yang kompatibel, lengkap dengan ekspor Memo Kebijakan PDF. |
 | Katalog dan metodologi | `/datasets`, `/methodology` | Metadata dataset, definisi indikator, metode perhitungan, dan batas penggunaannya. |
-| Impor admin & Tata kelola | `/admin` | Menyiapkan data lokal melalui manifest yang diaudit (SHA-256 & validasi skema ETL Polars), dengan otorisasi token admin terpisah. |
+| Impor admin & Tata kelola | `/admin`, `/admin/login` | Login token admin dengan sesi satu jam; menyiapkan data lokal melalui manifest yang diaudit (SHA-256 & validasi skema ETL Polars). |
 
 ### Alur pengguna & batasan peran (User Flow)
 
@@ -60,7 +60,7 @@ Platform memisahkan interaksi antara masyarakat umum, perencana kebijakan/pemeri
 | **Perencana & Pemerintah** | `/studio`, `/compare`, `/scenarios/[id]` | Menguji simulasi bobot prioritas (MCDA) & optimasi anggaran (CP-SAT), menganalisis peta GIS tingkat urgensi alokasi, uji sensitivitas, dan mengunduh Memo Kebijakan PDF. | Menyimpan *snapshot* skenario terikat versi data (`release_id`) tanpa mengubah data dasar. |
 | **Administrator Data** | `/admin` (`POST /api/v1/admin/import`) | Menjalankan *pipeline* ETL Polars untuk memverifikasi *manifest* berkas sumber Kemendikdasmen dan memperbarui *snapshot* rilis. | Dilindungi `Bearer ADMIN_TOKEN`; menolak otomatis (*fail-closed*) berkas yang gagal verifikasi SHA-256 atau struktur sel. |
 
-Seluruh fitur publik dapat digunakan tanpa login atau pendaftaran. Fitur yang memerlukan data membutuhkan backend, database, dan rilis lokal yang sudah disiapkan. Snapshot berada di workspace bersama dan dapat dibaca pengguna lain yang mengakses aplikasi; jangan menyimpan informasi pribadi di dalamnya.
+Seluruh fitur publik dapat digunakan tanpa login atau pendaftaran. Dashboard admin memerlukan login memakai `ADMIN_TOKEN` backend; sesi berakhir setelah satu jam atau saat cookie dihapus melalui tombol keluar. Fitur yang memerlukan data membutuhkan backend, database, dan rilis lokal yang sudah disiapkan. Snapshot berada di workspace bersama dan dapat dibaca pengguna lain yang mengakses aplikasi; jangan menyimpan informasi pribadi di dalamnya.
 
 ### Peta situs & wireframe
 
