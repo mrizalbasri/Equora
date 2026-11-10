@@ -132,8 +132,9 @@ jobs:
             RES_GROUP="${{ vars.AZURE_RESOURCE_GROUP || 'rg-group' }}"
             BASE_IMAGE="${{ vars.DOCKERHUB_IMAGE || format('{0}/equora-backend', vars.DOCKERHUB_USERNAME || 'mrizal23') }}"
             TAG="${{ needs.image.outputs.version }}"
-            if [[ -z "$TAG" || "$TAG" == "ci" ]]; then
-              TAG="latest"
+            if [[ -z "$TAG" || "$TAG" == "ci" || "$TAG" == "latest" ]]; then
+              COMMIT_SHA="${{ github.sha }}"
+              TAG="sha-${COMMIT_SHA:0:7}"
             fi
             IMAGE="docker.io/${BASE_IMAGE}:${TAG}"
 
@@ -149,13 +150,14 @@ jobs:
               --query "properties.configuration.ingress.fqdn" -o tsv)
 
             echo "Target FQDN: $FQDN"
-            echo "Verifying health on https://${FQDN}/api/v1/health/ready..."
+            echo "Verifying health on https://${FQDN}/api/v1/health/ready and geometry..."
 
             for attempt in $(seq 1 12); do
               status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://${FQDN}/api/v1/health/ready" || echo "000")
-              echo "Attempt $attempt: HTTP $status"
-              if [[ "$status" == "200" ]]; then
-                echo "Deployment verified: Backend is healthy and serving traffic!"
+              geo_status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://${FQDN}/api/v1/geometry" || echo "000")
+              echo "Attempt $attempt: ready=$status geometry=$geo_status"
+              if [[ "$status" == "200" && "$geo_status" == "200" ]]; then
+                echo "Deployment verified: Backend is healthy and serving geometry!"
                 exit 0
               fi
               sleep 5
