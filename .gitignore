@@ -20,7 +20,9 @@ coverage/
 .coverage.*
 playwright-report/
 test-results/
-data/raw/
+data/raw/*
+!data/raw/boundary-local/
+!data/raw/boundary-local/**
 data/datamentah/
 data/processed/
 tmp/
