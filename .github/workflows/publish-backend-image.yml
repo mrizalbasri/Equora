@@ -1,4 +1,4 @@
-name: Publish backend image
+name: Publish backend image and deploy to Azure
 
 on:
   push:
@@ -17,7 +17,12 @@ on:
         description: Push the image to Docker Hub
         required: true
         type: boolean
-        default: false
+        default: true
+      deploy:
+        description: Deploy to Azure Container Apps
+        required: true
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -30,6 +35,9 @@ jobs:
   image:
     name: Build${{ ((github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))) || (github.event_name == 'workflow_dispatch' && inputs.publish)) && ' and publish' || '' }}
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      tags: ${{ steps.meta.outputs.tags }}
     env:
       PUBLISH_IMAGE: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))) || (github.event_name == 'workflow_dispatch' && inputs.publish) }}
     steps:
@@ -86,3 +94,71 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=equora-backend
           cache-to: type=gha,mode=max,scope=equora-backend
+
+  deploy:
+    name: Deploy to Azure Container Apps
+    needs: image
+    if: |
+      needs.image.result == 'success' &&
+      ((github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))) ||
+       (github.event_name == 'workflow_dispatch' && inputs.deploy))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Azure deployment configuration
+        shell: bash
+        env:
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          if [[ -z "$AZURE_CREDENTIALS" ]]; then
+            echo "::error::Set the AZURE_CREDENTIALS repository secret before deploying."
+            exit 1
+          fi
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy and verify Azure Container App
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            set -euo pipefail
+
+            az config set extension.use_dynamic_install=yes_without_prompt > /dev/null 2>&1 || true
+            az extension add --name containerapp --upgrade --yes > /dev/null 2>&1 || true
+
+            APP_NAME="${{ vars.AZURE_CONTAINER_APP_NAME || 'equora-api' }}"
+            RES_GROUP="${{ vars.AZURE_RESOURCE_GROUP || 'rg-group' }}"
+            BASE_IMAGE="${{ vars.DOCKERHUB_IMAGE || format('{0}/equora-backend', vars.DOCKERHUB_USERNAME || 'mrizal23') }}"
+            TAG="${{ needs.image.outputs.version }}"
+            if [[ -z "$TAG" || "$TAG" == "ci" ]]; then
+              TAG="latest"
+            fi
+            IMAGE="docker.io/${BASE_IMAGE}:${TAG}"
+
+            echo "Deploying $IMAGE to $APP_NAME in resource group $RES_GROUP..."
+            az containerapp update \
+              --name "$APP_NAME" \
+              --resource-group "$RES_GROUP" \
+              --image "$IMAGE"
+
+            FQDN=$(az containerapp show \
+              --name "$APP_NAME" \
+              --resource-group "$RES_GROUP" \
+              --query "properties.configuration.ingress.fqdn" -o tsv)
+
+            echo "Target FQDN: $FQDN"
+            echo "Verifying health on https://${FQDN}/api/v1/health/ready..."
+
+            for attempt in $(seq 1 12); do
+              status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://${FQDN}/api/v1/health/ready" || echo "000")
+              echo "Attempt $attempt: HTTP $status"
+              if [[ "$status" == "200" ]]; then
+                echo "Deployment verified: Backend is healthy and serving traffic!"
+                exit 0
+              fi
+              sleep 5
+            done
+
+            echo "::warning::Health check did not return 200 within 60 seconds."

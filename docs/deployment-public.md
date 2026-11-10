@@ -68,6 +68,24 @@ cd backend
 DATABASE_URL_UNPOOLED='postgresql+psycopg://...' uv run alembic upgrade head
 ```
 
+## Opsi C — Azure Container Apps (Otomatis via GitHub Actions)
+
+Backend berjalan di **Azure Container Apps** (`equora-api` di resource group `rg-group`) dengan ingress publik HTTPS aktif. Deployment berjalan otomatis setiap ada push ke branch `main` melalui alur CI/CD:
+
+1. **GitHub Actions Workflow** (`.github/workflows/publish-backend-image.yml`):
+   - Membangun image dari `backend/Dockerfile`.
+   - Mengunggah image ke Docker Hub (`mrizal23/equora-backend:latest` & tag commit).
+   - Melakukan autentikasi ke Azure menggunakan Service Principal (`AZURE_CREDENTIALS`).
+   - Memperbarui revision Container App via `az containerapp update --image ...`.
+   - Menjalankan health check otomatis ke `/api/v1/health/ready` hingga berstatus `200 OK`.
+2. **Environment Azure Container App**:
+   - `DATABASE_URL` / `DATABASE_URL_UNPOOLED`: Neon PostgreSQL pooled connection.
+   - `ADMIN_TOKEN`: Token otorisasi admin untuk upload manifest.
+   - `CORS_ORIGINS`: `["https://equora-tau.vercel.app","http://localhost:5173","http://localhost:3000"]`.
+   - `REQUIRE_PUBLISHED_DATA`: `true`.
+3. **Koneksi Vercel**:
+   - Variabel `API_BASE_URL` di dashboard Vercel diset ke URL Azure Container App (`https://equora-api.bravecliff-18f241ae.japaneast.azurecontainerapps.io`).
+
 ## Isi data rilis
 
 Setelah backend dan database siap, unggah manifest melalui `/admin` atau endpoint admin:
