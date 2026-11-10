@@ -7,14 +7,26 @@ from app.main import create_app
 from app.services.geometry import geometry
 
 
+def test_geometry_with_valid_data_dir():
+    # Test path when data_dir exists and contains boundary assets
+    root_data = Path(__file__).resolve().parents[2] / "data"
+    result = geometry(root_data)
+    assert result["type"] == "FeatureCollection"
+    assert len(result["features"]) == 38
+
+
 def test_geometry_bundled_fallback(tmp_path: Path):
-    # Test that even when data_dir is empty or does not exist, bundled boundary is used
+    # Test fallback when data_dir does not exist or is empty
     result = geometry(tmp_path / "missing_data_dir")
     assert result["type"] == "FeatureCollection"
     assert len(result["features"]) == 38
     assert "attribution" in result
     assert "source_url" in result
     assert "license_url" in result
+
+    # Test fallback when data_dir is None
+    result_none = geometry(None)
+    assert len(result_none["features"]) == 38
 
     # Verify sample province feature
     first = result["features"][0]
