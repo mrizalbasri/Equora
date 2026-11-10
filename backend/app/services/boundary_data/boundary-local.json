@@ -1,0 +1,198 @@
+{
+  "url": "https://raw.githubusercontent.com/denyherianto/indonesia-geojson-topojson-maps-with-38-provinces/80aa4a90ac7eef5136eaa2b551b6aa5d198be27d/GeoJSON/indonesia-38-provinces.geojson",
+  "sha256": "97f23f738c7aa66836b971d76381c009a34c6aaefe9c982e85f060e678402027",
+  "attribution": "Indonesia GeoJSON & TopoJSON Maps (38 Provinces), Deny Herianto; CC BY 4.0. Community simplified boundaries; upstream provenance requires review before public redistribution.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "crosswalk": [
+    {
+      "feature_id": "72",
+      "boundary_name": "Sulawesi Tengah",
+      "source_code": "72"
+    },
+    {
+      "feature_id": "76",
+      "boundary_name": "Sulawesi Barat",
+      "source_code": "76"
+    },
+    {
+      "feature_id": "73",
+      "boundary_name": "Sulawesi Selatan",
+      "source_code": "73"
+    },
+    {
+      "feature_id": "91-D",
+      "boundary_name": "Papua Tengah",
+      "source_code": "94"
+    },
+    {
+      "feature_id": "92-A",
+      "boundary_name": "Papua Barat",
+      "source_code": "92"
+    },
+    {
+      "feature_id": "75",
+      "boundary_name": "Gorontalo",
+      "source_code": "75"
+    },
+    {
+      "feature_id": "14",
+      "boundary_name": "Riau",
+      "source_code": "14"
+    },
+    {
+      "feature_id": "91-C",
+      "boundary_name": "Papua Selatan",
+      "source_code": "93"
+    },
+    {
+      "feature_id": "34",
+      "boundary_name": "Daerah Istimewa Yogyakarta",
+      "source_code": "34"
+    },
+    {
+      "feature_id": "13",
+      "boundary_name": "Sumatera Barat",
+      "source_code": "13"
+    },
+    {
+      "feature_id": "31",
+      "boundary_name": "DKI Jakarta",
+      "source_code": "31"
+    },
+    {
+      "feature_id": "81",
+      "boundary_name": "Maluku",
+      "source_code": "81"
+    },
+    {
+      "feature_id": "17",
+      "boundary_name": "Bengkulu",
+      "source_code": "17"
+    },
+    {
+      "feature_id": "18",
+      "boundary_name": "Lampung",
+      "source_code": "18"
+    },
+    {
+      "feature_id": "91-A",
+      "boundary_name": "Papua",
+      "source_code": "91"
+    },
+    {
+      "feature_id": "21",
+      "boundary_name": "Kepulauan Riau",
+      "source_code": "21"
+    },
+    {
+      "feature_id": "52",
+      "boundary_name": "Nusa Tenggara Barat",
+      "source_code": "52"
+    },
+    {
+      "feature_id": "15",
+      "boundary_name": "Jambi",
+      "source_code": "15"
+    },
+    {
+      "feature_id": "51",
+      "boundary_name": "Bali",
+      "source_code": "51"
+    },
+    {
+      "feature_id": "35",
+      "boundary_name": "Jawa Timur",
+      "source_code": "35"
+    },
+    {
+      "feature_id": "92-B",
+      "boundary_name": "Papua Barat Daya",
+      "source_code": "96"
+    },
+    {
+      "feature_id": "12",
+      "boundary_name": "Sumatera Utara",
+      "source_code": "12"
+    },
+    {
+      "feature_id": "74",
+      "boundary_name": "Sulawesi Tenggara",
+      "source_code": "74"
+    },
+    {
+      "feature_id": "53",
+      "boundary_name": "Nusa Tenggara Timur",
+      "source_code": "53"
+    },
+    {
+      "feature_id": "63",
+      "boundary_name": "Kalimantan Selatan",
+      "source_code": "63"
+    },
+    {
+      "feature_id": "11",
+      "boundary_name": "Aceh",
+      "source_code": "11"
+    },
+    {
+      "feature_id": "62",
+      "boundary_name": "Kalimantan Tengah",
+      "source_code": "62"
+    },
+    {
+      "feature_id": "91-B",
+      "boundary_name": "Papua Pegunungan",
+      "source_code": "95"
+    },
+    {
+      "feature_id": "19",
+      "boundary_name": "Kepulauan Bangka Belitung",
+      "source_code": "19"
+    },
+    {
+      "feature_id": "16",
+      "boundary_name": "Sumatera Selatan",
+      "source_code": "16"
+    },
+    {
+      "feature_id": "36",
+      "boundary_name": "Banten",
+      "source_code": "36"
+    },
+    {
+      "feature_id": "71",
+      "boundary_name": "Sulawesi Utara",
+      "source_code": "71"
+    },
+    {
+      "feature_id": "65",
+      "boundary_name": "Kalimantan Utara",
+      "source_code": "65"
+    },
+    {
+      "feature_id": "64",
+      "boundary_name": "Kalimantan Timur",
+      "source_code": "64"
+    },
+    {
+      "feature_id": "33",
+      "boundary_name": "Jawa Tengah",
+      "source_code": "33"
+    },
+    {
+      "feature_id": "82",
+      "boundary_name": "Maluku Utara",
+      "source_code": "82"
+    },
+    {
+      "feature_id": "61",
+      "boundary_name": "Kalimantan Barat",
+      "source_code": "61"
+    },
+    {
+      "feature_id": "32",
+      "boundary_name": "Jawa Barat",
+      "source_code": "32"
+    }
+  ]
+}

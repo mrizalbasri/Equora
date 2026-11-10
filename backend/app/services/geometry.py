@@ -2,11 +2,25 @@
 
 import hashlib
 import json
+from pathlib import Path
+
+BUNDLED_BOUNDARY_DIR = Path(__file__).resolve().parent / "boundary_data"
 
 
-def geometry(data_dir):
-    manifest = json.loads((data_dir / "metadata/boundary-local.json").read_text("utf-8"))
-    raw = (data_dir / "raw/boundary-local/provinces.geojson").read_bytes()
+def geometry(data_dir=None):
+    if (
+        data_dir
+        and (data_dir / "metadata/boundary-local.json").exists()
+        and (data_dir / "raw/boundary-local/provinces.geojson").exists()
+    ):
+        manifest_path = data_dir / "metadata/boundary-local.json"
+        raw_path = data_dir / "raw/boundary-local/provinces.geojson"
+    else:
+        manifest_path = BUNDLED_BOUNDARY_DIR / "boundary-local.json"
+        raw_path = BUNDLED_BOUNDARY_DIR / "provinces.geojson"
+
+    manifest = json.loads(manifest_path.read_text("utf-8"))
+    raw = raw_path.read_bytes()
     if hashlib.sha256(raw).hexdigest() != manifest["sha256"]:
         raise ValueError("Boundary hash changed")
     payload = json.loads(raw)
