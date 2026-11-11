@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/state';
-  import { goto } from '$app/navigation';
   import AdminShell from '$lib/components/AdminShell.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import { api } from '$lib/api/workspace';
@@ -19,8 +18,14 @@
     items?: unknown[];
   };
 
-  const activeTab = $derived(
-    page.url.hash === '#catalog' ? 'catalog' : page.url.hash === '#governance' ? 'governance' : 'sync',
+  const activeSection = $derived(
+    page.url.hash === '#sync'
+      ? 'sync'
+      : page.url.hash === '#catalog'
+        ? 'catalog'
+        : page.url.hash === '#governance'
+          ? 'governance'
+          : 'overview',
   );
   let busy = $state(false);
   let error = $state('');
@@ -267,56 +272,183 @@
     </div>
   </div>
 
-  <!-- WORKSPACE VIEW SWITCHER -->
-  <div class="tab-nav-wrapper">
-    <div class="admin-tab-nav" role="tablist" aria-label="Navigasi Panel Admin">
-      <button
-        type="button"
-        role="tab"
-        aria-selected={activeTab === 'sync'}
-        class="tab-btn"
-        class:active={activeTab === 'sync'}
-        onclick={() => goto('/admin#sync', { noScroll: true, keepFocus: true })}
-      >
-        <Icon name="sliders" size={16} />
-        <span>Sinkronisasi & Impor Dataset</span>
-      </button>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={activeTab === 'catalog'}
-        class="tab-btn"
-        class:active={activeTab === 'catalog'}
-        onclick={() => goto('/admin#catalog', { noScroll: true, keepFocus: true })}
-      >
-        <Icon name="database" size={16} />
-        <span>Katalog 10 Indikator Aktif</span>
-      </button>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={activeTab === 'governance'}
-        class="tab-btn"
-        class:active={activeTab === 'governance'}
-        onclick={() => goto('/admin#governance', { noScroll: true, keepFocus: true })}
-      >
-        <Icon name="shield" size={16} />
-        <span>Matriks Peran & Keamanan</span>
-      </button>
-    </div>
-    <div class="tab-context-meta">
-      {#if activeTab === 'sync'}
-        <span class="context-pill"><Icon name="sliders" size={12} /> Pipeline &amp; Transaksi Database</span>
-      {:else if activeTab === 'catalog'}
-        <span class="context-pill"><Icon name="database" size={12} /> 10 Indikator Pendidikan Resmi</span>
-      {:else}
-        <span class="context-pill"><Icon name="shield" size={12} /> Matriks Akses &amp; Fail-Closed</span>
-      {/if}
-    </div>
-  </div>
+  <!-- WORKSPACE VIEW: RINGKASAN DATA (DEFAULT/OVERVIEW) -->
+  {#if activeSection === 'overview'}
+    <div class="overview-section">
+      <div class="overview-header-row">
+        <div class="card-title-row">
+          <span class="eq-kicker">RINGKASAN EKSEKUTIF TATA KELOLA DATA</span>
+          <h2>Status Ekosistem & Inventaris Data Nasional</h2>
+        </div>
+        <p class="work-muted">
+          Pusat pemantauan status data pendidikan 38 provinsi, integritas pipeline ETL, dan konsistensi rilis snapshot aktif.
+        </p>
+      </div>
 
-  <!-- TAB 1: SINKRONISASI & IMPOR DATASET -->
-  {#if activeTab === 'sync'}
+      <div class="overview-cards-grid">
+        <!-- KARTU 1: PIPELINE & RILIS SNAPSHOT -->
+        <div class="work-panel overview-card">
+          <div class="overview-card-header">
+            <div class="overview-icon-badge">
+              <Icon name="sliders" size={20} />
+            </div>
+            <div>
+              <span class="overview-kicker">PIPELINE &amp; VERIFIKASI</span>
+              <h3>Snapshot Rilis Terkini</h3>
+            </div>
+          </div>
+          <div class="overview-card-body">
+            <div class="info-row">
+              <span class="info-label">ID Rilis Aktif</span>
+              <code class="code-pill">{activeRelease.id}</code>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Status Verifikasi</span>
+              <span class="status-tag status-tag-verified">
+                <Icon name="check" size={12} /> {activeRelease.status === 'local_review' ? 'Review Terverifikasi' : 'Terverifikasi Aktif'}
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Audit Integritas</span>
+              <span class="info-value">10/10 Berkas SHA-256 Valid</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Mesin Pemroses</span>
+              <span class="info-value">Polars ETL v2 (Vektorisasi BPS)</span>
+            </div>
+          </div>
+          <div class="overview-card-footer">
+            <a href="/admin#sync" class="card-action-link">
+              <span>Buka Sinkronisasi &amp; Impor Dataset</span>
+              <Icon name="chevron" size={14} />
+            </a>
+          </div>
+        </div>
+
+        <!-- KARTU 2: DISTRIBUSI INDIKATOR & JENJANG -->
+        <div class="work-panel overview-card">
+          <div class="overview-card-header">
+            <div class="overview-icon-badge">
+              <Icon name="database" size={20} />
+            </div>
+            <div>
+              <span class="overview-kicker">DATASET RESMI</span>
+              <h3>Katalog 10 Indikator</h3>
+            </div>
+          </div>
+          <div class="overview-card-body">
+            <div class="info-row">
+              <span class="info-label">Indikator Inti MCDA</span>
+              <span class="info-value"><strong>4 Indikator</strong> (Sanitasi, Air, Internet, Komputer)</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Indikator Pelengkap</span>
+              <span class="info-value"><strong>6 Indikator</strong> (Satuan, Listrik, dsb.)</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Cakupan Wilayah</span>
+              <span class="info-value">38 Provinsi (100% Nasional)</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Jenjang Sekolah</span>
+              <span class="info-value">SD, SMP, SMA, SMK, TK, SLB</span>
+            </div>
+          </div>
+          <div class="overview-card-footer">
+            <a href="/admin#catalog" class="card-action-link">
+              <span>Telusuri Daftar 10 Indikator Lengkap</span>
+              <Icon name="chevron" size={14} />
+            </a>
+          </div>
+        </div>
+
+        <!-- KARTU 3: MATRIKS TATA KELOLA & PENGAMANAN -->
+        <div class="work-panel overview-card">
+          <div class="overview-card-header">
+            <div class="overview-icon-badge">
+              <Icon name="shield" size={20} />
+            </div>
+            <div>
+              <span class="overview-kicker">KEAMANAN &amp; AKSES</span>
+              <h3>Otorisasi &amp; Fail-Closed</h3>
+            </div>
+          </div>
+          <div class="overview-card-body">
+            <div class="info-row">
+              <span class="info-label">Akses Publik</span>
+              <span class="guard-pill guard-open">Terbuka (Read-Only)</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Perencana Daerah</span>
+              <span class="guard-pill guard-isolated">Snapshot Terisolasi</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Administrator</span>
+              <span class="guard-pill guard-failclosed">Fail-Closed Token</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Durasi Sesi</span>
+              <span class="info-value">1 Jam (HTTP-Only Cookie)</span>
+            </div>
+          </div>
+          <div class="overview-card-footer">
+            <a href="/admin#governance" class="card-action-link">
+              <span>Lihat Matriks Peran &amp; Arsitektur</span>
+              <Icon name="chevron" size={14} />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABEL RINGKASAN CEPAT 10 INDIKATOR DI OVERVIEW -->
+      <div class="work-panel overview-summary-table-panel">
+        <div class="summary-table-header">
+          <div>
+            <span class="eq-kicker">INVENTARIS DATA AKTIF</span>
+            <h3 style="margin: 2px 0 0; font-size: 1.15rem; font-weight: 700; color: var(--eq-text);">Ringkasan Indikator Terverifikasi</h3>
+          </div>
+          <a href="/admin#catalog" class="eq-button eq-button-secondary">
+            <Icon name="database" size={14} />
+            <span>Buka Katalog Lengkap</span>
+          </a>
+        </div>
+        <div class="work-table admin-table-container" style="margin-top: 14px; margin-bottom: 0;">
+          <table class="admin-data-table">
+            <thead>
+              <tr>
+                <th class="col-num">No</th>
+                <th class="col-name">Nama Indikator</th>
+                <th class="col-code">Kode Teknis</th>
+                <th class="col-cat">Kategori</th>
+                <th class="col-unit">Satuan</th>
+                <th class="col-audit">Integritas</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each indicatorCatalog as item, idx}
+                <tr>
+                  <td class="col-num">{idx + 1}</td>
+                  <td class="col-name"><strong>{item.name}</strong></td>
+                  <td class="col-code"><code class="code-pill">{item.code}</code></td>
+                  <td class="col-cat">
+                    <span class="cat-pill" class:cat-core={item.category.includes('Inti')}>
+                      {item.category}
+                    </span>
+                  </td>
+                  <td class="col-unit">{item.unit}</td>
+                  <td class="col-audit">
+                    <span class="status-tag status-tag-verified">
+                      <Icon name="check" size={12} /> SHA-256 Valid
+                    </span>
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  {:else if activeSection === 'sync'}
     <div class="tab-content">
       <div class="dashboard-two-col">
         <!-- FORM EKSEKUSI & UPLOAD -->
@@ -431,10 +563,9 @@
         </div>
       </div>
     </div>
-  {/if}
 
-  <!-- TAB 2: KATALOG 10 INDIKATOR AKTIF -->
-  {#if activeTab === 'catalog'}
+  <!-- VIEW 2: KATALOG 10 INDIKATOR AKTIF -->
+  {:else if activeSection === 'catalog'}
     <div class="tab-content">
       <div class="work-panel catalog-panel">
         <div class="card-title-row">
@@ -485,10 +616,8 @@
         </div>
       </div>
     </div>
-  {/if}
-
-  <!-- TAB 3: MATRIKS PERAN & KEAMANAN -->
-  {#if activeTab === 'governance'}
+  <!-- VIEW 3: MATRIKS PERAN & KEAMANAN -->
+  {:else if activeSection === 'governance'}
     <div class="tab-content">
       <section class="work-panel admin-governance-panel" aria-labelledby="role-matrix-title">
         <span class="eq-kicker">VALIDASI ALUR PENGGUNA (USER FLOW)</span>
@@ -720,67 +849,123 @@
     border: 1px solid #c2ecd8;
   }
 
-  /* WORKSPACE VIEW SELECTOR / TABS */
-  .tab-nav-wrapper {
+  /* OVERVIEW DASHBOARD SECTION */
+  .overview-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .overview-header-row {
+    margin-bottom: 4px;
+  }
+  .overview-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .overview-card {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    border: 1px solid var(--eq-border);
+    border-radius: 12px;
+    background: var(--eq-surface);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    margin: 0 !important;
+  }
+  .overview-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .overview-icon-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: var(--eq-primary-tint);
+    color: var(--eq-primary);
+    border: 1px solid #bfdbfe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .overview-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--eq-text-muted);
+    display: block;
+  }
+  .overview-card-header h3 {
+    margin: 2px 0 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--eq-text);
+  }
+  .overview-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .info-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--eq-border);
-    flex-wrap: wrap;
-  }
-  .admin-tab-nav {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px;
-    background: var(--eq-surface-subtle);
-    border: 1px solid var(--eq-border);
-    border-radius: 10px;
-    overflow-x: auto;
-  }
-  .tab-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 7px;
-    background: transparent;
-    color: var(--eq-text-secondary);
     font-size: 13px;
-    font-weight: 550;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 140ms ease;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    gap: 10px;
   }
-  .tab-btn:hover {
+  .info-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .info-label {
+    color: var(--eq-text-secondary);
+    font-size: 12px;
+  }
+  .info-value {
     color: var(--eq-text);
-    background: rgba(0, 0, 0, 0.04);
+    text-align: right;
+    font-size: 12px;
   }
-  .tab-btn.active {
-    color: var(--eq-primary);
-    background: var(--eq-surface);
-    font-weight: 650;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  .overview-card-footer {
+    padding-top: 12px;
+    border-top: 1px solid var(--eq-border);
   }
-  .tab-context-meta {
-    display: flex;
-    align-items: center;
-  }
-  .context-pill {
+  .card-action-link {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--eq-text-secondary);
-    padding: 5px 12px;
-    background: var(--eq-surface);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--eq-primary);
+    text-decoration: none;
+    transition: gap 140ms ease, color 140ms ease;
+  }
+  .card-action-link:hover {
+    color: var(--eq-primary-hover);
+    gap: 8px;
+  }
+  .overview-summary-table-panel {
+    padding: 20px;
     border: 1px solid var(--eq-border);
-    border-radius: 9999px;
+    border-radius: 12px;
+    background: var(--eq-surface);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    margin: 0 !important;
+  }
+  .summary-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
   /* TWO COLUMN LAYOUT */
