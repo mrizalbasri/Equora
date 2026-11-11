@@ -1,20 +1,47 @@
-# Equora
+# Equora — Wawasan Data Fasilitas Pendidikan Indonesia
 
-> Equora adalah aplikasi web analisis data publik untuk menelusuri kondisi fasilitas pendidikan antarprovinsi di Indonesia, membaca posisi relatif terhadap median provinsi pada jenjang yang sepadan, dan menguji skenario alokasi sumber daya secara transparan.
+> Equora adalah platform analisis data publik terbuka untuk memetakan kondisi fasilitas pendidikan di 38 provinsi Indonesia, mengevaluasi ketimpangan terhadap median nasional, dan menguji skenario alokasi sumber daya sekolah secara transparan menggunakan optimasi multi-kriteria MCDA dan solver matematis CP-SAT.
+
+## Apa itu Equora?
+
+Equora (https://equora.id) adalah sistem informasi analitik dan pengambil keputusan berbasis data terbuka (open data) yang berfokus pada pemerataan fasilitas sekolah di Indonesia. Equora mengintegrasikan data statistik resmi dari Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi (Kemendikbudristek) serta Badan Pusat Statistik (BPS) untuk seluruh 38 provinsi. Melalui visualisasi peta tematik (choropleth GIS) dan model matematika optimasi alokasi, Equora membantu masyarakat umum, akademisi, peneliti, dan perencana anggaran publik memahami ketimpangan fasilitas antarwilayah secara objektif dan berbasis bukti.
+
+## Indikator Fasilitas Sekolah yang Dianalisis
+
+Equora mengukur empat indikator infrastruktur dan sarana pembelajaran utama pada empat jenjang pendidikan formal (SD, SMP, SMA, dan SMK):
+1. **Sanitasi Dasar Sekolah**: Persentase sekolah yang memiliki jamban terpisah dan berfungsi layak.
+2. **Air Minum Layak**: Persentase sekolah dengan akses sumber air minum aman dan tersedia di lingkungan sekolah.
+3. **Akses Internet Pengajaran**: Jumlah dan persentase sekolah yang terhubung ke jaringan internet stabil untuk keperluan belajar-mengajar.
+4. **Komputer Pembelajaran**: Jumlah dan ketersediaan perangkat komputer yang dapat digunakan oleh siswa untuk asesmen dan kegiatan belajar.
+
+## Metodologi Analisis dan Algoritma Optimasi
+
+Penilaian kebutuhan wilayah di Equora menggunakan metode Multi-Criteria Decision Analysis (MCDA) untuk menghitung skor prioritas kebutuhan tiap provinsi. Untuk simulasi distribusi paket bantuan, Equora menggunakan solver program linier integer CP-SAT dari Google OR-Tools. Model ini memetakan alokasi fasilitas secara optimal berdasarkan batasan pagu anggaran total, biaya per paket fasilitas di tiap provinsi, kapasitas penyerapan daerah, serta batasan pemerataan wilayah. Seluruh kalkulasi beroperasi di bawah prinsip integritas data ketat: data hilang (`null`) dikecualikan dari pemeringkatan tanpa substitusi asumsi nol.
 
 ## Halaman Publik Utama
 
-- [Beranda](/) — Ringkasan masalah ketimpangan fasilitas sekolah antardaerah dan pintu masuk alur eksplorasi.
-- [Pendidikan di Daerah Saya](/daerah) — Profil fasilitas sekolah per provinsi, perbandingan dengan median provinsi, dan penelusuran indikator.
-- [Explorer Pendidikan](/explore) — Peta tematik (choropleth) dan tabel indikator sanitasi dasar, air bersih, akses internet, serta komputer pembelajaran berdasarkan jenjang (SD, SMP, SMA, SMK).
-- [Studio Simulasi](/studio) — Simulasi prioritas kebutuhan (MCDA) dan optimasi alokasi paket fasilitas menggunakan CP-SAT (OR-Tools) dengan batasan anggaran dan kapasitas.
-- [Perbandingan Skenario](/compare) — Analisis komparatif antara dua snapshot skenario pada rilis data dan jenjang yang kompatibel.
-- [Katalog Dataset](/datasets) — Metadata sumber indikator, definisi operasional, periode tahun ajaran, checksum SHA-256, dan catatan kualitas data.
-- [Metodologi](/methodology) — Penjelasan rumus skor kebutuhan MCDA, model matematis CP-SAT, aturan nilai hilang (`null` tidak dianggap nol), serta batas interpretasi hasil.
-- [Tentang Equora](/about) — Tujuan, sasaran pengguna, dan prinsip transparansi data Equora.
+- `Beranda -> https://equora.id/`: Pintu masuk utama, visualisasi ringkasan ketimpangan fasilitas sekolah nasional, dan pengenalan alur kerja platform.
+- `Pendidikan di Daerah Saya -> https://equora.id/daerah`: Profil lengkap fasilitas sekolah per provinsi, grafik radar, perbandingan langsung terhadap median provinsi nasional, dan penelusuran histori indikator.
+- `Explorer Pendidikan -> https://equora.id/explore`: Peta GIS tematik (choropleth) 38 provinsi di Indonesia dan tabel data dinamis berdasarkan jenjang (SD, SMP, SMA, SMK).
+- `Studio Simulasi -> https://equora.id/studio`: Antarmuka simulasi interaktif untuk menetapkan bobot indikator MCDA, batas anggaran daerah, dan menjalankan kalkulasi optimasi alokasi CP-SAT.
+- `Perbandingan Skenario -> https://equora.id/compare`: Analisis komparatif berdampingan antara dua snapshot skenario simulasi kebijakan pada rilis data yang sama.
+- `Katalog Dataset -> https://equora.id/datasets`: Dokumentasi lengkap metadata sumber data resmi, definisi operasional, tahun ajaran, satuan hitung, dan checksum SHA-256 untuk verifikasi provenance.
+- `Metodologi -> https://equora.id/methodology`: Dokumentasi teknis rumus pembobotan MCDA, formulasi matematis CP-SAT OR-Tools, batas validitas simulasi, dan aturan penanganan nilai hilang.
+- `Tentang Equora -> https://equora.id/about`: Visi misi, batasan peran pengguna, dan komitmen transparansi data publik Equora.
 
 ## Prinsip & Batas Interpretasi
 
 - **Nilai hilang (`null`) bukan nol**: Wilayah dengan indikator wajib yang belum tersedia dikecualikan secara eksplisit dari pemeringkatan dan tidak diisi dengan angka tebakan.
-- **Provenance terverifikasi**: Setiap angka indikator ditautkan ke sumber data, tahun ajaran, satuan, dan sel asal pada berkas sumber.
+- **Provenance terverifikasi**: Setiap angka indikator ditautkan ke sumber data, tahun ajaran, satuan, dan sel asal pada berkas sumber dengan checksum SHA-256.
 - **Simulasi bukan keputusan anggaran resmi**: Asumsi biaya per paket dan kapasitas penyerapan di Studio Simulasi merupakan parameter uji skenario untuk eksplorasi kebijakan, bukan ketetapan anggaran pemerintah.
+
+## Pertanyaan yang Sering Diajukan (FAQ)
+
+### Apakah Equora menetapkan alokasi anggaran resmi pemerintah?
+Tidak. Simulasi alokasi di Equora merupakan instrumen uji skenario (decision-support tool) untuk eksplorasi kebijakan dan analisis publik. Hasil simulasi bukan ketetapan anggaran resmi APBN atau APBD.
+
+### Apakah data sekolah di Equora selalu diperbarui?
+Data di Equora diperbarui secara berkala mengikuti publikasi rilis data resmi tahun ajaran Kemendikbudristek dan BPS. Setiap rilis diverifikasi dengan integritas checksum kriptografis SHA-256.
+
+### Bagaimana Equora menangani data yang tidak lengkap pada provinsi tertentu?
+Equora menerapkan aturan data provenance ketat: nilai yang tidak dilaporkan atau tidak tersedia diperlakukan sebagai `null` (bukan nol). Wilayah tersebut dikecualikan secara transparan dari pemeringkatan indikator terkait untuk mencegah kesimpulan yang menyesatkan.
