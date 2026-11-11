@@ -30,6 +30,10 @@
   <a href="#tim-dan-kontribusi">Tim</a>
 </p>
 
+<p align="center">
+  <img src="frontend/static/images/brand/equora-og.jpg" alt="Equora - Wawasan Data untuk Indonesia" width="100%">
+</p>
+
 ## Tentang proyek
 
 Equora adalah aplikasi web untuk mengeksplorasi data fasilitas pendidikan di Indonesia, membandingkan kondisi antardaerah, dan menguji skenario alokasi sumber daya. Pengguna dapat menelusuri sumber indikator, mengubah asumsi simulasi, lalu membandingkan hasilnya.
@@ -193,7 +197,7 @@ sequenceDiagram
     Note over Judge,Svelte: 4. Pemutusan Sesi Terverifikasi (Logout)
     Judge->>Svelte: Klik Keluar (POST /admin/logout)
     Svelte->>Svelte: Validasi Origin header (Anti-CSRF)
-    Svelte-->>Judge: Set-Cookie: equora_admin_session=deleted; Max-Age=0
+    Svelte-->>Judge: Set-Cookie: equora_admin_session=deleted (Max-Age=0)
     Svelte-->>Judge: HTTP 303 Redirect ke /admin/login
 ```
 

@@ -19,6 +19,7 @@ describe('seo metadata and structured data', () => {
     expect(resolveSeo('/').ogType).toBe('website');
     expect(resolveSeo('/methodology').ogType).toBe('article');
     expect(resolveSeo('/admin').noindex).toBe(true);
+    expect(resolveSeo('/admin/audit').noindex).toBe(true);
     expect(resolveSeo('/scenarios/abc-123').noindex).toBe(true);
     expect(resolveSeo('/datasets/sanitation').title).toContain('Equora');
     expect(resolveSeo('/regions/11').title).toContain('Equora');
@@ -27,7 +28,13 @@ describe('seo metadata and structured data', () => {
 
   it('builds valid Schema.org JSON-LD graph for root, methodology, and datasets', () => {
     const rootLd = JSON.parse(buildStructuredData('https://equora.id', '/'));
-    expect(rootLd['@graph']).toHaveLength(2);
+    const rootTypes = rootLd['@graph'].map(
+      (item: { '@type': string }) => item['@type'],
+    );
+    expect(rootTypes).toContain('Organization');
+    expect(rootTypes).toContain('WebSite');
+    expect(rootTypes).toContain('WebApplication');
+    expect(rootTypes).toContain('FAQPage');
 
     const methodologyLd = JSON.parse(
       buildStructuredData('https://equora.id', '/methodology'),
@@ -36,9 +43,11 @@ describe('seo metadata and structured data', () => {
     const types = methodologyLd['@graph'].map(
       (item: { '@type': string }) => item['@type'],
     );
+    expect(types).toContain('Organization');
     expect(types).toContain('WebSite');
     expect(types).toContain('WebApplication');
     expect(types).toContain('TechArticle');
+    expect(types).toContain('BreadcrumbList');
 
     const datasetsLd = JSON.parse(
       buildStructuredData('https://equora.id', '/datasets'),
@@ -47,6 +56,7 @@ describe('seo metadata and structured data', () => {
       (item: { '@type': string }) => item['@type'],
     );
     expect(datasetTypes).toContain('DataCatalog');
+    expect(datasetTypes).toContain('BreadcrumbList');
   });
 
   it('lists all public indexable routes in PUBLIC_SITEMAP_PATHS', () => {
@@ -71,6 +81,9 @@ describe('seo metadata and structured data', () => {
     const robotsText = await robotsRes.text();
     expect(robotsText).toContain('Disallow: /admin');
     expect(robotsText).toContain('Sitemap: https://equora.id/sitemap.xml');
+    expect(robotsText).toContain('User-agent: Googlebot');
+    expect(robotsText).toContain('User-agent: GPTBot');
+    expect(robotsText).toContain('User-agent: PerplexityBot');
 
     const sitemapRes = await getSitemap({
       url: new URL('https://equora.id/sitemap.xml'),
@@ -79,5 +92,8 @@ describe('seo metadata and structured data', () => {
     const sitemapText = await sitemapRes.text();
     expect(sitemapText).toContain('<loc>https://equora.id</loc>');
     expect(sitemapText).toContain('<loc>https://equora.id/methodology</loc>');
+    expect(sitemapText).toContain(
+      '<image:loc>https://equora.id/images/brand/equora-og.jpg</image:loc>',
+    );
   });
 });
