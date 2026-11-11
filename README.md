@@ -36,7 +36,7 @@ Equora adalah aplikasi web untuk mengeksplorasi data fasilitas pendidikan di Ind
 
 Proyek ini disiapkan untuk Web In Action (WIA), MIA 2026. Antarmuka menggunakan Bahasa Indonesia, dengan penjelasan untuk publik serta rincian metode, sumber, dan batas data.
 
-> **Status Deployment:** Layanan Equora beroperasi **penuh secara live** (*production-ready*). Frontend di-deploy pada domain resmi [www.eqora.web.id](https://www.eqora.web.id) (Vercel Edge Network) dan terhubung langsung ke backend API FastAPI pada **Azure Container Apps** (`equora-api` di `rg-group`) dengan database PostgreSQL terkelola.
+> **Status Deployment:** Layanan Equora beroperasi **penuh secara live** (*production-ready*). Frontend di-deploy pada domain resmi [www.equora.web.id](https://www.equora.web.id) (Vercel Edge Network) dan terhubung langsung ke backend API FastAPI pada **Azure Container Apps** (`equora-api` di `rg-group`) dengan database PostgreSQL terkelola.
 >
 > Seluruh alur publik (Profil Daerah, Explorer GIS, Studio Optimasi CP-SAT, Compare & Ekspor PDF) serta modul administrasi tata kelola data (`/admin`, `/admin/login`) dapat langsung diuji secara daring.
 
@@ -48,17 +48,17 @@ Bagian ini dirancang khusus bagi dewan juri untuk mengevaluasi fungsionalitas, a
 
 | Komponen | Tautan | Keterangan & Kredensial |
 | --- | --- | --- |
-| **Aplikasi Frontend (Domain Resmi)** | [www.eqora.web.id](https://www.eqora.web.id) | Antarmuka pengguna produksi utama (Vercel Edge Network). Akses publik tanpa perlu login. |
+| **Aplikasi Frontend (Domain Resmi)** | [www.equora.web.id](https://www.equora.web.id) | Antarmuka pengguna produksi utama (Vercel Edge Network). Akses publik tanpa perlu login. |
 | **Aplikasi Frontend (Mirror)** | [equora-tau.vercel.app](https://equora-tau.vercel.app) | URL deployment sekunder Vercel. |
 | **Backend API Gateway** | [equora-api.bravecliff-18f241ae.japaneast.azurecontainerapps.io](https://equora-api.bravecliff-18f241ae.japaneast.azurecontainerapps.io) | API FastAPI pada Azure Container Apps. |
 | **Dokumentasi Interaktif API** | [equora-api.bravecliff-18f241ae.japaneast.azurecontainerapps.io/docs](https://equora-api.bravecliff-18f241ae.japaneast.azurecontainerapps.io/docs) | Swagger UI / OpenAPI docs interaktif. |
-| **Health & Readiness Check** | [www.eqora.web.id/api/v1/health/ready](https://www.eqora.web.id/api/v1/health/ready) | Verifikasi konektivitas backend dan PostgreSQL (`200 OK`). |
-| **Endpoint Geometri Publik** | [www.eqora.web.id/api/v1/geometry](https://www.eqora.web.id/api/v1/geometry) | Data batas wilayah provinsi untuk visualisasi GIS (`200 OK`). |
-| **Halaman Login Admin** | [www.eqora.web.id/admin/login](https://www.eqora.web.id/admin/login) | Form autentikasi admin. **Token Evaluasi:** `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ` |
-| **Dashboard Admin Terlindungi** | [www.eqora.web.id/admin](https://www.eqora.web.id/admin) | Dashboard tata kelola data (terproteksi, dialihkan ke login jika belum ada sesi). |
+| **Health & Readiness Check** | [www.equora.web.id/api/v1/health/ready](https://www.equora.web.id/api/v1/health/ready) | Verifikasi konektivitas backend dan PostgreSQL (`200 OK`). |
+| **Endpoint Geometri Publik** | [www.equora.web.id/api/v1/geometry](https://www.equora.web.id/api/v1/geometry) | Data batas wilayah provinsi untuk visualisasi GIS (`200 OK`). |
+| **Halaman Login Admin** | [www.equora.web.id/admin/login](https://www.equora.web.id/admin/login) | Form autentikasi admin. **Token Evaluasi:** `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ` |
+| **Dashboard Admin Terlindungi** | [www.equora.web.id/admin](https://www.equora.web.id/admin) | Dashboard tata kelola data (terproteksi, dialihkan ke login jika belum ada sesi). |
 
 > 🔑 **Kredensial Pengujian Administrator (Khusus Evaluasi Dewan Juri):**
-> - **URL Halaman Login:** [https://www.eqora.web.id/admin/login](https://www.eqora.web.id/admin/login) *(Mirror: [https://equora-tau.vercel.app/admin/login](https://equora-tau.vercel.app/admin/login))*
+> - **URL Halaman Login:** [https://www.equora.web.id/admin/login](https://www.equora.web.id/admin/login) *(Mirror: [https://equora-tau.vercel.app/admin/login](https://equora-tau.vercel.app/admin/login))*
 > - **Admin Token Evaluasi:** `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ`
 > 
 > *Dewan juri dapat menggunakan token di atas untuk menguji alur otentikasi admin, validasi checksum data, dan fitur audit rilis dataset.*
@@ -71,15 +71,15 @@ Dewan juri dapat memverifikasi arsitektur keamanan dan keandalan sistem melalui 
 
 #### 1. Uji Proteksi Rute Admin (Route Guard & Fail-Closed)
 1. Buka jendela peramban baru dalam mode penyamaran (**Incognito / Private Window**).
-2. Akses langsung tautan dashboard admin: [www.eqora.web.id/admin](https://www.eqora.web.id/admin).
+2. Akses langsung tautan dashboard admin: [www.equora.web.id/admin](https://www.equora.web.id/admin).
 3. **Ekspektasi Hasil**: 
-   - Sistem **menolak akses** ke halaman admin dan secara otomatis mengembalikan status `303 See Other` yang mengarahkan peramban ke [www.eqora.web.id/admin/login](https://www.eqora.web.id/admin/login).
+   - Sistem **menolak akses** ke halaman admin dan secara otomatis mengembalikan status `303 See Other` yang mengarahkan peramban ke [www.equora.web.id/admin/login](https://www.equora.web.id/admin/login).
    - Middleware `hooks.server.ts` menghentikan pemrosesan rute sebelum komponen halaman mana pun dirender di sisi server jika cookie sesi `equora_admin_session` tidak ditemukan.
    - Header HTTP respon memuat `Cache-Control: no-store` untuk mencegah browser menyimpan cache tampilan dashboard berhak akses tinggi.
 
 #### 2. Uji Autentikasi Admin (Negative & Positive Testing)
 1. **Pengujian Negatif (Token Salah)**:
-   - Pada halaman [www.eqora.web.id/admin/login](https://www.eqora.web.id/admin/login), masukkan sembarang token acak (misal: `token-uji-coba-salah-123`).
+   - Pada halaman [www.equora.web.id/admin/login](https://www.equora.web.id/admin/login), masukkan sembarang token acak (misal: `token-uji-coba-salah-123`).
    - Tekan tombol **Masuk**.
    - **Ekspektasi**: Sistem menolak login dengan pesan error otentikasi tanpa membocorkan struktur kredensial internal server.
 2. **Pengujian Positif (Token Valid Evaluasi Juri)**:
@@ -93,7 +93,7 @@ Dewan juri dapat memverifikasi arsitektur keamanan dan keandalan sistem melalui 
      - Server menerbitkan token sesi bertandatangan HMAC-SHA256 (`<expires>.<nonce>.<hmac>`) berformat cookie `equora_admin_session`.
      - Cookie dikonfigurasi dengan atribut: `httpOnly: true` (kebal pencurian XSS), `sameSite: 'strict'` (pencegahan CSRF), `secure: true` (hanya HTTPS), dan `maxAge: 3600` (kedaluwarsa otomatis dalam 1 jam).
      - Token rahasia master (`ADMIN_TOKEN`) tidak pernah terekspos ke klien ataupun disimpan di `localStorage`.
-     - Pengguna secara otomatis dialihkan ke [www.eqora.web.id/admin](https://www.eqora.web.id/admin).
+     - Pengguna secara otomatis dialihkan ke [www.equora.web.id/admin](https://www.equora.web.id/admin).
 
 #### 3. Eksplorasi Tata Kelola Data pada Dashboard Admin
 Setelah login berhasil, juri dapat memeriksa fitur audit integritas data:
@@ -151,7 +151,7 @@ Peta situs lengkap, alur pengguna per peran, dan inventaris wireframe tersedia d
 Equora mengadopsi prinsip *defense-in-depth* dan arsitektur *two-tier security* yang memisahkan otentikasi sesi di lapisan peramban/edge (SvelteKit server-side) dari otorisasi transaksi data pada lapisan backend data (FastAPI + PostgreSQL).
 
 > 🧪 **Uji Langsung Arsitektur Keamanan (Khusus Dewan Juri):**
-> Alur sequence diagram di bawah ini dapat diuji langsung pada production memakai token evaluasi: `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ` melalui [www.eqora.web.id/admin/login](https://www.eqora.web.id/admin/login).
+> Alur sequence diagram di bawah ini dapat diuji langsung pada production memakai token evaluasi: `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ` melalui [www.equora.web.id/admin/login](https://www.equora.web.id/admin/login).
 
 ```mermaid
 sequenceDiagram
@@ -235,7 +235,7 @@ Aplikasi memisahkan konfigurasi sensitif ke dalam variabel lingkungan:
 | `ADMIN_TOKEN` | String rahasia (Token Evaluasi Juri: `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ`) | Token otorisasi master untuk login admin dan trigger pipeline ETL data. |
 | `DATABASE_URL` | `postgresql+psycopg://...` | Connection string runtime PostgreSQL (menggunakan *connection pooler* di produksi). |
 | `DATABASE_URL_UNPOOLED` | `postgresql+psycopg://...` | Connection string PostgreSQL langsung tanpa pooler (khusus untuk migrasi Alembic). |
-| `CORS_ORIGINS` | `["https://www.eqora.web.id","https://equora-tau.vercel.app"]` | Whitelist origin frontend yang diizinkan melakukan request lintas-domain. |
+| `CORS_ORIGINS` | `["https://www.equora.web.id","https://equora-tau.vercel.app"]` | Whitelist origin frontend yang diizinkan melakukan request lintas-domain. |
 | `REQUIRE_PUBLISHED_DATA` | `true` / `false` | Menjamin hanya data rilis resmi terverifikasi yang disajikan ke publik (`true` pada live). |
 | `WRITE_REQUESTS_PER_MINUTE` | `30` | Proteksi rate limit penulisan skenario untuk mencegah serangan denial-of-service. |
 | `MAX_SAVED_SCENARIOS` | `50` | Kuota maksimal penyimpanan skenario simulasi per workspace. |
@@ -257,7 +257,7 @@ Karya sementara yang telah diimplementasikan per tahap First Draft Submission:
 - [x] **Ringkasan temuan & estimasi dampak** — narasi hasil simulasi pada Studio dan Compare, serta penjelasan asumsi biaya per paket.
 - [x] **Komparasi skenario (`/compare`)** — perbandingan alokasi antar skenario dan pemerataan fasilitas.
 - [x] **Katalog dataset & metodologi (`/datasets`, `/methodology`)** — metadata indikator resmi Kemendikdasmen dan batas penggunaan data.
-- [x] **Aplikasi frontend publik produksi (`www.eqora.web.id`)** — halaman statis dan rute utama beroperasi secara live di cloud.
+- [x] **Aplikasi frontend publik produksi (`www.equora.web.id`)** — halaman statis dan rute utama beroperasi secara live di cloud.
 - [x] **Layanan data publik (API + PostgreSQL terverifikasi)** — aktif penuh di Azure Container Apps dan PostgreSQL, melayani data publik dan alur administrasi rilis.
 
 ## Bahasa dan teknologi
