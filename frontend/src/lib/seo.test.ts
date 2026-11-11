@@ -19,6 +19,7 @@ describe('seo metadata and structured data', () => {
     expect(resolveSeo('/').ogType).toBe('website');
     expect(resolveSeo('/methodology').ogType).toBe('article');
     expect(resolveSeo('/admin').noindex).toBe(true);
+    expect(resolveSeo('/admin/audit').noindex).toBe(true);
     expect(resolveSeo('/scenarios/abc-123').noindex).toBe(true);
     expect(resolveSeo('/datasets/sanitation').title).toContain('Equora');
     expect(resolveSeo('/regions/11').title).toContain('Equora');
