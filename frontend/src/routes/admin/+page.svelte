@@ -230,10 +230,12 @@
         <span class="stat-title">Snapshot Rilis Aktif</span>
         <span class="stat-icon-wrap"><Icon name="database" size={16} /></span>
       </div>
-      <div class="stat-value text-mono">{activeRelease.id}</div>
+      <div class="stat-value text-mono stat-release-id" title={activeRelease.id}>{activeRelease.id}</div>
       <div class="stat-caption">
-        <span class="status-tag status-tag-verified">Terverifikasi</span>
-        Tahun Ajaran 2025/2026
+        <span class="status-tag status-tag-verified">
+          <Icon name="check" size={11} /> Terverifikasi
+        </span>
+        <span>Tahun Ajaran 2025/2026</span>
       </div>
     </div>
 
@@ -265,41 +267,52 @@
     </div>
   </div>
 
-  <!-- TAB NAVIGATION -->
-  <div class="admin-tab-nav" role="tablist" aria-label="Navigasi Panel Admin">
-    <button
-      type="button"
-      role="tab"
-      aria-selected={activeTab === 'sync'}
-      class="tab-btn"
-      class:active={activeTab === 'sync'}
-      onclick={() => goto('/admin#sync', { noScroll: true, keepFocus: true })}
-    >
-      <Icon name="sliders" size={16} />
-      <span>Sinkronisasi & Impor Dataset</span>
-    </button>
-    <button
-      type="button"
-      role="tab"
-      aria-selected={activeTab === 'catalog'}
-      class="tab-btn"
-      class:active={activeTab === 'catalog'}
-      onclick={() => goto('/admin#catalog', { noScroll: true, keepFocus: true })}
-    >
-      <Icon name="database" size={16} />
-      <span>Katalog 10 Indikator Aktif</span>
-    </button>
-    <button
-      type="button"
-      role="tab"
-      aria-selected={activeTab === 'governance'}
-      class="tab-btn"
-      class:active={activeTab === 'governance'}
-      onclick={() => goto('/admin#governance', { noScroll: true, keepFocus: true })}
-    >
-      <Icon name="shield" size={16} />
-      <span>Matriks Peran & Keamanan</span>
-    </button>
+  <!-- WORKSPACE VIEW SWITCHER -->
+  <div class="tab-nav-wrapper">
+    <div class="admin-tab-nav" role="tablist" aria-label="Navigasi Panel Admin">
+      <button
+        type="button"
+        role="tab"
+        aria-selected={activeTab === 'sync'}
+        class="tab-btn"
+        class:active={activeTab === 'sync'}
+        onclick={() => goto('/admin#sync', { noScroll: true, keepFocus: true })}
+      >
+        <Icon name="sliders" size={16} />
+        <span>Sinkronisasi & Impor Dataset</span>
+      </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={activeTab === 'catalog'}
+        class="tab-btn"
+        class:active={activeTab === 'catalog'}
+        onclick={() => goto('/admin#catalog', { noScroll: true, keepFocus: true })}
+      >
+        <Icon name="database" size={16} />
+        <span>Katalog 10 Indikator Aktif</span>
+      </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={activeTab === 'governance'}
+        class="tab-btn"
+        class:active={activeTab === 'governance'}
+        onclick={() => goto('/admin#governance', { noScroll: true, keepFocus: true })}
+      >
+        <Icon name="shield" size={16} />
+        <span>Matriks Peran & Keamanan</span>
+      </button>
+    </div>
+    <div class="tab-context-meta">
+      {#if activeTab === 'sync'}
+        <span class="context-pill"><Icon name="sliders" size={12} /> Pipeline &amp; Transaksi Database</span>
+      {:else if activeTab === 'catalog'}
+        <span class="context-pill"><Icon name="database" size={12} /> 10 Indikator Pendidikan Resmi</span>
+      {:else}
+        <span class="context-pill"><Icon name="shield" size={12} /> Matriks Akses &amp; Fail-Closed</span>
+      {/if}
+    </div>
   </div>
 
   <!-- TAB 1: SINKRONISASI & IMPOR DATASET -->
@@ -428,38 +441,42 @@
           <span class="eq-kicker">INVENTORY DATASET RESMI</span>
           <h2>Daftar 10 Indikator Pendidikan Nasional Terverifikasi</h2>
         </div>
-        <p class="work-muted" style="margin-bottom: 18px;">
+        <p class="work-muted" style="margin-bottom: 20px;">
           Seluruh indikator ini langsung menjadi basis kalkulasi di halaman <code>/daerah</code>, visualisasi peta tematik di <code>/explore</code>, dan algoritma alokasi anggaran di <code>/studio</code>.
         </p>
 
-        <div class="work-table">
-          <table>
+        <div class="work-table admin-table-container">
+          <table class="admin-data-table">
             <thead>
               <tr>
-                <th>No</th>
-                <th>Nama Indikator</th>
-                <th>Kode Teknis</th>
-                <th>Kategori</th>
-                <th>Satuan</th>
-                <th>Nama Berkas Sumber</th>
-                <th>Status Audit</th>
+                <th class="col-num">No</th>
+                <th class="col-name">Nama Indikator</th>
+                <th class="col-code">Kode Teknis</th>
+                <th class="col-cat">Kategori</th>
+                <th class="col-unit">Satuan</th>
+                <th class="col-file">Nama Berkas Sumber</th>
+                <th class="col-audit">Status Audit</th>
               </tr>
             </thead>
             <tbody>
               {#each indicatorCatalog as item, idx}
                 <tr>
-                  <td>{idx + 1}</td>
-                  <td><strong>{item.name}</strong></td>
-                  <td><code class="code-pill">{item.code}</code></td>
-                  <td>
+                  <td class="col-num">{idx + 1}</td>
+                  <td class="col-name">
+                    <strong>{item.name}</strong>
+                  </td>
+                  <td class="col-code"><code class="code-pill">{item.code}</code></td>
+                  <td class="col-cat">
                     <span class="cat-pill" class:cat-core={item.category.includes('Inti')}>
                       {item.category}
                     </span>
                   </td>
-                  <td>{item.unit}</td>
-                  <td class="text-mono" style="font-size: 12px;">{item.file}</td>
-                  <td>
-                    <span class="status-tag status-tag-verified">Tervalidasi SHA-256</span>
+                  <td class="col-unit">{item.unit}</td>
+                  <td class="col-file text-mono">{item.file}</td>
+                  <td class="col-audit">
+                    <span class="status-tag status-tag-verified">
+                      <Icon name="check" size={12} /> Tervalidasi SHA-256
+                    </span>
                   </td>
                 </tr>
               {/each}
@@ -476,38 +493,85 @@
       <section class="work-panel admin-governance-panel" aria-labelledby="role-matrix-title">
         <span class="eq-kicker">VALIDASI ALUR PENGGUNA (USER FLOW)</span>
         <h2 id="role-matrix-title">Batasan Fitur Masyarakat Umum vs Pemerintah & Admin</h2>
-        <p class="work-muted" style="margin-bottom: 16px;">
+        <p class="work-muted" style="margin-bottom: 20px;">
           Platform memisahkan hak akses pembacaan publik, simulasi kebijakan, dan mutasi rilis dataset agar transparansi data tetap terjaga secara objektif.
         </p>
-        <div class="work-table">
-          <table>
-            <caption>Matriks peran, akses fitur, dan batasan otorisasi</caption>
+        <div class="work-table admin-table-container">
+          <table class="admin-governance-table">
+            <caption class="sr-only">Matriks peran, akses fitur, dan batasan otorisasi</caption>
             <thead>
               <tr>
-                <th>Peran pengguna</th>
-                <th>Rute utama</th>
-                <th>Hak interaksi & fitur</th>
-                <th>Batasan & pengamanan</th>
+                <th class="gov-col-role">Peran pengguna</th>
+                <th class="gov-col-routes">Rute utama</th>
+                <th class="gov-col-access">Hak interaksi & fitur</th>
+                <th class="gov-col-guards">Batasan & pengamanan</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>Masyarakat Umum</strong></td>
-                <td><code>/daerah</code>, <code>/explore</code>, <code>/datasets</code></td>
-                <td>Melihat profil fasilitas provinsi, peta GIS sebaran & selisih median, bukti sel workbook, serta ekspor CSV.</td>
-                <td>Akses terbuka tanpa login; <em>read-only</em> terhadap rilis dataset aktif.</td>
+                <td class="gov-col-role">
+                  <div class="role-badge role-badge-public">
+                    <Icon name="home" size={14} />
+                    <strong>Masyarakat Umum</strong>
+                  </div>
+                </td>
+                <td class="gov-col-routes">
+                  <div class="route-list">
+                    <code>/daerah</code>
+                    <code>/explore</code>
+                    <code>/datasets</code>
+                  </div>
+                </td>
+                <td class="gov-col-access">
+                  Melihat profil fasilitas provinsi, peta GIS sebaran & selisih median, bukti sel workbook, serta ekspor CSV.
+                </td>
+                <td class="gov-col-guards">
+                  <span class="guard-pill guard-open">Akses Terbuka Tanpa Login</span>
+                  <div class="guard-subtext"><em>Read-only</em> terhadap rilis dataset aktif.</div>
+                </td>
               </tr>
               <tr>
-                <td><strong>Perencana & Pemerintah</strong></td>
-                <td><code>/studio</code>, <code>/compare</code>, <code>/scenarios/[id]</code></td>
-                <td>Menjalankan simulasi prioritas MCDA & alokasi CP-SAT, melihat peta GIS urgensi alokasi, uji sensitivitas, dan unduh Memo Kebijakan PDF.</td>
-                <td>Menyimpan snapshot skenario terisolasi versi rilis (<code>release_id</code>) tanpa mengubah data dasar.</td>
+                <td class="gov-col-role">
+                  <div class="role-badge role-badge-planner">
+                    <Icon name="sliders" size={14} />
+                    <strong>Perencana & Pemerintah</strong>
+                  </div>
+                </td>
+                <td class="gov-col-routes">
+                  <div class="route-list">
+                    <code>/studio</code>
+                    <code>/compare</code>
+                    <code>/scenarios/[id]</code>
+                  </div>
+                </td>
+                <td class="gov-col-access">
+                  Menjalankan simulasi prioritas MCDA & alokasi CP-SAT, melihat peta GIS urgensi alokasi, uji sensitivitas, dan unduh Memo Kebijakan PDF.
+                </td>
+                <td class="gov-col-guards">
+                  <span class="guard-pill guard-isolated">Snapshot Terisolasi</span>
+                  <div class="guard-subtext">Menyimpan snapshot skenario terisolasi versi rilis (<code>release_id</code>) tanpa mengubah data dasar.</div>
+                </td>
               </tr>
               <tr>
-                <td><strong>Administrator Data</strong></td>
-                <td><code>/admin</code> (<code>POST /api/v1/admin/import</code>)</td>
-                <td>Menjalankan pipeline ETL Polars untuk memvalidasi manifest berkas sumber dan memperbarui snapshot rilis.</td>
-                <td>Wajib <code>Bearer ADMIN_TOKEN</code>; gagal otomatis (<em>fail-closed</em>) jika SHA-256 checksum atau struktur sel tidak cocok.</td>
+                <td class="gov-col-role">
+                  <div class="role-badge role-badge-admin">
+                    <Icon name="shield" size={14} />
+                    <strong>Administrator Data</strong>
+                  </div>
+                </td>
+                <td class="gov-col-routes">
+                  <div class="route-list">
+                    <code>/admin</code>
+                    <code class="route-action">POST /api/v1/admin/import</code>
+                  </div>
+                </td>
+                <td class="gov-col-access">
+                  Menjalankan pipeline ETL Polars untuk memvalidasi manifest berkas sumber dan memperbarui snapshot rilis.
+                </td>
+                <td class="gov-col-guards">
+                  <span class="guard-pill guard-failclosed">Fail-Closed Protected</span>
+                  <div class="guard-subtext">Wajib <code>Bearer ADMIN_TOKEN</code>; gagal otomatis (<em>fail-closed</em>) jika SHA-256 checksum atau struktur sel tidak cocok.</div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -519,19 +583,19 @@
         <h2 id="modularity-title">Arsitektur Modular Backend & Frontend</h2>
         <div class="work-grid">
           <div class="arch-card">
-            <strong>1. Pipeline ETL Polars & Manifest Registry</strong>
+            <strong><Icon name="database" size={16} /> 1. Pipeline ETL Polars & Manifest Registry</strong>
             <p class="work-muted">
               Modul <code>backend/app/etl/</code> memvalidasi SHA-256, header, denominator, dan kode BPS secara vektorisasi sehingga siap diperluas ke tingkat Kabupaten/Kota atau lintas tahun ajaran.
             </p>
           </div>
           <div class="arch-card">
-            <strong>2. Mesin MCDA & Solver CP-SAT Terpisah</strong>
+            <strong><Icon name="sliders" size={16} /> 2. Mesin MCDA & Solver CP-SAT Terpisah</strong>
             <p class="work-muted">
               Modul <code>backend/app/priority/</code> dan <code>backend/app/allocation/</code> terpisah dari lapisan HTTP, mendukung penambahan indikator baru maupun batasan kebijakan daerah tanpa mengubah kontrak utama.
             </p>
           </div>
           <div class="arch-card">
-            <strong>3. Kontrak OpenAPI & Adapter GIS Murni</strong>
+            <strong><Icon name="map" size={16} /> 3. Kontrak OpenAPI & Adapter GIS Murni</strong>
             <p class="work-muted">
               Komponen SvelteKit (<code>ProvinceMap</code>, <code>ScenarioResult</code>, <code>DecisionReview</code>) mengonsumsi skema TypeScript tergenerasi dari OpenAPI dan tile vektor <code>PMTiles</code> berefisiensi tinggi.
             </p>
@@ -623,6 +687,17 @@
     color: var(--eq-text);
     line-height: 1.2;
   }
+  .stat-release-id {
+    font-size: 1.05rem;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    word-break: break-all;
+    background: var(--eq-surface-subtle);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--eq-border);
+    margin-top: 4px;
+  }
   .stat-caption {
     font-size: 12px;
     color: var(--eq-text-muted);
@@ -631,8 +706,10 @@
     gap: 6px;
   }
   .status-tag {
-    display: inline-block;
-    padding: 1px 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
     border-radius: 4px;
     font-size: 11px;
     font-weight: 600;
@@ -643,39 +720,67 @@
     border: 1px solid #c2ecd8;
   }
 
-  /* TABS */
-  .admin-tab-nav {
+  /* WORKSPACE VIEW SELECTOR / TABS */
+  .tab-nav-wrapper {
     display: flex;
-    gap: 8px;
-    border-bottom: 2px solid var(--eq-border);
-    margin-bottom: 20px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--eq-border);
+    flex-wrap: wrap;
+  }
+  .admin-tab-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    border-radius: 10px;
     overflow-x: auto;
   }
   .tab-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 16px;
+    padding: 8px 16px;
     border: none;
+    border-radius: 7px;
     background: transparent;
     color: var(--eq-text-secondary);
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 550;
     cursor: pointer;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
-    transition: all 120ms ease;
+    white-space: nowrap;
+    transition: all 140ms ease;
   }
   .tab-btn:hover {
     color: var(--eq-text);
-    background: rgba(0, 0, 0, 0.02);
+    background: rgba(0, 0, 0, 0.04);
   }
   .tab-btn.active {
     color: var(--eq-primary);
-    border-bottom-color: var(--eq-primary);
     background: var(--eq-surface);
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    font-weight: 650;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+  .tab-context-meta {
+    display: flex;
+    align-items: center;
+  }
+  .context-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--eq-text-secondary);
+    padding: 5px 12px;
+    background: var(--eq-surface);
+    border: 1px solid var(--eq-border);
+    border-radius: 9999px;
   }
 
   /* TWO COLUMN LAYOUT */
@@ -820,20 +925,22 @@
   .code-pill {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     background: var(--eq-surface-subtle);
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 3px 7px;
+    border-radius: 5px;
     font-size: 12px;
     border: 1px solid var(--eq-border);
+    display: inline-block;
   }
   .cat-pill {
     display: inline-block;
-    padding: 2px 8px;
+    padding: 3px 9px;
     border-radius: 9999px;
     font-size: 11px;
     font-weight: 600;
     background: var(--eq-surface-subtle);
     color: var(--eq-text-secondary);
     border: 1px solid var(--eq-border);
+    white-space: nowrap;
   }
   .cat-core {
     background: var(--eq-primary-tint);
@@ -841,22 +948,213 @@
     border-color: #b9d7ff;
   }
 
-  /* GOVERNANCE & ARCH CARDS */
-  .arch-card {
-    padding: 14px 16px;
+  /* ENTERPRISE DATA TABLES */
+  .admin-table-container {
+    overflow-x: auto;
     border: 1px solid var(--eq-border);
-    border-radius: 10px;
+    border-radius: 12px;
+    background: var(--eq-surface);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    margin-block: 18px;
+  }
+  .admin-data-table, .admin-governance-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13px;
+  }
+  .admin-data-table {
+    min-width: 920px;
+  }
+  .admin-data-table th, .admin-governance-table th {
+    padding: 12px 16px;
     background: var(--eq-surface-subtle);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--eq-text-secondary);
+    border-bottom: 2px solid var(--eq-border);
+    white-space: nowrap;
+  }
+  .admin-data-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--eq-border);
+    vertical-align: middle;
+  }
+  .admin-data-table tbody tr:last-child td,
+  .admin-governance-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .admin-data-table tbody tr:nth-child(even),
+  .admin-governance-table tbody tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.012);
+  }
+  .admin-data-table tbody tr:hover,
+  .admin-governance-table tbody tr:hover {
+    background: var(--eq-primary-tint);
+  }
+  .col-num {
+    width: 48px;
+    text-align: center;
+    padding-left: 14px;
+    padding-right: 8px;
+    font-weight: 600;
+    color: var(--eq-text-muted);
+  }
+  .col-name {
+    min-width: 240px;
+    color: var(--eq-text);
+  }
+  .col-code {
+    min-width: 160px;
+  }
+  .col-cat {
+    min-width: 150px;
+  }
+  .col-unit {
+    min-width: 100px;
+    color: var(--eq-text-secondary);
+  }
+  .col-file {
+    min-width: 200px;
+    font-size: 12px;
+    color: var(--eq-text-secondary);
+  }
+  .col-audit {
+    min-width: 160px;
+    text-align: right;
+  }
+
+  /* GOVERNANCE TABLE */
+  .admin-governance-table {
+    min-width: 860px;
+  }
+  .admin-governance-table td {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--eq-border);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .gov-col-role { width: 190px; }
+  .gov-col-routes { width: 170px; }
+  .gov-col-access { min-width: 250px; }
+  .gov-col-guards { min-width: 250px; }
+  .role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .role-badge-public {
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    color: var(--eq-text);
+  }
+  .role-badge-planner {
+    background: var(--eq-primary-tint);
+    border: 1px solid #bfdbfe;
+    color: var(--eq-primary);
+  }
+  .role-badge-admin {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+  }
+  .route-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+  .route-list code {
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  .route-action {
+    color: var(--eq-primary);
+    font-weight: 600;
+  }
+  .guard-pill {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .guard-open {
+    background: var(--eq-surface-subtle);
+    border: 1px solid var(--eq-border);
+    color: var(--eq-text-secondary);
+  }
+  .guard-isolated {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+  }
+  .guard-failclosed {
+    background: var(--eq-success-tint);
+    border: 1px solid #bbf0d8;
+    color: var(--eq-success);
+  }
+  .guard-subtext {
+    margin: 0;
+    font-size: 12px;
+    color: var(--eq-text-secondary);
+    line-height: 1.5;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* MODULAR ARCHITECTURE CARDS */
+  .work-grid {
     display: grid;
-    gap: 6px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .arch-card {
+    padding: 18px 20px;
+    border: 1px solid var(--eq-border);
+    border-radius: 12px;
+    background: var(--eq-surface);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 140ms ease, box-shadow 140ms ease;
+  }
+  .arch-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
   .arch-card strong {
     font-size: 14px;
     color: var(--eq-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   .arch-card p {
     margin: 0;
     font-size: 13px;
-    line-height: 1.55;
+    line-height: 1.6;
+    color: var(--eq-text-secondary);
   }
 </style>
