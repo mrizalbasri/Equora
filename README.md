@@ -46,14 +46,21 @@ Bagian ini dirancang khusus bagi dewan juri untuk mengevaluasi fungsionalitas, a
 
 ### Tautan Akses Langsung Evaluasi
 
-| Komponen | Tautan | Keterangan & Status |
+| Komponen | Tautan | Keterangan & Kredensial |
 | --- | --- | --- |
-| **Aplikasi Frontend** | [equora-tau.vercel.app](https://equora-tau.vercel.app) | Antarmuka pengguna produksi (Vercel Edge Network). |
+| **Aplikasi Frontend** | [equora-tau.vercel.app](https://equora-tau.vercel.app) | Antarmuka pengguna produksi (Vercel Edge Network). Akses publik tanpa perlu login. |
 | **Backend API Gateway** | [equora-api.bravecliff-18f241ae.japaneast.azurecontainerapps.io](https://equora-api.bravecliff-18f241ae.japaneast.azurecontainerapps.io) | API FastAPI pada Azure Container Apps. |
+| **Dokumentasi Interaktif API** | [equora-api.bravecliff-18f241ae.japaneast.azurecontainerapps.io/docs](https://equora-api.bravecliff-18f241ae.japaneast.azurecontainerapps.io/docs) | Swagger UI / OpenAPI docs interaktif. |
 | **Health & Readiness Check** | [equora-tau.vercel.app/api/v1/health/ready](https://equora-tau.vercel.app/api/v1/health/ready) | Verifikasi konektivitas backend dan PostgreSQL (`200 OK`). |
 | **Endpoint Geometri Publik** | [equora-tau.vercel.app/api/v1/geometry](https://equora-tau.vercel.app/api/v1/geometry) | Data batas wilayah provinsi untuk visualisasi GIS (`200 OK`). |
-| **Halaman Login Admin** | [equora-tau.vercel.app/admin/login](https://equora-tau.vercel.app/admin/login) | Form autentikasi sesi admin terlindungi. |
-| **Dashboard Admin Terlindungi** | [equora-tau.vercel.app/admin](https://equora-tau.vercel.app/admin) | Dashboard tata kelola data (dialihkan jika belum login). |
+| **Halaman Login Admin** | [equora-tau.vercel.app/admin/login](https://equora-tau.vercel.app/admin/login) | Form autentikasi admin. **Token Evaluasi:** `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ` |
+| **Dashboard Admin Terlindungi** | [equora-tau.vercel.app/admin](https://equora-tau.vercel.app/admin) | Dashboard tata kelola data (terproteksi, dialihkan ke login jika belum ada sesi). |
+
+> 🔑 **Kredensial Pengujian Administrator (Khusus Evaluasi Dewan Juri):**
+> - **URL Halaman Login:** [https://equora-tau.vercel.app/admin/login](https://equora-tau.vercel.app/admin/login)
+> - **Admin Token Evaluasi:** `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ`
+> 
+> *Dewan juri dapat menggunakan token di atas untuk menguji alur otentikasi admin, validasi checksum data, dan fitur audit rilis dataset.*
 
 ---
 
@@ -142,6 +149,9 @@ Peta situs lengkap, alur pengguna per peran, dan inventaris wireframe tersedia d
 
 Equora mengadopsi prinsip *defense-in-depth* dan arsitektur *two-tier security* yang memisahkan otentikasi sesi di lapisan peramban/edge (SvelteKit server-side) dari otorisasi transaksi data pada lapisan backend data (FastAPI + PostgreSQL).
 
+> 🧪 **Uji Langsung Arsitektur Keamanan (Khusus Dewan Juri):**
+> Alur sequence diagram di bawah ini dapat diuji langsung pada production memakai token evaluasi: `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ` melalui [equora-tau.vercel.app/admin/login](https://equora-tau.vercel.app/admin/login).
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -221,7 +231,7 @@ Aplikasi memisahkan konfigurasi sensitif ke dalam variabel lingkungan:
 
 | Variabel | Tipe / Contoh | Peran Keamanan & Fungsional |
 | --- | --- | --- |
-| `ADMIN_TOKEN` | String rahasia acak | Token otorisasi master untuk login admin dan trigger pipeline ETL data. |
+| `ADMIN_TOKEN` | String rahasia (Token Evaluasi Juri: `yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ`) | Token otorisasi master untuk login admin dan trigger pipeline ETL data. |
 | `DATABASE_URL` | `postgresql+psycopg://...` | Connection string runtime PostgreSQL (menggunakan *connection pooler* di produksi). |
 | `DATABASE_URL_UNPOOLED` | `postgresql+psycopg://...` | Connection string PostgreSQL langsung tanpa pooler (khusus untuk migrasi Alembic). |
 | `CORS_ORIGINS` | `["https://equora-tau.vercel.app"]` | Whitelist origin frontend yang diizinkan melakukan request lintas-domain. |
