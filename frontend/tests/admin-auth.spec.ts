@@ -43,6 +43,8 @@ test('valid login survives refresh, authorizes import, and logout closes dashboa
   expect(await page.evaluate(() => document.cookie)).not.toContain('equora_admin_session');
   await page.reload();
   await expect(page.getByRole('button', { name: 'Keluar admin' })).toBeVisible();
+  const nav = page.getByRole('navigation', { name: 'Navigasi admin', exact: true });
+  await nav.getByRole('link', { name: 'Sinkronisasi & impor' }).click();
   await page.getByRole('button', { name: 'Periksa & impor snapshot' }).click();
   await expect(page.getByRole('status')).toContainText('Impor lokal berhasil diselesaikan!');
   await expect(page.getByRole('status')).toContainText('synthetic-release');
@@ -75,15 +77,16 @@ test('admin navigation is separate and keeps catalog and security views in the U
   }
   await nav.getByRole('link', { name: 'Katalog indikator' }).click();
   await expect(page).toHaveURL(/\/admin#catalog$/);
-  await expect(page.getByRole('tab', { name: 'Katalog 10 Indikator Aktif' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('heading', { name: 'Daftar 10 Indikator Pendidikan Nasional Terverifikasi' })).toBeVisible();
   await page.reload();
   await expect(nav.getByRole('link', { name: 'Katalog indikator' })).toHaveAttribute('aria-current', 'location');
   await nav.getByRole('link', { name: 'Peran & keamanan' }).click();
   await expect(page.getByRole('heading', { name: 'Batasan Fitur Masyarakat Umum vs Pemerintah & Admin' })).toBeVisible();
   await page.goBack();
-  await expect(page.getByRole('tab', { name: 'Katalog 10 Indikator Aktif' })).toHaveAttribute('aria-selected', 'true');
-  await page.getByRole('tab', { name: 'Sinkronisasi & Impor Dataset' }).click();
+  await expect(page.getByRole('heading', { name: 'Daftar 10 Indikator Pendidikan Nasional Terverifikasi' })).toBeVisible();
+  await nav.getByRole('link', { name: 'Sinkronisasi & impor' }).click();
   await expect(nav.getByRole('link', { name: 'Sinkronisasi & impor', exact: true })).toHaveAttribute('aria-current', 'location');
+  await expect(page.getByRole('heading', { name: 'Periksa & Terbitkan Rilis Snapshot' })).toBeVisible();
   await page.getByRole('link', { name: 'Buka aplikasi publik' }).click();
   await expect(page).toHaveURL(/\/explore$/);
   await expect(page.getByRole('navigation', { name: 'Navigasi workspace', exact: true })).toBeVisible();
@@ -109,7 +112,7 @@ test('mobile admin menu supports navigation, keyboard dismissal, and logout', as
   await menu.click();
   await nav.getByRole('link', { name: 'Katalog indikator' }).click();
   await expect(nav).toBeHidden();
-  await expect(page.getByRole('tab', { name: 'Katalog 10 Indikator Aktif' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('heading', { name: 'Daftar 10 Indikator Pendidikan Nasional Terverifikasi' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await menu.click();
   await page.getByRole('button', { name: 'Keluar admin' }).click();
@@ -119,6 +122,8 @@ test('mobile admin menu supports navigation, keyboard dismissal, and logout', as
 test('expired session during import returns to login', async ({ page, context }) => {
   await mockWorkspace(page);
   await login(page);
+  const nav = page.getByRole('navigation', { name: 'Navigasi admin', exact: true });
+  await nav.getByRole('link', { name: 'Sinkronisasi & impor' }).click();
   await context.addCookies([{
     name: 'equora_admin_session', value: 'expired', url: 'http://127.0.0.1:4173',
   }]);
