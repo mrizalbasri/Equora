@@ -74,8 +74,11 @@ Dewan juri dapat memverifikasi arsitektur keamanan dan keandalan sistem melalui 
    - Pada halaman [equora-tau.vercel.app/admin/login](https://equora-tau.vercel.app/admin/login), masukkan sembarang token acak (misal: `token-uji-coba-salah-123`).
    - Tekan tombol **Masuk**.
    - **Ekspektasi**: Sistem menolak login dengan pesan error otentikasi tanpa membocorkan struktur kredensial internal server.
-2. **Pengujian Positif (Token Valid)**:
-   - Masukkan token admin yang telah dikonfigurasikan pada variabel lingkungan backend (`ADMIN_TOKEN`).
+2. **Pengujian Positif (Token Valid Evaluasi Juri)**:
+   - Masukkan token demonstrasi admin khusus evaluasi juri:
+     ```text
+     yJup-kHjZnqEqqLf2VXl_ciiGWTi0e8BT2XtyVXPdKQ
+     ```
    - Tekan tombol **Masuk**.
    - **Ekspektasi**:
      - Backend memvalidasi token memakai perbandingan waktu konstan (`secrets.compare_digest`) guna menangkal serangan kebocoran waktu (*timing attack*).
